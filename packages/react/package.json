@@ -1,0 +1,41 @@
+{
+  "name": "@tokiforge/react",
+  "version": "1.0.0",
+  "description": "React adapter for TokiForge theming",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.tsx --format cjs,esm --dts --external react",
+    "dev": "tsup src/index.tsx --format cjs,esm --dts --watch --external react",
+    "lint": "eslint src --ext .ts,.tsx",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "@tokiforge/core": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@tokiforge/core": "^1.0.0"
+  },
+  "keywords": [
+    "react",
+    "theming",
+    "design-tokens"
+  ],
+  "author": "TokiForge Community",
+  "license": "MIT"
+}
+
