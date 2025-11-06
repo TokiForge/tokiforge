@@ -59,7 +59,7 @@ export async function buildCommand(projectPath: string = process.cwd()): Promise
     }
 
     const options: TokenExportOptions = {
-      format,
+      format: format!,
       prefix: config.prefix || 'hf',
       selector: config.selector || ':root',
       variables: format === 'js' || format === 'ts',
@@ -67,7 +67,7 @@ export async function buildCommand(projectPath: string = process.cwd()): Promise
 
     const content = TokenExporter.export(tokens, options);
     fs.writeFileSync(fullPath, content);
-    console.log(`✅ Generated ${format.toUpperCase()}: ${outputPath}`);
+    console.log(`✅ Generated ${format!.toUpperCase()}: ${outputPath}`);
   }
 
   console.log('\n🎉 Build complete!');

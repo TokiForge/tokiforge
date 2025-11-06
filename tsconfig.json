@@ -20,6 +20,6 @@
     "tsBuildInfoFile": ".tsbuildinfo",
     "verbatimModuleSyntax": true
   },
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts", "**/.tsbuildinfo"]
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts", "**/.tsbuildinfo", "**/vitest.config.ts", "examples/**", "docs/**", "packages/react/**", "packages/vue/**", "packages/svelte/**"]
 }
 

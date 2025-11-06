@@ -62,7 +62,6 @@ docs/.vitepress/dist/
 docs/.vitepress/cache/
 
 # Test directories
-test-hueforge/
 test-tokiforge/
 
 # Scripts (if they're not needed in repo)

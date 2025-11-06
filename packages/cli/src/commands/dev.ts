@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as http from 'http';
 import { createServer } from 'http';
 import { TokenParser } from '@tokiforge/core';
 import chokidar from 'chokidar';
@@ -147,9 +146,6 @@ export async function devCommand(projectPath: string = process.cwd()): Promise<v
 </html>`;
   };
 
-  let tokens = TokenParser.parse(inputPath);
-  const html = generateHTML(tokens);
-
   const server = createServer((req, res) => {
     if (req.url === '/') {
       res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -169,7 +165,7 @@ export async function devCommand(projectPath: string = process.cwd()): Promise<v
   const watcher = chokidar.watch(inputPath, { persistent: true });
   watcher.on('change', () => {
     console.log('🔄 Token file changed, reloading...');
-    tokens = TokenParser.parse(inputPath);
+    // Tokens are re-parsed on each request
   });
 
   process.on('SIGINT', () => {
