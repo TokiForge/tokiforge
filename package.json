@@ -1,10 +1,11 @@
 {
   "name": "tokiforge",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Framework-agnostic design token and theming engine for React, Vue, Svelte, Angular. Runtime theme switching, CSS variables, smart color utilities. <3KB gzipped.",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "documentation"
   ],
   "scripts": {
     "build": "npm run build:core && npm run build:rest",
@@ -16,9 +17,9 @@
     "test": "npm run test --workspaces --if-present",
     "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
     "clean:all": "npm run clean --workspaces && rm -rf node_modules .tsbuildinfo",
-    "docs:dev": "cd docs && npm install && npm run dev",
-    "docs:build": "cd docs && npm install && npm run build",
-    "docs:preview": "cd docs && npm run preview",
+    "docs:dev": "npm run dev --workspace TokiForge-docs",
+    "docs:build": "npm run build --workspace TokiForge-docs",
+    "docs:preview": "npm run preview --workspace TokiForge-docs",
     "typecheck": "tsc --noEmit --project tsconfig.json",
     "link:all": "npm run link:core && npm run link:react && npm run link:vue && npm run link:svelte && npm run link:angular && npm run link:cli",
     "link:core": "cd packages/core && npm link",

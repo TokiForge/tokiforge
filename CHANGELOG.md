@@ -5,6 +5,26 @@ All notable changes to TokiForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2025-11-06
+
+### Changed
+
+- **Version Bump**: All packages updated from 0.2.0 to 0.2.1
+- **Dependency Updates**: All internal dependencies updated to `@tokiforge/core@^0.2.1`
+- **Documentation**: All documentation files updated with v0.2.1 version references
+  - Updated installation commands across all guides
+  - Updated CDN links to reflect new version
+  - Updated version badges in all documentation pages
+
+### Fixed
+
+- **Git Ignore**: Comprehensive `.gitignore` updates to prevent unnecessary files from being committed
+  - Added recursive patterns for build outputs (`dist/`, `build/`)
+  - Added patterns for documentation build outputs (`.vitepress/dist/`, `.vitepress/cache/`)
+  - Added patterns for example build outputs
+  - Added patterns for source maps and cache directories
+  - Improved VS Code extension output exclusions
+
 ## [0.2.0] - 2026-01-06
 
 ### Added
@@ -70,6 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Framework-agnostic theming system
 - Complete documentation and examples
 
+[0.2.1]: https://github.com/tokiforge/tokiforge/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/tokiforge/tokiforge/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/tokiforge/tokiforge/releases/tag/v0.1.0
 

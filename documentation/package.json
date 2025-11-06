@@ -1,0 +1,38 @@
+{
+  "name": "TokiForge-docs",
+  "version": "1.0.0",
+  "description": "TokiForge Documentation Site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "keywords": [
+    "documentation",
+    "vitepress",
+    "design-tokens",
+    "theme-engine",
+    "theming"
+  ],
+  "author": "TokiForge Community",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TokiForge/tokiforge.git",
+    "directory": "documentation"
+  },
+  "homepage": "https://github.com/TokiForge/tokiforge#readme",
+  "bugs": {
+    "url": "https://github.com/TokiForge/tokiforge/issues"
+  },
+  "dependencies": {
+    "@tokiforge/core": "^0.2.1"
+  },
+  "devDependencies": {
+    "vitepress": "^1.0.0",
+    "vue": "^3.4.0"
+  }
+}
+

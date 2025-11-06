@@ -1,6 +1,6 @@
-export { ThemeService, type ThemeContext } from './theme.service';
+export { ThemeService, type ThemeContext, type ThemeInitOptions } from './theme.service';
+export { generateThemeCSS, generateCombinedThemeCSS, type GenerateCSSOptions } from './utils';
 
-// Re-export core types and classes
 export type {
   DesignTokens,
   Theme,

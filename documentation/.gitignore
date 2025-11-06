@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+.vitepress/dist/
+.vitepress/cache/
+.vitepress/.temp/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Cache
+.cache/
+
+# Environment
+.env
+.env.local

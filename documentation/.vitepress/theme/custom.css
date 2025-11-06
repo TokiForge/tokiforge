@@ -1,0 +1,67 @@
+:root {
+  --vp-c-brand: #7C3AED;
+  --vp-c-brand-light: #8B5CF6;
+  --vp-c-brand-lighter: #A78BFA;
+  --vp-c-brand-dark: #6D28D9;
+  --vp-c-brand-darker: #5B21B6;
+}
+
+/* Full width header - prevent overflow */
+.VPNav {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.VPNavBar {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.VPNavBar .content {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Fix header overlap with content - ensure proper spacing */
+.VPContent {
+  padding-top: var(--vp-nav-height, 64px) !important;
+}
+
+/* Fix anchor links to account for fixed header */
+.VPDoc .content {
+  scroll-margin-top: calc(var(--vp-nav-height, 64px) + 1rem);
+}
+
+/* Ensure headings have proper spacing when scrolled to */
+.VPDoc h1,
+.VPDoc h2,
+.VPDoc h3,
+.VPDoc h4,
+.VPDoc h5,
+.VPDoc h6 {
+  scroll-margin-top: calc(var(--vp-nav-height, 64px) + 1rem);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .VPContent {
+    padding-top: var(--vp-nav-height-mobile, 64px) !important;
+  }
+  
+  .VPDoc .content {
+    scroll-margin-top: calc(var(--vp-nav-height-mobile, 64px) + 1rem);
+  }
+  
+  .VPDoc h1,
+  .VPDoc h2,
+  .VPDoc h3,
+  .VPDoc h4,
+  .VPDoc h5,
+  .VPDoc h6 {
+    scroll-margin-top: calc(var(--vp-nav-height-mobile, 64px) + 1rem);
+  }
+}
+

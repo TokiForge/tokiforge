@@ -19,7 +19,7 @@ import { ThemeService } from '@tokiforge/angular';
         }
       </select>
       <button (click)="themeService.nextTheme()" class="next-theme-btn">
-        Next Theme
+        Next Theme ({{ themeService.availableThemes().length }} available)
       </button>
     </div>
   `,

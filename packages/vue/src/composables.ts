@@ -1,8 +1,18 @@
 import { inject, provide, ref, computed, type Ref, type ComputedRef } from 'vue';
 import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
-import { ThemeRuntime as ThemeRuntimeClass } from '@tokiforge/core';
+import { ThemeRuntime as ThemeRuntimeClass, TokenExporter, ThemeRuntime } from '@tokiforge/core';
 
 const ThemeKey = Symbol('tokiforge-theme');
+
+export interface ProvideThemeOptions {
+  selector?: string;
+  prefix?: string;
+  defaultTheme?: string;
+  mode?: 'dynamic' | 'static';
+  persist?: boolean;
+  watchSystemTheme?: boolean;
+  bodyClassPrefix?: string;
+}
 
 interface ThemeContext {
   theme: Ref<string>;
@@ -11,26 +21,90 @@ interface ThemeContext {
   nextTheme: () => void;
   availableThemes: ComputedRef<string[]>;
   runtime: ThemeRuntimeClass;
+  generateCSS?: (themeName?: string) => string;
 }
 
 export function provideTheme(
   config: ThemeConfig,
-  selector: string = ':root',
-  prefix: string = 'hf',
-  defaultTheme?: string
+  options: ProvideThemeOptions = {}
 ): ThemeContext {
-  const runtime = new ThemeRuntimeClass(config);
-  const themeName = defaultTheme || config.defaultTheme || config.themes[0]?.name || 'default';
-  const theme = ref(themeName);
-  const tokens = computed(() => runtime.getThemeTokens(theme.value));
+  const {
+    selector = ':root',
+    prefix = 'hf',
+    defaultTheme,
+    mode = 'dynamic',
+    persist = true,
+    watchSystemTheme = false,
+    bodyClassPrefix = 'theme',
+  } = options;
 
-  // Initialize runtime
+  const runtime = new ThemeRuntimeClass(config);
+  const availableThemes = runtime.getAvailableThemes();
+  
+  let initialTheme = defaultTheme || config.defaultTheme || availableThemes[0] || 'default';
+  
   if (typeof window !== 'undefined') {
-    runtime.init(selector, prefix);
+    if (persist) {
+      const saved = localStorage.getItem('tokiforge-theme');
+      if (saved && availableThemes.includes(saved)) {
+        initialTheme = saved;
+      }
+    }
+    
+    if (watchSystemTheme && !persist) {
+      const systemTheme = ThemeRuntime.detectSystemTheme();
+      if (availableThemes.includes(systemTheme)) {
+        initialTheme = systemTheme;
+      }
+    }
   }
 
-  // Watch for theme changes
+  const theme = ref(initialTheme);
+  const tokens = computed(() => runtime.getThemeTokens(theme.value));
+
+  const setTheme = (name: string) => {
+    if (!availableThemes.includes(name)) {
+      throw new Error(`Theme "${name}" not found. Available themes: ${availableThemes.join(', ')}`);
+    }
+
+    if (mode === 'static') {
+      availableThemes.forEach(t => {
+        document.body.classList.remove(`${bodyClassPrefix}-${t}`);
+      });
+      document.body.classList.add(`${bodyClassPrefix}-${name}`);
+    } else {
+      runtime.applyTheme(name, selector, prefix);
+    }
+    
+    theme.value = name;
+    
+    if (typeof window !== 'undefined' && persist) {
+      localStorage.setItem('tokiforge-theme', name);
+    }
+  };
+
   if (typeof window !== 'undefined') {
+    if (mode === 'static') {
+      const bodyClass = `${bodyClassPrefix}-${initialTheme}`;
+      document.body.classList.add(bodyClass);
+    } else {
+      runtime.init(selector, prefix);
+    }
+
+    if (watchSystemTheme) {
+      const unwatch = runtime.watchSystemTheme((systemTheme) => {
+        if (availableThemes.includes(systemTheme)) {
+          setTheme(systemTheme);
+        }
+      });
+      
+      if (typeof window !== 'undefined') {
+        window.addEventListener('beforeunload', () => unwatch());
+      }
+    }
+  }
+
+  if (typeof window !== 'undefined' && mode === 'dynamic') {
     const handleThemeChange = (e: Event) => {
       const customEvent = e as CustomEvent;
       theme.value = customEvent.detail.theme;
@@ -39,14 +113,23 @@ export function provideTheme(
     window.addEventListener('tokiforge:theme-change', handleThemeChange);
   }
 
-  const setTheme = (name: string) => {
-    runtime.applyTheme(name, selector, prefix);
-    theme.value = name;
+  const nextTheme = () => {
+    const currentIndex = availableThemes.indexOf(theme.value);
+    const nextIndex = (currentIndex + 1) % availableThemes.length;
+    setTheme(availableThemes[nextIndex]);
   };
 
-  const nextTheme = () => {
-    const newTheme = runtime.nextTheme();
-    theme.value = newTheme;
+  const generateCSS = (themeName?: string) => {
+    const targetTheme = themeName || theme.value;
+    const themeTokens = runtime.getThemeTokens(targetTheme);
+    const bodySelector = mode === 'static' 
+      ? `body.${bodyClassPrefix}-${targetTheme}`
+      : selector;
+    
+    return TokenExporter.exportCSS(themeTokens, {
+      selector: bodySelector,
+      prefix: prefix,
+    });
   };
 
   const context: ThemeContext = {
@@ -54,8 +137,9 @@ export function provideTheme(
     tokens,
     setTheme,
     nextTheme,
-    availableThemes: computed(() => runtime.getAvailableThemes()),
+    availableThemes: computed(() => availableThemes),
     runtime,
+    ...(mode === 'static' ? { generateCSS } : {}),
   };
 
   provide(ThemeKey, context);

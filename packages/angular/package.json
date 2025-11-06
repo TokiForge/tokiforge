@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/angular",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Angular adapter for TokiForge theming",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -27,18 +27,20 @@
   ],
   "sideEffects": false,
   "peerDependencies": {
-    "@angular/core": ">=17.0.0 <20.0.0",
-    "@angular/common": ">=17.0.0 <20.0.0",
-    "@tokiforge/core": "^0.2.0"
+    "@angular/common": ">=17.0.0 <22.0.0",
+    "@angular/core": ">=17.0.0 <22.0.0",
+    "@tokiforge/core": "^0.2.1"
   },
   "devDependencies": {
-    "@angular/core": "^19.0.0",
-    "@angular/common": "^19.0.0",
+    "@angular/common": "^21.0.0-rc.0",
+    "@angular/core": "^21.0.0-rc.0",
+    "@swc/core": "^1.15.0",
+    "sharp": "^0.34.5",
     "tsup": "^8.0.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@tokiforge/core": "^0.2.0"
+    "@tokiforge/core": "^0.2.1"
   },
   "keywords": [
     "angular",
@@ -60,4 +62,3 @@
     "access": "public"
   }
 }
-

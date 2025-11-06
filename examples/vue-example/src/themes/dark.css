@@ -1,0 +1,22 @@
+/* Dark Theme Design Tokens */
+body.theme-dark {
+  /* Colors */
+  --color-primary: #7C3AED;
+  --color-accent: #06B6D4;
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #CBD5E1;
+  --color-background-default: #0F172A;
+  --color-background-muted: #1E293B;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+}
+

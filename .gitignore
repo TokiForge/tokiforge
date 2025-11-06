@@ -1,20 +1,27 @@
 # Dependencies
 node_modules/
+**/node_modules/
 package-lock.json
+**/package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
 # Build outputs
 dist/
+**/dist/
 build/
+**/build/
 *.tsbuildinfo
 **/.tsbuildinfo
-packages/*/dist/
-packages/*/build/
 .tsbuildinfo
+
+# Source maps
+*.map
+**/*.map
 
 # Logs
 *.log
+**/*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -41,47 +48,132 @@ desktop.ini
 
 # Cache
 .cache/
+**/.cache/
 .parcel-cache/
 .nyc_output/
+.vitepress/cache/
+**/.vitepress/cache/
+**/.vitepress/dist/
+**/.vitepress/.temp/
 
 # Environment
 .env
 .env.local
 .env.*.local
+**/.env
+**/.env.local
 
 # Testing
 coverage/
+**/coverage/
 .nyc_output/
 
 # Temporary files
 *.tmp
 *.temp
+**/*.tmp
+**/*.temp
 
-# Docs build
-docs/.vitepress/dist/
-docs/.vitepress/cache/
-
-# Test directories
-test-tokiforge/
-
-# Scripts (if they're not needed in repo)
-create-git-history.ps1
-setup-git-history.ps1
+# Documentation build
+documentation/.vitepress/dist/
+documentation/.vitepress/cache/
+documentation/.vitepress/.temp/
+documentation/node_modules/
 
 # Example builds
-examples/*/dist/
-examples/*/node_modules/
-
-# TokiForge specific
-*.local
-.DS_Store
-*.log
-
-# Keep example files but ignore their builds
-!examples/
 examples/*/dist/
 examples/*/node_modules/
 examples/*/.next/
 examples/*/.nuxt/
 examples/*/.svelte-kit/
+examples/*/build/
+examples/*/dist-ssr/
 
+# VS Code Extension (if exists)
+packages/vscode-extension/out/
+packages/vscode-extension/*.vsix
+packages/vscode-extension/node_modules/
+
+# Test directories
+test-tokiforge/
+**/test-tokiforge/
+
+# Scripts (temporary)
+create-git-history.ps1
+setup-git-history.ps1
+
+# TokiForge specific
+*.local
+**/*.local
+
+# Keep example source files but ignore builds
+!examples/
+!examples/**/*.ts
+!examples/**/*.tsx
+!examples/**/*.vue
+!examples/**/*.svelte
+!examples/**/*.json
+!examples/**/*.md
+!examples/**/*.html
+!examples/**/*.css
+!examples/**/*.js
+!examples/**/README.md
+!examples/**/package.json
+!examples/**/tsconfig.json
+!examples/**/vite.config.*
+!examples/**/svelte.config.*
+!examples/**/angular.json
+
+# Angular specific
+**/.angular/
+**/angular.json.bak
+
+# Vite
+**/.vite/
+
+# TypeScript
+**/tsconfig.tsbuildinfo
+
+# Package manager
+**/.pnp/
+**/.pnp.js
+
+# Optional npm cache
+**/.npm
+
+# Optional eslint cache
+**/.eslintcache
+
+# Optional stylelint cache
+**/.stylelintcache
+
+# Microbundle cache
+**/.rpt2_cache/
+**/.rts2_cache_cjs/
+**/.rts2_cache_es/
+**/.rts2_cache_umd/
+
+# Optional REPL history
+**/.node_repl_history
+
+# Output of 'npm pack'
+**/*.tgz
+
+# Yarn Integrity file
+**/.yarn-integrity
+
+# dotenv environment variable files
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+**/.env.local
+
+# Stores VSCode versions used for testing VSCode extensions
+**/.vscode-test
+
+# yarn v2
+**/.yarn/cache
+**/.yarn/unplugged
+**/.yarn/build-state.yml
+**/.yarn/install-state.gz
+**/.pnp.*

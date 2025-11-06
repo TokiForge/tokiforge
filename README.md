@@ -96,11 +96,14 @@ In short — it's your **complete color and theme infrastructure**, built for th
 
 ### 🎨 Theming
 
-* Light/Dark/System theme switching
+* **Static Mode** - Zero JS overhead with body class-based theming
+* **Dynamic Mode** - Runtime CSS injection for flexible theming
+* Light/Dark/System theme switching with automatic detection
 * Custom brand themes (e.g., multiple clients)
 * Contextual theming for nested components
 * **Auto-generate dark themes** from light themes
 * **Smooth theme transitions** with animation tokens
+* **Automatic localStorage persistence** - Theme preferences saved automatically
 
 ### 🧠 Design Tokens
 
@@ -115,6 +118,7 @@ In short — it's your **complete color and theme infrastructure**, built for th
 * `tokiforge dev` – local preview playground
 * `tokiforge lint` – validates token consistency
 * `tokiforge build` – generates final token bundle
+* **CSS Generation Utilities** - Generate theme CSS files at build time
 * **VS Code extension** - autocomplete, live preview, theme switcher
 * **Hot reload** - watch tokens and auto-rebuild
 
@@ -139,12 +143,15 @@ In short — it's your **complete color and theme infrastructure**, built for th
 | Feature                   | TokiForge | Others                    |
 | ------------------------- | -------- | ------------------------- |
 | Real-time theme switching | ✅        | ⚠️ Often rebuild required |
+| **Zero JS overhead (static mode)** | ✅ | ❌ Always requires JS runtime |
 | Multi-framework support   | ✅        | ❌ Usually React-only      |
 | Type-safe token exports   | ✅        | ⚠️ Partial or manual      |
 | Figma bidirectional sync  | ✅        | ❌ One-way export only     |
 | CLI + Visual Playground   | ✅        | ⚠️ Missing or paid        |
 | CSS-native runtime        | ✅        | ⚠️ JS-heavy runtime       |
 | <3KB gzipped size         | ✅        | ❌ Bloated builds          |
+| **Auto localStorage persistence** | ✅ | ❌ Manual implementation |
+| **System theme detection** | ✅ | ❌ Manual implementation |
 | Accessibility validation  | ✅        | ❌ Missing                 |
 | **Smart color utilities** | ✅        | ❌ Manual color manipulation |
 | **Auto dark theme gen**   | ✅        | ❌ Manual creation         |

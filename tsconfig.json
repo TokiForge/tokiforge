@@ -21,6 +21,6 @@
     "verbatimModuleSyntax": true
   },
   "include": ["packages/core/src/**/*", "packages/cli/src/**/*", "packages/angular/src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts", "**/.tsbuildinfo", "**/vitest.config.ts", "examples/**", "docs/**", "packages/react/**", "packages/vue/**", "packages/svelte/**"]
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts", "**/.tsbuildinfo", "**/vitest.config.ts", "examples/**", "documentation/**", "packages/react/**", "packages/vue/**", "packages/svelte/**"]
 }
 
