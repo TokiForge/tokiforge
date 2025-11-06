@@ -27,7 +27,14 @@
     "link:svelte": "cd packages/svelte && npm link && npm link @tokiforge/core",
     "link:cli": "cd packages/cli && npm link",
     "install:global": "cd packages/cli && npm run build && npm install -g .",
-    "uninstall:global": "npm uninstall -g tokiforge-cli"
+    "uninstall:global": "npm uninstall -g tokiforge-cli",
+    "publish:core": "cd packages/core && npm publish --access public",
+    "publish:react": "cd packages/react && npm publish --access public",
+    "publish:vue": "cd packages/vue && npm publish --access public",
+    "publish:svelte": "cd packages/svelte && npm publish --access public",
+    "publish:cli": "cd packages/cli && npm publish",
+    "publish:all": "npm run publish:core && npm run publish:react && npm run publish:vue && npm run publish:svelte && npm run publish:cli",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "design-tokens",

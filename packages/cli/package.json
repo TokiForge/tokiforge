@@ -36,6 +36,9 @@
   "bugs": {
     "url": "https://github.com/TokiForge/tokiforge/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@tokiforge/core": "^0.1.0",
     "commander": "^11.1.0",

@@ -49,6 +49,9 @@
   "homepage": "https://github.com/TokiForge/tokiforge#readme",
   "bugs": {
     "url": "https://github.com/TokiForge/tokiforge/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
 
