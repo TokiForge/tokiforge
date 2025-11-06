@@ -36,7 +36,11 @@ jobs:
       - name: Install dependencies
         run: |
           cd documentation
-          npm ci
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       - name: Build documentation
         env:
