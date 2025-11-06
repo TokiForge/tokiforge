@@ -1,0 +1,20 @@
+# TokiForge Commit Message Style
+
+## Format
+<type>(<scope>): <subject>
+
+## Types
+- feat: New feature
+- fix: Bug fix
+- docs: Documentation changes
+- style: Code style changes (formatting, etc.)
+- refactor: Code refactoring
+- test: Adding tests
+- chore: Maintenance tasks
+
+## Examples
+feat(core): Add color utilities for auto-generating shades
+fix(runtime): Fix theme switching on SSR
+docs(readme): Update installation instructions
+
+
