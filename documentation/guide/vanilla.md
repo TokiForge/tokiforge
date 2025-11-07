@@ -1,13 +1,13 @@
 # Vanilla JavaScript Guide
 
-> **TokiForge v0.2.1**
+> **TokiForge v1.0.0**
 
 Use TokiForge with vanilla JavaScript, no framework required!
 
 ## Installation
 
 ```bash
-npm install @tokiforge/core@^0.2.1
+npm install @tokiforge/core@^1.0.0
 ```
 
 ## Basic Usage
@@ -22,7 +22,7 @@ Or with CDN:
 
 ```html
 <script type="module">
-  import { ThemeRuntime } from 'https://cdn.jsdelivr.net/npm/@tokiforge/core@0.2.1/dist/index.mjs';
+  import { ThemeRuntime } from 'https://cdn.jsdelivr.net/npm/@tokiforge/core@1.0.0/dist/index.mjs';
 </script>
 ```
 
@@ -215,7 +215,7 @@ function nextTheme() {
 <body>
   <div class="container">
     <header class="header">
-      <h1>🌈 TokiForge Vanilla JS</h1>
+      <h1>TokiForge Vanilla JS</h1>
       <p>Current theme: <span id="current-theme">light</span></p>
     </header>
     

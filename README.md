@@ -22,10 +22,20 @@
 - 🎨 **Runtime theme switching** - Change themes instantly without page reload
 - 📦 **Lightweight** - Less than 3KB gzipped
 - 🔒 **Full TypeScript support** - Type-safe tokens with autocomplete
-- 🛠️ **CLI tools** - Initialize, build, and manage tokens from command line
+- 🛠️ **Powerful CLI** - Initialize, build, validate, and analyze tokens
 - 🎯 **CSS custom properties** - Native browser support with smart fallbacks
 - 🌓 **Dark mode ready** - Built-in light/dark theme support
-- 📚 **Comprehensive docs** - Complete guides and examples
+- 🔄 **Token versioning** - Track versions, deprecations, and migrations
+- 🎭 **Component theming** - Scoped themes for individual components
+- 🔌 **Plugin system** - Extensible with custom exporters and validators
+- ♿ **Accessibility** - Built-in WCAG compliance checking and contrast analysis
+- 📱 **Responsive tokens** - Breakpoint and state-aware token variations
+- 🔍 **Figma sync** - Compare and sync tokens with Figma designs
+- ✅ **CI/CD ready** - Automated validation for PRs and pipelines
+- 📊 **Analytics** - Token usage tracking and bundle impact analysis
+- 📚 **Multi-team support** - Versioned token registry for design systems
+- 💻 **IDE support** - Autocomplete and hover previews (VSCode ready)
+- 🎨 **Tailwind integration** - Generate Tailwind config from tokens
 
 ---
 
@@ -264,6 +274,15 @@ tokiforge dev
 
 # Validate token schema
 tokiforge lint
+
+# Validate tokens for CI/CD
+tokiforge validate [--strict] [--figma]
+
+# Compare Figma ↔ Code tokens
+tokiforge figma:diff --token TOKEN --file-key KEY
+
+# Generate token analytics
+tokiforge analytics
 ```
 
 ---
@@ -353,17 +372,40 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 
 ## 🗺️ Roadmap
 
+### ✅ Completed (v1.0.0)
 - [x] Core engine + React adapter
 - [x] Vue/Svelte/Angular adapters
 - [x] CLI tooling
 - [x] TypeScript support
-- [ ] VS Code extension
-- [ ] Figma plugin
-- [ ] Theme playground
-- [ ] Accessibility dashboard
-- [ ] Tailwind CSS plugin
+- [x] Token versioning & deprecation
+- [x] Component theming
+- [x] Plugin system
+- [x] Accessibility dashboard
+- [x] Responsive & state-aware tokens
+- [x] Figma sync & diff tool
+- [x] CI/CD integration
+- [x] Token analytics
+- [x] Versioned token registry
+- [x] IDE support (API ready)
+- [x] Tailwind CSS integration
 
-[View full roadmap →](https://github.com/TokiForge/tokiforge/issues)
+### 🚧 In Progress (v1.1.0+)
+- [ ] Enhanced semantic tokens & aliasing
+- [ ] Multi-platform exporters (iOS, Android, React Native)
+- [ ] Type generation CLI (`generate:types`)
+- [ ] Enhanced Tailwind plugin format
+- [ ] CLI enhancements (`migrate`, `watch`)
+- [ ] Zero-JS + SSR improvements
+- [ ] Enhanced Figma integration (Tokens Studio)
+
+### 📋 Planned
+- [ ] VS Code extension
+- [ ] Visual playground enhancements
+- [ ] CI/Visual regression integration
+- [ ] Enhanced usage analytics
+- [ ] Community plugin examples
+
+📖 **[View Full Roadmap →](./ROADMAP.md)** | **[Implementation Plan →](./IMPLEMENTATION_PLAN.md)**
 
 ---
 

@@ -6,10 +6,22 @@ export class TokenExporter {
       const value = tokens[key];
       const path = prefix ? `${prefix}.${key}` : key;
 
-      if (value && typeof value === 'object' && 'value' in value) {
-        result[path] = value as TokenValue;
-      } else if (value && typeof value === 'object') {
-        this.flattenTokens(value as DesignTokens, path, result);
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        if ('value' in value || '$value' in value || '$alias' in value) {
+          const token = value as any;
+          if ('$value' in token && !('value' in token)) {
+            const normalizedToken: TokenValue = {
+              ...token,
+              value: token.$value,
+            };
+            delete normalizedToken.$value;
+            result[path] = normalizedToken;
+          } else {
+            result[path] = token as TokenValue;
+          }
+        } else {
+          this.flattenTokens(value as DesignTokens, path, result);
+        }
       }
     }
 

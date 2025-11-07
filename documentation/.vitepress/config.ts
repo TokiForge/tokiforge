@@ -116,6 +116,7 @@ export default defineConfig({
         {
           text: 'Advanced',
           items: [
+            { text: 'Advanced Features', link: '/guide/advanced-features' },
             { text: 'Theming', link: '/guide/theming' },
             { text: 'Design Tokens', link: '/guide/design-tokens' },
             { text: 'Custom Exporters', link: '/guide/custom-exporters' },
@@ -131,6 +132,16 @@ export default defineConfig({
             { text: 'TokenParser', link: '/api/token-parser' },
             { text: 'TokenExporter', link: '/api/token-exporter' },
             { text: 'ThemeRuntime', link: '/api/theme-runtime' },
+            { text: 'TokenVersioning', link: '/api/core#tokenversioning' },
+            { text: 'ComponentTheming', link: '/api/core#componenttheming' },
+            { text: 'PluginManager', link: '/api/core#pluginmanager' },
+            { text: 'AccessibilityUtils', link: '/api/core#accessibilityutils' },
+            { text: 'ResponsiveTokens', link: '/api/core#responsivetokens' },
+            { text: 'FigmaDiff', link: '/api/core#figmadiff' },
+            { text: 'CICDValidator', link: '/api/core#cicdvalidator' },
+            { text: 'TokenAnalytics', link: '/api/core#tokenanalytics' },
+            { text: 'TokenRegistry', link: '/api/core#tokenregistry' },
+            { text: 'IDESupport', link: '/api/core#idesupport' },
           ],
         },
         {

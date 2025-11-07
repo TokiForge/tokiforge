@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <h1>🌈 Enhanced TokiForge Vue Plugin</h1>
+    <h1>Enhanced TokiForge Vue Plugin</h1>
     <p>This uses the improved plugin with static mode + all features!</p>
     
     <div class="controls">
@@ -15,7 +15,7 @@
     <div class="info-section">
       <h2>Current Theme: {{ theme }}</h2>
       <p><strong>Mode:</strong> Static (body classes, no JS injection)</p>
-      <p><strong>Features:</strong> Token parsing ✅ | References ✅ | localStorage ✅ | System theme ✅</p>
+      <p><strong>Features:</strong> Token parsing | References | localStorage | System theme</p>
       <p><strong>Performance:</strong> Zero runtime overhead (pure CSS)</p>
     </div>
 

@@ -1,6 +1,6 @@
 # GitHub Pages Deployment
 
-> **TokiForge v0.2.1** - Documentation deployment guide
+> **TokiForge v1.0.0** - Documentation deployment guide
 
 ## Step 1: Enable GitHub Pages
 

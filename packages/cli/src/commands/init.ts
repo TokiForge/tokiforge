@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-export async /**
- * initCommand - Enhanced with better documentation
- * @returns Improved functionality
+/**
+ * Initialize TokiForge in a project
+ * Creates default tokens.json and tokiforge.config.json files
  */
-function initCommand(projectPath: string = process.cwd()): Promise<void> {
+export async function initCommand(projectPath: string = process.cwd()): Promise<void> {
   const tokensPath = path.join(projectPath, 'tokens.json');
   const configPath = path.join(projectPath, 'tokiforge.config.json');
 
@@ -72,20 +72,20 @@ function initCommand(projectPath: string = process.cwd()): Promise<void> {
   };
 
   if (fs.existsSync(tokensPath)) {
-    console.log('⚠️  tokens.json already exists. Skipping...');
+    console.log('tokens.json already exists. Skipping...');
   } else {
     fs.writeFileSync(tokensPath, JSON.stringify(defaultTokens, null, 2));
-    console.log('✅ Created tokens.json');
+    console.log('Created tokens.json');
   }
 
   if (fs.existsSync(configPath)) {
-    console.log('⚠️  tokiforge.config.json already exists. Skipping...');
+    console.log('tokiforge.config.json already exists. Skipping...');
   } else {
     fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2));
-    console.log('✅ Created tokiforge.config.json');
+    console.log('Created tokiforge.config.json');
   }
 
-  console.log('\n🎉 TokiForge initialized successfully!');
+  console.log('\nTokiForge initialized successfully!');
   console.log('\nNext steps:');
   console.log('  1. Edit tokens.json to define your design tokens');
   console.log('  2. Run "tokiforge build" to generate token exports');

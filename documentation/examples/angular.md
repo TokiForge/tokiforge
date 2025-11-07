@@ -1,13 +1,13 @@
 # Angular Example
 
-> **TokiForge v0.2.1** | **Angular 17+**
+> **TokiForge v1.0.0** | **Angular 17+**
 
 Complete Angular example using TokiForge with standalone components.
 
 ## Setup
 
 ```bash
-npm install @tokiforge/angular@^0.2.1 @tokiforge/core@^0.2.1 @angular/core@^17.0.0 @angular/common@^17.0.0 @angular/platform-browser@^17.0.0
+npm install @tokiforge/angular@^1.0.0 @tokiforge/core@^1.0.0 @angular/core@^17.0.0 @angular/common@^17.0.0 @angular/platform-browser@^17.0.0
 ```
 
 ## Code
@@ -25,7 +25,7 @@ import tokens from '../tokens.json';
   standalone: true,
   template: `
     <div class="app-container">
-      <h1>🌈 TokiForge Angular Example</h1>
+      <h1>TokiForge Angular Example</h1>
       <app-theme-switcher></app-theme-switcher>
       <app-card></app-card>
       <app-button></app-button>

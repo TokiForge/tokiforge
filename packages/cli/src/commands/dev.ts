@@ -10,7 +10,7 @@ export async function devCommand(projectPath: string = process.cwd()): Promise<v
   const configPath = path.join(projectPath, 'tokiforge.config.json');
 
   if (!fs.existsSync(configPath)) {
-    console.error('❌ tokiforge.config.json not found. Run "tokiforge init" first.');
+    console.error('tokiforge.config.json not found. Run "tokiforge init" first.');
     process.exit(1);
   }
 
@@ -18,7 +18,7 @@ export async function devCommand(projectPath: string = process.cwd()): Promise<v
   const inputPath = path.resolve(projectPath, config.input);
 
   if (!fs.existsSync(inputPath)) {
-    console.error(`❌ Token file not found: ${inputPath}`);
+    console.error(`Token file not found: ${inputPath}`);
     process.exit(1);
   }
 
@@ -157,19 +157,18 @@ export async function devCommand(projectPath: string = process.cwd()): Promise<v
   });
 
   server.listen(PORT, () => {
-    console.log(`\n🚀 TokiForge Dev Server running at http://localhost:${PORT}`);
-    console.log('📝 Watching for token changes...\n');
+    console.log(`\nTokiForge Dev Server running at http://localhost:${PORT}`);
+    console.log('Watching for token changes...\n');
   });
 
   // Watch for changes
   const watcher = chokidar.watch(inputPath, { persistent: true });
   watcher.on('change', () => {
-    console.log('🔄 Token file changed, reloading...');
-    // Tokens are re-parsed on each request
+    console.log('Token file changed, reloading...');
   });
 
   process.on('SIGINT', () => {
-    console.log('\n👋 Shutting down...');
+    console.log('\nShutting down...');
     watcher.close();
     server.close();
     process.exit(0);

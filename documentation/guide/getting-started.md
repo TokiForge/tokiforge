@@ -13,12 +13,12 @@ TokiForge is a modern design token and theming engine that lets you:
 
 ## Installation
 
-> **Version:** TokiForge v0.2.1
+> **Version:** TokiForge v1.0.0
 
 ### Core Package
 
 ```bash
-npm install @tokiforge/core@^0.2.1
+npm install @tokiforge/core@^1.0.0
 ```
 
 ### Framework Adapters
@@ -27,22 +27,22 @@ Choose your framework:
 
 ```bash
 # React
-npm install @tokiforge/react@^0.2.1
+npm install @tokiforge/react@^1.0.0
 
 # Vue
-npm install @tokiforge/vue@^0.2.1
+npm install @tokiforge/vue@^1.0.0
 
 # Angular
-npm install @tokiforge/angular@^0.2.1
+npm install @tokiforge/angular@^1.0.0
 
 # Svelte
-npm install @tokiforge/svelte@^0.2.1
+npm install @tokiforge/svelte@^1.0.0
 ```
 
 ### CLI Tool
 
 ```bash
-npm install -g tokiforge-cli@^0.2.1
+npm install -g tokiforge-cli@^1.0.0
 # or
 npx tokiforge-cli@latest init
 ```

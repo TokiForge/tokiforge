@@ -1,11 +1,11 @@
 # @tokiforge/core
 
-Core design token engine for TokiForge.
+Core design token engine for TokiForge v1.0.0.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/core
+npm install @tokiforge/core@^1.0.0
 ```
 
 ## Usage
@@ -49,9 +49,22 @@ runtime.init();
 runtime.applyTheme('dark');
 ```
 
+## New Features (v1.0.0)
+
+- **Token Versioning** - Track versions, deprecations, and migrations
+- **Component Theming** - Scoped themes for individual components
+- **Plugin System** - Extensible with custom exporters and validators
+- **Accessibility** - WCAG compliance checking and contrast analysis
+- **Responsive Tokens** - Breakpoint and state-aware token variations
+- **Figma Sync** - Compare and sync tokens with Figma
+- **CI/CD Integration** - Automated validation for pipelines
+- **Analytics** - Token usage tracking and bundle impact
+- **Token Registry** - Multi-team design system support
+- **IDE Support** - Autocomplete and hover previews
+
 ## API
 
-See the main [TokiForge README](../../README.md) for complete documentation.
+See the main [TokiForge README](../../README.md) and [API Documentation](../../documentation/api/core.md) for complete documentation.
 
 
 

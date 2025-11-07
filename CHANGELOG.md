@@ -5,6 +5,107 @@ All notable changes to TokiForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2025-11-12
+
+### Added
+
+#### Token Versioning & Deprecation Support
+- **Token Versioning**: Track token versions with metadata (introduced, deprecated, removed dates)
+- **Deprecation Management**: Detect and filter deprecated tokens
+- **Migration Helpers**: Automated token migration with replacement tracking
+- **Version Validation**: Validate token versions against minimum requirements
+
+#### Scoped Component Themes
+- **Per-Component Theming**: Scoped token namespaces for individual components
+- **Component Theme Registration**: Register and manage component-specific themes
+- **Scoped CSS Generation**: Generate CSS with component-scoped variable names
+
+#### Plugin API
+- **Extensible Plugin System**: Create custom exporters, validators, and formatters
+- **Plugin Manager**: Centralized plugin registration and management
+- **Custom Exporters**: Build custom token export formats
+- **Custom Validators**: Create token validation rules
+- **Custom Formatters**: Transform tokens with custom logic
+
+#### Accessibility Dashboard
+- **Contrast Ratio Calculations**: WCAG-compliant contrast checking
+- **Accessibility Metrics**: WCAG AA/AAA compliance checking
+- **Motion Preference Detection**: Respect user motion preferences
+- **Color-Blind Safety Checks**: Verify color combinations for accessibility
+- **Accessibility Reports**: Comprehensive accessibility analysis
+
+#### Responsive & State-Aware Tokens
+- **Breakpoint-Based Tokens**: Responsive token variations by breakpoint
+- **State-Based Tokens**: Hover, active, focus, disabled, loading states
+- **Responsive CSS Generation**: Generate media query-based CSS
+- **State CSS Generation**: Generate state-based CSS classes
+- **Token Flattening**: Flatten tokens for specific breakpoints or states
+
+#### Figma ↔ Code Diff Tool
+- **Token Comparison**: Compare Figma and codebase tokens
+- **Diff Reports**: Detailed reports of added, removed, and changed tokens
+- **Color Tolerance**: Configurable color comparison with tolerance
+- **JSON Export**: Export diff results as JSON
+
+#### CI/CD Integration
+- **Automated Validation**: Token validation in CI pipelines
+- **Accessibility Checks**: Automated accessibility compliance checking
+- **Deprecation Detection**: Automated deprecation warnings
+- **Figma Sync Validation**: Automated Figma sync checks
+- **Exit Codes**: Proper exit codes for CI integration
+
+#### Design Token Analytics
+- **Usage Tracking**: Track token usage across projects
+- **Bundle Impact Analysis**: Analyze token impact on bundle size
+- **Unused Token Detection**: Identify unused tokens
+- **Coverage Reports**: Token usage coverage metrics
+- **Size Estimation**: Estimate token size impact
+
+#### Versioned Token Registry
+- **Multi-Team Support**: Manage tokens across multiple teams
+- **Version Management**: Track token versions per team
+- **Token Tagging**: Organize tokens with tags
+- **Conflict Detection**: Detect token conflicts between teams
+- **Registry Merging**: Merge multiple token registries
+
+#### IDE Extension Support
+- **Token Hover Information**: Hover previews for tokens
+- **Autocomplete Support**: Token path autocomplete
+- **Token Documentation**: Generate token documentation
+- **Context-Aware Suggestions**: Smart token suggestions based on context
+- **VSCode Integration**: Ready for VSCode extension development
+
+#### CLI Enhancements
+- **validate Command**: CI/CD token validation
+- **figma:diff Command**: Compare Figma and code tokens
+- **analytics Command**: Generate token analytics reports
+- **Enhanced Error Messages**: Better error reporting and diagnostics
+
+#### Tailwind CSS Integration
+- **Tailwind Config Generation**: Generate Tailwind config from tokens
+- **CSS Variable Support**: Use CSS variables in Tailwind config
+- **Token Mapping**: Custom theme key mappings
+
+#### Figma Integration
+- **Pull Tokens from Figma**: Sync tokens from Figma files
+- **Push Tokens to Figma**: Sync tokens to Figma (limited API support)
+- **Figma API Client**: Full Figma API integration
+
+### Changed
+
+- **Version Bump**: All packages updated from 0.2.1 to 1.0.0
+- **Breaking Changes**: Some API changes for better consistency
+- **Type System**: Enhanced type definitions for new features
+- **Documentation**: Comprehensive documentation updates
+
+### Technical Improvements
+
+- **Modular Architecture**: Better separation of concerns
+- **Performance Optimizations**: Improved token parsing and processing
+- **Type Safety**: Enhanced TypeScript types throughout
+- **Error Handling**: Better error messages and diagnostics
+- **Code Quality**: Improved code organization and maintainability
+
 ## [0.2.1] - 2025-11-06
 
 ### Changed
@@ -25,7 +126,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added patterns for source maps and cache directories
   - Improved VS Code extension output exclusions
 
-## [0.2.0] - 2026-01-06
+## [0.2.0] - 2025-10-06
 
 ### Added
 
@@ -74,7 +175,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All examples now use consistent stub implementations for Node.js built-ins
 - Improved error handling and type safety across framework adapters
 
-## [0.1.0] - Initial Release
+## [0.1.0] - 2025-09-01
 
 ### Added
 
@@ -90,6 +191,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Framework-agnostic theming system
 - Complete documentation and examples
 
+[1.0.0]: https://github.com/tokiforge/tokiforge/compare/v0.2.1...v1.0.0
 [0.2.1]: https://github.com/tokiforge/tokiforge/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/tokiforge/tokiforge/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/tokiforge/tokiforge/releases/tag/v0.1.0
