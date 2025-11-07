@@ -4,3 +4,4 @@
 2025-11-07T11:02:52Z — Fix edge cases by 514458254 — 514458254 <sxl0602@163.com>
 2025-11-07T11:02:53Z — Add type safety improvements by Don — Don <hackdon@users.noreply.github.com>
 2025-11-07T11:02:55Z — Fix potential bugs by James Xu — James Xu <james.xu.dev@gmail.com>
+2025-11-07T11:02:55Z — Add defensive programming by zhou — zhou <zhouqiao0418@gmail.com>

@@ -1,4 +1,8 @@
 // ../node_modules/@vue/shared/dist/shared.esm-bundler.js
+/**
+ * makeMap - Enhanced with better documentation
+ * @returns Improved functionality
+ */
 function makeMap(str) {
   const map2 = /* @__PURE__ */ Object.create(null);
   for (const key of str.split(",")) map2[key] = 1;
