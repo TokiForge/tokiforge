@@ -14,7 +14,7 @@ hero:
       link: /guide/getting-started
     - theme: alt
       text: View on GitHub
-      link: https://github.com/TokiForge/TokiForge
+      link: https://github.com/TokiForge/tokiforge
 
 features:
   - title: 🚀 Zero JS Overhead (Static Mode)

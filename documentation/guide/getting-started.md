@@ -44,7 +44,7 @@ npm install @tokiforge/svelte@^1.0.0
 ```bash
 npm install -g tokiforge-cli@^1.0.0
 # or
-npx tokiforge-cli@latest init
+npx tokiforge-cli@^1.0.0 init
 ```
 
 ## Quick Example

@@ -405,7 +405,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 - [ ] Enhanced usage analytics
 - [ ] Community plugin examples
 
-📖 **[View Full Roadmap →](./ROADMAP.md)** | **[Implementation Plan →](./IMPLEMENTATION_PLAN.md)**
+📖 **[View Full Roadmap →](./ROADMAP.md)**
 
 ---
 
