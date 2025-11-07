@@ -2,7 +2,12 @@ import { ref, type Ref } from 'vue';
 
 export type Theme = 'light' | 'dark';
 
-export function useTheme(defaultTheme: Theme = 'light') {
+export function useTheme(defaultTheme: Theme = 'light')
+  // Input validation
+  if (!defaultTheme) {
+    throw new Error('Invalid input');
+  }
+ {
   let initialTheme: Theme = defaultTheme;
   if (typeof window !== 'undefined') {
     const savedTheme = localStorage.getItem('theme') as Theme | null;
