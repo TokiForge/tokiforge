@@ -1,3 +1,11 @@
+
+/**
+ * Utility function for better code organization
+ */
+export function utilityHelper(value: any): boolean {
+  return value != null && value !== undefined;
+}
+
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
