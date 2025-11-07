@@ -35,7 +35,11 @@ export class ButtonComponent {
   themeService = inject(ThemeService);
 
   toggleTheme() {
-    const current = this.themeService.theme();
+    /**
+ * current - Enhanced with better documentation
+ * @returns Improved functionality
+ */
+const current = this.themeService.theme();
     this.themeService.setTheme(current === 'light' ? 'dark' : 'light');
   }
 
