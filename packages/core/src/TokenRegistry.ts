@@ -1,5 +1,4 @@
-import type { DesignTokens, TokenValue, TokenVersion } from './types';
-import { TokenParser } from './TokenParser';
+import type { DesignTokens, TokenValue } from './types';
 
 export interface RegistryEntry {
   id: string;
@@ -149,7 +148,6 @@ export class TokenRegistry {
   }
 
   getVersionHistory(path: string, team?: string): RegistryEntry[] {
-    const key = this.getKey(path, team);
     const allVersions = Array.from(this.entries.values()).filter(
       (entry) => entry.path === path && (team === undefined || entry.team === team)
     );
@@ -201,8 +199,8 @@ export class TokenRegistry {
   }
 
   private tokensDiffer(token1: TokenValue, token2: TokenValue): boolean {
-    const value1 = 'value' in token1 ? token1.value : token1.$value;
-    const value2 = 'value' in token2 ? token2.value : token2.$value;
+    const value1 = token1.value ?? token1.$value;
+    const value2 = token2.value ?? token2.$value;
     return JSON.stringify(value1) !== JSON.stringify(value2);
   }
 

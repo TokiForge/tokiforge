@@ -1,5 +1,4 @@
 import type { DesignTokens } from './types';
-import { TokenParser } from './TokenParser';
 
 export interface DiffResult {
   added: Array<{ path: string; value: any }>;

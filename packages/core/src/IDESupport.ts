@@ -67,7 +67,6 @@ export class IDESupport {
       if (prefixLower === '' || path.toLowerCase().includes(prefixLower)) {
         const token = entry.token;
         const value = this.getTokenValue(token);
-        const preview = this.generatePreview(token, value);
 
         completions.push({
           label: path,

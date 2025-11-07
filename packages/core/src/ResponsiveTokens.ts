@@ -1,4 +1,4 @@
-import type { DesignTokens, TokenValue, TokenState, TokenResponsive, Breakpoint } from './types';
+import type { DesignTokens, TokenValue, Breakpoint } from './types';
 
 export interface MediaQuery {
   name: string;
