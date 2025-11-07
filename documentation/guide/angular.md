@@ -335,3 +335,10 @@ export class StandaloneComponent {
 - Learn about [Advanced Theming](/guide/theming)
 - Check the [API Reference](/api/angular)
 
+
+
+## Improvements
+
+- Enhanced documentation
+- Better examples
+- Updated usage guide
