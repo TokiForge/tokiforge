@@ -1,6 +1,6 @@
 {
   "name": "tokiforge",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "Framework-agnostic design token and theming engine for React, Vue, Svelte, Angular. Runtime theme switching, CSS variables, smart color utilities. <3KB gzipped.",
   "private": true,
   "workspaces": [
@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npm run build:core && npm run build:rest",
     "build:core": "npm run build --workspace @tokiforge/core",
-    "build:rest": "npm run build --workspace @tokiforge/react --workspace @tokiforge/vue --workspace @tokiforge/svelte --workspace @tokiforge/angular --workspace tokiforge-cli",
+    "build:rest": "npm run build --workspace @tokiforge/react --workspace @tokiforge/vue --workspace @tokiforge/svelte --workspace @tokiforge/angular --workspace @tokiforge/tailwind --workspace @tokiforge/figma --workspace tokiforge-cli",
     "build:all": "npm run build --workspaces",
     "dev": "npm run dev --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
@@ -21,12 +21,14 @@
     "docs:build": "npm run build --workspace TokiForge-docs",
     "docs:preview": "npm run preview --workspace TokiForge-docs",
     "typecheck": "tsc --noEmit --project tsconfig.json",
-    "link:all": "npm run link:core && npm run link:react && npm run link:vue && npm run link:svelte && npm run link:angular && npm run link:cli",
+    "link:all": "npm run link:core && npm run link:react && npm run link:vue && npm run link:svelte && npm run link:angular && npm run link:tailwind && npm run link:figma && npm run link:cli",
     "link:core": "cd packages/core && npm link",
     "link:react": "cd packages/react && npm link && npm link @tokiforge/core",
     "link:vue": "cd packages/vue && npm link && npm link @tokiforge/core",
     "link:svelte": "cd packages/svelte && npm link && npm link @tokiforge/core",
     "link:angular": "cd packages/angular && npm link && npm link @tokiforge/core",
+    "link:tailwind": "cd packages/tailwind && npm link && npm link @tokiforge/core",
+    "link:figma": "cd packages/figma && npm link && npm link @tokiforge/core",
     "link:cli": "cd packages/cli && npm link",
     "install:global": "cd packages/cli && npm run build && npm install -g .",
     "uninstall:global": "npm uninstall -g tokiforge-cli",
@@ -35,8 +37,10 @@
     "publish:vue": "cd packages/vue && npm publish --access public",
     "publish:svelte": "cd packages/svelte && npm publish --access public",
     "publish:angular": "cd packages/angular && npm publish --access public",
+    "publish:tailwind": "cd packages/tailwind && npm publish --access public",
+    "publish:figma": "cd packages/figma && npm publish --access public",
     "publish:cli": "cd packages/cli && npm publish",
-    "publish:all": "npm run publish:core && npm run publish:react && npm run publish:vue && npm run publish:svelte && npm run publish:angular && npm run publish:cli",
+    "publish:all": "npm run publish:core && npm run publish:react && npm run publish:vue && npm run publish:svelte && npm run publish:angular && npm run publish:tailwind && npm run publish:figma && npm run publish:cli",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

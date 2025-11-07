@@ -48,7 +48,7 @@
 </script>
 
 <div class="app" style="background-color: var(--hf-color-background-default); color: var(--hf-color-text-primary);">
-  <h1>🌈 TokiForge Svelte Example</h1>
+  <h1>TokiForge Svelte Example</h1>
   <p>This demonstrates the TokiForge theming system with Svelte.</p>
   <button class="theme-button" on:click={toggleTheme}>
     Switch to {$theme === 'light' ? 'Dark' : 'Light'} Theme

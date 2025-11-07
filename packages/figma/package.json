@@ -1,0 +1,54 @@
+{
+  "name": "@tokiforge/figma",
+  "version": "1.0.0",
+  "description": "Figma integration for TokiForge design tokens",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "figma",
+    "design-tokens",
+    "tokiforge",
+    "figma-plugin",
+    "figma-api"
+  ],
+  "author": "TokiForge Community",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TokiForge/tokiforge.git"
+  },
+  "homepage": "https://github.com/TokiForge/tokiforge#readme",
+  "bugs": {
+    "url": "https://github.com/TokiForge/tokiforge/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@tokiforge/core": "^1.0.0",
+    "axios": "^1.6.0"
+  }
+}
+

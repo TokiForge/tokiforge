@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <h1>🌈 TokiForge Vue Example (Using Plugin)</h1>
+    <h1>TokiForge Vue Example (Using Plugin)</h1>
     <p>This uses the @tokiforge/vue plugin with ThemeRuntime.</p>
     <button @click="toggleTheme" class="theme-button">
       Switch to {{ theme === 'light' ? 'Dark' : 'Light' }} Theme

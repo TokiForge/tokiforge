@@ -13,13 +13,13 @@ import { ButtonComponent } from './button.component';
   imports: [CommonModule, ThemeSwitcherComponent, CardComponent, ButtonComponent],
   template: `
     <div class="app-container">
-      <h1>🌈 Enhanced TokiForge Angular Example</h1>
+      <h1>Enhanced TokiForge Angular Example</h1>
       <p>This demonstrates the enhanced TokiForge theming system with static mode + all features!</p>
       
       <div class="info-section">
         <p><strong>Current Theme:</strong> {{ themeService.theme() }}</p>
         <p><strong>Mode:</strong> Static (body classes, zero JS overhead)</p>
-        <p><strong>Features:</strong> Token parsing ✅ | References ✅ | localStorage ✅ | System theme ✅</p>
+        <p><strong>Features:</strong> Token parsing | References | localStorage | System theme</p>
       </div>
       
       <app-theme-switcher></app-theme-switcher>

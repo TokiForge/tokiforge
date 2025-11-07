@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/core",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "Core design token engine for TokiForge",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -50,13 +50,14 @@
     "access": "public"
   },
   "devDependencies": {
+    "@vitest/ui": "^4.0.7",
     "tsup": "^8.0.0",
     "typescript": "^5.3.3",
-    "vitest": "^1.0.0",
-    "@vitest/ui": "^1.0.0"
+    "vitest": "^4.0.7"
   },
   "dependencies": {
+    "vite": "7.2.1",
+    "vitepress": "^1.6.4",
     "yaml": "^2.3.4"
   }
 }
-

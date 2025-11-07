@@ -54,6 +54,6 @@ const css = generateCombinedThemeCSS(themeConfig, {
 const outputPath = join(__dirname, 'src/themes/generated.css');
 writeFileSync(outputPath, css, 'utf-8');
 
-console.log('✅ Generated theme CSS:', outputPath);
-console.log('📦 File size:', (css.length / 1024).toFixed(2), 'KB');
+console.log('Generated theme CSS:', outputPath);
+console.log('File size:', (css.length / 1024).toFixed(2), 'KB');
 

@@ -32,9 +32,24 @@ export class TokenParser {
         return;
       }
 
-      if ('value' in obj) {
-        if (typeof obj.value !== 'string' && typeof obj.value !== 'number') {
-          throw new Error(`Invalid token value at ${path}: must be string or number`);
+      const isToken = 'value' in obj || '$value' in obj || '$alias' in obj;
+      
+      if (isToken) {
+        if ('value' in obj && obj.value !== undefined) {
+          if (typeof obj.value !== 'string' && typeof obj.value !== 'number') {
+            throw new Error(`Invalid token value at ${path}: must be string or number`);
+          }
+        } else if ('$value' in obj && obj.$value !== undefined) {
+          if (typeof obj.$value !== 'string' && typeof obj.$value !== 'number') {
+            throw new Error(`Invalid token $value at ${path}: must be string or number`);
+          }
+        }
+        
+        if ('$alias' in obj && obj.$alias) {
+          const alias = String(obj.$alias);
+          if (!alias.startsWith('{') || !alias.endsWith('}')) {
+            throw new Error(`Invalid $alias format at ${path}: must be in format "{token.path}"`);
+          }
         }
       } else {
         for (const key in obj) {
@@ -44,6 +59,86 @@ export class TokenParser {
     };
 
     validateRecursive(tokens);
+  }
+  
+  /**
+   * Extract all semantic tokens from a token tree
+   */
+  static extractSemanticTokens(tokens: DesignTokens): Array<{ path: string; token: TokenValue }> {
+    const semantic: Array<{ path: string; token: TokenValue }> = [];
+    
+    const traverse = (obj: DesignTokens, path: string = ''): void => {
+      for (const key in obj) {
+        const currentPath = path ? `${path}.${key}` : key;
+        const value = obj[key];
+        
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+          if ('value' in value || '$value' in value || '$alias' in value) {
+            const token = value as TokenValue;
+            if (token.semantic?.category === 'semantic' || token.$alias) {
+              semantic.push({ path: currentPath, token });
+            }
+          } else {
+            traverse(value as DesignTokens, currentPath);
+          }
+        }
+      }
+    };
+    
+    traverse(tokens);
+    return semantic;
+  }
+  
+  /**
+   * Validate all token aliases are valid
+   */
+  static validateAliases(tokens: DesignTokens): { valid: boolean; errors: string[] } {
+    const errors: string[] = [];
+    const allPaths = new Set<string>();
+    
+    // Collect all token paths
+    const collectPaths = (obj: DesignTokens, path: string = ''): void => {
+      for (const key in obj) {
+        const currentPath = path ? `${path}.${key}` : key;
+        const value = obj[key];
+        
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+          if ('value' in value || '$value' in value || '$alias' in value) {
+            allPaths.add(currentPath);
+          } else {
+            collectPaths(value as DesignTokens, currentPath);
+          }
+        }
+      }
+    };
+    
+    collectPaths(tokens);
+    
+    // Validate all aliases
+    const validateAlias = (obj: DesignTokens, path: string = ''): void => {
+      for (const key in obj) {
+        const currentPath = path ? `${path}.${key}` : key;
+        const value = obj[key];
+        
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+          if ('$alias' in value && value.$alias) {
+            const aliasPath = String(value.$alias).slice(1, -1); // Remove { }
+            if (!allPaths.has(aliasPath)) {
+              errors.push(`Alias at ${currentPath} references non-existent token: ${aliasPath}`);
+            }
+          } else {
+            validateAlias(value as DesignTokens, currentPath);
+          }
+        }
+      }
+    };
+    
+    validateAlias(tokens);
+    
+    return {
+      valid: errors.length === 0,
+      errors,
+    };
   }
 
   static expandReferences(tokens: DesignTokens): DesignTokens {
@@ -64,29 +159,63 @@ export class TokenParser {
         }
       }
 
-      if (current && typeof current === 'object' && 'value' in current) {
-        const value = current.value;
-        if (typeof value === 'string' && value.startsWith('{')) {
-          return resolveReference(value, root) as string;
+      if (current && typeof current === 'object') {
+        const tokenValue = 'value' in current ? current.value : ('$value' in current ? current.$value : null);
+        
+        if ('$alias' in current && current.$alias) {
+          return resolveReference(current.$alias, root) as string;
         }
-        return value;
+        
+        if (tokenValue !== null) {
+          if (typeof tokenValue === 'string' && tokenValue.startsWith('{')) {
+            return resolveReference(tokenValue, root) as string;
+          }
+          return tokenValue;
+        }
       }
 
       throw new Error(`Invalid token reference: ${path}`);
     };
 
     const isTokenValue = (obj: any): obj is TokenValue => {
-      return obj && typeof obj === 'object' && !Array.isArray(obj) && 'value' in obj;
+      return obj && typeof obj === 'object' && !Array.isArray(obj) && 
+             ('value' in obj || '$value' in obj || '$alias' in obj);
     };
 
     const expandRecursive = (obj: DesignTokens): DesignTokens => {
       if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
         if (isTokenValue(obj)) {
-          const resolvedValue = resolveReference(String(obj.value), tokens);
-          return {
-            ...obj,
-            value: resolvedValue,
-          } as unknown as DesignTokens;
+          if ('$alias' in obj && obj.$alias) {
+            const resolvedValue = resolveReference(String(obj.$alias), tokens);
+            return {
+              ...obj,
+              value: resolvedValue,
+              $alias: undefined,
+            } as unknown as DesignTokens;
+          }
+          
+          if ('$value' in obj && obj.$value) {
+            const valueToResolve = typeof obj.$value === 'string' && obj.$value.startsWith('{') 
+              ? obj.$value 
+              : String(obj.$value);
+            const resolvedValue = resolveReference(valueToResolve, tokens);
+            return {
+              ...obj,
+              value: resolvedValue,
+              $value: undefined,
+            } as unknown as DesignTokens;
+          }
+          
+          if ('value' in obj && obj.value) {
+            const valueToResolve = typeof obj.value === 'string' && obj.value.startsWith('{')
+              ? obj.value
+              : String(obj.value);
+            const resolvedValue = resolveReference(valueToResolve, tokens);
+            return {
+              ...obj,
+              value: resolvedValue,
+            } as unknown as DesignTokens;
+          }
         }
 
         const expanded: DesignTokens = {};

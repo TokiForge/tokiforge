@@ -1,6 +1,6 @@
 <template>
   <div class="app" :style="{ backgroundColor: 'var(--hf-color-background-default)', color: 'var(--hf-color-text-primary)' }">
-    <h1>🌈 TokiForge Vue Example</h1>
+    <h1>TokiForge Vue Example</h1>
     <p>This demonstrates the TokiForge theming system with Vue.</p>
     <button @click="toggleTheme" class="theme-button">
       Switch to {{ theme === 'light' ? 'Dark' : 'Light' }} Theme
