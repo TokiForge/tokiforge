@@ -138,10 +138,10 @@ $themeStore.theme
 **Solution:**
 ```bash
 # Install globally
-npm install -g tokiforge-cli
+npm install -g tokiforge-cli@^1.0.0
 
 # Or use npx
-npx tokiforge-cli init
+npx tokiforge-cli@^1.0.0 init
 ```
 
 ### Build Errors
@@ -175,7 +175,7 @@ npx tokiforge-cli init
 
 ## Still Having Issues?
 
-1. Check [GitHub Issues](https://github.com/TokiForge/TokiForge/issues)
+1. Check [GitHub Issues](https://github.com/TokiForge/tokiforge/issues)
 2. Review [Examples](/examples/react)
 3. See [API Reference](/api/core)
 

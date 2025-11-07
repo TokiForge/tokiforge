@@ -70,7 +70,7 @@ export default defineConfig({
         'ratingCount': '1'
       },
       'description': 'Framework-agnostic design token and theming engine for React, Vue, Svelte, Angular, and more.',
-      'url': 'https://github.com/tokiforge/tokiforge',
+      'url': 'https://github.com/TokiForge/tokiforge',
       'author': {
         '@type': 'Organization',
         'name': 'TokiForge Community'
@@ -88,7 +88,7 @@ export default defineConfig({
       { text: 'API', link: '/api/core' },
       { text: 'Examples', link: '/examples/react' },
       { text: 'CLI', link: '/cli/overview' },
-      { text: 'GitHub', link: 'https://github.com/tokiforge/tokiforge' },
+      { text: 'GitHub', link: 'https://github.com/TokiForge/tokiforge' },
     ],
 
     sidebar: {
@@ -179,12 +179,12 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/tokiforge/tokiforge' },
+      { icon: 'github', link: 'https://github.com/TokiForge/tokiforge' },
     ],
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2026 TokiForge Community',
+      copyright: 'Copyright © 2025 TokiForge Community',
     },
 
     search: {
@@ -192,7 +192,7 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/tokiforge/tokiforge/edit/main/docs/:path',
+      pattern: 'https://github.com/TokiForge/tokiforge/edit/main/documentation/:path',
       text: 'Edit this page on GitHub',
     },
 

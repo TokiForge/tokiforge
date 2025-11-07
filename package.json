@@ -11,7 +11,7 @@
     "build": "npm run build:core && npm run build:rest",
     "build:core": "npm run build --workspace @tokiforge/core",
     "build:rest": "npm run build --workspace @tokiforge/react --workspace @tokiforge/vue --workspace @tokiforge/svelte --workspace @tokiforge/angular --workspace @tokiforge/tailwind --workspace @tokiforge/figma --workspace tokiforge-cli",
-    "build:all": "npm run build --workspaces",
+    "build:all": "npm run build:core && npm run build --workspace @tokiforge/cli --workspace @tokiforge/figma --workspace @tokiforge/react --workspace @tokiforge/vue --workspace @tokiforge/svelte --workspace @tokiforge/angular --workspace @tokiforge/tailwind --workspace @tokiforge/playground --workspace TokiForge-docs",
     "dev": "npm run dev --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",

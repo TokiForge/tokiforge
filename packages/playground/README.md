@@ -1,6 +1,6 @@
 # TokiForge Playground
 
-Visual web UI for editing and previewing design tokens.
+Visual web UI for editing and previewing design tokens (v1.0.0).
 
 ## Features
 

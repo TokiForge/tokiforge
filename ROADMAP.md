@@ -357,6 +357,6 @@ We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guideline
 
 ---
 
-*Last updated: January 2025*  
+*Last updated: November 2025*  
 *Version: 1.0.0*
 

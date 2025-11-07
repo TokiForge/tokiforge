@@ -6,7 +6,7 @@ We actively support the following versions of TokiForge with security updates:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
+| 1.0.x   | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
@@ -150,7 +150,7 @@ If you discover a security issue, please report it using the methods above.
 ## Security Updates
 
 Security updates will be:
-- Released as patch versions (e.g., `0.1.0` → `0.1.1`)
+- Released as patch versions (e.g., `1.0.0` → `1.0.1`)
 - Documented in [CHANGELOG.md](./CHANGELOG.md) (if exists)
 - Announced via GitHub releases
 - Tagged with `security` label
@@ -201,7 +201,7 @@ This security policy is provided as-is. For legal matters, please refer to the [
 
 ---
 
-**Last Updated:** 2024-11-06
+**Last Updated:** 2025-11-07
 
 **Policy Version:** 1.0
 

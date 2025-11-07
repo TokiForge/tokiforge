@@ -58,13 +58,13 @@ Requires Angular 17.0+.
 Install globally for easy access:
 
 ```bash
-npm install -g tokiforge-cli
+npm install -g tokiforge-cli@^1.0.0
 ```
 
 Or use with `npx`:
 
 ```bash
-npx tokiforge-cli init
+npx tokiforge-cli@^1.0.0 init
 ```
 
 ## TypeScript Support

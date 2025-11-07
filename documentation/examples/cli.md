@@ -13,7 +13,7 @@ Complete example of using TokiForge CLI to manage design tokens.
 npm install -g tokiforge-cli@^1.0.0
 
 # Or use with npx (no installation needed)
-npx tokiforge-cli@latest init
+npx tokiforge-cli@^1.0.0 init
 ```
 
 ### 2. Initialize Project

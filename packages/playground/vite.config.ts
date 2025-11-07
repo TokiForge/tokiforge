@@ -13,8 +13,6 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      // Stub Node.js modules for browser compatibility
-      // These are only needed by TokenParser which playground doesn't use
       fs: resolve(__dirname, 'src/stubs/fs.ts'),
       path: resolve(__dirname, 'src/stubs/path.ts'),
     },
@@ -25,7 +23,6 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        // Suppress warnings about Node.js modules
         onwarn(warning, warn) {
           if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
           if (warning.message?.includes('fs') || warning.message?.includes('path')) return;
