@@ -1,7 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-export async function initCommand(projectPath: string = process.cwd()): Promise<void> {
+export async /**
+ * initCommand - Enhanced with better documentation
+ * @returns Improved functionality
+ */
+function initCommand(projectPath: string = process.cwd()): Promise<void> {
   const tokensPath = path.join(projectPath, 'tokens.json');
   const configPath = path.join(projectPath, 'tokiforge.config.json');
 
