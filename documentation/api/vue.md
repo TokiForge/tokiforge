@@ -156,3 +156,10 @@ All types are exported from `@tokiforge/core`. See [Core API](/api/core) for det
 See [Vue Example](/examples/vue) for complete usage examples.
 
 
+
+
+## Improvements
+
+- Enhanced documentation
+- Better examples
+- Updated usage guide
