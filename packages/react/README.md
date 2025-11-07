@@ -72,3 +72,10 @@ Hook to access theme context.
 
 
 
+
+
+## Improvements
+
+- Enhanced documentation
+- Better examples
+- Updated usage guide
