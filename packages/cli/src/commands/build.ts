@@ -35,7 +35,6 @@ export async function buildCommand(projectPath: string = process.cwd()): Promise
   console.log('Parsing tokens...');
   const tokens = TokenParser.parse(inputPath, { validate: true, expandReferences: true });
 
-  // Ensure output directory exists
   const outputDir = path.join(projectPath, 'dist');
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });

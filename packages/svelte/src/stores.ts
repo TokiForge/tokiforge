@@ -14,11 +14,9 @@ export function createThemeStore(
   const theme = writable<string>(themeName);
   const tokens = derived(theme, ($theme) => runtime.getThemeTokens($theme));
 
-  // Initialize runtime
   if (typeof window !== 'undefined') {
     runtime.init(selector, prefix);
 
-    // Watch for theme changes
     const handleThemeChange = (e: Event) => {
       const customEvent = e as CustomEvent;
       theme.set(customEvent.detail.theme);

@@ -95,7 +95,6 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
     },
   };
 
-  // Default mappings
   const colorPaths = themeMappings.colors || ['color'];
   const spacingPaths = themeMappings.spacing || ['spacing', 'size'];
   const borderRadiusPaths = themeMappings.borderRadius || ['radius', 'borderRadius'];
@@ -103,7 +102,6 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
   const fontFamilyPaths = themeMappings.fontFamily || ['fontFamily', 'typography.family'];
   const fontWeightPaths = themeMappings.fontWeight || ['fontWeight', 'typography.weight'];
 
-  // Extract colors
   const colors: Record<string, string> = {};
   for (const path in flattened) {
     if (colorPaths.some((p) => path.startsWith(p))) {
@@ -117,7 +115,6 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
     }
   }
 
-  // Extract spacing
   const spacing: Record<string, string> = {};
   for (const path in flattened) {
     if (spacingPaths.some((p) => path.startsWith(p))) {
@@ -131,7 +128,6 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
     }
   }
 
-  // Extract border radius
   const borderRadius: Record<string, string> = {};
   for (const path in flattened) {
     if (borderRadiusPaths.some((p) => path.startsWith(p))) {
@@ -145,7 +141,6 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
     }
   }
 
-  // Extract font sizes
   const fontSize: Record<string, any> = {};
   for (const path in flattened) {
     if (fontSizePaths.some((p) => path.startsWith(p))) {
@@ -159,7 +154,6 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
     }
   }
 
-  // Extract font families
   const fontFamily: Record<string, string[]> = {};
   for (const path in flattened) {
     if (fontFamilyPaths.some((p) => path.startsWith(p))) {
@@ -171,7 +165,6 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
     }
   }
 
-  // Extract font weights
   const fontWeight: Record<string, string> = {};
   for (const path in flattened) {
     if (fontWeightPaths.some((p) => path.startsWith(p))) {
@@ -183,7 +176,6 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
     }
   }
 
-  // Build theme.extend
   if (Object.keys(colors).length > 0) {
     config.theme!.extend!.colors = colors;
   }

@@ -35,15 +35,12 @@ export async function lintCommand(projectPath: string = process.cwd()): Promise<
   const result: LintResult = { errors: [], warnings: [] };
 
   try {
-    // Schema validation
     console.log('Validating schema...');
     TokenParser.parse(inputPath, { validate: true });
     console.log('Schema valid\n');
 
-    // Parse tokens
     const tokens = TokenParser.parse(inputPath, { expandReferences: true });
 
-    // Alias validation
     console.log('Validating aliases...');
     const aliasValidation = TokenParser.validateAliases(tokens);
     if (!aliasValidation.valid) {
@@ -111,7 +108,6 @@ function checkColorContrast(tokens: DesignTokens): string[] {
   const issues: string[] = [];
   const colors: Array<{ path: string; value: string }> = [];
 
-  // Collect all color tokens
   const collectColors = (obj: DesignTokens, path: string = ''): void => {
     for (const key in obj) {
       const currentPath = path ? `${path}.${key}` : key;
@@ -132,7 +128,6 @@ function checkColorContrast(tokens: DesignTokens): string[] {
 
   collectColors(tokens);
 
-  // Check common contrast pairs
   const textColors = colors.filter(c => c.path.includes('text'));
   const bgColors = colors.filter(c => c.path.includes('background') || c.path.includes('bg'));
 
@@ -203,7 +198,6 @@ export function diffTokens(
   const removed: string[] = [];
   const changed: Array<{ path: string; old: any; new: any }> = [];
 
-  // Find added and changed
   for (const path in newFlat) {
     if (!(path in oldFlat)) {
       added.push(path);
@@ -212,7 +206,6 @@ export function diffTokens(
     }
   }
 
-  // Find removed
   for (const path in oldFlat) {
     if (!(path in newFlat)) {
       removed.push(path);

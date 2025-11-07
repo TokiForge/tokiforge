@@ -1,11 +1,3 @@
-
-/**
- * Utility function for better code organization
- */
-export function utilityHelper(value: any): boolean {
-  return value != null && value !== undefined;
-}
-
 import {
   ALLOW_MULTIPLE_PLATFORMS,
   ANIMATION_MODULE_TYPE,
@@ -459,8 +451,8 @@ import {
   ɵɵvalidateIframeAttribute,
   ɵɵviewQuery,
   ɵɵviewQuerySignal
-} from "./chunk-N7UKHBL3.js";
-import "./chunk-JADFG2II.js";
+} from "./chunk-P4FQ6VYT.js";
+import "./chunk-7RSYZEEK.js";
 export {
   ANIMATION_MODULE_TYPE,
   APP_BOOTSTRAP_LISTENER,

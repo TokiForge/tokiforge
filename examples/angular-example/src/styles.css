@@ -1,0 +1,57 @@
+/* Global styles for Angular example - matching React example */
+
+/* Default CSS variable values (fallback until theme service initializes) */
+:root {
+  --hf-color-background-default: #FFFFFF;
+  --hf-color-background-muted: #F9FAFB;
+  --hf-color-text-primary: #1E293B;
+  --hf-color-text-secondary: #64748B;
+  --hf-color-primary: #7C3AED;
+  --hf-color-accent: #06B6D4;
+  --hf-radius-lg: 12px;
+  --hf-radius-md: 8px;
+  --hf-spacing-md: 16px;
+  --hf-spacing-lg: 24px;
+}
+
+.app-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: var(--hf-color-background-default);
+  color: var(--hf-color-text-primary);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.theme-button {
+  background-color: var(--hf-color-primary);
+  color: #FFFFFF;
+  border-radius: var(--hf-radius-lg);
+  padding: var(--hf-spacing-md) var(--hf-spacing-lg);
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.2s;
+  margin-top: 1rem;
+}
+
+.theme-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.theme-button:active {
+  transform: translateY(0);
+}
+
+.tokens-section {
+  margin-top: 2rem;
+}
+
+.tokens-section pre {
+  background-color: var(--hf-color-background-muted);
+  padding: 1rem;
+  border-radius: var(--hf-radius-md);
+  overflow: auto;
+}
+

@@ -98,7 +98,6 @@ export async function devCommand(projectPath: string = process.cwd()): Promise<v
       const root = document.documentElement;
       const preview = document.getElementById('preview');
       
-      // Apply CSS variables
       function applyTokens(obj, prefix = '') {
         for (const key in obj) {
           const value = obj[key];
@@ -161,7 +160,6 @@ export async function devCommand(projectPath: string = process.cwd()): Promise<v
     console.log('Watching for token changes...\n');
   });
 
-  // Watch for changes
   const watcher = chokidar.watch(inputPath, { persistent: true });
   watcher.on('change', () => {
     console.log('Token file changed, reloading...');

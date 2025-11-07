@@ -9,7 +9,6 @@ export async function initCommand(projectPath: string = process.cwd()): Promise<
   const tokensPath = path.join(projectPath, 'tokens.json');
   const configPath = path.join(projectPath, 'tokiforge.config.json');
 
-  // Default tokens
   const defaultTokens = {
     color: {
       primary: { value: '#7C3AED', type: 'color' },

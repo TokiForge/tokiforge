@@ -53,10 +53,8 @@ const themeConfig = {
   defaultTheme: 'light',
 };
 
-// Provide theme context
 provideTheme(themeConfig);
 
-// Use theme
 const { theme, tokens: themeTokens, setTheme } = useTheme();
 
 const toggleTheme = () => {

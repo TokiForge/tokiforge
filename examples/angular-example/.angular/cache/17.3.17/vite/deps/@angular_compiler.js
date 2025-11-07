@@ -1,7 +1,7 @@
 import {
   __spreadProps,
   __spreadValues
-} from "./chunk-JADFG2II.js";
+} from "./chunk-7RSYZEEK.js";
 
 // node_modules/@angular/compiler/fesm2022/compiler.mjs
 var _SELECTOR_REGEXP = new RegExp(

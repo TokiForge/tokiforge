@@ -2,7 +2,6 @@ import { ThemeProvider, useTheme } from '@tokiforge/react';
 import tokens from './tokens.json';
 import './App.css';
 
-// Create theme config
 const themeConfig = {
   themes: [
     {

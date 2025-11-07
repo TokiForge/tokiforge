@@ -54,7 +54,6 @@ export class FigmaSync {
    */
   async pullTokens(): Promise<DesignTokens> {
     try {
-      // Extract colors from styles
       const stylesResponse = await this.api.get(`/files/${this.config.fileKey}/styles`);
       const styles = stylesResponse.data.meta.styles;
 
@@ -62,10 +61,8 @@ export class FigmaSync {
         color: {},
       };
 
-      // Convert Figma styles to tokens
       for (const style of styles) {
         if (style.styleType === 'FILL') {
-          // Get style details
           const styleDetails = await this.getStyleDetails(style.key);
           if (styleDetails && styleDetails.fills && styleDetails.fills[0]) {
             const fill = styleDetails.fills[0];
@@ -95,10 +92,8 @@ export class FigmaSync {
     try {
       const tokens = TokenParser.parse(tokensPath, { expandReferences: true });
       
-      // Extract colors from tokens
       const colors = this.extractColors(tokens);
       
-      // Create/update Figma styles
       for (const [path, color] of Object.entries(colors)) {
         const styleName = this.tokenPathToStyleName(path);
         await this.createOrUpdateStyle(styleName, color);
@@ -124,8 +119,8 @@ export class FigmaSync {
    * Create or update a Figma style
    */
   private async createOrUpdateStyle(
-    name: string,
-    color: string
+    _name: string,
+    _color: string
   ): Promise<void> {
     // Creating styles via Figma API requires plugin context
     // This functionality is limited by Figma API restrictions
