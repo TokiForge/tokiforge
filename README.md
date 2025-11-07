@@ -1,206 +1,37 @@
-# 🌈 TokiForge — The Modern Design Token & Theme Engine
+<div align="center">
 
-> **Forge your colors. Shape your UI.**
+# 🌈 TokiForge
 
-TokiForge is a next-generation **open-source design token and theming engine** built for developers and designers who demand elegance, speed, and consistency. **Works with any framework** — React, Vue, Svelte, Angular, Next.js, Remix, Solid, Qwik, or even vanilla JavaScript. TokiForge lets you define, sync, and switch your themes effortlessly.
+**Framework-agnostic design token engine for React, Vue, Angular, Svelte & vanilla JS**
 
-**Keywords:** design tokens, theme engine, theming library, CSS variables, design system, runtime theming, React theming, Vue theming, Angular theming, Svelte theming, theme switching, dark mode, light mode, color tokens, design tokens library, frontend theming, token parser, style dictionary alternative
+[![GitHub stars](https://img.shields.io/github/stars/TokiForge/tokiforge?style=social)](https://github.com/TokiForge/tokiforge/stargazers)
+[![npm version](https://img.shields.io/npm/v/@tokiforge/core?label=version)](https://www.npmjs.com/package/@tokiforge/core)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
+[![Bundle Size](https://img.shields.io/badge/bundle%20size-%3C3KB-green.svg)](https://bundlephobia.com/package/@tokiforge/core)
 
----
+[Documentation](https://tokiforge.dev) • [Examples](./examples) • [Report Bug](https://github.com/TokiForge/tokiforge/issues) • [Request Feature](https://github.com/TokiForge/tokiforge/issues)
 
-## 🧩 Overview
-
-TokiForge provides a **framework-agnostic, runtime theming system** powered by **CSS custom properties**, **design tokens**, and **live theme management**. It bridges the gap between design tools (like Figma) and production-ready codebases with zero friction.
-
-### ⚡ Why TokiForge?
-
-Other tools focus on either design export or complex setups. TokiForge combines:
-
-* 🧠 **Intelligent design-token management**
-* ⚙️ **Runtime theme switching** (light/dark/brand-based)
-* 💅 **Framework-agnostic adapters**
-* 🪄 **Figma integration and token sync**
-* 🧰 **CLI + Dashboard for instant configuration**
-
-In short — it's your **complete color and theme infrastructure**, built for the future of frontend design systems.
+</div>
 
 ---
 
-## 🏗️ Architecture
+## ✨ Features
 
-### Core Components
-
-**1. Token Engine (`@tokiforge/core`)**
-
-* Defines and manages design tokens (colors, typography, spacing, radii, etc.)
-* Converts JSON/YAML tokens → CSS, SCSS, JS, or TS.
-* Supports versioning and live reload.
-
-**2. Runtime Engine**
-
-* Uses CSS variables with smart fallbacks for legacy browsers.
-* Enables instant theme switching without reloading or recompiling.
-* Optimized for <3KB gzipped footprint.
-
-**3. Framework Adapters**
-
-* React: `@tokiforge/react` → useTheme(), ThemeProvider
-* Vue: `@tokiforge/vue` → composables for reactivity
-* Svelte: `@tokiforge/svelte` → reactive bindings
-* Angular: `@tokiforge/angular` → ThemeService with Signals
-* **Any Framework**: `@tokiforge/core` → Works with Next.js, Remix, Solid, Qwik, Astro, and more!
-* Vanilla: pure JS API
-
-**4. CLI Tool (`tokiforge-cli`)**
-
-* Initialize tokens: `npx tokiforge init`
-* Generate exports: `tokiforge build`
-* Preview themes: `tokiforge dev`
-
-**5. Design Integration**
-
-* **Figma Plugin:** sync design tokens bidirectionally
-* **Style Dictionary Bridge:** full compatibility with Amazon's style-dictionary
-* **Accessibility Checks:** color contrast validation built-in
+- 🚀 **Framework-agnostic** - Works with React, Vue, Angular, Svelte, Next.js, Remix, Solid, Qwik, or vanilla JS
+- 🎨 **Runtime theme switching** - Change themes instantly without page reload
+- 📦 **Lightweight** - Less than 3KB gzipped
+- 🔒 **Full TypeScript support** - Type-safe tokens with autocomplete
+- 🛠️ **CLI tools** - Initialize, build, and manage tokens from command line
+- 🎯 **CSS custom properties** - Native browser support with smart fallbacks
+- 🌓 **Dark mode ready** - Built-in light/dark theme support
+- 📚 **Comprehensive docs** - Complete guides and examples
 
 ---
 
-## 🧱 System Diagram
+## 🚀 Quick Start
 
-```
-   ┌──────────────────────────────┐
-   │         Figma Plugin         │
-   │ (Design Tokens & Styles)     │
-   └─────────────┬────────────────┘
-                 │  Sync via API
-   ┌─────────────▼───────────────┐
-   │      TokiForge Core Engine   │
-   │  - Token Parser/Validator   │
-   │  - Runtime CSS Generator    │
-   └─────────────┬───────────────┘
-                 │
-   ┌─────────────▼───────────────┐
-   │   Framework Adapters        │
-   │ (React/Vue/Svelte/Angular)  │
-   └─────────────┬───────────────┘
-                 │
-   ┌─────────────▼───────────────┐
-   │  UI Components / App Code   │
-   │   Consuming TokiForge Tokens │
-   └──────────────────────────────┘
-```
-
----
-
-## 🚀 Key Features
-
-### 🎨 Theming
-
-* **Static Mode** - Zero JS overhead with body class-based theming
-* **Dynamic Mode** - Runtime CSS injection for flexible theming
-* Light/Dark/System theme switching with automatic detection
-* Custom brand themes (e.g., multiple clients)
-* Contextual theming for nested components
-* **Auto-generate dark themes** from light themes
-* **Smooth theme transitions** with animation tokens
-* **Automatic localStorage persistence** - Theme preferences saved automatically
-
-### 🧠 Design Tokens
-
-* JSON/YAML schema for token definition
-* Auto export to CSS, JS, TS, SCSS
-* Type-safe token usage
-* **Smart color utilities** - auto-generate shades, tints, palettes
-* **Color manipulation** - lighten, darken, saturate, desaturate
-
-### ⚙️ Developer Experience
-
-* `tokiforge dev` – local preview playground
-* `tokiforge lint` – validates token consistency
-* `tokiforge build` – generates final token bundle
-* **CSS Generation Utilities** - Generate theme CSS files at build time
-* **VS Code extension** - autocomplete, live preview, theme switcher
-* **Hot reload** - watch tokens and auto-rebuild
-
-### 💡 Designer Integration
-
-* Figma → Code sync (bidirectional)
-* **Accessibility dashboard** - WCAG compliance checker
-* Visual token diff between versions
-* **Theme playground** - shareable preview URLs
-
-### 🌟 Advanced Features
-
-* **AI-powered theme generator** - generate palettes from a single color
-* **Accessibility helpers** - auto-fix contrast issues
-* **Color palette generation** - create harmonious color schemes
-* **Contrast ratio calculator** - ensure WCAG compliance
-
----
-
-## 🔥 Why TokiForge is Better
-
-| Feature                   | TokiForge | Others                    |
-| ------------------------- | -------- | ------------------------- |
-| Real-time theme switching | ✅        | ⚠️ Often rebuild required |
-| **Zero JS overhead (static mode)** | ✅ | ❌ Always requires JS runtime |
-| Multi-framework support   | ✅        | ❌ Usually React-only      |
-| Type-safe token exports   | ✅        | ⚠️ Partial or manual      |
-| Figma bidirectional sync  | ✅        | ❌ One-way export only     |
-| CLI + Visual Playground   | ✅        | ⚠️ Missing or paid        |
-| CSS-native runtime        | ✅        | ⚠️ JS-heavy runtime       |
-| <3KB gzipped size         | ✅        | ❌ Bloated builds          |
-| **Auto localStorage persistence** | ✅ | ❌ Manual implementation |
-| **System theme detection** | ✅ | ❌ Manual implementation |
-| Accessibility validation  | ✅        | ❌ Missing                 |
-| **Smart color utilities** | ✅        | ❌ Manual color manipulation |
-| **Auto dark theme gen**   | ✅        | ❌ Manual creation         |
-| **AI palette generator**  | 🚧 Coming | ❌ Not available           |
-| **VS Code extension**     | 🚧 Coming | ⚠️ Limited support         |
-
----
-
-## 🏠 Local Usage
-
-For local development and testing, see [LOCAL_USAGE.md](./LOCAL_USAGE.md) for detailed instructions.
-
-**Quick Start:**
-```bash
-# Build all packages
-npm run build
-
-# Link all packages for local use
-npm run link:all
-
-# Use in your project
-npm link @tokiforge/core @tokiforge/react
-```
-
----
-
-## 🌐 Global Usage
-
-For global CLI installation, see [GLOBAL_USAGE.md](./GLOBAL_USAGE.md) for detailed instructions.
-
-**Quick Start:**
-```bash
-# Install CLI globally from local source
-npm run install:global
-
-# Or install from npm (when published)
-npm install -g tokiforge-cli
-
-# Use anywhere
-tokiforge init
-tokiforge build
-tokiforge dev
-```
-
----
-
-## 📦 Installation
-
-Install TokiForge for your framework:
+### Installation
 
 ```bash
 # React
@@ -215,169 +46,347 @@ npm install @tokiforge/core @tokiforge/angular
 # Svelte
 npm install @tokiforge/core @tokiforge/svelte
 
-# Vanilla JavaScript / Any Framework
+# Vanilla JS / Any Framework
 npm install @tokiforge/core
 ```
 
-## 🧠 Example Usage
+### Basic Usage
 
-**Define tokens (`tokens.json`):**
+**1. Define your tokens (`tokens.json`):**
 
 ```json
 {
   "color": {
-    "primary": { "value": "#7C3AED" },
-    "accent": { "value": "#06B6D4" },
-    "text": { "value": "#F8FAFC" }
+    "primary": { "value": "#7C3AED", "type": "color" },
+    "accent": { "value": "#06B6D4", "type": "color" },
+    "text": {
+      "primary": { "value": "#1F2937", "type": "color" },
+      "secondary": { "value": "#6B7280", "type": "color" }
+    }
   },
-  "radius": { "sm": { "value": "4px" }, "lg": { "value": "12px" } }
+  "spacing": {
+    "sm": { "value": "8px", "type": "dimension" },
+    "md": { "value": "16px", "type": "dimension" },
+    "lg": { "value": "24px", "type": "dimension" }
+  },
+  "radius": {
+    "sm": { "value": "4px", "type": "dimension" },
+    "lg": { "value": "12px", "type": "dimension" }
+  }
 }
 ```
 
-**Use in React:**
+**2. Use in React:**
 
 ```tsx
-import { useTheme } from '@tokiforge/react';
+import { ThemeProvider, useToken } from '@tokiforge/react';
+import tokens from './tokens.json';
 
-export function Button() {
-  const { tokens, setTheme } = useTheme();
+function App() {
+  return (
+    <ThemeProvider tokens={tokens} defaultTheme="light">
+      <Button />
+    </ThemeProvider>
+  );
+}
+
+function Button() {
+  const primaryColor = useToken('color.primary');
+  const spacing = useToken('spacing.md');
+  const radius = useToken('radius.lg');
+  
   return (
     <button
       style={{
-        backgroundColor: tokens.color.primary,
-        borderRadius: tokens.radius.lg,
+        backgroundColor: primaryColor,
+        padding: spacing,
+        borderRadius: radius,
       }}
-      onClick={() => setTheme('dark')}
     >
-      Switch Theme
+      Click me
     </button>
   );
 }
 ```
 
-**Smart Color Utilities:**
+**3. Switch themes at runtime:**
 
 ```tsx
-import { ColorUtils } from '@tokiforge/core';
+import { useTheme } from '@tokiforge/react';
 
-// Auto-generate shades from a base color
-const shades = ColorUtils.generateShades('#7C3AED', 10);
-// Returns: { '0': '#000000', '100': '#...', ..., '900': '#ffffff' }
+function ThemeSwitcher() {
+  const { setTheme, currentTheme } = useTheme();
+  
+  return (
+    <button onClick={() => setTheme(currentTheme === 'light' ? 'dark' : 'light')}>
+      Switch to {currentTheme === 'light' ? 'dark' : 'light'} mode
+    </button>
+  );
+}
+```
 
-// Generate accessible colors (WCAG compliant)
-const accessible = ColorUtils.findAccessibleColor('#000000', '#ffffff', 'AA');
-// Automatically adjusts color if contrast is insufficient
+👉 **[View full documentation →](https://tokiforge.dev)**
 
-// Auto-generate dark theme from light theme
-const darkTheme = ColorUtils.generateDarkTheme(lightTokens);
-// Intelligently inverts colors while maintaining design intent
+---
 
-// Generate harmonious color palette
-const palette = ColorUtils.generatePalette('#7C3AED', 5);
-// Creates complementary colors for your design system
+## 🎯 Why TokiForge?
+
+| Feature | TokiForge | Others |
+|---------|-----------|--------|
+| Runtime theme switching | ✅ | ⚠️ Often requires rebuild |
+| Framework-agnostic | ✅ | ❌ Usually framework-specific |
+| TypeScript support | ✅ | ⚠️ Partial or manual |
+| Bundle size | ✅ <3KB | ❌ Often larger |
+| CSS custom properties | ✅ | ⚠️ JS-heavy runtime |
+| Zero JS overhead (static mode) | ✅ | ❌ Always requires JS |
+
+---
+
+## 📦 Packages
+
+| Package | Description | npm |
+|---------|-------------|-----|
+| `@tokiforge/core` | Core engine (works with any framework) | [![npm](https://img.shields.io/npm/v/@tokiforge/core)](https://www.npmjs.com/package/@tokiforge/core) |
+| `@tokiforge/react` | React adapter with hooks | [![npm](https://img.shields.io/npm/v/@tokiforge/react)](https://www.npmjs.com/package/@tokiforge/react) |
+| `@tokiforge/vue` | Vue 3 composables | [![npm](https://img.shields.io/npm/v/@tokiforge/vue)](https://www.npmjs.com/package/@tokiforge/vue) |
+| `@tokiforge/angular` | Angular service with Signals | [![npm](https://img.shields.io/npm/v/@tokiforge/angular)](https://www.npmjs.com/package/@tokiforge/angular) |
+| `@tokiforge/svelte` | Svelte stores | [![npm](https://img.shields.io/npm/v/@tokiforge/svelte)](https://www.npmjs.com/package/@tokiforge/svelte) |
+| `tokiforge-cli` | CLI tool for token management | [![npm](https://img.shields.io/npm/v/tokiforge-cli)](https://www.npmjs.com/package/tokiforge-cli) |
+
+---
+
+## 🏗️ Architecture
+
+```
+┌──────────────────────────────┐
+│      Design Tokens (JSON)    │
+│   (colors, spacing, etc.)    │
+└─────────────┬────────────────┘
+              │
+┌─────────────▼───────────────┐
+│   TokiForge Core Engine     │
+│  - Token Parser/Validator    │
+│  - Runtime CSS Generator     │
+│  - Theme Manager             │
+└─────────────┬───────────────┘
+              │
+┌─────────────▼───────────────┐
+│   Framework Adapters        │
+│ (React/Vue/Angular/Svelte)  │
+└─────────────┬───────────────┘
+              │
+┌─────────────▼───────────────┐
+│   Your Application          │
+│   Using Design Tokens       │
+└──────────────────────────────┘
 ```
 
 ---
 
-## 🧠 Philosophy
+## 🎨 Framework Examples
 
-TokiForge was designed around three guiding principles:
+### React
 
-1. **Universal Compatibility:** Works with any stack — web, mobile, or design tools.
-2. **Declarative Design:** Define tokens once, use everywhere.
-3. **Performance + Simplicity:** Lightweight, fast, and developer-first.
+```tsx
+import { ThemeProvider, useToken } from '@tokiforge/react';
+
+function App() {
+  return (
+    <ThemeProvider tokens={tokens}>
+      <Component />
+    </ThemeProvider>
+  );
+}
+```
+
+### Vue
+
+```vue
+<script setup>
+import { useToken } from '@tokiforge/vue';
+
+const primaryColor = useToken('color.primary');
+</script>
+```
+
+### Angular
+
+```typescript
+import { ThemeService } from '@tokiforge/angular';
+
+constructor(private themeService: ThemeService) {
+  const primaryColor = this.themeService.getToken('color.primary');
+}
+```
+
+### Svelte
+
+```svelte
+<script>
+  import { useToken } from '@tokiforge/svelte';
+  const primaryColor = useToken('color.primary');
+</script>
+```
+
+### Vanilla JS
+
+```javascript
+import { ThemeRuntime } from '@tokiforge/core';
+
+const runtime = new ThemeRuntime(tokens);
+const primaryColor = runtime.getToken('color.primary');
+runtime.applyTheme('dark');
+```
+
+👉 **[View complete examples →](./examples)**
 
 ---
 
-## 🧬 Roadmap (2026)
+## 🛠️ CLI Tool
 
-* [x] MVP: Core engine + React adapter
-* [x] CLI tooling
-* [x] Vue/Svelte/Angular adapters
-* [x] **Smart color utilities** - lighten, darken, generate shades
-* [x] **Auto dark theme generation**
-* [x] **Angular 17+ support** with Signals and SSR
-* [ ] **VS Code Extension** - autocomplete & live preview
-* [ ] **Theme Playground** - shareable preview URLs
-* [ ] **Accessibility Dashboard** - WCAG compliance checker
-* [ ] **Figma Plugin** - bidirectional sync
-* [ ] **AI-powered palette generator**
-* [ ] **Visual Token Studio** - web-based editor
-* [ ] **Tailwind CSS plugin**
-* [ ] **Storybook integration**
+Install the CLI globally:
 
----
+```bash
+npm install -g tokiforge-cli
+```
 
-## 🌟 Community & Contribution
+**Commands:**
 
-Join our open-source family at [github.com/tokiforge/tokiforge](https://github.com/tokiforge/tokiforge) ❤️
+```bash
+# Initialize a new token file
+tokiforge init
 
-### How to Contribute
+# Build tokens to CSS/SCSS/JS
+tokiforge build
 
-1. Fork the repo
-2. Create a feature branch (`feat/runtime-optimization`)
-3. Submit a PR with examples
+# Start development server with live preview
+tokiforge dev
 
-We welcome designers, frontend devs, and design-system engineers.
-
-### Star Us on GitHub
-
-If you find TokiForge useful, please consider giving us a ⭐ on [GitHub](https://github.com/tokiforge/tokiforge). Your support helps us grow!
+# Validate token schema
+tokiforge lint
+```
 
 ---
 
-## 💬 License
+## 📚 Documentation
+
+- **[Getting Started](https://tokiforge.dev/guide/getting-started)** - Quick setup guide
+- **[Installation](https://tokiforge.dev/guide/installation)** - Framework-specific setup
+- **[React Guide](https://tokiforge.dev/guide/react)** - React integration
+- **[Vue Guide](https://tokiforge.dev/guide/vue)** - Vue integration
+- **[Angular Guide](https://tokiforge.dev/guide/angular)** - Angular integration
+- **[Svelte Guide](https://tokiforge.dev/guide/svelte)** - Svelte integration
+- **[Examples](./examples)** - Complete example projects
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how you can help:
+
+1. ⭐ **Star the project** - It helps others discover TokiForge
+2. 🐛 **Report bugs** - Open an issue on GitHub
+3. 💡 **Suggest features** - Share your ideas
+4. 🔧 **Submit PRs** - Fix bugs or add features
+5. 📖 **Improve docs** - Help make documentation better
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+**Quick start for contributors:**
+
+```bash
+# Clone the repo
+git clone https://github.com/TokiForge/tokiforge.git
+cd tokiforge
+
+# Install dependencies
+npm install
+
+# Build all packages
+npm run build
+
+# Run tests
+npm test
+```
+
+---
+
+## ❓ FAQ
+
+<details>
+<summary><b>What is TokiForge?</b></summary>
+
+TokiForge is a framework-agnostic design token and theming engine that enables runtime theme switching using CSS custom properties. It works with React, Vue, Svelte, Angular, and any other JavaScript framework.
+</details>
+
+<details>
+<summary><b>How does TokiForge compare to Style Dictionary?</b></summary>
+
+TokiForge provides runtime theme switching capabilities that Style Dictionary doesn't offer. While Style Dictionary focuses on build-time token transformation, TokiForge adds a lightweight runtime engine (<3KB) for dynamic theme management.
+</details>
+
+<details>
+<summary><b>Does TokiForge support dark mode?</b></summary>
+
+Yes! TokiForge has built-in support for light/dark themes and can automatically generate dark themes from light theme tokens.
+</details>
+
+<details>
+<summary><b>Is TokiForge production-ready?</b></summary>
+
+Yes, TokiForge is production-ready with support for React, Vue, Svelte, and Angular. It's optimized for performance with a <3KB gzipped runtime footprint.
+</details>
+
+<details>
+<summary><b>Can I use TokiForge with TypeScript?</b></summary>
+
+Absolutely! TokiForge is written in TypeScript and provides full type safety for design tokens and theme configurations.
+</details>
+
+<details>
+<summary><b>Does TokiForge work with SSR?</b></summary>
+
+Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other SSR frameworks.
+</details>
+
+---
+
+## 🗺️ Roadmap
+
+- [x] Core engine + React adapter
+- [x] Vue/Svelte/Angular adapters
+- [x] CLI tooling
+- [x] TypeScript support
+- [ ] VS Code extension
+- [ ] Figma plugin
+- [ ] Theme playground
+- [ ] Accessibility dashboard
+- [ ] Tailwind CSS plugin
+
+[View full roadmap →](https://github.com/TokiForge/tokiforge/issues)
+
+---
+
+## 📄 License
 
 MIT License — free for personal and commercial use.
 
 ---
 
-## ❓ Frequently Asked Questions (FAQ)
+## 🙏 Acknowledgments
 
-### What is TokiForge?
+Built with 💜 by the TokiForge Community.
 
-TokiForge is a framework-agnostic design token and theming engine that enables runtime theme switching using CSS custom properties. It works with React, Vue, Svelte, Angular, and any other JavaScript framework.
-
-### How does TokiForge compare to Style Dictionary?
-
-TokiForge provides runtime theme switching capabilities that Style Dictionary doesn't offer. While Style Dictionary focuses on build-time token transformation, TokiForge adds a lightweight runtime engine (<3KB) for dynamic theme management.
-
-### Does TokiForge support dark mode?
-
-Yes! TokiForge has built-in support for light/dark themes and can automatically generate dark themes from light theme tokens using smart color utilities.
-
-### Is TokiForge production-ready?
-
-Yes, TokiForge is production-ready with support for React, Vue, Svelte, and Angular. It's optimized for performance with a <3KB gzipped runtime footprint.
-
-### Can I use TokiForge with TypeScript?
-
-Absolutely! TokiForge is written in TypeScript and provides full type safety for design tokens and theme configurations.
-
-### Does TokiForge work with SSR (Server-Side Rendering)?
-
-Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other SSR frameworks. The Angular adapter specifically supports `@angular/ssr`.
-
-### How do I install TokiForge?
-
-```bash
-npm install @tokiforge/core @tokiforge/react  # For React
-npm install @tokiforge/core @tokiforge/vue   # For Vue
-npm install @tokiforge/core @tokiforge/angular # For Angular
-npm install @tokiforge/core @tokiforge/svelte # For Svelte
-```
-
-### What browsers does TokiForge support?
-
-TokiForge uses CSS custom properties (CSS variables) which are supported in all modern browsers. It includes fallbacks for legacy browser support.
+Inspired by the intersection of **design and code**.
 
 ---
 
-## 🧠 Credits
+<div align="center">
 
-Built with 💜 by the TokiForge Community — inspired by the intersection of **design and code**.
+**⭐ If you find TokiForge useful, please consider giving it a star on GitHub! ⭐**
 
-> *TokiForge — The future of frontend theming begins here.*
+[![Star History Chart](https://api.star-history.com/svg?repos=TokiForge/tokiforge&type=Date)](https://star-history.com/#TokiForge/tokiforge&Date)
 
+Made with ❤️ by [TokiForge Community](https://github.com/TokiForge)
 
-
+</div>
