@@ -44,6 +44,7 @@
     "publish:figma": "cd packages/figma && npm publish --access public",
     "publish:cli": "cd packages/cli && npm publish",
     "publish:all": "npm run publish:core && npm run publish:react && npm run publish:vue && npm run publish:svelte && npm run publish:angular && npm run publish:tailwind && npm run publish:figma && npm run publish:cli",
+    "version:bump": "node scripts/version-bump.js",
     "prepublishOnly": "npm run build",
     "prepare": "husky"
   },

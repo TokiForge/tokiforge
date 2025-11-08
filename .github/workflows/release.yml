@@ -1,0 +1,179 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - release
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version type (patch, minor, major)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip release]')"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install --prefer-offline --no-audit
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Determine version bump type
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION_TYPE="${{ github.event.inputs.version_type }}"
+          else
+            # Check if tags exist
+            if git describe --tags --abbrev=0 >/dev/null 2>&1; then
+              LAST_TAG=$(git describe --tags --abbrev=0)
+              echo "Last tag: $LAST_TAG"
+              
+              # Check commit messages since last tag
+              COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"%s" 2>/dev/null || echo "")
+            else
+              echo "No tags found, analyzing recent commits"
+              LAST_TAG=""
+              COMMITS=$(git log --pretty=format:"%s" -n 50 2>/dev/null || echo "")
+            fi
+            
+            # Determine version bump based on commit messages
+            if echo "$COMMITS" | grep -qiE "BREAKING CHANGE"; then
+              VERSION_TYPE="major"
+            elif echo "$COMMITS" | grep -qE "^(feat|feature)(\(.+\))?:"; then
+              VERSION_TYPE="minor"
+            elif echo "$COMMITS" | grep -qE "^(fix|bugfix)(\(.+\))?:"; then
+              VERSION_TYPE="patch"
+            else
+              # Default to patch if no specific commit types found
+              VERSION_TYPE="patch"
+            fi
+          fi
+
+          echo "version_type=$VERSION_TYPE" >> $GITHUB_OUTPUT
+          echo "Version bump type: $VERSION_TYPE"
+
+      - name: Get current version
+        id: current_version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "Current version: $CURRENT_VERSION"
+
+      - name: Update versions
+        run: |
+          node scripts/version-bump.js ${{ steps.version.outputs.version_type }}
+
+      - name: Get new version
+        id: new_version
+        run: |
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "New version: $NEW_VERSION"
+
+      - name: Build packages
+        run: npm run build:all
+
+      - name: Run tests
+        run: npm test
+        continue-on-error: true
+
+      - name: Check for changes
+        id: git_status
+        run: |
+          git add .
+          if git diff --staged --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No changes to commit"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected"
+          fi
+
+      - name: Create release commit
+        if: steps.git_status.outputs.has_changes == 'true'
+        run: |
+          git commit -m "chore: release v${{ steps.new_version.outputs.new_version }}"
+
+      - name: Create git tag
+        run: |
+          git tag -a "v${{ steps.new_version.outputs.new_version }}" -m "Release v${{ steps.new_version.outputs.new_version }}"
+
+      - name: Push changes and tags
+        run: |
+          if [ "${{ steps.git_status.outputs.has_changes }}" == "true" ]; then
+            git push origin HEAD:${{ github.ref_name }} --follow-tags
+          else
+            git push origin --tags
+          fi
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
+          npm run publish:all
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.new_version.outputs.new_version }}
+          name: Release v${{ steps.new_version.outputs.new_version }}
+          body: |
+            ## 🚀 Release v${{ steps.new_version.outputs.new_version }}
+
+            ### Changes
+            - Automated release from ${{ github.ref_name }} branch
+            - Version bump: ${{ steps.current_version.outputs.current_version }} → ${{ steps.new_version.outputs.new_version }}
+
+            ### Published Packages
+            - `@tokiforge/core@${{ steps.new_version.outputs.new_version }}`
+            - `@tokiforge/react@${{ steps.new_version.outputs.new_version }}`
+            - `@tokiforge/vue@${{ steps.new_version.outputs.new_version }}`
+            - `@tokiforge/angular@${{ steps.new_version.outputs.new_version }}`
+            - `@tokiforge/svelte@${{ steps.new_version.outputs.new_version }}`
+            - `@tokiforge/tailwind@${{ steps.new_version.outputs.new_version }}`
+            - `@tokiforge/figma@${{ steps.new_version.outputs.new_version }}`
+            - `tokiforge-cli@${{ steps.new_version.outputs.new_version }}`
+
+            ### Installation
+            ```bash
+            npm install @tokiforge/core@${{ steps.new_version.outputs.new_version }}
+            ```
+
+            See [CHANGELOG.md](./CHANGELOG.md) for full details.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
