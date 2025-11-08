@@ -30,12 +30,12 @@ export default defineConfig({
   
   head: [
     // Google Analytics
-    ['script', { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-SLV94ETEF7' }],
+    ['script', { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-QMSD2BCYDK' }],
     ['script', {}, `
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-SLV94ETEF7');
+      gtag('config', 'G-QMSD2BCYDK');
     `],
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#7C3AED' }],
