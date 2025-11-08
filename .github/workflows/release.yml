@@ -27,6 +27,8 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip release]')"
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     steps:
       - name: Checkout code
@@ -138,11 +140,17 @@ jobs:
             git push origin --tags
           fi
 
-      - name: Publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Verify NPM authentication
         run: |
-          echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "Error: NPM_TOKEN secret is not set"
+            exit 1
+          fi
+          npm whoami --registry=https://registry.npmjs.org || (echo "NPM authentication failed" && exit 1)
+          echo "NPM authentication verified"
+
+      - name: Publish to npm
+        run: |
           npm run publish:all
 
       - name: Create GitHub Release
