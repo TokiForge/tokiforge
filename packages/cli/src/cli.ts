@@ -19,13 +19,11 @@ program
   .description('Modern Design Token & Theme Engine CLI')
   .version('1.0.0')
   .hook('preAction', (_thisCommand, actionCommand) => {
-    // Show compact splash for commands (except when showing help)
     if (!process.argv.includes('--help') && !process.argv.includes('-h') && actionCommand) {
       showCompactSplash();
     }
   });
 
-// Show full splash screen when no command is provided
 if (process.argv.length === 2) {
   showSplash();
   program.help();

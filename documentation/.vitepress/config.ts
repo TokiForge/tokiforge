@@ -24,18 +24,15 @@ export default defineConfig({
     },
   },
   description: 'TokiForge is a framework-agnostic design token and theming engine for React, Vue, Svelte, Angular, and more. Runtime theme switching, CSS variables, and smart color utilities. <3KB gzipped.',
-  // For GitHub Pages: base path should match repository name
-  // Change '/tokiforge/' to match your repository name, or use '/' for custom domain
   base: '/tokiforge/',
   
   head: [
-    // Google Analytics
-    ['script', { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-SLV94ETEF7' }],
+    ['script', { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-QMSD2BCYDK' }],
     ['script', {}, `
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-SLV94ETEF7');
+      gtag('config', 'G-QMSD2BCYDK');
     `],
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#7C3AED' }],
