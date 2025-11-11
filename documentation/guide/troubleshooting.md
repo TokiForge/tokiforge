@@ -138,10 +138,10 @@ $themeStore.theme
 **Solution:**
 ```bash
 # Install globally
-npm install -g tokiforge-cli@^1.0.0
+npm install -g tokiforge-cli@^1.1.0
 
 # Or use npx
-npx tokiforge-cli@^1.0.0 init
+npx tokiforge-cli@^1.1.0 init
 ```
 
 ### Build Errors

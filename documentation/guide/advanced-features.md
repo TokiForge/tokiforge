@@ -1,6 +1,6 @@
 # Advanced Features
 
-TokiForge v1.0.0 introduces powerful advanced features for enterprise-grade design systems.
+TokiForge v1.1.0 introduces powerful advanced features for enterprise-grade design systems.
 
 ## Token Versioning & Deprecation
 

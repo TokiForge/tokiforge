@@ -321,7 +321,10 @@ cd tokiforge
 # Install dependencies
 npm install
 
-# Build all packages
+# Build all packages (including playground and docs)
+npm run build:all
+
+# Or build core + framework packages only
 npm run build
 
 # Run tests
@@ -372,7 +375,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 
 ## 🗺️ Roadmap
 
-### ✅ Completed (v1.0.0)
+### ✅ Completed (v1.1.0)
 - [x] Core engine + React adapter
 - [x] Vue/Svelte/Angular adapters
 - [x] CLI tooling

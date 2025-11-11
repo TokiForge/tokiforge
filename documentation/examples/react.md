@@ -1,13 +1,13 @@
 # React Example
 
-> **TokiForge v1.0.0**
+> **TokiForge v1.1.0**
 
 Complete React example using TokiForge.
 
 ## Setup
 
 ```bash
-npm install @tokiforge/react@^1.0.0 @tokiforge/core@^1.0.0 react react-dom
+npm install @tokiforge/react@^1.1.0 @tokiforge/core@^1.1.0 react react-dom
 ```
 
 ## Code
@@ -16,7 +16,6 @@ npm install @tokiforge/react@^1.0.0 @tokiforge/core@^1.0.0 react react-dom
 import { ThemeProvider, useTheme } from '@tokiforge/react';
 import { useState } from 'react';
 
-// Define your tokens
 const lightTokens = {
   color: {
     primary: { value: '#7C3AED', type: 'color' },
@@ -66,7 +65,6 @@ const themeConfig = {
   defaultTheme: 'light',
 };
 
-// App Component
 function App() {
   return (
     <ThemeProvider config={themeConfig}>
@@ -79,7 +77,6 @@ function App() {
   );
 }
 
-// Header Component
 function Header() {
   const { tokens } = useTheme();
   
@@ -99,7 +96,6 @@ function Header() {
   );
 }
 
-// Content Component
 function Content() {
   const { tokens } = useTheme();
   
@@ -121,7 +117,6 @@ function Content() {
   );
 }
 
-// Button Component
 function Button({ children, variant = 'primary' }) {
   const { tokens } = useTheme();
   
@@ -155,7 +150,6 @@ function Button({ children, variant = 'primary' }) {
   );
 }
 
-// Theme Switcher
 function ThemeSwitcher() {
   const { theme, setTheme, availableThemes } = useTheme();
   

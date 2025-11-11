@@ -1,11 +1,11 @@
 # @tokiforge/react
 
-React adapter for TokiForge theming (v1.0.0).
+React adapter for TokiForge theming (v1.1.0).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/react@^1.0.0 @tokiforge/core@^1.0.0
+npm install @tokiforge/react@^1.1.0 @tokiforge/core@^1.1.0
 ```
 
 ## Usage

@@ -1,13 +1,13 @@
 # Quick Start
 
-> **TokiForge v1.0.0**
+> **TokiForge v1.1.0**
 
 Get up and running with TokiForge in 5 minutes!
 
 ## Step 1: Install
 
 ```bash
-npm install @tokiforge/core@^1.0.0 @tokiforge/react@^1.0.0
+npm install @tokiforge/core@^1.1.0 @tokiforge/react@^1.1.0
 ```
 
 ## Step 2: Create Tokens

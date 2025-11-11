@@ -1,62 +1,52 @@
 {
-  "hash": "aa1bd64d",
+  "hash": "1ffbbd22",
   "configHash": "20400a05",
-  "lockfileHash": "212a327b",
-  "browserHash": "eaa5c368",
+  "lockfileHash": "e0cc4e0c",
+  "browserHash": "e838ca8f",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "914450b3",
+      "fileHash": "005b9fad",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "8a21cb26",
+      "fileHash": "92c724cf",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "08f1b589",
+      "fileHash": "c91c0405",
       "needsInterop": false
     },
     "vitepress > @vueuse/integrations/useFocusTrap": {
       "src": "../../../../node_modules/@vueuse/integrations/useFocusTrap.mjs",
       "file": "vitepress___@vueuse_integrations_useFocusTrap.js",
-      "fileHash": "e52f41ea",
+      "fileHash": "029fd6d9",
       "needsInterop": false
     },
     "vitepress > mark.js/src/vanilla.js": {
       "src": "../../../../node_modules/mark.js/src/vanilla.js",
       "file": "vitepress___mark__js_src_vanilla__js.js",
-      "fileHash": "50fc3934",
+      "fileHash": "5b50763d",
       "needsInterop": false
     },
     "vitepress > minisearch": {
       "src": "../../../../node_modules/minisearch/dist/es/index.js",
       "file": "vitepress___minisearch.js",
-      "fileHash": "9b1ff54c",
-      "needsInterop": false
-    },
-    "yaml": {
-      "src": "../../../../node_modules/yaml/browser/index.js",
-      "file": "yaml.js",
-      "fileHash": "11e89490",
+      "fileHash": "310556a0",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-VK4QGWNZ": {
-      "file": "chunk-VK4QGWNZ.js"
+    "chunk-LQ6NEG75": {
+      "file": "chunk-LQ6NEG75.js"
     },
-    "chunk-TCKBI4FM": {
-      "file": "chunk-TCKBI4FM.js"
-    },
-    "chunk-PZ5AY32C": {
-      "file": "chunk-PZ5AY32C.js"
+    "chunk-3SVREP4X": {
+      "file": "chunk-3SVREP4X.js"
     }
-  },
-  "_updated": "2025-11-07"
+  }
 }

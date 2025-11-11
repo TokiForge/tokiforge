@@ -1,6 +1,6 @@
 # TokiForge Documentation
 
-This is the documentation site for TokiForge v1.0.0, built with [VitePress](https://vitepress.dev/).
+This is the documentation site for TokiForge v1.1.0, built with [VitePress](https://vitepress.dev/).
 
 ## Development
 

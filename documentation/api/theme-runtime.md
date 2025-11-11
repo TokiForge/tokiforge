@@ -161,10 +161,8 @@ getThemeTokens(themeName?: string): DesignTokens
 **Example:**
 
 ```typescript
-// Get current theme tokens
 const tokens = runtime.getThemeTokens();
 
-// Get specific theme tokens
 const darkTokens = runtime.getThemeTokens('dark');
 ```
 
@@ -265,7 +263,6 @@ const unwatch = runtime.watchSystemTheme((theme) => {
   runtime.applyTheme(theme);
 });
 
-// Stop watching
 unwatch();
 ```
 
@@ -289,9 +286,8 @@ static detectSystemTheme(): 'light' | 'dark'
 
 ```typescript
 const systemTheme = ThemeRuntime.detectSystemTheme();
-console.log(systemTheme); // 'light' or 'dark'
+console.log(systemTheme);
 
-// Apply system theme
 runtime.applyTheme(systemTheme);
 ```
 
@@ -312,10 +308,8 @@ const runtime = new ThemeRuntime({
   defaultTheme: 'light',
 });
 
-// Initialize
 runtime.init();
 
-// Switch theme
 runtime.applyTheme('dark');
 ```
 
@@ -326,11 +320,9 @@ import { ThemeRuntime } from '@tokiforge/core';
 
 const runtime = new ThemeRuntime(config);
 
-// Apply system theme on init
 const systemTheme = ThemeRuntime.detectSystemTheme();
 runtime.applyTheme(systemTheme);
 
-// Watch for system theme changes
 runtime.watchSystemTheme((theme) => {
   runtime.applyTheme(theme);
 });
@@ -343,10 +335,8 @@ import { ThemeRuntime } from '@tokiforge/core';
 
 const runtime = new ThemeRuntime(config);
 
-// Use custom selector and prefix
 runtime.init('body.theme-light', 'myapp');
 
-// Apply theme with custom settings
 runtime.applyTheme('dark', 'body.theme-dark', 'myapp');
 ```
 
@@ -358,14 +348,12 @@ import { ThemeRuntime } from '@tokiforge/core';
 const runtime = new ThemeRuntime(config);
 runtime.init();
 
-// Listen for theme changes
 window.addEventListener('tokiforge:theme-change', (e) => {
   const { theme, tokens } = e.detail;
   console.log('Theme:', theme);
   console.log('Tokens:', tokens);
 });
 
-// Trigger change
 runtime.applyTheme('dark');
 ```
 
@@ -376,7 +364,6 @@ import { ThemeRuntime } from '@tokiforge/core';
 
 const runtime = new ThemeRuntime(config);
 
-// Safe in both server and client
 if (typeof window !== 'undefined') {
   runtime.init();
   runtime.applyTheme('dark');
@@ -391,7 +378,6 @@ import { ThemeRuntime } from '@tokiforge/core';
 const runtime = new ThemeRuntime(config);
 runtime.init();
 
-// Later, cleanup
 runtime.destroy();
 ```
 

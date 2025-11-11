@@ -213,7 +213,6 @@ const files = generateThemeCSS(themeConfig, {
   prefix: 'hf',
   format: 'css',
 });
-// Returns: { 'light.css': '...', 'dark.css': '...' }
 ```
 
 ### `generateCombinedThemeCSS(config, options?)`

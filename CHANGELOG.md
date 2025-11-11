@@ -5,6 +5,32 @@ All notable changes to TokiForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-11-11
+
+### Fixed
+
+- **Vue Package**: Fixed localStorage mock in test environment to properly handle all required methods
+- **Vue Package**: Improved error handling for localStorage access with better fallback support
+- **Vue Package**: Fixed error handling tests to properly catch Vue setup function errors using errorHandler
+- **Vue Package**: Enhanced production code quality by removing test-specific comments
+- **Core Package**: Fixed package.json exports to match actual build output (index.js for ESM, index.cjs for CJS)
+- **Build System**: Fixed `build:all` script to work correctly with npm workspaces
+- **Build System**: Added `build:all` stubs to all workspace packages to prevent npm workspace script resolution issues
+
+### Changed
+
+- **Version Bump**: All packages updated from 1.0.0 to 1.1.0
+- **Dependency Updates**: All internal dependencies updated to `@tokiforge/core@^1.1.0`
+- **Code Quality**: Improved error handling and code cleanup across Vue package
+- **Build Scripts**: Updated `build:all` script to include playground and documentation packages
+
+### Technical Improvements
+
+- **Test Reliability**: All Vue package tests now pass consistently
+- **Production Ready**: Removed unnecessary comments and improved code maintainability
+- **Error Handling**: Better error handling for localStorage operations in various environments
+- **Build System**: Improved build script organization and workspace compatibility
+
 ## [1.0.0] - 2025-11-07
 
 ### Added
@@ -191,6 +217,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Framework-agnostic theming system
 - Complete documentation and examples
 
+[1.1.0]: https://github.com/tokiforge/tokiforge/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/tokiforge/tokiforge/compare/v0.2.1...v1.0.0
 [0.2.1]: https://github.com/tokiforge/tokiforge/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/tokiforge/tokiforge/compare/v0.1.0...v0.2.0

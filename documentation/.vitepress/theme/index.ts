@@ -2,6 +2,7 @@ import { h } from 'vue';
 import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import { ThemeRuntime } from '@tokiforge/core';
+import ApiPlayground from '../components/ApiPlayground.vue';
 import './custom.css';
 
 // Initialize TokiForge theme for the docs site
@@ -42,6 +43,9 @@ const themeRuntime = new ThemeRuntime(docsThemeConfig);
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
+    // Register playground component
+    app.component('ApiPlayground', ApiPlayground);
+    
     // Initialize theme runtime
     if (typeof window !== 'undefined') {
       themeRuntime.init();

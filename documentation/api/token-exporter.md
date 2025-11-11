@@ -169,12 +169,10 @@ static exportJS(
 ```typescript
 import { TokenExporter } from '@tokiforge/core';
 
-// Export with values
 const js = TokenExporter.exportJS(tokens, {
   variables: false,
 });
 
-// Export with CSS variables
 const jsWithVars = TokenExporter.exportJS(tokens, {
   variables: true,
   prefix: 'hf',
@@ -338,13 +336,10 @@ for (const format of formats) {
 ```typescript
 import { TokenExporter } from '@tokiforge/core';
 
-// Custom prefix for CSS variables
 const css = TokenExporter.exportCSS(tokens, {
   prefix: 'myapp',
   selector: ':root',
 });
-
-// Generates: --myapp-color-primary instead of --hf-color-primary
 ```
 
 ### Export JavaScript with CSS Variables
@@ -352,13 +347,10 @@ const css = TokenExporter.exportCSS(tokens, {
 ```typescript
 import { TokenExporter } from '@tokiforge/core';
 
-// Export JS that uses CSS variables
 const js = TokenExporter.exportJS(tokens, {
   variables: true,
   prefix: 'hf',
 });
-
-// Output uses var(--hf-color-primary) instead of "#7C3AED"
 ```
 
 ### Custom Selector for CSS
@@ -366,16 +358,10 @@ const js = TokenExporter.exportJS(tokens, {
 ```typescript
 import { TokenExporter } from '@tokiforge/core';
 
-// Export for body class selector
 const css = TokenExporter.exportCSS(tokens, {
   selector: 'body.theme-light',
   prefix: 'hf',
 });
-
-// Output:
-// body.theme-light {
-//   --hf-color-primary: #7C3AED;
-// }
 ```
 
 ## Variable Naming

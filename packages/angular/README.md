@@ -1,11 +1,11 @@
 # @tokiforge/angular
 
-Angular adapter for TokiForge theming engine (v1.0.0).
+Angular adapter for TokiForge theming engine (v1.1.0).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/angular@^1.0.0 @tokiforge/core@^1.0.0
+npm install @tokiforge/angular@^1.1.0 @tokiforge/core@^1.1.0
 ```
 
 ## Requirements

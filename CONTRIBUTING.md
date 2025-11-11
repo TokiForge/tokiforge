@@ -1,6 +1,6 @@
 # Contributing to TokiForge
 
-Thank you for your interest in contributing to TokiForge (v1.0.0)! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to TokiForge (v1.1.0)! This document provides guidelines and instructions for contributing.
 
 ## Getting Started
 
@@ -14,6 +14,10 @@ Thank you for your interest in contributing to TokiForge (v1.0.0)! This document
 ### Building
 
 ```bash
+# Build all packages (including playground and docs)
+npm run build:all
+
+# Or build core + framework packages only
 npm run build
 ```
 

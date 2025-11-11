@@ -45,6 +45,20 @@
   scroll-margin-top: calc(var(--vp-nav-height, 64px) + 1rem);
 }
 
+/* Fix sidebar active state for hash links */
+.VPSidebarItem.level-1 > .item > .link.active:not([href*="#"]):has(+ .items .link.active[href*="#"]) {
+  color: var(--vp-c-text-2) !important;
+}
+
+.VPSidebarItem.level-1 > .item > .link:not([href*="#"]):has(+ .items .link.active[href*="#"]) {
+  color: var(--vp-c-text-2) !important;
+}
+
+/* Ensure only the specific hash link is highlighted */
+.VPSidebarItem .link.active[href*="#"] {
+  color: var(--vp-c-brand) !important;
+}
+
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
   .VPContent {

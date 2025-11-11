@@ -1,13 +1,13 @@
 # Angular Example
 
-> **TokiForge v1.0.0** | **Angular 17+**
+> **TokiForge v1.1.0** | **Angular 17+**
 
 Complete Angular example using TokiForge with standalone components.
 
 ## Setup
 
 ```bash
-npm install @tokiforge/angular@^1.0.0 @tokiforge/core@^1.0.0 @angular/core@^17.0.0 @angular/common@^17.0.0 @angular/platform-browser@^17.0.0
+npm install @tokiforge/angular@^1.1.0 @tokiforge/core@^1.1.0 @angular/core@^17.0.0 @angular/common@^17.0.0 @angular/platform-browser@^17.0.0
 ```
 
 ## Code

@@ -8,9 +8,10 @@ export default defineConfig({
       skipLibCheck: true,
     },
   },
+  external: ['tailwindcss'],
   splitting: false,
   sourcemap: true,
   clean: true,
-  external: ['tailwindcss'],
+  tsconfig: './tsconfig.json',
 });
 

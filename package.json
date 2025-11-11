@@ -1,6 +1,6 @@
 {
   "name": "tokiforge",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Framework-agnostic design token and theming engine for React, Vue, Svelte, Angular. Runtime theme switching, CSS variables, smart color utilities. <3KB gzipped.",
   "private": true,
   "workspaces": [
@@ -11,7 +11,7 @@
     "build": "npm run build:core && npm run build:rest",
     "build:core": "npm run build --workspace @tokiforge/core",
     "build:rest": "npm run build --workspace @tokiforge/react --workspace @tokiforge/vue --workspace @tokiforge/svelte --workspace @tokiforge/angular --workspace @tokiforge/tailwind --workspace @tokiforge/figma --workspace tokiforge-cli",
-    "build:all": "npm run build:core && npm run build --workspace @tokiforge/cli --workspace @tokiforge/figma --workspace @tokiforge/react --workspace @tokiforge/vue --workspace @tokiforge/svelte --workspace @tokiforge/angular --workspace @tokiforge/tailwind --workspace @tokiforge/playground --workspace TokiForge-docs",
+    "build:all": "npm run build --workspace @tokiforge/core --workspace @tokiforge/react --workspace @tokiforge/vue --workspace @tokiforge/svelte --workspace @tokiforge/angular --workspace @tokiforge/tailwind --workspace @tokiforge/figma --workspace tokiforge-cli --workspace @tokiforge/playground --workspace TokiForge-docs",
     "dev": "npm run dev --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",

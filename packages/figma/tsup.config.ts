@@ -8,8 +8,10 @@ export default defineConfig({
       skipLibCheck: true,
     },
   },
+  external: ['axios'],
   splitting: false,
   sourcemap: true,
   clean: true,
+  tsconfig: './tsconfig.json',
 });
 

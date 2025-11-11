@@ -30,7 +30,6 @@ Switching themes:
 
 ```typescript
 runtime.applyTheme('dark');
-// Instant - just updates CSS variables
 ```
 
 No re-renders needed with CSS variables!
@@ -42,9 +41,8 @@ No re-renders needed with CSS variables!
 For best performance, use static mode with body classes:
 
 ```typescript
-// Vue
 provideTheme(themeConfig, {
-  mode: 'static', // Zero JS overhead
+  mode: 'static',
 });
 
 // Angular
@@ -104,7 +102,6 @@ Parse tokens once:
 
 ```typescript
 const parsedTokens = TokenParser.parse('./tokens.json');
-// Reuse parsedTokens
 ```
 
 ### 4. Minimize Token File Size
@@ -120,9 +117,8 @@ Keep token files small:
 Preload themes you'll need:
 
 ```typescript
-// Preload dark theme
 runtime.applyTheme('dark');
-runtime.applyTheme('light'); // Switch back
+runtime.applyTheme('light');
 ```
 
 ## Server-Side Rendering
@@ -130,7 +126,6 @@ runtime.applyTheme('light'); // Switch back
 TokiForge works with SSR:
 
 ```typescript
-// Safe - checks for window
 if (typeof window !== 'undefined') {
   runtime.init();
 }
@@ -152,7 +147,6 @@ Measure performance:
 console.time('theme-switch');
 runtime.applyTheme('dark');
 console.timeEnd('theme-switch');
-// Typically <1ms
 ```
 
 ## Best Practices

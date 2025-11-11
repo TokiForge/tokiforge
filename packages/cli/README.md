@@ -1,6 +1,6 @@
 # tokiforge-cli
 
-Command-line tool for TokiForge design tokens (v1.0.0).
+Command-line tool for TokiForge design tokens (v1.1.0).
 
 ## Installation
 

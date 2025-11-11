@@ -48,18 +48,14 @@ interface TokenParserOptions {
 ```typescript
 import { TokenParser } from '@tokiforge/core';
 
-// Parse JSON file
 const tokens = TokenParser.parse('./tokens.json');
 
-// Parse YAML file
 const yamlTokens = TokenParser.parse('./tokens.yaml');
 
-// Parse without validation
 const tokens = TokenParser.parse('./tokens.json', {
   validate: false,
 });
 
-// Parse without expanding references
 const tokens = TokenParser.parse('./tokens.json', {
   expandReferences: false,
 });
@@ -168,7 +164,6 @@ const tokensWithRefs = {
 };
 
 const expanded = TokenParser.expandReferences(tokensWithRefs);
-// accent.value is now '#7C3AED'
 ```
 
 **Throws:**
@@ -188,7 +183,6 @@ const expanded = TokenParser.expandReferences(tokensWithRefs);
 ```typescript
 import { TokenParser } from '@tokiforge/core';
 
-// Parse tokens.json
 const tokens = TokenParser.parse('./tokens.json');
 ```
 
@@ -197,7 +191,6 @@ const tokens = TokenParser.parse('./tokens.json');
 ```typescript
 import { TokenParser } from '@tokiforge/core';
 
-// Parse without validation (faster, but less safe)
 const tokens = TokenParser.parse('./tokens.json', {
   validate: false,
   expandReferences: true,
@@ -209,12 +202,10 @@ const tokens = TokenParser.parse('./tokens.json', {
 ```typescript
 import { TokenParser } from '@tokiforge/core';
 
-// Parse without auto-validation
 const tokens = TokenParser.parse('./tokens.json', {
   validate: false,
 });
 
-// Validate manually later
 try {
   TokenParser.validate(tokens);
 } catch (error) {
@@ -227,12 +218,10 @@ try {
 ```typescript
 import { TokenParser } from '@tokiforge/core';
 
-// Parse without auto-expansion
 const tokens = TokenParser.parse('./tokens.json', {
   expandReferences: false,
 });
 
-// Expand references manually
 const expanded = TokenParser.expandReferences(tokens);
 ```
 

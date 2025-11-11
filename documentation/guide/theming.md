@@ -34,14 +34,12 @@ const themeConfig = {
 Use static mode for zero JavaScript overhead:
 
 ```typescript
-// Vue
 provideTheme(themeConfig, {
   mode: 'static',
   persist: true,
   watchSystemTheme: true,
 });
 
-// Angular
 themeService.init(themeConfig, {
   mode: 'static',
   persist: true,
@@ -60,11 +58,9 @@ Static mode uses body classes (`theme-light`, `theme-dark`) instead of runtime i
 Dynamic mode uses runtime CSS injection (default):
 
 ```typescript
-// Vue
-provideTheme(themeConfig); // Default: dynamic mode
+provideTheme(themeConfig);
 
-// Angular
-themeService.init(themeConfig); // Default: dynamic mode
+themeService.init(themeConfig);
 ```
 
 ## Theme Switching
@@ -72,18 +68,11 @@ themeService.init(themeConfig); // Default: dynamic mode
 ### Programmatic
 
 ```typescript
-// React
 const { setTheme } = useTheme();
 setTheme('dark');
 
-// Vue
-const { setTheme } = useTheme();
-setTheme('dark'); // Works in both static and dynamic mode
-
-// Angular
 themeService.setTheme('dark');
 
-// Svelte
 themeStore.setTheme('dark');
 ```
 
@@ -108,12 +97,10 @@ function ThemeSelector() {
 Automatic system theme detection is built-in:
 
 ```typescript
-// Vue
 provideTheme(themeConfig, {
-  watchSystemTheme: true, // Auto-detect and follow system theme
+  watchSystemTheme: true,
 });
 
-// Angular
 themeService.init(themeConfig, {
   watchSystemTheme: true,
 });
@@ -125,9 +112,7 @@ Or use manually:
 import { ThemeRuntime } from '@tokiforge/core';
 
 const systemTheme = ThemeRuntime.detectSystemTheme();
-// 'light' | 'dark'
 
-// Watch for changes
 const unwatch = ThemeRuntime.watchSystemTheme((theme) => {
   setTheme(theme);
 });
@@ -138,7 +123,6 @@ const unwatch = ThemeRuntime.watchSystemTheme((theme) => {
 Apply themes to specific components:
 
 ```typescript
-// Different selector
 const runtime = new ThemeRuntime(config);
 runtime.init('.my-component', 'hf');
 ```

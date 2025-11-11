@@ -1,13 +1,13 @@
 # Vue Guide
 
-> **TokiForge v1.0.0** | **Vue 3+**
+> **TokiForge v1.1.0** | **Vue 3+**
 
 Complete guide to using TokiForge with Vue 3.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/vue@^1.0.0 @tokiforge/core@^1.0.0
+npm install @tokiforge/vue@^1.1.0 @tokiforge/core@^1.1.0
 ```
 
 ## Setup

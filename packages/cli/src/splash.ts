@@ -1,6 +1,19 @@
 import chalk from 'chalk';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+function getVersion(): string {
+  try {
+    const packageJsonPath = join(__dirname, '../package.json');
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
+    return packageJson.version || '1.0.0';
+  } catch {
+    return '1.0.0';
+  }
+}
 
 export function showSplash(): void {
+  const version = getVersion();
   const primary = chalk.hex('#7C3AED');
   const accent = chalk.hex('#06B6D4');
   
@@ -21,10 +34,11 @@ ${primary.bold('╚════════════════════�
 `;
 
   console.log(splash);
-  console.log(chalk.gray(`   Version: ${chalk.white.bold('1.0.0')} | ${accent.underline('https://github.com/TokiForge/tokiforge')}\n`));
+  console.log(chalk.gray(`   Version: ${chalk.white.bold(version)} | ${accent.underline('https://github.com/TokiForge/tokiforge')}\n`));
 }
 
 export function showCompactSplash(): void {
-  console.log(chalk.hex('#7C3AED').bold('TokiForge') + chalk.gray(' v1.0.0') + ' - ' + chalk.gray('Modern Design Token & Theme Engine\n'));
+  const version = getVersion();
+  console.log(chalk.hex('#7C3AED').bold('TokiForge') + chalk.gray(` v${version}`) + ' - ' + chalk.gray('Modern Design Token & Theme Engine\n'));
 }
 

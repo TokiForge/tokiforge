@@ -1,13 +1,13 @@
 # Vanilla JavaScript Guide
 
-> **TokiForge v1.0.0**
+> **TokiForge v1.1.0**
 
 Use TokiForge with vanilla JavaScript, no framework required!
 
 ## Installation
 
 ```bash
-npm install @tokiforge/core@^1.0.0
+npm install @tokiforge/core@^1.1.0
 ```
 
 ## Basic Usage
@@ -22,7 +22,7 @@ Or with CDN:
 
 ```html
 <script type="module">
-  import { ThemeRuntime } from 'https://cdn.jsdelivr.net/npm/@tokiforge/core@1.0.0/dist/index.mjs';
+  import { ThemeRuntime } from 'https://cdn.jsdelivr.net/npm/@tokiforge/core@1.1.0/dist/index.mjs';
 </script>
 ```
 
@@ -125,16 +125,13 @@ window.addEventListener('TokiForge:theme-change', (e) => {
 ```javascript
 import { ThemeRuntime } from '@tokiforge/core';
 
-// Detect current system theme
 const systemTheme = ThemeRuntime.detectSystemTheme();
-console.log('System prefers:', systemTheme); // 'light' or 'dark'
+console.log('System prefers:', systemTheme);
 
-// Watch for system theme changes
 const unwatch = ThemeRuntime.watchSystemTheme((theme) => {
   runtime.applyTheme(theme);
 });
 
-// Stop watching
 unwatch();
 ```
 
@@ -142,7 +139,7 @@ unwatch();
 
 ```javascript
 const tokens = runtime.getThemeTokens();
-console.log(tokens.color.primary); // Current theme's primary color
+console.log(tokens.color.primary);
 ```
 
 ### Cycle Through Themes
@@ -282,10 +279,8 @@ function nextTheme() {
       defaultTheme: 'light',
     });
     
-    // Initialize
     runtime.init();
     
-    // Update UI on theme change
     const updateUI = () => {
       document.getElementById('current-theme').textContent = 
         runtime.getCurrentTheme();
@@ -293,13 +288,11 @@ function nextTheme() {
     
     window.addEventListener('TokiForge:theme-change', updateUI);
     
-    // Theme toggle
     document.getElementById('toggle-theme').addEventListener('click', () => {
       const current = runtime.getCurrentTheme();
       runtime.applyTheme(current === 'light' ? 'dark' : 'light');
     });
     
-    // Initial UI update
     updateUI();
   </script>
 </body>

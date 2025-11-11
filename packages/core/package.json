@@ -1,19 +1,21 @@
 {
   "name": "@tokiforge/core",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Core design token engine for TokiForge",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "scripts": {
     "build": "tsup",
+    "build:all": "npm run build",
     "dev": "tsup --watch",
     "lint": "eslint src --ext .ts",
     "clean": "rm -rf dist",
@@ -51,6 +53,7 @@
   },
   "devDependencies": {
     "@vitest/ui": "^4.0.7",
+    "jsdom": "^23.0.0",
     "tsup": "^8.0.0",
     "typescript": "^5.3.3",
     "vitest": "^4.0.7"

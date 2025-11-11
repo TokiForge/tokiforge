@@ -22,12 +22,10 @@ export default defineConfig({
       transformMixedEsModules: true,
     },
     rollupOptions: {
-      output: {
-        onwarn(warning, warn) {
-          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
-          if (warning.message?.includes('fs') || warning.message?.includes('path')) return;
-          warn(warning);
-        },
+      onwarn(warning, warn) {
+        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
+        if (warning.message?.includes('fs') || warning.message?.includes('path')) return;
+        warn(warning);
       },
     },
   },

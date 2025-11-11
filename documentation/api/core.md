@@ -74,26 +74,21 @@ const css = TokenExporter.export(tokens, {
 #### Format-Specific Methods
 
 ```typescript
-// CSS
 const css = TokenExporter.exportCSS(tokens, {
   selector: ':root',
   prefix: 'hf',
 });
 
-// SCSS
 const scss = TokenExporter.exportSCSS(tokens, {
   prefix: 'hf',
 });
 
-// JavaScript
 const js = TokenExporter.exportJS(tokens, {
   variables: false,
 });
 
-// TypeScript
 const ts = TokenExporter.exportTS(tokens);
 
-// JSON
 const json = TokenExporter.exportJSON(tokens);
 ```
 
