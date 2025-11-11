@@ -14,7 +14,7 @@ export default defineConfig({
   clean: true,
   minify: true,
   treeshake: true,
-  external: ['fs', 'path'], // Mark Node.js built-ins as external
+  external: ['fs', 'path'],
   noExternal: [],
 });
 

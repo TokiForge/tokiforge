@@ -22,6 +22,57 @@ export default defineConfig({
     ssr: {
       noExternal: ['@tokiforge/core'],
     },
+    build: {
+      rollupOptions: {
+        onwarn(warning, warn) {
+          // Suppress warning about mixed static/dynamic imports for @tokiforge/core
+          // This is expected: ThemeRuntime is statically imported (needed at init),
+          // while TokenExporter is dynamically imported (lazy-loaded in playground)
+          const message = warning.message || String(warning);
+          if (
+            warning.code === 'MODULE_LEVEL_DIRECTIVE' || 
+            (message.includes('dynamically imported') && 
+             (message.includes('@tokiforge/core') || message.includes('packages/core')) &&
+             message.includes('statically imported'))
+          ) {
+            return;
+          }
+          warn(warning);
+        },
+      },
+      chunkSizeWarningLimit: 1000,
+    },
+    logLevel: 'warn',
+    customLogger: {
+      info: (msg) => {
+        // Suppress info messages about dynamic imports for @tokiforge/core
+        if (typeof msg === 'string' && msg.includes('dynamically imported') && (msg.includes('@tokiforge/core') || msg.includes('packages/core'))) {
+          return;
+        }
+        // Suppress other info messages during build
+        return;
+      },
+      warn: (msg) => {
+        // Suppress the specific warning about dynamic imports for @tokiforge/core
+        const msgStr = typeof msg === 'string' ? msg : String(msg);
+        if (msgStr.includes('dynamically imported') && (msgStr.includes('@tokiforge/core') || msgStr.includes('packages/core')) && msgStr.includes('statically imported')) {
+          return;
+        }
+        console.warn(msg);
+      },
+      warnOnce: (msg) => {
+        // Suppress the specific warning about dynamic imports for @tokiforge/core
+        const msgStr = typeof msg === 'string' ? msg : String(msg);
+        if (msgStr.includes('dynamically imported') && (msgStr.includes('@tokiforge/core') || msgStr.includes('packages/core')) && msgStr.includes('statically imported')) {
+          return;
+        }
+        console.warn(msg);
+      },
+      error: (msg) => console.error(msg),
+      clearScreen: () => {},
+      hasErrorLogged: () => false,
+      hasWarned: false,
+    },
   },
   description: 'TokiForge is a framework-agnostic design token and theming engine for React, Vue, Svelte, Angular, and more. Runtime theme switching, CSS variables, and smart color utilities. <3KB gzipped.',
   base: '/tokiforge/',

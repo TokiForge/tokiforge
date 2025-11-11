@@ -1,13 +1,13 @@
 # Angular Guide
 
-> **TokiForge v1.1.0** | **Angular 17+**
+> **TokiForge v1.1.1** | **Angular 17+**
 
 Complete guide to using TokiForge with Angular 17+.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/angular@^1.1.0 @tokiforge/core@^1.1.0
+npm install @tokiforge/angular@^1.1.1 @tokiforge/core@^1.1.1
 ```
 
 ## Requirements

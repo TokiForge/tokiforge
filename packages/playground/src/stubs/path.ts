@@ -1,4 +1,3 @@
-// Stub for Node.js 'path' module - not used in browser
 export const extname = () => {
   throw new Error('path.extname is not available in browser');
 };

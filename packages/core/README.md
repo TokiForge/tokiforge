@@ -1,11 +1,11 @@
 # @tokiforge/core
 
-Core design token engine for TokiForge v1.1.0.
+Core design token engine for TokiForge v1.1.1.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/core@^1.1.0
+npm install @tokiforge/core@^1.1.1
 ```
 
 ## Usage
@@ -49,7 +49,7 @@ runtime.init();
 runtime.applyTheme('dark');
 ```
 
-## New Features (v1.1.0)
+## New Features (v1.1.1)
 
 - **Token Versioning** - Track versions, deprecations, and migrations
 - **Component Theming** - Scoped themes for individual components

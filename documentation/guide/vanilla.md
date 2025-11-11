@@ -1,13 +1,13 @@
 # Vanilla JavaScript Guide
 
-> **TokiForge v1.1.0**
+> **TokiForge v1.1.1**
 
 Use TokiForge with vanilla JavaScript, no framework required!
 
 ## Installation
 
 ```bash
-npm install @tokiforge/core@^1.1.0
+npm install @tokiforge/core@^1.1.1
 ```
 
 ## Basic Usage
@@ -22,7 +22,7 @@ Or with CDN:
 
 ```html
 <script type="module">
-  import { ThemeRuntime } from 'https://cdn.jsdelivr.net/npm/@tokiforge/core@1.1.0/dist/index.mjs';
+  import { ThemeRuntime } from 'https://cdn.jsdelivr.net/npm/@tokiforge/core@1.1.1/dist/index.js';
 </script>
 ```
 
@@ -87,7 +87,7 @@ runtime.init();
   <button id="theme-toggle">Switch Theme</button>
   
   <script type="module">
-    import { ThemeRuntime } from './node_modules/@tokiforge/core/dist/index.mjs';
+    import { ThemeRuntime } from './node_modules/@tokiforge/core/dist/index.js';
     
     const runtime = new ThemeRuntime({
       themes: [

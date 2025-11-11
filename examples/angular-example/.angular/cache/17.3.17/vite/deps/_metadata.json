@@ -1,46 +1,46 @@
 {
-  "hash": "68d7fbac",
-  "configHash": "6b2a65fa",
-  "lockfileHash": "f101e0c4",
-  "browserHash": "de069655",
+  "hash": "b0033447",
+  "configHash": "14c5f8d3",
+  "lockfileHash": "25dc6ce5",
+  "browserHash": "49cb49a3",
   "optimized": {
     "@angular/compiler": {
       "src": "../../../../../node_modules/@angular/compiler/fesm2022/compiler.mjs",
       "file": "@angular_compiler.js",
-      "fileHash": "f423348f",
+      "fileHash": "e5710d57",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "37f3a374",
+      "fileHash": "3eb7b4b0",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "d77ea722",
+      "fileHash": "0f16a25a",
       "needsInterop": false
     },
     "@tokiforge/angular": {
       "src": "../../../../../../../packages/angular/dist/index.mjs",
       "file": "@tokiforge_angular.js",
-      "fileHash": "4e16cb6f",
+      "fileHash": "e990ae6c",
       "needsInterop": false
     },
     "zone.js": {
       "src": "../../../../../node_modules/zone.js/fesm2015/zone.js",
       "file": "zone__js.js",
-      "fileHash": "19f62c90",
+      "fileHash": "e5d52271",
       "needsInterop": true
     }
   },
   "chunks": {
-    "chunk-P4FQ6VYT": {
-      "file": "chunk-P4FQ6VYT.js"
+    "chunk-RWTTAE5U": {
+      "file": "chunk-RWTTAE5U.js"
     },
-    "chunk-7RSYZEEK": {
-      "file": "chunk-7RSYZEEK.js"
+    "chunk-J25FJFZE": {
+      "file": "chunk-J25FJFZE.js"
     }
   }
 }

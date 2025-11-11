@@ -17,7 +17,7 @@ const program = new Command();
 program
   .name('tokiforge')
   .description('Modern Design Token & Theme Engine CLI')
-  .version('1.1.0')
+  .version('1.1.1')
   .hook('preAction', (_thisCommand, actionCommand) => {
     if (!process.argv.includes('--help') && !process.argv.includes('-h') && actionCommand) {
       showCompactSplash();

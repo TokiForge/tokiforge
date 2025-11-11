@@ -1,6 +1,6 @@
 # Installation
 
-> **TokiForge v1.1.0**
+> **TokiForge v1.1.1**
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@
 The core package is required for all TokiForge functionality:
 
 ```bash
-npm install @tokiforge/core@^1.1.0
+npm install @tokiforge/core@^1.1.1
 ```
 
 ### Framework Adapters
@@ -24,7 +24,7 @@ Install the adapter for your framework:
 #### React
 
 ```bash
-npm install @tokiforge/react@^1.1.0
+npm install @tokiforge/react@^1.1.1
 ```
 
 Requires React 16.8+ (hooks support).
@@ -32,7 +32,7 @@ Requires React 16.8+ (hooks support).
 #### Vue
 
 ```bash
-npm install @tokiforge/vue@^1.1.0
+npm install @tokiforge/vue@^1.1.1
 ```
 
 Requires Vue 3.0+.
@@ -40,7 +40,7 @@ Requires Vue 3.0+.
 #### Svelte
 
 ```bash
-npm install @tokiforge/svelte@^1.1.0
+npm install @tokiforge/svelte@^1.1.1
 ```
 
 Requires Svelte 3.0+.
@@ -48,7 +48,7 @@ Requires Svelte 3.0+.
 #### Angular
 
 ```bash
-npm install @tokiforge/angular@^1.1.0
+npm install @tokiforge/angular@^1.1.1
 ```
 
 Requires Angular 17.0+.
@@ -58,13 +58,13 @@ Requires Angular 17.0+.
 Install globally for easy access:
 
 ```bash
-npm install -g tokiforge-cli@^1.1.0
+npm install -g tokiforge-cli@^1.1.1
 ```
 
 Or use with `npx`:
 
 ```bash
-npx tokiforge-cli@^1.1.0 init
+npx tokiforge-cli@^1.1.1 init
 ```
 
 ## TypeScript Support
@@ -77,7 +77,7 @@ For vanilla JavaScript projects, you can use the core package via CDN:
 
 ```html
 <script type="module">
-  import { ThemeRuntime } from 'https://cdn.jsdelivr.net/npm/@tokiforge/core@1.1.0/dist/index.mjs';
+  import { ThemeRuntime } from 'https://cdn.jsdelivr.net/npm/@tokiforge/core@1.1.1/dist/index.js';
   
   const runtime = new ThemeRuntime({
     themes: [{ name: 'default', tokens: myTokens }],
@@ -86,6 +86,8 @@ For vanilla JavaScript projects, you can use the core package via CDN:
   runtime.init();
 </script>
 ```
+
+**Note:** The core package uses `index.js` for ESM (not `index.mjs`) because it has `"type": "module"` in its package.json.
 
 ## Framework-Specific Setup
 
@@ -146,6 +148,14 @@ If you get module not found errors:
 1. Make sure you've installed the package: `npm install @tokiforge/core`
 2. Check your Node.js version: `node --version` (should be 18+)
 3. Try clearing cache: `npm cache clean --force`
+
+### Vue Package Resolution Error
+
+If you get `Failed to resolve entry for package "@tokiforge/vue"`:
+
+1. Ensure you're using v1.1.1 or later: `npm install @tokiforge/vue@^1.1.1`
+2. Clear node_modules and reinstall: `rm -rf node_modules package-lock.json && npm install`
+3. See [Troubleshooting Guide](/guide/troubleshooting#vue-package-resolution-error) for details
 
 ### TypeScript Errors
 

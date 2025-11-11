@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/core",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Core design token engine for TokiForge",
   "type": "module",
   "main": "./dist/index.cjs",

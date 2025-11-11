@@ -116,6 +116,32 @@ const { tokens } = useTheme();
 </script>
 ```
 
+### Vue: Package Resolution Error
+
+**Error:** `Failed to resolve entry for package "@tokiforge/vue". The package may have incorrect main/module/exports specified in its package.json`
+
+**Solution:**
+This issue was fixed in v1.1.1. If you're experiencing this:
+
+1. Ensure you're using the latest version:
+   ```bash
+   npm install @tokiforge/vue@^1.1.1
+   ```
+
+2. Clear your node_modules and reinstall:
+   ```bash
+   rm -rf node_modules package-lock.json
+   npm install
+   ```
+
+3. Clear npm cache if the issue persists:
+   ```bash
+   npm cache clean --force
+   npm install @tokiforge/vue@^1.1.1
+   ```
+
+**Note:** This was caused by incorrect package.json exports that didn't match the actual build output. The fix aligns exports with the built files (`index.cjs` for CommonJS, `index.js` for ESM).
+
 ### Svelte: Store Errors
 
 **Error:** Store not reactive
@@ -138,10 +164,10 @@ $themeStore.theme
 **Solution:**
 ```bash
 # Install globally
-npm install -g tokiforge-cli@^1.1.0
+npm install -g tokiforge-cli@^1.1.1
 
 # Or use npx
-npx tokiforge-cli@^1.1.0 init
+npx tokiforge-cli@^1.1.1 init
 ```
 
 ### Build Errors
