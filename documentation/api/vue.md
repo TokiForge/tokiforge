@@ -4,20 +4,27 @@ Complete API reference for `@tokiforge/vue`.
 
 ## provideTheme
 
-Provides theme context to Vue components.
+Provides theme context to Vue components. Supports type-safe token access through generic type parameters.
 
 ### Signature
 
 ```typescript
+// Type-safe version (infers token type from config)
+function provideTheme<T extends DesignTokens>(
+  config: { themes: Array<{ name: string; tokens: T }>; defaultTheme?: string },
+  options?: ProvideThemeOptions
+): ThemeContext<T>;
+
+// Backward compatible version
 function provideTheme(
   config: ThemeConfig,
   options?: ProvideThemeOptions
-): ThemeContext
+): ThemeContext<DesignTokens>;
 ```
 
 ### Parameters
 
-- `config: ThemeConfig` - Theme configuration object
+- `config: ThemeConfig | { themes: Array<{ name: string; tokens: T }>; defaultTheme?: string }` - Theme configuration object. When using the typed version, the token type is inferred from the config.
 - `options?: ProvideThemeOptions` - Configuration options
 
 ### Options
@@ -36,14 +43,15 @@ interface ProvideThemeOptions {
 
 ### Returns
 
-`ThemeContext` - Context object with theme state and methods
+`ThemeContext<T>` - Context object with theme state and methods, where `T` is the token type (inferred or explicitly provided)
 
 ### Example
 
 ```vue
-<script setup>
+<script setup lang="ts">
 import { provideTheme } from '@tokiforge/vue';
 
+// Type-safe: token type is inferred from config
 const themeConfig = {
   themes: [
     { name: 'light', tokens: lightTokens },
@@ -62,20 +70,20 @@ provideTheme(themeConfig, {
 
 ## useTheme
 
-Composable to access theme context.
+Composable to access theme context. Supports type-safe token access through generic type parameters.
 
 ### Signature
 
 ```typescript
-function useTheme(): ThemeContext
+function useTheme<T extends DesignTokens = DesignTokens>(): ThemeContext<T>
 ```
 
 ### Returns
 
 ```typescript
-interface ThemeContext {
+interface ThemeContext<T extends DesignTokens = DesignTokens> {
   theme: Ref<string>;
-  tokens: ComputedRef<DesignTokens>;
+  tokens: ComputedRef<T>;  // Type-safe tokens!
   setTheme: (themeName: string) => void;
   nextTheme: () => void;
   availableThemes: ComputedRef<string[]>;
@@ -84,12 +92,52 @@ interface ThemeContext {
 }
 ```
 
-### Example
+### Type-Safe Usage
+
+```vue
+<script setup lang="ts">
+import { useTheme } from '@tokiforge/vue';
+
+// Define your token type
+interface MyDesignTokens extends DesignTokens {
+  color: {
+    primary: TokenValue;
+    secondary: TokenValue;
+  };
+  radius: {
+    sm: TokenValue;
+    lg: TokenValue;
+  };
+}
+
+// Use with type parameter for full type safety
+const { tokens, setTheme } = useTheme<MyDesignTokens>();
+
+// Now tokens.value.color.primary is fully typed!
+const primaryColor = tokens.value.color.primary.value;
+const borderRadius = tokens.value.radius.lg.value;
+</script>
+
+<template>
+  <button
+    :style="{
+      backgroundColor: tokens.value.color.primary.value,
+      borderRadius: tokens.value.radius.lg.value,
+    }"
+    @click="setTheme('dark')"
+  >
+    Switch Theme
+  </button>
+</template>
+```
+
+### Backward Compatible Usage
 
 ```vue
 <script setup>
 import { useTheme } from '@tokiforge/vue';
 
+// Works without type parameter (defaults to DesignTokens)
 const { theme, tokens, setTheme } = useTheme();
 
 function toggleTheme() {
