@@ -30,7 +30,7 @@
               "@tokiforge/angular"
             ],
             "assets": [],
-            "styles": [],
+            "styles": ["src/styles.css"],
             "scripts": []
           },
           "configurations": {

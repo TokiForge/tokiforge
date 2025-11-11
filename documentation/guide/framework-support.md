@@ -360,3 +360,10 @@ CSS custom properties are supported in all modern browsers (IE11 not supported).
 - Explore [Examples](/examples/react) for framework examples
 
 
+
+
+## Improvements
+
+- Enhanced documentation
+- Better examples
+- Updated usage guide

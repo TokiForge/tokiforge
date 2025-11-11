@@ -2,7 +2,6 @@ import { ThemeProvider, useTheme } from '@tokiforge/react';
 import tokens from './tokens.json';
 import './App.css';
 
-// Create theme config
 const themeConfig = {
   themes: [
     {
@@ -82,7 +81,7 @@ function App() {
           transition: 'background-color 0.3s, color 0.3s',
         }}
       >
-        <h1>🌈 TokiForge React Example</h1>
+        <h1>TokiForge React Example</h1>
         <p>This demonstrates the TokiForge theming system with React.</p>
         <Button />
         <TokensDisplay />

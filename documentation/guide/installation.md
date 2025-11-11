@@ -1,6 +1,6 @@
 # Installation
 
-> **TokiForge v0.2.1**
+> **TokiForge v1.0.0**
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@
 The core package is required for all TokiForge functionality:
 
 ```bash
-npm install @tokiforge/core@^0.2.1
+npm install @tokiforge/core@^1.0.0
 ```
 
 ### Framework Adapters
@@ -24,7 +24,7 @@ Install the adapter for your framework:
 #### React
 
 ```bash
-npm install @tokiforge/react@^0.2.1
+npm install @tokiforge/react@^1.0.0
 ```
 
 Requires React 16.8+ (hooks support).
@@ -32,7 +32,7 @@ Requires React 16.8+ (hooks support).
 #### Vue
 
 ```bash
-npm install @tokiforge/vue@^0.2.1
+npm install @tokiforge/vue@^1.0.0
 ```
 
 Requires Vue 3.0+.
@@ -40,7 +40,7 @@ Requires Vue 3.0+.
 #### Svelte
 
 ```bash
-npm install @tokiforge/svelte@^0.2.1
+npm install @tokiforge/svelte@^1.0.0
 ```
 
 Requires Svelte 3.0+.
@@ -48,7 +48,7 @@ Requires Svelte 3.0+.
 #### Angular
 
 ```bash
-npm install @tokiforge/angular@^0.2.1
+npm install @tokiforge/angular@^1.0.0
 ```
 
 Requires Angular 17.0+.
@@ -58,13 +58,13 @@ Requires Angular 17.0+.
 Install globally for easy access:
 
 ```bash
-npm install -g tokiforge-cli
+npm install -g tokiforge-cli@^1.0.0
 ```
 
 Or use with `npx`:
 
 ```bash
-npx tokiforge-cli init
+npx tokiforge-cli@^1.0.0 init
 ```
 
 ## TypeScript Support
@@ -77,7 +77,7 @@ For vanilla JavaScript projects, you can use the core package via CDN:
 
 ```html
 <script type="module">
-  import { ThemeRuntime } from 'https://cdn.jsdelivr.net/npm/@tokiforge/core@0.2.1/dist/index.mjs';
+  import { ThemeRuntime } from 'https://cdn.jsdelivr.net/npm/@tokiforge/core@1.0.0/dist/index.mjs';
   
   const runtime = new ThemeRuntime({
     themes: [{ name: 'default', tokens: myTokens }],

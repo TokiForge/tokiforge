@@ -1,0 +1,58 @@
+{
+  "name": "@tokiforge/tailwind",
+  "version": "1.0.0",
+  "description": "Tailwind CSS integration for TokiForge design tokens",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "test": "vitest run"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "tailwind",
+    "tailwindcss",
+    "design-tokens",
+    "tokiforge",
+    "theme-engine"
+  ],
+  "author": "TokiForge Community",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TokiForge/tokiforge.git"
+  },
+  "homepage": "https://github.com/TokiForge/tokiforge#readme",
+  "bugs": {
+    "url": "https://github.com/TokiForge/tokiforge/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.7"
+  },
+  "dependencies": {
+    "@tokiforge/core": "^1.0.0",
+    "vite": "7.2.1"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^3.0.0"
+  }
+}

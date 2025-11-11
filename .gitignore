@@ -48,6 +48,9 @@ desktop.ini
 *.sublime-project
 *.sublime-workspace
 
+# Git hooks (Husky)
+.husky/
+
 # Cache
 .cache/
 **/.cache/

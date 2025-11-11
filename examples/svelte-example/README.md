@@ -69,3 +69,10 @@ svelte-example/
 └── tsconfig.json
 ```
 
+
+
+## Improvements
+
+- Enhanced documentation
+- Better examples
+- Updated usage guide

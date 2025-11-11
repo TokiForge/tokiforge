@@ -1,13 +1,13 @@
 # Svelte Example
 
-> **TokiForge v0.2.1**
+> **TokiForge v1.0.0**
 
 Complete Svelte example using TokiForge.
 
 ## Setup
 
 ```bash
-npm install @tokiforge/svelte@^0.2.1 @tokiforge/core@^0.2.1 svelte
+npm install @tokiforge/svelte@^1.0.0 @tokiforge/core@^1.0.0 svelte
 ```
 
 ## Code
@@ -74,7 +74,7 @@ npm install @tokiforge/svelte@^0.2.1 @tokiforge/core@^0.2.1 svelte
 </script>
 
 <div class="app">
-  <h1>🌈 TokiForge Svelte Example</h1>
+  <h1>TokiForge Svelte Example</h1>
   <p>This demonstrates theme switching with Svelte.</p>
   
   <ThemeSwitcher {themeStore} />

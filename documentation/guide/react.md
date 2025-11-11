@@ -1,13 +1,13 @@
 # React Guide
 
-> **TokiForge v0.2.1**
+> **TokiForge v1.0.0**
 
 TokiForge works seamlessly with React through the `@tokiforge/react` package.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/react@^0.2.1 @tokiforge/core@^0.2.1
+npm install @tokiforge/react@^1.0.0 @tokiforge/core@^1.0.0
 ```
 
 ## Setup

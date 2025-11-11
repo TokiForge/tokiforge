@@ -3,7 +3,13 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: ['src/index.ts'],
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: {
+    compilerOptions: {
+      skipLibCheck: true,
+      noUnusedLocals: false,
+      noUnusedParameters: false,
+    },
+  },
   splitting: false,
   sourcemap: false,
   clean: true,
@@ -14,11 +20,9 @@ export default defineConfig({
   esbuildOptions(options) {
     options.keepNames = true;
     options.target = 'es2022';
-    // Don't transform decorators - let Angular handle them
     options.tsconfig = './tsconfig.json';
   },
   tsconfig: './tsconfig.json',
-  // Use TypeScript compiler for better decorator handling
   esbuildPlugins: [],
 });
 

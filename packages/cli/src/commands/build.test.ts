@@ -24,7 +24,6 @@ describe('buildCommand', () => {
   });
 
   it('should build tokens when config exists', async () => {
-    // Create config
     const configPath = path.join(tempDir, 'tokiforge.config.json');
     const tokensPath = path.join(tempDir, 'tokens.json');
     const tokens = {

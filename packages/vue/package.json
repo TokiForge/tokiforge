@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/vue",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "Vue adapter for TokiForge theming",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -29,7 +29,7 @@
   "sideEffects": false,
   "peerDependencies": {
     "vue": ">=3.0.0",
-    "@tokiforge/core": "^0.2.1"
+    "@tokiforge/core": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
@@ -40,7 +40,7 @@
     "jsdom": "^23.0.0"
   },
   "dependencies": {
-    "@tokiforge/core": "^0.2.1"
+    "@tokiforge/core": "^1.0.0"
   },
   "keywords": [
     "vue",

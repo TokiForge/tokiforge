@@ -143,6 +143,9 @@ Examples:
 - [ ] `@tokiforge/react`
 - [ ] `@tokiforge/vue`
 - [ ] `@tokiforge/svelte`
+- [ ] `@tokiforge/angular`
+- [ ] `@tokiforge/tailwind`
+- [ ] `@tokiforge/figma`
 - [ ] `tokiforge-cli`
 - [ ] Documentation
 - [ ] Examples

@@ -7,13 +7,13 @@ The TokiForge CLI is a powerful command-line tool for managing design tokens.
 ### Global Installation
 
 ```bash
-npm install -g tokiforge-cli
+npm install -g tokiforge-cli@^1.0.0
 ```
 
 ### Local Usage
 
 ```bash
-npx tokiforge-cli <command>
+npx tokiforge-cli@^1.0.0 <command>
 ```
 
 ## Commands

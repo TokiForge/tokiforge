@@ -1,13 +1,13 @@
 # React Example
 
-> **TokiForge v0.2.1**
+> **TokiForge v1.0.0**
 
 Complete React example using TokiForge.
 
 ## Setup
 
 ```bash
-npm install @tokiforge/react@^0.2.1 @tokiforge/core@^0.2.1 react react-dom
+npm install @tokiforge/react@^1.0.0 @tokiforge/core@^1.0.0 react react-dom
 ```
 
 ## Code
@@ -93,7 +93,7 @@ function Header() {
       }}
     >
       <h1 style={{ color: tokens.color.text.primary, margin: 0 }}>
-        🌈 TokiForge React Example
+        TokiForge React Example
       </h1>
     </header>
   );

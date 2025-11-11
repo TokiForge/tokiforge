@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <h1>🌈 TokiForge Vue Example</h1>
+    <h1>TokiForge Vue Example</h1>
     <p>This demonstrates a simple CSS-based theming system with Vue.</p>
     <button @click="toggleTheme" class="theme-button">
       Switch to {{ theme === 'light' ? 'Dark' : 'Light' }} Theme

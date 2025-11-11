@@ -1,111 +1,45 @@
 import type { DesignTokens, TokenExportOptions, TokenValue } from './types';
 
 export class TokenExporter {
-  private static flattenTokens(tokens: DesignTokens, prefix: string = '', result: Record<string, TokenValue> = {}): Record<string, TokenValue> {
-    for (const key in tokens) {
-      const value = tokens[key];
-      const path = prefix ? `${prefix}.${key}` : key;
-
-      if (value && typeof value === 'object' && 'value' in value) {
-        result[path] = value as TokenValue;
-      } else if (value && typeof value === 'object') {
-        this.flattenTokens(value as DesignTokens, path, result);
-      }
-    }
-
-    return result;
-  }
-
-  private static toCSSVariable(path: string, prefix: string = ''): string {
-    const parts = prefix ? [prefix, ...path.split('.')] : path.split('.');
-    return `--${parts
-      .map((part) => part.replace(/([A-Z])/g, '-$1').toLowerCase())
-      .join('-')}`;
-  }
-
   static exportCSS(tokens: DesignTokens, options: TokenExportOptions = {}): string {
-    const { selector = ':root', prefix = 'hf' } = options;
-    const flattened = this.flattenTokens(tokens);
-    const lines: string[] = [`${selector} {`];
-
-    for (const path in flattened) {
-      const token = flattened[path];
-      const cssVar = this.toCSSVariable(path, prefix);
-      lines.push(`  ${cssVar}: ${token.value};`);
+    const selector = options.selector || ':root';
+    const prefix = options.prefix || 'hf';
+    const variables: string[] = [];
+    
+    this.flattenTokens(tokens, prefix, variables);
+    
+    if (variables.length === 0) {
+      return `${selector} {}`;
     }
 
-    lines.push('}');
-    return lines.join('\n');
+    return `${selector} {\n  ${variables.join('\n  ')}\n}`;
   }
 
   static exportSCSS(tokens: DesignTokens, options: TokenExportOptions = {}): string {
-    const { prefix = 'hf' } = options;
-    const flattened = this.flattenTokens(tokens);
-    const lines: string[] = [];
-
-    for (const path in flattened) {
-      const token = flattened[path];
-      const scssVar = this.toSCSSVariable(path, prefix);
-      lines.push(`${scssVar}: ${token.value};`);
-    }
-
-    return lines.join('\n');
-  }
-
-  private static toSCSSVariable(path: string, prefix: string = ''): string {
-    const parts = prefix ? [prefix, ...path.split('.')] : path.split('.');
-    return `$${parts
-      .map((part) => part.replace(/([A-Z])/g, '-$1').toLowerCase())
-      .join('-')}`;
+    const prefix = options.prefix || 'hf';
+    const variables: string[] = [];
+    
+    this.flattenTokens(tokens, prefix, variables, true);
+    
+    return variables.join('\n');
   }
 
   static exportJS(tokens: DesignTokens, options: TokenExportOptions = {}): string {
-    const { variables = false, prefix = 'hf' } = options;
-    const flattened = this.flattenTokens(tokens);
-    const result: Record<string, any> = {};
-
-    for (const path in flattened) {
-      const token = flattened[path];
-      const parts = path.split('.');
-      let current = result;
-
-      for (let i = 0; i < parts.length - 1; i++) {
-        if (!current[parts[i]]) {
-          current[parts[i]] = {};
-        }
-        current = current[parts[i]];
-      }
-
-      current[parts[parts.length - 1]] = variables
-        ? `var(${this.toCSSVariable(path, prefix)})`
-        : token.value;
-    }
-
-    return `export default ${JSON.stringify(result, null, 2)};`;
+    const prefix = options.prefix || 'hf';
+    const variables: Record<string, string | number> = {};
+    
+    this.flattenTokensToObject(tokens, prefix, variables);
+    
+    return `module.exports = ${JSON.stringify(variables, null, 2)};`;
   }
 
   static exportTS(tokens: DesignTokens, options: TokenExportOptions = {}): string {
-    const js = this.exportJS(tokens, options);
-    const typeDef = this.generateTypeDef(tokens);
-    return `${typeDef}\n\n${js}`;
-  }
-
-  private static generateTypeDef(tokens: DesignTokens, indent: number = 0): string {
-    const spaces = '  '.repeat(indent);
-    const lines: string[] = ['{'];
-
-    for (const key in tokens) {
-      const value = tokens[key];
-      if (value && typeof value === 'object' && 'value' in value) {
-        const type = typeof value.value === 'string' ? 'string' : 'number';
-        lines.push(`${spaces}  ${key}: ${type};`);
-      } else if (value && typeof value === 'object') {
-        lines.push(`${spaces}  ${key}: ${this.generateTypeDef(value as DesignTokens, indent + 1)}`);
-      }
-    }
-
-    lines.push(`${spaces}}`);
-    return lines.join('\n');
+    const prefix = options.prefix || 'hf';
+    const variables: Record<string, string | number> = {};
+    
+    this.flattenTokensToObject(tokens, prefix, variables);
+    
+    return `export const tokens = ${JSON.stringify(variables, null, 2)} as const;`;
   }
 
   static exportJSON(tokens: DesignTokens): string {
@@ -127,7 +61,58 @@ export class TokenExporter {
       case 'json':
         return this.exportJSON(tokens);
       default:
-        throw new Error(`Unsupported format: ${format}`);
+        throw new Error(`Unsupported export format: ${format}`);
+    }
+  }
+
+  private static flattenTokens(
+    tokens: DesignTokens,
+    prefix: string,
+    result: string[],
+    isSCSS: boolean = false,
+    currentPath: string = ''
+  ): void {
+    for (const [key, value] of Object.entries(tokens)) {
+      const path = currentPath ? `${currentPath}-${key}` : key;
+      
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        if ('value' in value || '$value' in value) {
+          const tokenValue = (value as TokenValue).value ?? (value as TokenValue).$value;
+          if (tokenValue !== undefined && tokenValue !== null) {
+            const cssVar = `--${prefix}-${path}`.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
+            if (isSCSS) {
+              result.push(`$${prefix}-${path.replace(/-/g, '-')}: ${tokenValue};`);
+            } else {
+              result.push(`${cssVar}: ${tokenValue};`);
+            }
+          }
+        } else {
+          this.flattenTokens(value as DesignTokens, prefix, result, isSCSS, path);
+        }
+      }
+    }
+  }
+
+  private static flattenTokensToObject(
+    tokens: DesignTokens,
+    prefix: string,
+    result: Record<string, string | number>,
+    currentPath: string = ''
+  ): void {
+    for (const [key, value] of Object.entries(tokens)) {
+      const path = currentPath ? `${currentPath}.${key}` : key;
+      
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        if ('value' in value || '$value' in value) {
+          const tokenValue = (value as TokenValue).value ?? (value as TokenValue).$value;
+          if (tokenValue !== undefined && tokenValue !== null && (typeof tokenValue === 'string' || typeof tokenValue === 'number')) {
+            const jsKey = `${prefix}.${path}`.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
+            result[jsKey] = tokenValue;
+          }
+        } else {
+          this.flattenTokensToObject(value as DesignTokens, prefix, result, path);
+        }
+      }
     }
   }
 }

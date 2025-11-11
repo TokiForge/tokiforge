@@ -24,18 +24,15 @@ export default defineConfig({
     },
   },
   description: 'TokiForge is a framework-agnostic design token and theming engine for React, Vue, Svelte, Angular, and more. Runtime theme switching, CSS variables, and smart color utilities. <3KB gzipped.',
-  // For GitHub Pages: base path should match repository name
-  // Change '/tokiforge/' to match your repository name, or use '/' for custom domain
   base: '/tokiforge/',
   
   head: [
-    // Google Analytics
-    ['script', { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-SLV94ETEF7' }],
+    ['script', { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-QMSD2BCYDK' }],
     ['script', {}, `
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-SLV94ETEF7');
+      gtag('config', 'G-QMSD2BCYDK');
     `],
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#7C3AED' }],
@@ -70,7 +67,7 @@ export default defineConfig({
         'ratingCount': '1'
       },
       'description': 'Framework-agnostic design token and theming engine for React, Vue, Svelte, Angular, and more.',
-      'url': 'https://github.com/tokiforge/tokiforge',
+      'url': 'https://github.com/TokiForge/tokiforge',
       'author': {
         '@type': 'Organization',
         'name': 'TokiForge Community'
@@ -88,7 +85,7 @@ export default defineConfig({
       { text: 'API', link: '/api/core' },
       { text: 'Examples', link: '/examples/react' },
       { text: 'CLI', link: '/cli/overview' },
-      { text: 'GitHub', link: 'https://github.com/tokiforge/tokiforge' },
+      { text: 'GitHub', link: 'https://github.com/TokiForge/tokiforge' },
     ],
 
     sidebar: {
@@ -116,6 +113,7 @@ export default defineConfig({
         {
           text: 'Advanced',
           items: [
+            { text: 'Advanced Features', link: '/guide/advanced-features' },
             { text: 'Theming', link: '/guide/theming' },
             { text: 'Design Tokens', link: '/guide/design-tokens' },
             { text: 'Custom Exporters', link: '/guide/custom-exporters' },
@@ -131,6 +129,16 @@ export default defineConfig({
             { text: 'TokenParser', link: '/api/token-parser' },
             { text: 'TokenExporter', link: '/api/token-exporter' },
             { text: 'ThemeRuntime', link: '/api/theme-runtime' },
+            { text: 'TokenVersioning', link: '/api/core#tokenversioning' },
+            { text: 'ComponentTheming', link: '/api/core#componenttheming' },
+            { text: 'PluginManager', link: '/api/core#pluginmanager' },
+            { text: 'AccessibilityUtils', link: '/api/core#accessibilityutils' },
+            { text: 'ResponsiveTokens', link: '/api/core#responsivetokens' },
+            { text: 'FigmaDiff', link: '/api/core#figmadiff' },
+            { text: 'CICDValidator', link: '/api/core#cicdvalidator' },
+            { text: 'TokenAnalytics', link: '/api/core#tokenanalytics' },
+            { text: 'TokenRegistry', link: '/api/core#tokenregistry' },
+            { text: 'IDESupport', link: '/api/core#idesupport' },
           ],
         },
         {
@@ -168,12 +176,12 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/tokiforge/tokiforge' },
+      { icon: 'github', link: 'https://github.com/TokiForge/tokiforge' },
     ],
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2026 TokiForge Community',
+      copyright: 'Copyright © 2025 TokiForge Community',
     },
 
     search: {
@@ -181,7 +189,7 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/tokiforge/tokiforge/edit/main/docs/:path',
+      pattern: 'https://github.com/TokiForge/tokiforge/edit/main/documentation/:path',
       text: 'Edit this page on GitHub',
     },
 

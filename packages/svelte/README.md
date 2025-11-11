@@ -1,11 +1,11 @@
 # @tokiforge/svelte
 
-Svelte adapter for TokiForge theming.
+Svelte adapter for TokiForge theming (v1.0.0).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/svelte @tokiforge/core
+npm install @tokiforge/svelte@^1.0.0 @tokiforge/core@^1.0.0
 ```
 
 ## Usage

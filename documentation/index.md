@@ -4,7 +4,7 @@ layout: home
 hero:
   name: TokiForge
   text: Design Token & Theme Engine
-  tagline: Forge your colors. Shape your UI. (v0.2.1)
+  tagline: Forge your colors. Shape your UI. (v1.0.0)
   image:
     src: /logo.svg
     alt: TokiForge
@@ -14,7 +14,7 @@ hero:
       link: /guide/getting-started
     - theme: alt
       text: View on GitHub
-      link: https://github.com/TokiForge/TokiForge
+      link: https://github.com/TokiForge/tokiforge
 
 features:
   - title: 🚀 Zero JS Overhead (Static Mode)
@@ -29,6 +29,16 @@ features:
     details: Full TypeScript support with auto-generated types from your tokens.
   - title: ♿ Accessible
     details: Built-in accessibility checks for color contrast and WCAG compliance.
+  - title: 🔄 Versioning
+    details: Track token versions, deprecations, and migrations with full history support.
+  - title: 🔌 Extensible
+    details: Plugin system for custom exporters, validators, and formatters.
+  - title: 📱 Responsive
+    details: Breakpoint and state-aware tokens for responsive and interactive designs.
+  - title: 🔍 Figma Sync
+    details: Compare and sync tokens with Figma designs seamlessly.
+  - title: ✅ CI/CD Ready
+    details: Automated validation and testing in your CI/CD pipelines.
 ---
 
 

@@ -1,56 +1,56 @@
-# TokiForge-cli
+# tokiforge-cli
 
-Command-line tool for TokiForge design tokens.
+Command-line tool for TokiForge design tokens (v1.0.0).
 
 ## Installation
 
 ```bash
-npm install -g TokiForge-cli
+npm install -g tokiforge-cli
 ```
 
 Or use with npx:
 
 ```bash
-npx TokiForge-cli init
+npx tokiforge-cli init
 ```
 
 ## Commands
 
-### `TokiForge init`
+### `tokiforge init`
 
-Initialize TokiForge in your project. Creates `tokens.json` and `TokiForge.config.json`.
+Initialize TokiForge in your project. Creates `tokens.json` and `tokiforge.config.json`.
 
 ```bash
-TokiForge init
+tokiforge init
 ```
 
-### `TokiForge build`
+### `tokiforge build`
 
 Build and export tokens to various formats (CSS, JS, TS, SCSS, JSON).
 
 ```bash
-TokiForge build
+tokiforge build
 ```
 
-### `TokiForge dev`
+### `tokiforge dev`
 
 Start a development server with live theme preview.
 
 ```bash
-TokiForge dev
+tokiforge dev
 ```
 
-### `TokiForge lint`
+### `tokiforge lint`
 
 Validate token consistency and accessibility.
 
 ```bash
-TokiForge lint
+tokiforge lint
 ```
 
 ## Configuration
 
-Edit `TokiForge.config.json` to configure:
+Edit `tokiforge.config.json` to configure:
 
 - Input token file path
 - Output file paths for different formats

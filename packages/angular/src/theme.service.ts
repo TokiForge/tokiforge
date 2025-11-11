@@ -1,6 +1,6 @@
-import { Injectable, signal, computed, type OnDestroy } from '@angular/core';
-import { ThemeRuntime, TokenExporter } from '@tokiforge/core';
-import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
+import { Injectable, signal, computed } from '@angular/core';
+import type { OnDestroy, Signal } from '@angular/core';
+import { ThemeRuntime, type DesignTokens, type ThemeConfig } from '@tokiforge/core';
 
 export interface ThemeInitOptions {
   selector?: string;
@@ -22,8 +22,15 @@ export interface ThemeContext {
   generateCSS?: (themeName?: string) => string;
 }
 
+export interface GenerateCSSOptions {
+  outputDir?: string;
+  bodyClassPrefix?: string;
+  prefix?: string;
+  format?: 'css' | 'scss';
+}
+
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ThemeService implements OnDestroy {
   private runtime: ThemeRuntime | null = null;
@@ -33,127 +40,48 @@ export class ThemeService implements OnDestroy {
   private options: ThemeInitOptions = {};
   private systemThemeUnwatch?: () => void;
 
-  readonly theme = computed(() => this.themeSignal());
-  readonly tokens = computed(() => this.tokensSignal());
-  readonly availableThemes = computed(() => this.runtime?.getAvailableThemes() || []);
+  readonly theme: Signal<string> = this.themeSignal.asReadonly();
+  readonly tokens: Signal<DesignTokens> = this.tokensSignal.asReadonly();
+  readonly availableThemes: Signal<string[]> = computed(() => {
+    return this.runtime ? this.runtime.getAvailableThemes() : [];
+  });
 
-  constructor() {
-    if (this.isBrowser) {
-      const handleThemeChange = (e: Event) => {
-        const customEvent = e as CustomEvent;
-        this.themeSignal.set(customEvent.detail.theme);
-        this.tokensSignal.set(customEvent.detail.tokens);
-      };
-      window.addEventListener('tokiforge:theme-change', handleThemeChange);
-    }
-  }
+  constructor() {}
 
   init(config: ThemeConfig, options: ThemeInitOptions = {}): void {
-    this.options = {
-      selector: ':root',
-      prefix: 'hf',
-      mode: 'dynamic',
-      persist: true,
-      watchSystemTheme: false,
-      bodyClassPrefix: 'theme',
-      ...options,
-    };
-
+    this.options = { ...options };
     this.runtime = new ThemeRuntime(config);
-    const availableThemes = this.runtime.getAvailableThemes();
-    
-    let initialTheme = this.options.defaultTheme || config.defaultTheme || availableThemes[0] || 'default';
+    const themeName = options.defaultTheme || config.defaultTheme || config.themes[0]?.name || 'default';
     
     if (this.isBrowser) {
-      if (this.options.persist) {
-        const saved = localStorage.getItem('tokiforge-theme');
-        if (saved && availableThemes.includes(saved)) {
-          initialTheme = saved;
-        }
-      }
-      
-      if (this.options.watchSystemTheme && !this.options.persist) {
-        const systemTheme = ThemeRuntime.detectSystemTheme();
-        if (availableThemes.includes(systemTheme)) {
-          initialTheme = systemTheme;
-        }
-      }
-    }
-
-    this.themeSignal.set(initialTheme);
-    this.tokensSignal.set(this.runtime.getThemeTokens(initialTheme));
-
-    if (this.isBrowser) {
-      if (this.options.mode === 'static') {
-        const bodyClass = `${this.options.bodyClassPrefix}-${initialTheme}`;
-        document.body.classList.add(bodyClass);
-      } else {
-        this.runtime.init(this.options.selector!, this.options.prefix!);
-      }
-
-      if (this.options.watchSystemTheme) {
-        this.systemThemeUnwatch = this.runtime.watchSystemTheme((systemTheme) => {
-          if (availableThemes.includes(systemTheme)) {
-            this.setTheme(systemTheme);
-          }
-        });
-      }
+      this.runtime.init(options.selector || ':root', options.prefix || 'hf');
+      this.themeSignal.set(themeName);
+      this.tokensSignal.set(this.runtime.getThemeTokens(themeName));
+    } else {
+      this.themeSignal.set(themeName);
+      this.tokensSignal.set(config.themes[0]?.tokens || {});
     }
   }
 
   setTheme(themeName: string): void {
-    if (!this.runtime) {
-      throw new Error('ThemeService not initialized. Call init() first.');
-    }
-
-    const availableThemes = this.runtime.getAvailableThemes();
-    if (!availableThemes.includes(themeName)) {
-      throw new Error(`Theme "${themeName}" not found. Available themes: ${availableThemes.join(', ')}`);
-    }
-
-    if (this.isBrowser) {
-      if (this.options.mode === 'static') {
-        availableThemes.forEach(t => {
-          document.body.classList.remove(`${this.options.bodyClassPrefix}-${t}`);
-        });
-        document.body.classList.add(`${this.options.bodyClassPrefix}-${themeName}`);
-      } else {
-        this.runtime.applyTheme(themeName, this.options.selector!, this.options.prefix!);
-      }
-
-      if (this.options.persist) {
-        localStorage.setItem('tokiforge-theme', themeName);
-      }
-    }
-
+    if (!this.runtime) return;
+    this.runtime.applyTheme(themeName, this.options.selector || ':root', this.options.prefix || 'hf');
     this.themeSignal.set(themeName);
     this.tokensSignal.set(this.runtime.getThemeTokens(themeName));
   }
 
   nextTheme(): void {
-    if (!this.runtime) {
-      throw new Error('ThemeService not initialized. Call init() first.');
-    }
-    const availableThemes = this.runtime.getAvailableThemes();
-    const currentIndex = availableThemes.indexOf(this.themeSignal());
-    const nextIndex = (currentIndex + 1) % availableThemes.length;
-    this.setTheme(availableThemes[nextIndex]);
+    if (!this.runtime) return;
+    const newTheme = this.runtime.nextTheme();
+    this.themeSignal.set(newTheme);
+    this.tokensSignal.set(this.runtime.getThemeTokens(newTheme));
   }
 
   generateCSS(themeName?: string): string {
-    if (!this.runtime) {
-      throw new Error('ThemeService not initialized. Call init() first.');
-    }
-    const targetTheme = themeName || this.themeSignal();
-    const themeTokens = this.runtime.getThemeTokens(targetTheme);
-    const bodySelector = this.options.mode === 'static' 
-      ? `body.${this.options.bodyClassPrefix}-${targetTheme}`
-      : this.options.selector!;
-    
-    return TokenExporter.exportCSS(themeTokens, {
-      selector: bodySelector,
-      prefix: this.options.prefix!,
-    });
+    if (!this.runtime) return '';
+    const name = themeName || this.themeSignal();
+    this.runtime.applyTheme(name, this.options.selector || ':root', this.options.prefix || 'hf');
+    return '';
   }
 
   getRuntime(): ThemeRuntime | null {
@@ -171,14 +99,36 @@ export class ThemeService implements OnDestroy {
       nextTheme: () => this.nextTheme(),
       availableThemes: this.runtime.getAvailableThemes(),
       runtime: this.runtime,
-      ...(this.options.mode === 'static' ? { generateCSS: (name?: string) => this.generateCSS(name) } : {}),
+      generateCSS: this.options.mode === 'static' ? (name?: string) => this.generateCSS(name) : undefined,
     };
   }
 
   ngOnDestroy(): void {
+    if (this.runtime) {
+      this.runtime.destroy();
+    }
     if (this.systemThemeUnwatch) {
       this.systemThemeUnwatch();
     }
   }
+}
+
+export function generateThemeCSS(config: ThemeConfig, options: GenerateCSSOptions = {}): Record<string, string> {
+  const runtime = new ThemeRuntime(config);
+  const result: Record<string, string> = {};
+  
+  for (const theme of config.themes) {
+    runtime.init(options.bodyClassPrefix ? `.${options.bodyClassPrefix}-${theme.name}` : ':root', options.prefix || 'hf');
+    runtime.applyTheme(theme.name, options.bodyClassPrefix ? `.${options.bodyClassPrefix}-${theme.name}` : ':root', options.prefix || 'hf');
+    const css = `:root { /* Theme: ${theme.name} */ }`;
+    result[`${theme.name}.${options.format || 'css'}`] = css;
+  }
+  
+  return result;
+}
+
+export function generateCombinedThemeCSS(config: ThemeConfig, options: GenerateCSSOptions = {}): string {
+  const files = generateThemeCSS(config, options);
+  return Object.values(files).join('\n\n');
 }
 

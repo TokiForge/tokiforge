@@ -156,7 +156,7 @@ If you have questions about this Code of Conduct, please contact:
 
 ---
 
-**Last Updated:** 2024-11-06
+**Last Updated:** 2025-11-07
 
 **Version:** 2.1 (Based on Contributor Covenant)
 
