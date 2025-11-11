@@ -1,8 +1,8 @@
-import { inject, provide, ref, computed, type Ref, type ComputedRef } from 'vue';
+import { inject, provide, ref, computed, type Ref, type ComputedRef, type InjectionKey } from 'vue';
 import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
 import { ThemeRuntime as ThemeRuntimeClass, TokenExporter, ThemeRuntime } from '@tokiforge/core';
 
-const ThemeKey = Symbol('tokiforge-theme');
+const ThemeKey: InjectionKey<ThemeContext<DesignTokens>> = Symbol('tokiforge-theme');
 
 export interface ProvideThemeOptions {
   selector?: string;
@@ -14,9 +14,15 @@ export interface ProvideThemeOptions {
   bodyClassPrefix?: string;
 }
 
-interface ThemeContext {
+export type ExtractTokenType<T extends ThemeConfig> = T['themes'][number] extends { tokens: infer TokenType }
+  ? TokenType extends DesignTokens
+    ? TokenType
+    : DesignTokens
+  : DesignTokens;
+
+export interface ThemeContext<T extends DesignTokens = DesignTokens> {
   theme: Ref<string>;
-  tokens: ComputedRef<DesignTokens>;
+  tokens: ComputedRef<T>;
   setTheme: (themeName: string) => void;
   nextTheme: () => void;
   availableThemes: ComputedRef<string[]>;
@@ -24,10 +30,18 @@ interface ThemeContext {
   generateCSS?: (themeName?: string) => string;
 }
 
+export function provideTheme<T extends DesignTokens>(
+  config: { themes: Array<{ name: string; tokens: T }>; defaultTheme?: string },
+  options?: ProvideThemeOptions
+): ThemeContext<T>;
 export function provideTheme(
   config: ThemeConfig,
+  options?: ProvideThemeOptions
+): ThemeContext<DesignTokens>;
+export function provideTheme<T extends DesignTokens = DesignTokens>(
+  config: ThemeConfig | { themes: Array<{ name: string; tokens: T }>; defaultTheme?: string },
   options: ProvideThemeOptions = {}
-): ThemeContext {
+): ThemeContext<T> {
   const {
     selector = ':root',
     prefix = 'hf',
@@ -38,16 +52,21 @@ export function provideTheme(
     bodyClassPrefix = 'theme',
   } = options;
 
-  const runtime = new ThemeRuntimeClass(config);
+  const themeConfig: ThemeConfig = config as ThemeConfig;
+  const runtime = new ThemeRuntimeClass(themeConfig);
   const availableThemes = runtime.getAvailableThemes();
   
-  let initialTheme = defaultTheme || config.defaultTheme || availableThemes[0] || 'default';
+  let initialTheme = defaultTheme || themeConfig.defaultTheme || availableThemes[0] || 'default';
   
   if (typeof window !== 'undefined') {
-    if (persist) {
-      const saved = localStorage.getItem('tokiforge-theme');
-      if (saved && availableThemes.includes(saved)) {
-        initialTheme = saved;
+    if (persist && window.localStorage && typeof window.localStorage.getItem === 'function') {
+      try {
+        const saved = window.localStorage.getItem('tokiforge-theme');
+        if (saved && availableThemes.includes(saved)) {
+          initialTheme = saved;
+        }
+      } catch (e) {
+        // Ignore localStorage access errors
       }
     }
     
@@ -60,7 +79,7 @@ export function provideTheme(
   }
 
   const theme = ref(initialTheme);
-  const tokens = computed(() => runtime.getThemeTokens(theme.value));
+  const tokens = computed(() => runtime.getThemeTokens(theme.value) as T);
 
   const setTheme = (name: string) => {
     if (!availableThemes.includes(name)) {
@@ -78,8 +97,12 @@ export function provideTheme(
     
     theme.value = name;
     
-    if (typeof window !== 'undefined' && persist) {
-      localStorage.setItem('tokiforge-theme', name);
+    if (typeof window !== 'undefined' && persist && window.localStorage && typeof window.localStorage.setItem === 'function') {
+      try {
+        window.localStorage.setItem('tokiforge-theme', name);
+      } catch (e) {
+        // Ignore localStorage access errors
+      }
     }
   };
 
@@ -132,7 +155,7 @@ export function provideTheme(
     });
   };
 
-  const context: ThemeContext = {
+  const context: ThemeContext<T> = {
     theme,
     tokens,
     setTheme,
@@ -142,16 +165,16 @@ export function provideTheme(
     ...(mode === 'static' ? { generateCSS } : {}),
   };
 
-  provide(ThemeKey, context);
+  provide(ThemeKey, context as ThemeContext<DesignTokens>);
 
   return context;
 }
 
-export function useTheme(): ThemeContext {
-  const context = inject<ThemeContext>(ThemeKey);
+export function useTheme<T extends DesignTokens = DesignTokens>(): ThemeContext<T> {
+  const context = inject<ThemeContext<DesignTokens>>(ThemeKey);
   if (!context) {
     throw new Error('useTheme must be used within a component that provides theme context');
   }
-  return context;
+  return context as ThemeContext<T>;
 }
 
