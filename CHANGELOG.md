@@ -5,10 +5,24 @@ All notable changes to TokiForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2025-11-11
+
+### Changed
+
+- **Version Bump**: All packages updated from 1.1.0 to 1.1.1
+- **Documentation**: Updated all documentation files to reflect version 1.1.1
+- **Dependencies**: All internal dependencies updated to `@tokiforge/core@^1.1.1`
+
+### Technical Improvements
+
+- **Code Cleanup**: Removed unnecessary comments and markdown sections from documentation
+- **Release Template**: Updated release template to be version-agnostic
+
 ## [1.1.0] - 2025-11-11
 
 ### Fixed
 
+- **Vue Package**: Fixed package.json exports to match actual build output - changed from `index.mjs`/`index.js` to `index.cjs`/`index.js` to correctly handle ESM/CJS exports when `"type": "module"` is set (resolves "Failed to resolve entry" errors)
 - **Vue Package**: Fixed localStorage mock in test environment to properly handle all required methods
 - **Vue Package**: Improved error handling for localStorage access with better fallback support
 - **Vue Package**: Fixed error handling tests to properly catch Vue setup function errors using errorHandler
@@ -26,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Technical Improvements
 
+- **Package Exports**: Fixed Vue package exports to correctly handle ESM/CJS module resolution when `"type": "module"` is set, matching Core package configuration
 - **Test Reliability**: All Vue package tests now pass consistently
 - **Production Ready**: Removed unnecessary comments and improved code maintainability
 - **Error Handling**: Better error handling for localStorage operations in various environments
@@ -217,6 +232,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Framework-agnostic theming system
 - Complete documentation and examples
 
+[1.1.1]: https://github.com/tokiforge/tokiforge/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/tokiforge/tokiforge/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/tokiforge/tokiforge/compare/v0.2.1...v1.0.0
 [0.2.1]: https://github.com/tokiforge/tokiforge/compare/v0.2.0...v0.2.1

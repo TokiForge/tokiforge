@@ -1,13 +1,13 @@
 # Vue Example
 
-> **TokiForge v1.1.0**
+> **TokiForge v1.1.1**
 
 Complete Vue example using TokiForge.
 
 ## Setup
 
 ```bash
-npm install @tokiforge/vue@^1.1.0 @tokiforge/core@^1.1.0 vue
+npm install @tokiforge/vue@^1.1.1 @tokiforge/core@^1.1.1 vue
 ```
 
 ## Code

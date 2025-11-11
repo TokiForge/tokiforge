@@ -1,11 +1,11 @@
 # @tokiforge/react
 
-React adapter for TokiForge theming (v1.1.0).
+React adapter for TokiForge theming (v1.1.1).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/react@^1.1.0 @tokiforge/core@^1.1.0
+npm install @tokiforge/react@^1.1.1 @tokiforge/core@^1.1.1
 ```
 
 ## Usage
@@ -69,13 +69,3 @@ Hook to access theme context.
 - `nextTheme()`: Cycle to next theme
 - `availableThemes`: Array of available theme names
 - `runtime`: ThemeRuntime instance
-
-
-
-
-
-## Improvements
-
-- Enhanced documentation
-- Better examples
-- Updated usage guide

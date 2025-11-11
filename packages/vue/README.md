@@ -1,11 +1,11 @@
 # @tokiforge/vue
 
-Vue adapter for TokiForge theming (v1.1.0).
+Vue adapter for TokiForge theming (v1.1.1).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/vue@^1.1.0 @tokiforge/core@^1.1.0
+npm install @tokiforge/vue@^1.1.1 @tokiforge/core@^1.1.1
 ```
 
 ## Usage

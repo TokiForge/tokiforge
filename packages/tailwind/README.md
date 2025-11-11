@@ -1,11 +1,11 @@
 # @tokiforge/tailwind
 
-Tailwind CSS integration for TokiForge design tokens (v1.1.0).
+Tailwind CSS integration for TokiForge design tokens (v1.1.1).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/tailwind@^1.1.0 @tokiforge/core@^1.1.0 tailwindcss
+npm install @tokiforge/tailwind@^1.1.1 @tokiforge/core@^1.1.1 tailwindcss
 ```
 
 ## Usage

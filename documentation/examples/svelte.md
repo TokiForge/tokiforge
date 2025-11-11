@@ -1,13 +1,13 @@
 # Svelte Example
 
-> **TokiForge v1.1.0**
+> **TokiForge v1.1.1**
 
 Complete Svelte example using TokiForge.
 
 ## Setup
 
 ```bash
-npm install @tokiforge/svelte@^1.1.0 @tokiforge/core@^1.1.0 svelte
+npm install @tokiforge/svelte@^1.1.1 @tokiforge/core@^1.1.1 svelte
 ```
 
 ## Code
