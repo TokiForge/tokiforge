@@ -579,6 +579,192 @@ class ValidationError extends Error {
 
 ---
 
+## TokenVersioning
+
+Track token versions and manage deprecations.
+
+```typescript
+import { TokenVersioning } from '@tokiforge/core';
+
+const tokens = {
+  color: {
+    primary: {
+      value: '#7C3AED',
+      version: {
+        version: '1.0.0',
+        introduced: '2024-01-01',
+        deprecated: '2024-06-01',
+        replacedBy: 'color.brand.primary',
+        migration: 'Use color.brand.primary instead'
+      }
+    }
+  }
+};
+
+const warnings = TokenVersioning.getDeprecatedTokens(tokens);
+const activeTokens = TokenVersioning.filterDeprecated(tokens, false);
+```
+
+---
+
+## ComponentTheming
+
+Scoped themes for individual components.
+
+```typescript
+import { ComponentTheming } from '@tokiforge/core';
+
+const theming = new ComponentTheming();
+theming.registerComponentTheme({
+  name: 'button',
+  scope: 'btn',
+  tokens: {
+    color: {
+      primary: { value: '#7C3AED' },
+      hover: { value: '#6D28D9' }
+    }
+  }
+});
+
+const buttonTokens = theming.getScopedTokens('button', globalTokens);
+const css = theming.applyComponentTheme('button', '.btn', 'hf');
+```
+
+---
+
+## PluginManager
+
+Extend TokiForge with custom functionality.
+
+```typescript
+import { pluginManager } from '@tokiforge/core';
+
+pluginManager.register({
+  name: 'my-exporter',
+  exporter: (tokens, options) => {
+    return JSON.stringify(tokens, null, 2);
+  },
+  validator: (tokens) => {
+    return { valid: true, errors: [] };
+  }
+});
+
+const output = pluginManager.export(tokens, 'my-exporter');
+```
+
+---
+
+## AccessibilityUtils
+
+Built-in accessibility checking and utilities.
+
+```typescript
+import { AccessibilityUtils } from '@tokiforge/core';
+
+const contrast = AccessibilityUtils.calculateContrast('#000000', '#FFFFFF');
+const metrics = AccessibilityUtils.checkAccessibility(tokens);
+const report = AccessibilityUtils.generateAccessibilityReport(tokens);
+```
+
+---
+
+## ResponsiveTokens
+
+Breakpoint and state-aware tokens.
+
+```typescript
+import { ResponsiveTokens } from '@tokiforge/core';
+
+const tokens = {
+  spacing: {
+    padding: {
+      value: '16px',
+      responsive: {
+        sm: '8px',
+        md: '16px',
+        lg: '24px'
+      }
+    }
+  }
+};
+
+const responsive = ResponsiveTokens.process(tokens);
+```
+
+---
+
+## FigmaDiff
+
+Compare and sync tokens with Figma.
+
+```typescript
+import { FigmaDiff } from '@tokiforge/core';
+
+const diff = FigmaDiff.compare(localTokens, figmaTokens);
+const sync = FigmaDiff.sync(localTokens, figmaTokens, { strategy: 'merge' });
+```
+
+---
+
+## CICDValidator
+
+Automated validation for CI/CD pipelines.
+
+```typescript
+import { CICDValidator } from '@tokiforge/core';
+
+const validator = new CICDValidator();
+const result = await validator.validate(tokens);
+if (!result.valid) {
+  console.error(result.errors);
+  process.exit(1);
+}
+```
+
+---
+
+## TokenAnalytics
+
+Token usage tracking and bundle impact analysis.
+
+```typescript
+import { TokenAnalytics } from '@tokiforge/core';
+
+const analytics = new TokenAnalytics();
+const usage = analytics.trackUsage(tokens);
+const impact = analytics.analyzeBundleImpact(tokens);
+```
+
+---
+
+## TokenRegistry
+
+Multi-team design system support.
+
+```typescript
+import { TokenRegistry } from '@tokiforge/core';
+
+const registry = new TokenRegistry();
+registry.register('team-a', tokensA);
+registry.register('team-b', tokensB);
+const merged = registry.merge();
+```
+
+---
+
+## IDESupport
+
+IDE autocomplete and hover previews.
+
+```typescript
+import { IDESupport } from '@tokiforge/core';
+
+IDESupport.generateTypes(tokens, './tokens.d.ts');
+IDESupport.generateAutocomplete(tokens, './tokens.json');
+```
+
+---
+
 ## See Also
 
 - [Vue API](/api/vue)

@@ -34,8 +34,8 @@ jobs:
       - name: Install root dependencies
         run: npm install
 
-      - name: Build core package
-        run: npm run build:core
+      - name: Build core and vue packages
+        run: npm run build:core && npm run build --workspace @tokiforge/vue
 
       - name: Install documentation dependencies
         run: |

@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@tokiforge/core": "^1.2.0",
+    "@tokiforge/vue": "^1.2.0",
     "vite": "7.2.1",
     "vitest": "4.0.7"
   },
