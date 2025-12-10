@@ -45,8 +45,9 @@ export async function analyticsCommand(projectPath: string = process.cwd()): Pro
     );
 
     console.log(`\nAnalytics saved to: ${outputPath}`);
-  } catch (error: any) {
-    console.error('Analytics failed:', error.message);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Analytics failed:', message);
     process.exit(1);
   }
 }

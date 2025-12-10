@@ -39,8 +39,9 @@ function App() {
       const parsed = JSON.parse(jsonInput);
       setTokens(parsed);
       setError(null);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e);
+      setError(message);
     }
   }, [jsonInput]);
 

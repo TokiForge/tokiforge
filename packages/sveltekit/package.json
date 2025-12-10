@@ -1,0 +1,48 @@
+{
+    "name": "@tokiforge/sveltekit",
+    "version": "1.2.0",
+    "description": "SvelteKit integration for TokiForge theming",
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+        }
+    },
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "clean": "rm -rf dist"
+    },
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "sideEffects": false,
+    "peerDependencies": {
+        "@sveltejs/kit": ">=2.0.0",
+        "svelte": ">=4.0.0",
+        "@tokiforge/core": "^1.2.0"
+    },
+    "devDependencies": {
+        "@sveltejs/kit": "^2.0.0",
+        "svelte": "^4.0.0",
+        "tsup": "^8.0.0",
+        "typescript": "^5.3.3"
+    },
+    "dependencies": {
+        "@tokiforge/core": "^1.2.0"
+    },
+    "keywords": [
+        "sveltekit",
+        "svelte",
+        "theming",
+        "design-tokens"
+    ],
+    "author": "TokiForge Community",
+    "license": "AGPL-3.0"
+}

@@ -1,3 +1,8 @@
+---
+title: Svelte API Reference | TokiForge
+description: Complete API reference for @tokiforge/svelte package. Svelte stores, createThemeStore, and reactive theme management for Svelte applications.
+---
+
 # Svelte API Reference
 
 Complete API reference for `@tokiforge/svelte`.

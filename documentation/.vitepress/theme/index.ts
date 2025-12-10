@@ -1,8 +1,8 @@
-import { h } from 'vue';
 import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import { ThemeRuntime } from '@tokiforge/core';
 import ApiPlayground from '../components/ApiPlayground.vue';
+import { setupSnow } from './snow';
 import './custom.css';
 
 // Initialize TokiForge theme for the docs site
@@ -49,6 +49,13 @@ export default {
     // Initialize theme runtime
     if (typeof window !== 'undefined') {
       themeRuntime.init();
+      
+      // Setup snow overlay after DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => setupSnow());
+      } else {
+        setupSnow();
+      }
     }
   },
 } satisfies Theme;

@@ -1,3 +1,8 @@
+---
+title: CLI Configuration | TokiForge
+description: Configure TokiForge CLI behavior via tokiforge.config.json. Customize token paths, output formats, themes, and build options.
+---
+
 # CLI Configuration
 
 Configure TokiForge CLI behavior via `tokiforge.config.json`.

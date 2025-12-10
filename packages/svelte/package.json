@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/svelte",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Svelte adapter for TokiForge theming",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -29,7 +29,7 @@
   "sideEffects": false,
   "peerDependencies": {
     "svelte": ">=3.0.0",
-    "@tokiforge/core": "^1.1.2"
+    "@tokiforge/core": "^1.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
@@ -37,7 +37,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@tokiforge/core": "^1.1.2"
+    "@tokiforge/core": "^1.2.0"
   },
   "keywords": [
     "svelte",
@@ -45,7 +45,7 @@
     "design-tokens"
   ],
   "author": "TokiForge Community",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/TokiForge/tokiforge.git"

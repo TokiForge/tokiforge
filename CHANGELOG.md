@@ -5,6 +5,14 @@ All notable changes to TokiForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-12-10
+
+### Added
+- Performance optimization features (caching, lazy loading, compression)
+- Accessibility features (high contrast, reduced motion, color blind support, font scaling)
+- Advanced token features (functions, expressions, references with fallbacks, scoping, theming API)
+- Integrations (Storybook, enhanced Figma sync, design tools, CMS, design system tools)
+
 ## [1.1.2] - 2025-11-12
 
 ### Fixed

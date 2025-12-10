@@ -50,8 +50,9 @@ export async function figmaDiffCommand(
     } else {
       console.log('\nNo mismatches found!');
     }
-  } catch (error: any) {
-    console.error('Diff failed:', error.message);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Diff failed:', message);
     process.exit(1);
   }
 }

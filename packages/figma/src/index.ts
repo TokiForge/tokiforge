@@ -1,4 +1,4 @@
-import type { DesignTokens } from '@tokiforge/core';
+import type { DesignTokens, TokenValue } from '@tokiforge/core';
 import { TokenParser } from '@tokiforge/core';
 import axios from 'axios';
 import type { AxiosInstance } from 'axios';
@@ -80,8 +80,9 @@ export class FigmaSync {
       }
 
       return tokens;
-    } catch (error: any) {
-      throw new Error(`Failed to pull tokens from Figma: ${error.message}`);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to pull tokens from Figma: ${message}`);
     }
   }
 
@@ -98,8 +99,9 @@ export class FigmaSync {
         const styleName = this.tokenPathToStyleName(path);
         await this.createOrUpdateStyle(styleName, color);
       }
-    } catch (error: any) {
-      throw new Error(`Failed to push tokens to Figma: ${error.message}`);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to push tokens to Figma: ${message}`);
     }
   }
 
@@ -115,16 +117,159 @@ export class FigmaSync {
     }
   }
 
-  /**
-   * Create or update a Figma style
-   */
   private async createOrUpdateStyle(
-    _name: string,
-    _color: string
+    name: string,
+    color: string,
+    styleType: 'FILL' | 'TEXT' = 'FILL'
   ): Promise<void> {
-    // Creating styles via Figma API requires plugin context
-    // This functionality is limited by Figma API restrictions
-    throw new Error('Creating styles via API requires a Figma plugin context. Please use the Figma plugin for this feature.');
+    throw new Error(
+      `Creating styles via API requires a Figma plugin context. ` +
+      `Please use the Figma plugin for this feature. ` +
+      `Style: ${name}, Color: ${color}, Type: ${styleType}`
+    );
+  }
+
+  /**
+   * Enhanced sync with conflict resolution
+   */
+  async syncWithConflictResolution(
+    localTokens: DesignTokens,
+    options?: {
+      strategy?: 'local' | 'remote' | 'merge';
+      onConflict?: (path: string, local: any, remote: any) => any;
+    }
+  ): Promise<DesignTokens> {
+    const remoteTokens = await this.pullTokens();
+    const strategy = options?.strategy || 'merge';
+
+    if (strategy === 'local') {
+      return localTokens;
+    }
+
+    if (strategy === 'remote') {
+      return remoteTokens;
+    }
+
+    // Merge strategy
+    return this.mergeTokens(localTokens, remoteTokens, options?.onConflict);
+  }
+
+  /**
+   * Merge tokens with conflict resolution
+   */
+  private mergeTokens(
+    local: DesignTokens,
+    remote: DesignTokens,
+    onConflict?: (path: string, local: any, remote: any) => any
+  ): DesignTokens {
+    const merged = { ...local };
+
+    const mergeRecursive = (localObj: any, remoteObj: any, path: string[] = []): any => {
+      for (const [key, remoteValue] of Object.entries(remoteObj)) {
+        const currentPath = [...path, key];
+        const pathStr = currentPath.join('.');
+
+        if (remoteValue && typeof remoteValue === 'object' && !Array.isArray(remoteValue)) {
+          if ('value' in remoteValue) {
+            // It's a TokenValue
+            const localValue = localObj[key];
+            if (localValue && typeof localValue === 'object' && 'value' in localValue) {
+              // Conflict - both have values
+              if (onConflict) {
+                merged[key] = onConflict(pathStr, localValue, remoteValue) as TokenValue;
+              } else {
+                // Default: use remote
+                merged[key] = remoteValue as TokenValue;
+              }
+            } else {
+              // No conflict, use remote
+              merged[key] = remoteValue as TokenValue;
+            }
+          } else {
+            // Nested tokens
+            if (!localObj[key] || typeof localObj[key] !== 'object') {
+              localObj[key] = {};
+            }
+            mergeRecursive(localObj[key], remoteValue, currentPath);
+          }
+        }
+      }
+    };
+
+    mergeRecursive(merged, remote);
+    return merged;
+  }
+
+  /**
+   * Get sync status (what would change)
+   */
+  async getSyncStatus(localTokens: DesignTokens): Promise<{
+    added: string[];
+    modified: string[];
+    removed: string[];
+  }> {
+    const remoteTokens = await this.pullTokens();
+    
+    const localPaths = this.getTokenPaths(localTokens);
+    const remotePaths = this.getTokenPaths(remoteTokens);
+
+    const added = remotePaths.filter(p => !localPaths.includes(p));
+    const removed = localPaths.filter(p => !remotePaths.includes(p));
+    const modified: string[] = [];
+
+    for (const path of localPaths) {
+      if (remotePaths.includes(path)) {
+        const localValue = this.getTokenByPath(localTokens, path);
+        const remoteValue = this.getTokenByPath(remoteTokens, path);
+        if (JSON.stringify(localValue) !== JSON.stringify(remoteValue)) {
+          modified.push(path);
+        }
+      }
+    }
+
+    return { added, modified, removed };
+  }
+
+  /**
+   * Get all token paths
+   */
+  private getTokenPaths(tokens: DesignTokens, prefix: string = ''): string[] {
+    const paths: string[] = [];
+
+    const traverse = (obj: any, path: string) => {
+      for (const [key, value] of Object.entries(obj)) {
+        const currentPath = path ? `${path}.${key}` : key;
+
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+          if ('value' in value) {
+            paths.push(currentPath);
+          } else {
+            traverse(value, currentPath);
+          }
+        }
+      }
+    };
+
+    traverse(tokens, prefix);
+    return paths;
+  }
+
+  /**
+   * Get token by path
+   */
+  private getTokenByPath(tokens: DesignTokens, path: string): any {
+    const parts = path.split('.');
+    let current: any = tokens;
+
+    for (const part of parts) {
+      if (current && typeof current === 'object' && part in current) {
+        current = current[part];
+      } else {
+        return undefined;
+      }
+    }
+
+    return current;
   }
 
   /**
@@ -187,16 +332,23 @@ export class FigmaSync {
   /**
    * Set nested value in object
    */
-  private setNestedValue(obj: any, path: string, value: any): void {
+  private setNestedValue(obj: DesignTokens, path: string, value: TokenValue): void {
     const parts = path.split('.');
-    let current = obj;
+    let current: DesignTokens = obj;
 
     for (let i = 0; i < parts.length - 1; i++) {
       const part = parts[i];
-      if (!current[part]) {
-        current[part] = {};
+      const partValue = current[part];
+      if (!partValue || typeof partValue !== 'object' || Array.isArray(partValue) || 'value' in partValue) {
+        current[part] = {} as DesignTokens;
       }
-      current = current[part];
+      const nextValue = current[part];
+      if (typeof nextValue === 'object' && nextValue !== null && !Array.isArray(nextValue) && !('value' in nextValue)) {
+        current = nextValue as DesignTokens;
+      } else {
+        current[part] = {} as DesignTokens;
+        current = current[part] as DesignTokens;
+      }
     }
 
     current[parts[parts.length - 1]] = value;

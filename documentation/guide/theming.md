@@ -1,3 +1,8 @@
+---
+title: Theming Guide | TokiForge
+description: Complete guide to theming with TokiForge. Learn how to create themes, switch between themes, and manage theme configurations.
+---
+
 # Theming Guide
 
 Complete guide to theming with TokiForge.

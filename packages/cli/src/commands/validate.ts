@@ -51,8 +51,9 @@ export async function validateCommand(
           fileKey: options.figmaFileKey,
         });
         validationOptions.figmaTokens = figmaTokens;
-      } catch (error: any) {
-        console.warn(`Failed to fetch Figma tokens: ${error.message}`);
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.warn(`Failed to fetch Figma tokens: ${message}`);
         validationOptions.checkFigma = false;
       }
     }
@@ -70,8 +71,9 @@ export async function validateCommand(
     } else {
       console.log('Validation passed');
     }
-  } catch (error: any) {
-    console.error('Validation error:', error.message);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Validation error:', message);
     process.exit(1);
   }
 }

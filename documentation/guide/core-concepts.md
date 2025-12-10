@@ -1,3 +1,8 @@
+---
+title: Core Concepts | TokiForge
+description: Learn the core concepts of TokiForge design token and theming engine. Understand design tokens, themes, CSS variables, and runtime switching.
+---
+
 # Core Concepts
 
 Understanding how TokiForge works under the hood.

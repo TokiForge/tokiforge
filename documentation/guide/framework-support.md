@@ -1,3 +1,8 @@
+---
+title: Framework Support | TokiForge
+description: TokiForge is framework-agnostic and works with React, Vue, Angular, Svelte, Next.js, Remix, Solid, Qwik, and vanilla JavaScript.
+---
+
 # Framework Support
 
 TokiForge is **framework-agnostic** and works with **any frontend framework** or even vanilla JavaScript!

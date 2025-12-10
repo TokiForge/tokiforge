@@ -16,15 +16,15 @@ export interface ProvideThemeOptions {
 
 export type ExtractTokenType<T extends ThemeConfig> = T['themes'][number] extends { tokens: infer TokenType }
   ? TokenType extends DesignTokens
-    ? TokenType
-    : DesignTokens
+  ? TokenType
+  : DesignTokens
   : DesignTokens;
 
 export interface ThemeContext<T extends DesignTokens = DesignTokens> {
   theme: Ref<string>;
-  tokens: ComputedRef<T>;
-  setTheme: (themeName: string) => void;
-  nextTheme: () => void;
+  tokens: Ref<T>;
+  setTheme: (themeName: string) => Promise<void>;
+  nextTheme: () => Promise<void>;
   availableThemes: ComputedRef<string[]>;
   runtime: ThemeRuntime;
   generateCSS?: (themeName?: string) => string;
@@ -55,9 +55,9 @@ export function provideTheme<T extends DesignTokens = DesignTokens>(
   const themeConfig: ThemeConfig = config as ThemeConfig;
   const runtime = new ThemeRuntime(themeConfig);
   const availableThemesList = runtime.getAvailableThemes();
-  
+
   let initialTheme = defaultTheme || themeConfig.defaultTheme || availableThemesList[0] || 'default';
-  
+
   if (typeof window !== 'undefined') {
     if (persist && window.localStorage && typeof window.localStorage.getItem === 'function') {
       try {
@@ -69,7 +69,7 @@ export function provideTheme<T extends DesignTokens = DesignTokens>(
         // Ignore localStorage access errors
       }
     }
-    
+
     if (watchSystemTheme && !persist) {
       const systemTheme = ThemeRuntime.detectSystemTheme();
       if (availableThemesList.includes(systemTheme)) {
@@ -79,24 +79,52 @@ export function provideTheme<T extends DesignTokens = DesignTokens>(
   }
 
   const theme = ref(initialTheme);
-  const tokens = computed(() => runtime.getThemeTokens(theme.value) as T);
 
-  const setTheme = (name: string) => {
+  // Initialize tokens synchronously with the initial theme's tokens
+  // This ensures tokens are available immediately, even before async init completes
+  let initialTokens: DesignTokens = {};
+  try {
+    initialTokens = runtime.getThemeTokens(initialTheme);
+  } catch (e) {
+    // Tokens will be populated when runtime initializes
+  }
+  const tokens = ref<DesignTokens>(initialTokens);
+
+  const updateTokens = (themeName: string) => {
+    try {
+      const t = runtime.getThemeTokens(themeName);
+      tokens.value = t as T;
+    } catch (e) {
+      const provider = (runtime as any).themes?.get(themeName);
+      if (provider && typeof provider !== 'function') {
+        tokens.value = provider as T;
+      }
+    }
+  };
+
+  const setTheme = async (name: string) => {
     if (!availableThemesList.includes(name)) {
       throw new Error(`Theme "${name}" not found. Available themes: ${availableThemesList.join(', ')}`);
     }
 
+    // Update tokens immediately for synchronous access
+    updateTokens(name);
+    
     if (mode === 'static') {
-      availableThemesList.forEach((t: string) => {
-        document.body.classList.remove(`${bodyClassPrefix}-${t}`);
-      });
-      document.body.classList.add(`${bodyClassPrefix}-${name}`);
+      if (typeof window !== 'undefined') {
+        availableThemesList.forEach((t: string) => {
+          document.body.classList.remove(`${bodyClassPrefix}-${t}`);
+        });
+        document.body.classList.add(`${bodyClassPrefix}-${name}`);
+      }
     } else {
-      runtime.applyTheme(name, selector, prefix);
+      if (typeof window !== 'undefined') {
+        runtime.applyTheme(name, selector, prefix);
+      }
     }
-    
+
     theme.value = name;
-    
+
     if (typeof window !== 'undefined' && persist && window.localStorage && typeof window.localStorage.setItem === 'function') {
       try {
         window.localStorage.setItem('tokiforge-theme', name);
@@ -110,8 +138,19 @@ export function provideTheme<T extends DesignTokens = DesignTokens>(
     if (mode === 'static') {
       const bodyClass = `${bodyClassPrefix}-${initialTheme}`;
       document.body.classList.add(bodyClass);
+      updateTokens(initialTheme);
     } else {
-      runtime.init(selector, prefix);
+      try {
+        updateTokens(initialTheme);
+      } catch (e) {
+        try {
+          runtime.init(selector, prefix);
+          updateTokens(runtime.getCurrentTheme() || initialTheme);
+          runtime.applyTheme(initialTheme, selector, prefix);
+        } catch (err) {
+          console.error('Failed to initialize theme runtime:', err);
+        }
+      }
     }
 
     if (watchSystemTheme) {
@@ -120,7 +159,7 @@ export function provideTheme<T extends DesignTokens = DesignTokens>(
           setTheme(systemTheme);
         }
       });
-      
+
       if (typeof window !== 'undefined') {
         window.addEventListener('beforeunload', () => unwatch());
       }
@@ -131,31 +170,32 @@ export function provideTheme<T extends DesignTokens = DesignTokens>(
     const handleThemeChange = (e: Event) => {
       const customEvent = e as CustomEvent;
       theme.value = customEvent.detail.theme;
+      tokens.value = customEvent.detail.tokens;
     };
 
     window.addEventListener('tokiforge:theme-change', handleThemeChange);
   }
 
-  const nextTheme = () => {
+  const nextTheme = async () => {
     const currentIndex = availableThemesList.indexOf(theme.value);
     const nextIndex = (currentIndex + 1) % availableThemesList.length;
-    setTheme(availableThemesList[nextIndex]);
+    await setTheme(availableThemesList[nextIndex]);
   };
 
   const generateCSS = (themeName?: string) => {
     const targetTheme = themeName || theme.value;
     const themeTokens = runtime.getThemeTokens(targetTheme);
-    const bodySelector = mode === 'static' 
+    const bodySelector = mode === 'static'
       ? `body.${bodyClassPrefix}-${targetTheme}`
       : selector;
-    
+
     return TokenExporter.exportCSS(themeTokens, {
       selector: bodySelector,
       prefix: prefix,
     });
   };
 
-  const context: ThemeContext<T> = {
+  const context: ThemeContext<DesignTokens> = {
     theme,
     tokens,
     setTheme,
@@ -165,9 +205,15 @@ export function provideTheme<T extends DesignTokens = DesignTokens>(
     ...(mode === 'static' ? { generateCSS } : {}),
   };
 
-  provide(ThemeKey, context as ThemeContext<DesignTokens>);
+  // Only call provide() if we're in a Vue component setup context
+  // This allows provideTheme to be called outside setup for testing
+  try {
+    provide(ThemeKey, context);
+  } catch (e) {
+    // provide() can only be called inside setup()
+  }
 
-  return context;
+  return context as unknown as ThemeContext<T>;
 }
 
 export function useTheme<T extends DesignTokens = DesignTokens>(): ThemeContext<T> {
@@ -175,6 +221,6 @@ export function useTheme<T extends DesignTokens = DesignTokens>(): ThemeContext<
   if (!context) {
     throw new Error('useTheme must be used within a component that provides theme context');
   }
-  return context as ThemeContext<T>;
+  return context as unknown as ThemeContext<T>;
 }
 

@@ -1,8 +1,8 @@
-# TokiForge Roadmap v1.1.2+
+# TokiForge Roadmap v1.2.0+
 
 ## Current Status Analysis
 
-### Already Implemented (v1.1.2)
+### Already Implemented (v1.2.0)
 
 1. **Semantic Tokens & Aliasing** - Partially implemented
    - `$alias` support for token referencing
@@ -357,6 +357,6 @@ We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guideline
 
 ---
 
-*Last updated: November 2025*  
-*Version: 1.1.2*
+*Last updated: January 2025*  
+*Version: 1.2.0*
 

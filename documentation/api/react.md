@@ -1,3 +1,8 @@
+---
+title: React API Reference | TokiForge
+description: Complete API reference for @tokiforge/react package. React hooks, ThemeProvider, and theme management for React applications.
+---
+
 # React API Reference
 
 Complete API reference for `@tokiforge/react`.

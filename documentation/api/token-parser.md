@@ -1,3 +1,8 @@
+---
+title: TokenParser API Reference | TokiForge
+description: Complete API reference for TokenParser class. Parse, validate, and process design token files in JSON and YAML formats.
+---
+
 # TokenParser API Reference
 
 Complete API reference for the `TokenParser` class from `@tokiforge/core`.

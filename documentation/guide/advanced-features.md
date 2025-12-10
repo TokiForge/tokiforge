@@ -1,6 +1,13 @@
+---
+title: Advanced Features | TokiForge
+description: Advanced features for enterprise-grade design systems. Learn about token functions, expressions, scoping, theming API, validation plugins, and transformation pipeline.
+---
+
 # Advanced Features
 
-TokiForge v1.1.2 introduces powerful advanced features for enterprise-grade design systems.
+TokiForge v1.2.0 introduces powerful advanced features for enterprise-grade design systems.
+
+> **New in v1.2.0**: Check out [Advanced Token Features](/guide/advanced-token-features), [Performance Optimization](/guide/performance-optimization), [Accessibility](/guide/accessibility), and [Integrations](/guide/integrations) for the latest features.
 
 ## Token Versioning & Deprecation
 

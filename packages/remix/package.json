@@ -1,0 +1,55 @@
+{
+    "name": "@tokiforge/remix",
+    "version": "1.2.0",
+    "description": "Remix integration for TokiForge theming",
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+        },
+        "./server": {
+            "types": "./dist/server.d.ts",
+            "import": "./dist/server.js",
+            "require": "./dist/server.cjs"
+        }
+    },
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "clean": "rm -rf dist"
+    },
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "sideEffects": false,
+    "peerDependencies": {
+        "@remix-run/react": ">=2.0.0",
+        "@remix-run/node": ">=2.0.0",
+        "react": ">=18.0.0",
+        "@tokiforge/core": "^1.2.0"
+    },
+    "devDependencies": {
+        "@remix-run/react": "^2.0.0",
+        "@remix-run/node": "^2.0.0",
+        "@types/react": "^18.2.0",
+        "react": "^18.2.0",
+        "tsup": "^8.0.0",
+        "typescript": "^5.3.3"
+    },
+    "dependencies": {
+        "@tokiforge/core": "^1.2.0"
+    },
+    "keywords": [
+        "remix",
+        "theming",
+        "design-tokens"
+    ],
+    "author": "TokiForge Community",
+    "license": "AGPL-3.0"
+}

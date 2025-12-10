@@ -2,12 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { ThemeService } from './theme.service';
 import type { ThemeConfig, DesignTokens } from '@tokiforge/core';
 
-// Mock Angular dependencies
-// Note: In a real Angular app, you would use TestBed to create the service
-// This is a simplified test that mocks the Angular DI dependencies
 function createThemeService(): ThemeService {
-  // Create service instance directly
-  // In real Angular tests, use: TestBed.inject(ThemeService)
   const service = new (ThemeService as any)();
   
   // Mock the injected PLATFORM_ID

@@ -1,13 +1,18 @@
+---
+title: Angular Example | TokiForge
+description: Complete Angular example using TokiForge with standalone components. See how to use ThemeService, Signals, and implement theme switching in Angular 17+.
+---
+
 # Angular Example
 
-> **TokiForge v1.1.2** | **Angular 17+**
+> **TokiForge v1.2.0** | **Angular 17+**
 
 Complete Angular example using TokiForge with standalone components.
 
 ## Setup
 
 ```bash
-npm install @tokiforge/angular@^1.1.2 @tokiforge/core@^1.1.2 @angular/core@^17.0.0 @angular/common@^17.0.0 @angular/platform-browser@^17.0.0
+npm install @tokiforge/angular@^1.2.0 @tokiforge/core@^1.2.0 @angular/core@^17.0.0 @angular/common@^17.0.0 @angular/platform-browser@^17.0.0
 ```
 
 ## Code
