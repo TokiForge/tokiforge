@@ -25,12 +25,12 @@
     "sideEffects": false,
     "peerDependencies": {
         "@sveltejs/kit": ">=2.0.0",
-        "svelte": ">=4.0.0",
+        "svelte": ">=5.0.0",
         "@tokiforge/core": "^1.2.0"
     },
     "devDependencies": {
         "@sveltejs/kit": "^2.0.0",
-        "svelte": "^4.0.0",
+        "svelte": "^5.0.0",
         "tsup": "^8.0.0",
         "typescript": "^5.3.3"
     },
