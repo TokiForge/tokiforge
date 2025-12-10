@@ -19,20 +19,16 @@ export default defineConfig({
       },
     },
     optimizeDeps: {
-      exclude: ['@tokiforge/core', '@tokiforge/vue'],
+      exclude: ['@tokiforge/core', '@tokiforge/vue', 'fs', 'path', 'module', 'yaml', 'fs/promises'],
     },
     ssr: {
       noExternal: ['@tokiforge/core', '@tokiforge/vue'],
     },
     build: {
       rollupOptions: {
-        external: ['fs', 'path', 'module', 'yaml', 'zlib', 'util', 'fs/promises', 'worker_threads'],
+        external: ['zlib', 'util', 'worker_threads'],
         output: {
-          globals: {
-            'module': 'module',
-            'fs': 'fs',
-            'path': 'path',
-          },
+          globals: {},
         },
         onwarn(warning, warn) {
           // Suppress warning about mixed static/dynamic imports for @tokiforge/core
