@@ -1,3 +1,8 @@
+---
+title: Performance Guide | TokiForge
+description: Optimize TokiForge for maximum performance. Learn about bundle size, caching, lazy loading, compression, and performance optimization strategies.
+---
+
 # Performance Guide
 
 Optimize TokiForge for maximum performance.

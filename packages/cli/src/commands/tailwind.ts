@@ -32,8 +32,9 @@ export async function tailwindCommand(projectPath: string = process.cwd()): Prom
     fs.writeFileSync(outputPath, tailwindConfig);
 
     console.log(`Tailwind config generated: ${outputPath}\n`);
-  } catch (error: any) {
-    console.error('Failed to generate Tailwind config:', error.message);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Failed to generate Tailwind config:', message);
     process.exit(1);
   }
 }

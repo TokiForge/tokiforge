@@ -1,13 +1,18 @@
+---
+title: Svelte Example | TokiForge
+description: Complete Svelte example using TokiForge. See how to use createThemeStore, Svelte stores, and implement theme switching in a Svelte application.
+---
+
 # Svelte Example
 
-> **TokiForge v1.1.2**
+> **TokiForge v1.2.0**
 
 Complete Svelte example using TokiForge.
 
 ## Setup
 
 ```bash
-npm install @tokiforge/svelte@^1.1.2 @tokiforge/core@^1.1.2 svelte
+npm install @tokiforge/svelte@^1.2.0 @tokiforge/core@^1.2.0 svelte
 ```
 
 ## Code

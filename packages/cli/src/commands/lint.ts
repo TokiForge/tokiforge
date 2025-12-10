@@ -95,8 +95,9 @@ export async function lintCommand(projectPath: string = process.cwd()): Promise<
     if (result.errors.length > 0) {
       process.exit(1);
     }
-  } catch (error: any) {
-    console.error('Validation failed:', error.message);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Validation failed:', message);
     process.exit(1);
   }
 }
@@ -218,7 +219,7 @@ export function diffTokens(
 /**
  * Flatten tokens to a flat object
  */
-function flattenTokens(tokens: DesignTokens, prefix: string = '', result: Record<string, any> = {}): Record<string, any> {
+function flattenTokens(tokens: DesignTokens, prefix: string = '', result: Record<string, unknown> = {}): Record<string, unknown> {
   for (const key in tokens) {
     const value = tokens[key];
     const path = prefix ? `${prefix}.${key}` : key;

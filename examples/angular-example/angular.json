@@ -27,7 +27,13 @@
             "tsConfig": "tsconfig.app.json",
             "allowedCommonJsDependencies": [
               "@tokiforge/core",
-              "@tokiforge/angular"
+              "@tokiforge/angular",
+              "util",
+              "inherits",
+              "is-arguments",
+              "is-generator-function",
+              "which-typed-array",
+              "is-typed-array"
             ],
             "assets": [],
             "styles": ["src/styles.css"],

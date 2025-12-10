@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/spec",
+    "types": [
+      "jasmine"
+    ],
+    "paths": {
+      "fs": ["./src/stubs/fs.ts"],
+      "path": ["./src/stubs/path.ts"],
+      "module": ["./src/stubs/module.ts"],
+      "zlib": ["./src/stubs/zlib.ts"],
+      "util": ["./src/stubs/util.ts"]
+    }
+  },
+  "include": [
+    "src/**/*.spec.ts",
+    "src/**/*.d.ts"
+  ]
+}
+

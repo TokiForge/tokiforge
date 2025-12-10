@@ -1,6 +1,11 @@
+---
+title: CLI Usage Example | TokiForge
+description: Complete example of using TokiForge CLI to manage design tokens. Initialize, build, validate, and analyze tokens from the command line.
+---
+
 # CLI Usage Example
 
-> **TokiForge v1.1.2**
+> **TokiForge v1.2.0**
 
 Complete example of using TokiForge CLI to manage design tokens.
 
@@ -10,10 +15,10 @@ Complete example of using TokiForge CLI to manage design tokens.
 
 ```bash
 # Global installation
-npm install -g tokiforge-cli@^1.1.2
+npm install -g tokiforge-cli@^1.2.0
 
 # Or use with npx (no installation needed)
-npx tokiforge-cli@^1.1.2 init
+npx tokiforge-cli@^1.2.0 init
 ```
 
 ### 2. Initialize Project

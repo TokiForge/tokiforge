@@ -1,5 +1,5 @@
 import { writable, derived } from 'svelte/store';
-import { ThemeRuntime } from '@tokiforge/core';
+import { ThemeRuntime, type DesignTokens } from '@tokiforge/core';
 import type { ThemeConfig } from '@tokiforge/core';
 
 export function createThemeStore(
@@ -10,16 +10,38 @@ export function createThemeStore(
 ) {
   const runtime = new ThemeRuntime(config);
   const themeName = defaultTheme || config.defaultTheme || config.themes[0]?.name || 'default';
-  
+
   const theme = writable<string>(themeName);
-  const tokens = derived(theme, ($theme) => runtime.getThemeTokens($theme));
+  const tokens = writable<DesignTokens>({});
+
+  const updateTokens = (name: string) => {
+    try {
+      const t = runtime.getThemeTokens(name);
+      tokens.set(t);
+    } catch {
+      // Tokens will be loaded when runtime initializes
+    }
+  };
+
+  updateTokens(themeName);
 
   if (typeof window !== 'undefined') {
-    runtime.init(selector, prefix);
+    try {
+      runtime.init(selector, prefix);
+      updateTokens(runtime.getCurrentTheme() || themeName);
+    } catch (err) {
+      console.error('Failed to initialize theme runtime:', err);
+    }
 
     const handleThemeChange = (e: Event) => {
       const customEvent = e as CustomEvent;
-      theme.set(customEvent.detail.theme);
+      const tName = customEvent.detail.theme;
+      theme.set(tName);
+      if (customEvent.detail.tokens) {
+        tokens.set(customEvent.detail.tokens);
+      } else {
+        updateTokens(tName);
+      }
     };
 
     window.addEventListener('tokiforge:theme-change', handleThemeChange);
@@ -28,11 +50,11 @@ export function createThemeStore(
   return {
     theme,
     tokens,
-    setTheme: (name: string) => {
+    setTheme: async (name: string) => {
       runtime.applyTheme(name, selector, prefix);
       theme.set(name);
     },
-    nextTheme: () => {
+    nextTheme: async () => {
       const newTheme = runtime.nextTheme();
       runtime.applyTheme(newTheme, selector, prefix);
       theme.set(newTheme);

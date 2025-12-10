@@ -1,577 +1,487 @@
+---
+title: Core API Reference | TokiForge
+description: Complete API reference for @tokiforge/core package. Learn about ThemeRuntime, TokenParser, TokenExporter, and all core classes and methods.
+---
+
+---
+title: Core API Reference | TokiForge
+description: Complete API reference for TokiForge core classes. ThemeRuntime, TokenExporter, TokenParser, and all core functionality for design token management.
+---
+
 # Core API Reference
 
-The `@tokiforge/core` package provides the foundation for TokiForge.
+Complete API reference for `@tokiforge/core` package.
 
-## TokenParser
+---
 
-Parse and validate design token files.
+## ThemeRuntime
 
-### Methods
+Central class for managing theme lifecycle and CSS variable injection.
 
-#### `TokenParser.parse(filePath, options?)`
-
-Parse a JSON or YAML token file.
+### Constructor
 
 ```typescript
-import { TokenParser } from '@tokiforge/core';
+new ThemeRuntime(config: ThemeConfig)
+```
 
-const tokens = TokenParser.parse('./tokens.json', {
-  validate: true,        // Validate token structure (default: true)
-  expandReferences: true // Expand token references (default: true)
+Creates a new theme runtime instance.
+
+**Parameters:**
+- `config: ThemeConfig` - Theme configuration object
+
+**Example:**
+```typescript
+import { ThemeRuntime } from '@tokiforge/core';
+
+const runtime = new ThemeRuntime({
+  themes: [
+    {
+      name: 'light',
+      tokens: {
+        color: {
+          primary: { value: '#3b82f6' },
+          background: { value: '#ffffff' },
+        },
+      },
+    },
+    {
+      name: 'dark',
+      tokens: {
+        color: {
+          primary: { value: '#60a5fa' },
+          background: { value: '#1f2937' },
+        },
+      },
+    },
+  ],
+  defaultTheme: 'light',
 });
 ```
 
-**Options:**
-- `validate?: boolean` - Validate token structure
-- `expandReferences?: boolean` - Expand `{token.path}` references
+---
 
-**Returns:** `DesignTokens`
-
-#### `TokenParser.validate(tokens)`
-
-Validate token structure.
+### init()
 
 ```typescript
-TokenParser.validate(tokens);
+async init(selector?: string, prefix?: string): Promise<void>
 ```
 
-Throws an error if tokens are invalid.
+Initialize the runtime and apply the default theme.
 
-#### `TokenParser.expandReferences(tokens)`
+**Parameters:**
+- `selector?: string` - CSS selector for variable injection (default: `:root`)
+- `prefix?: string` - Prefix for CSS variables (default: `hf`)
 
-Expand token references.
+**Example:**
+```typescript
+await runtime.init(':root', 'app');
+// CSS variables will be: --app-color-primary, --app-color-background, etc.
+```
+
+---
+
+### applyTheme()
 
 ```typescript
-const expanded = TokenParser.expandReferences(tokens);
+async applyTheme(
+  themeName: string, 
+  selector?: string, 
+  prefix?: string
+): Promise<void>
 ```
+
+Apply a theme by injecting CSS variables.
+
+**Parameters:**
+- `themeName: string` - Name of the theme to apply
+- `selector?: string` - CSS selector (default: `:root`)
+- `prefix?: string` - Variable prefix (default: `hf`)
+
+**Throws:**
+- `ThemeNotFoundError` - If theme doesn't exist
+
+**Events:**
+- Dispatches `tokiforge:theme-change` event with `{ theme, tokens }`
+
+**Example:**
+```typescript
+await runtime.applyTheme('dark');
+
+// With custom selector and prefix
+await runtime.applyTheme('dark', '[data-theme="dark"]', 'custom');
+```
+
+---
+
+### getCurrentTheme()
+
+```typescript
+getCurrentTheme(): string | null
+```
+
+Get the currently active theme name.
+
+**Returns:** `string | null` - Current theme name or null if none applied
+
+**Example:**
+```typescript
+const currentTheme = runtime.getCurrentTheme();
+console.log(currentTheme); // 'dark'
+```
+
+---
+
+### getThemeTokens()
+
+```typescript
+getThemeTokens(themeName: string): DesignTokens
+```
+
+Get token values for a specific theme.
+
+**Parameters:**
+- `themeName: string` - Theme name
+
+**Returns:** `DesignTokens` - Token object
+
+**Throws:**
+- `ThemeError` - If theme not loaded or doesn't exist
+
+**Example:**
+```typescript
+const tokens = runtime.getThemeTokens('dark');
+console.log(tokens.color.primary.value); // '#60a5fa'
+```
+
+---
+
+### getAvailableThemes()
+
+```typescript
+getAvailableThemes(): string[]
+```
+
+Get list of all available theme names.
+
+**Returns:** `string[]` - Array of theme names
+
+**Example:**
+```typescript
+const themes = runtime.getAvailableThemes();
+console.log(themes); // ['light', 'dark']
+```
+
+---
+
+### nextTheme()
+
+```typescript
+nextTheme(): string
+```
+
+Get the next theme in rotation.
+
+**Returns:** `string` - Next theme name
+
+**Example:**
+```typescript
+const next = runtime.nextTheme();
+await runtime.applyTheme(next);
+```
+
+---
+
+### watchSystemTheme()
+
+```typescript
+watchSystemTheme(callback: (theme: string) => void): () => void
+```
+
+Watch for system theme changes (light/dark).
+
+**Parameters:**
+- `callback: (theme: string) => void` - Called with 'light' or 'dark'
+
+**Returns:** `() => void` - Unwatch function
+
+**Example:**
+```typescript
+const unwatch = runtime.watchSystemTheme((systemTheme) => {
+  console.log('System theme changed to:', systemTheme);
+  runtime.applyTheme(systemTheme);
+});
+
+// Later: stop watching
+unwatch();
+```
+
+---
+
+### destroy()
+
+```typescript
+destroy(): void
+```
+
+Clean up runtime resources and remove injected styles.
+
+**Example:**
+```typescript
+runtime.destroy();
+```
+
+---
+
+### Static: detectSystemTheme()
+
+```typescript
+static detectSystemTheme(): string
+```
+
+Detect current system color scheme preference.
+
+**Returns:** `string` - 'dark' or 'light'
+
+**Example:**
+```typescript
+const systemTheme = ThemeRuntime.detectSystemTheme();
+console.log(systemTheme); // 'dark' or 'light'
+```
+
+---
 
 ## TokenExporter
 
 Export tokens to various formats.
 
-### Methods
+### export()
 
-#### `TokenExporter.export(tokens, options)`
+```typescript
+static export(
+  tokens: DesignTokens, 
+  options: TokenExportOptions
+): string
+```
 
-Main export method.
+Export tokens to specified format.
 
+**Parameters:**
+- `tokens: DesignTokens` - Token object to export
+- `options: TokenExportOptions` - Export configuration
+
+**Returns:** `string` - Formatted output
+
+**Example:**
 ```typescript
 import { TokenExporter } from '@tokiforge/core';
 
 const css = TokenExporter.export(tokens, {
   format: 'css',
   selector: ':root',
-  prefix: 'hf',
+  prefix: 'app',
 });
 ```
 
-**Options:**
-- `format: 'css' | 'js' | 'ts' | 'scss' | 'json'` - Output format
-- `selector?: string` - CSS selector (for CSS format)
-- `prefix?: string` - CSS variable prefix
-- `variables?: boolean` - Use CSS variables in JS/TS output
+---
 
-#### Format-Specific Methods
+### exportCSS()
 
+```typescript
+static exportCSS(
+  tokens: DesignTokens,
+  options?: { selector?: string; prefix?: string }
+): string
+```
+
+Export as CSS variables.
+
+**Example:**
 ```typescript
 const css = TokenExporter.exportCSS(tokens, {
   selector: ':root',
-  prefix: 'hf',
+  prefix: 'app',
 });
 
-const scss = TokenExporter.exportSCSS(tokens, {
-  prefix: 'hf',
+console.log(css);
+// :root {
+//   --app-color-primary: #3b82f6;
+//   --app-color-background: #ffffff;
+// }
+```
+
+---
+
+### exportSCSS()
+
+```typescript
+static exportSCSS(
+  tokens: DesignTokens,
+  options?: { prefix?: string }
+): string
+```
+
+Export as SCSS variables.
+
+**Example:**
+```typescript
+const scss = TokenExporter.exportSCSS(tokens, { prefix: 'app' });
+
+console.log(scss);
+// $app-color-primary: #3b82f6;
+// $app-color-background: #ffffff;
+```
+
+---
+
+### exportJS()
+
+```typescript
+static exportJS(
+  tokens: DesignTokens,
+  options?: { variables?: boolean; prefix?: string }
+): string
+```
+
+Export as JavaScript module.
+
+**Example:**
+```typescript
+// Export as CSS variable references
+const jsVars = TokenExporter.exportJS(tokens, { 
+  variables: true,
+  prefix: 'app'
 });
 
-const js = TokenExporter.exportJS(tokens, {
-  variables: false,
-});
+// Export as plain object
+const jsObj = TokenExporter.exportJS(tokens, { variables: false });
+```
 
+---
+
+### exportTS()
+
+```typescript
+static exportTS(tokens: DesignTokens): string
+```
+
+Export as TypeScript module with const assertion.
+
+**Example:**
+```typescript
 const ts = TokenExporter.exportTS(tokens);
+// export default { ... } as const;
+```
 
+---
+
+### exportJSON()
+
+```typescript
+static exportJSON(tokens: DesignTokens): string
+```
+
+Export as formatted JSON.
+
+**Example:**
+```typescript
 const json = TokenExporter.exportJSON(tokens);
 ```
 
-## ThemeRuntime
+---
 
-Runtime engine for theme switching.
+## TokenParser
 
-### Constructor
+Parse and validate token files. Now supports advanced features including functions, expressions, and fallback references.
+
+### Advanced Features
+
+The parser supports:
+- **Token Functions**: `darken({color.primary}, 20)`
+- **Expressions**: `{spacing.base} * 2`
+- **Fallback References**: `{color.primary || #000000}`
+
+See [Token Functions](/api/advanced/token-functions), [Token Expressions](/api/advanced/token-expressions), and [Token References](/api/advanced/token-references) for details.
+
+### parse()
 
 ```typescript
-import { ThemeRuntime } from '@tokiforge/core';
+static parse(
+  filePath: string,
+  options?: TokenParserOptions
+): DesignTokens
+```
 
-const runtime = new ThemeRuntime({
-  themes: [
-    { name: 'light', tokens: lightTokens },
-    { name: 'dark', tokens: darkTokens },
-  ],
-  defaultTheme: 'light',
+Parse token file (JSON or YAML).
+
+**Parameters:**
+- `filePath: string` - Path to token file
+- `options?: TokenParserOptions` - Parser options
+
+**Throws:**
+- `ParseError` - If file can't be parsed
+- `ValidationError` - If validation fails
+
+**Example:**
+```typescript
+import { TokenParser } from '@tokiforge/core';
+
+const tokens = TokenParser.parse('./tokens.json', {
+  validate: true,
+  expandReferences: true,
 });
 ```
 
-### Methods
+---
 
-#### `init(selector?, prefix?)`
-
-Initialize runtime and inject CSS variables.
+### validate()
 
 ```typescript
-runtime.init(':root', 'hf');
+static validate(tokens: DesignTokens): void
 ```
 
-#### `applyTheme(themeName, selector?, prefix?)`
+Validate token structure.
 
-Switch to a specific theme.
+**Throws:**
+- `ValidationError` - If validation fails
 
+**Example:**
 ```typescript
-runtime.applyTheme('dark');
-```
-
-#### `getCurrentTheme()`
-
-Get current theme name.
-
-```typescript
-const current = runtime.getCurrentTheme();
-```
-
-#### `getThemeTokens(themeName)`
-
-Get tokens for a specific theme.
-
-```typescript
-const tokens = runtime.getThemeTokens('dark');
-```
-
-#### `getAvailableThemes()`
-
-Get all available theme names.
-
-```typescript
-const themes = runtime.getAvailableThemes();
-console.log(themes); // ['light', 'dark']
-```
-
-#### `nextTheme()`
-
-Cycle to the next available theme.
-
-```typescript
-const nextTheme = runtime.nextTheme();
-runtime.applyTheme(nextTheme);
-```
-
-#### `destroy()`
-
-Cleanup runtime and remove injected CSS.
-
-```typescript
-runtime.destroy();
-```
-
-#### `watchSystemTheme(callback)`
-
-Watch for system theme changes.
-
-```typescript
-const unwatch = runtime.watchSystemTheme((theme) => {
-  runtime.applyTheme(theme);
-});
-unwatch();
-```
-
-#### `ThemeRuntime.detectSystemTheme()` (static)
-
-Detect the system's color scheme preference.
-
-```typescript
-const systemTheme = ThemeRuntime.detectSystemTheme();
-runtime.applyTheme(systemTheme);
-```
-
-## TokenVersioning
-
-Manage token versions and deprecations.
-
-### Methods
-
-#### `TokenVersioning.getDeprecatedTokens(tokens)`
-
-Get all deprecated tokens.
-
-```typescript
-import { TokenVersioning } from '@tokiforge/core';
-
-const warnings = TokenVersioning.getDeprecatedTokens(tokens);
-```
-
-#### `TokenVersioning.filterDeprecated(tokens, includeDeprecated?)`
-
-Filter out deprecated tokens.
-
-```typescript
-const activeTokens = TokenVersioning.filterDeprecated(tokens, false);
-```
-
-#### `TokenVersioning.migrateToken(tokens, oldPath, newPath)`
-
-Migrate a token to a new path.
-
-```typescript
-const result = TokenVersioning.migrateToken(tokens, 'color.primary', 'color.brand.primary');
-```
-
-## ComponentTheming
-
-Scoped component theming.
-
-### Methods
-
-#### `registerComponentTheme(theme)`
-
-Register a component theme.
-
-```typescript
-import { ComponentTheming } from '@tokiforge/core';
-
-const theming = new ComponentTheming();
-theming.registerComponentTheme({
-  name: 'button',
-  scope: 'btn',
-  tokens: buttonTokens,
-});
-```
-
-#### `getScopedTokens(componentName, globalTokens)`
-
-Get scoped tokens for a component.
-
-```typescript
-const buttonTokens = theming.getScopedTokens('button', globalTokens);
-```
-
-#### `applyComponentTheme(componentName, selector, prefix?)`
-
-Generate CSS for component theme.
-
-```typescript
-const css = theming.applyComponentTheme('button', '.btn', 'hf');
-```
-
-## PluginManager
-
-Extensible plugin system.
-
-### Methods
-
-#### `register(plugin)`
-
-Register a plugin.
-
-```typescript
-import { pluginManager } from '@tokiforge/core';
-
-pluginManager.register({
-  name: 'my-exporter',
-  exporter: (tokens) => JSON.stringify(tokens),
-});
-```
-
-#### `export(tokens, pluginName, options?)`
-
-Export using a plugin.
-
-```typescript
-const output = pluginManager.export(tokens, 'my-exporter');
-```
-
-#### `validate(tokens, pluginName)`
-
-Validate using a plugin.
-
-```typescript
-const result = pluginManager.validate(tokens, 'my-validator');
-```
-
-## AccessibilityUtils
-
-Accessibility checking and analysis.
-
-### Methods
-
-#### `calculateContrast(color1, color2)`
-
-Calculate contrast ratio.
-
-```typescript
-import { AccessibilityUtils } from '@tokiforge/core';
-
-const contrast = AccessibilityUtils.calculateContrast('#000000', '#FFFFFF');
-console.log(contrast.ratio); // 21
-console.log(contrast.wcagAA); // true
-```
-
-#### `checkAccessibility(tokens)`
-
-Check accessibility for all tokens.
-
-```typescript
-const metrics = AccessibilityUtils.checkAccessibility(tokens);
-```
-
-#### `generateAccessibilityReport(tokens)`
-
-Generate accessibility report.
-
-```typescript
-const report = AccessibilityUtils.generateAccessibilityReport(tokens);
-console.log(`Passing: ${report.passing}, Failing: ${report.failing}`);
-```
-
-## ResponsiveTokens
-
-Responsive and state-aware tokens.
-
-### Methods
-
-#### `getResponsiveValue(token, breakpoint)`
-
-Get responsive value for breakpoint.
-
-```typescript
-import { ResponsiveTokens } from '@tokiforge/core';
-
-const padding = ResponsiveTokens.getResponsiveValue(token, 'lg');
-```
-
-#### `getStateValue(token, state)`
-
-Get state value.
-
-```typescript
-const hoverBg = ResponsiveTokens.getStateValue(token, 'hover');
-```
-
-#### `generateResponsiveCSS(tokens, breakpoints?, prefix?)`
-
-Generate responsive CSS.
-
-```typescript
-const css = ResponsiveTokens.generateResponsiveCSS(tokens);
-```
-
-#### `generateStateCSS(tokens, prefix?)`
-
-Generate state CSS.
-
-```typescript
-const css = ResponsiveTokens.generateStateCSS(tokens);
-```
-
-## FigmaDiff
-
-Compare Figma and code tokens.
-
-### Methods
-
-#### `compare(figmaTokens, codeTokens, options?)`
-
-Compare tokens.
-
-```typescript
-import { FigmaDiff } from '@tokiforge/core';
-
-const diff = FigmaDiff.compare(figmaTokens, codeTokens, {
-  tolerance: 5,
-});
-```
-
-#### `generateReport(diff)`
-
-Generate diff report.
-
-```typescript
-const report = FigmaDiff.generateReport(diff);
-console.log(report);
-```
-
-#### `hasMismatches(diff)`
-
-Check for mismatches.
-
-```typescript
-if (FigmaDiff.hasMismatches(diff)) {
-  console.log('Mismatches found!');
+try {
+  TokenParser.validate(tokens);
+  console.log('Tokens are valid!');
+} catch (error) {
+  console.error('Validation failed:', error.message);
 }
 ```
 
-## CICDValidator
+---
 
-CI/CD token validation.
-
-### Methods
-
-#### `validate(tokens, options?)`
-
-Validate tokens.
+### expandReferences()
 
 ```typescript
-import { CICDValidator } from '@tokiforge/core';
-
-const result = CICDValidator.validate(tokens, {
-  strict: true,
-  checkAccessibility: true,
-  checkDeprecated: true,
-});
+static expandReferences(tokens: DesignTokens): DesignTokens
 ```
 
-#### `validateFile(filePath, options?)`
+Expand token references (e.g., `{color.primary}`).
 
-Validate token file.
-
+**Example:**
 ```typescript
-const result = CICDValidator.validateFile('./tokens.json', {
-  strict: true,
-});
+const tokens = {
+  color: {
+    blue: { value: '#3b82f6' },
+    primary: { value: '{color.blue}' },
+  },
+};
+
+const expanded = TokenParser.expandReferences(tokens);
+console.log(expanded.color.primary.value); // '#3b82f6'
 ```
 
-#### `exitCode(result)`
+---
 
-Get exit code for CI.
+## Type Definitions
 
-```typescript
-process.exit(CICDValidator.exitCode(result));
-```
-
-## TokenAnalytics
-
-Token usage analytics.
-
-### Methods
-
-#### `trackUsage(path, format?)`
-
-Track token usage.
-
-```typescript
-import { TokenAnalytics } from '@tokiforge/core';
-
-const analytics = new TokenAnalytics();
-analytics.trackUsage('color.primary', 'css');
-```
-
-#### `getUsageReport(tokens)`
-
-Get usage report.
-
-```typescript
-const report = analytics.getUsageReport(tokens);
-console.log(`Coverage: ${report.coverage}%`);
-```
-
-## TokenRegistry
-
-Versioned token registry for multi-team support.
-
-### Methods
-
-#### `importFromTokens(tokens, team?, version?)`
-
-Import tokens into registry.
-
-```typescript
-import { TokenRegistry } from '@tokiforge/core';
-
-const registry = new TokenRegistry();
-registry.importFromTokens(tokens, 'design', '1.0.0');
-```
-
-#### `getAll(team?)`
-
-Get all tokens.
-
-```typescript
-const designTokens = registry.getAll('design');
-```
-
-#### `exportTokens(team?, version?)`
-
-Export tokens.
-
-```typescript
-const tokens = registry.exportTokens('design', '1.0.0');
-```
-
-## IDESupport
-
-IDE extension support.
-
-### Methods
-
-#### `loadTokens(tokens)`
-
-Load tokens.
-
-```typescript
-import { IDESupport } from '@tokiforge/core';
-
-const ide = new IDESupport();
-ide.loadTokens(tokens);
-```
-
-#### `getHoverInfo(tokenPath)`
-
-Get hover information.
-
-```typescript
-const hoverInfo = ide.getHoverInfo('color.primary');
-```
-
-#### `getCompletions(prefix?)`
-
-Get completions.
-
-```typescript
-const completions = ide.getCompletions('color');
-```
-
-## Types
-
-### `DesignTokens`
-
-```typescript
-interface DesignTokens {
-  [key: string]: TokenValue | DesignTokens | TokenValue[] | DesignTokens[];
-}
-```
-
-### `TokenValue`
-
-```typescript
-interface TokenValue {
-  value: string | number | TokenState | TokenResponsive;
-  type?: 'color' | 'dimension' | 'fontFamily' | 'fontWeight' | 'duration' | 'custom';
-  description?: string;
-  version?: TokenVersion;
-  deprecated?: boolean;
-  states?: TokenState;
-  responsive?: TokenResponsive;
-  component?: string;
-  scope?: string;
-}
-```
-
-### `Theme`
-
-```typescript
-interface Theme {
-  name: string;
-  tokens: DesignTokens;
-}
-```
-
-### `ThemeConfig`
+### ThemeConfig
 
 ```typescript
 interface ThemeConfig {
@@ -580,6 +490,98 @@ interface ThemeConfig {
 }
 ```
 
-## Examples
+### Theme
 
-See the [Examples](/examples/react) section for complete usage examples.
+```typescript
+interface Theme {
+  name: string;
+  tokens: ThemeTokensProvider;
+}
+
+type ThemeTokensProvider = 
+  | DesignTokens 
+  | (() => Promise<DesignTokens>);
+```
+
+### DesignTokens
+
+```typescript
+interface DesignTokens {
+  [key: string]: TokenValue | DesignTokens;
+}
+```
+
+### TokenValue
+
+```typescript
+interface TokenValue {
+  value: string | number | TokenState | TokenResponsive;
+  type?: 'color' | 'dimension' | 'fontFamily' | 'fontWeight' | 'duration' | 'custom';
+  description?: string;
+  deprecated?: boolean;
+}
+```
+
+### TokenExportOptions
+
+```typescript
+interface TokenExportOptions {
+  format: 'css' | 'js' | 'ts' | 'scss' | 'json';
+  selector?: string;
+  prefix?: string;
+  variables?: boolean;
+}
+```
+
+---
+
+## Error Classes
+
+### ThemeError
+
+Base error for theme-related issues.
+
+```typescript
+class ThemeError extends Error {
+  constructor(message: string, path?: string);
+}
+```
+
+### ThemeNotFoundError
+
+Thrown when theme doesn't exist.
+
+```typescript
+class ThemeNotFoundError extends ThemeError {
+  constructor(themeName: string, availableThemes?: string[]);
+}
+```
+
+### ParseError
+
+Thrown when token file parsing fails.
+
+```typescript
+class ParseError extends Error {
+  constructor(message: string, path?: string);
+}
+```
+
+### ValidationError
+
+Thrown when token validation fails.
+
+```typescript
+class ValidationError extends Error {
+  constructor(message: string, path?: string);
+}
+```
+
+---
+
+## See Also
+
+- [Vue API](/api/vue)
+- [React API](/api/react)
+- [Angular API](/api/angular)
+- [Advanced APIs](/api/advanced/)

@@ -1,3 +1,8 @@
+---
+title: Design Tokens Guide | TokiForge
+description: Complete guide to creating and managing design tokens with TokiForge. Learn token structure, types, references, and best practices.
+---
+
 # Design Tokens Guide
 
 Complete guide to creating and managing design tokens.

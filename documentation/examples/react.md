@@ -1,13 +1,18 @@
+---
+title: React Example | TokiForge
+description: Complete React example using TokiForge. See how to set up ThemeProvider, use hooks, and implement theme switching in a React application.
+---
+
 # React Example
 
-> **TokiForge v1.1.2**
+> **TokiForge v1.2.0**
 
 Complete React example using TokiForge.
 
 ## Setup
 
 ```bash
-npm install @tokiforge/react@^1.1.2 @tokiforge/core@^1.1.2 react react-dom
+npm install @tokiforge/react@^1.2.0 @tokiforge/core@^1.2.0 react react-dom
 ```
 
 ## Code

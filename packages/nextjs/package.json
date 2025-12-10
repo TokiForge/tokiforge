@@ -1,0 +1,68 @@
+{
+    "name": "@tokiforge/nextjs",
+    "version": "1.2.0",
+    "description": "Next.js App Router adapter for TokiForge theming",
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+        },
+        "./server": {
+            "types": "./dist/server.d.ts",
+            "import": "./dist/server.js",
+            "require": "./dist/server.cjs"
+        }
+    },
+    "scripts": {
+        "build": "tsup",
+        "build:all": "npm run build",
+        "dev": "tsup --watch",
+        "clean": "rm -rf dist"
+    },
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "sideEffects": false,
+    "peerDependencies": {
+        "next": ">=14.0.0",
+        "react": ">=18.0.0",
+        "@tokiforge/core": "^1.2.0"
+    },
+    "devDependencies": {
+        "@types/react": "^18.2.0",
+        "next": "^14.0.0",
+        "react": "^18.2.0",
+        "tsup": "^8.0.0",
+        "typescript": "^5.3.3"
+    },
+    "dependencies": {
+        "@tokiforge/core": "^1.2.0"
+    },
+    "keywords": [
+        "nextjs",
+        "next",
+        "app-router",
+        "theming",
+        "design-tokens",
+        "rsc"
+    ],
+    "author": "TokiForge Community",
+    "license": "AGPL-3.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/TokiForge/tokiforge.git"
+    },
+    "homepage": "https://github.com/TokiForge/tokiforge#readme",
+    "bugs": {
+        "url": "https://github.com/TokiForge/tokiforge/issues"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

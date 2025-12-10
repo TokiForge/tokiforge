@@ -1,6 +1,6 @@
 # Contributing to TokiForge
 
-Thank you for your interest in contributing to TokiForge (v1.1.2)! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to TokiForge (v1.2.0)! This document provides guidelines and instructions for contributing.
 
 ## Getting Started
 

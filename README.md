@@ -6,13 +6,17 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/TokiForge/tokiforge?style=social)](https://github.com/TokiForge/tokiforge/stargazers)
 [![npm version](https://img.shields.io/npm/v/@tokiforge/core?label=version)](https://www.npmjs.com/package/@tokiforge/core)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
 [![Bundle Size](https://img.shields.io/badge/bundle%20size-%3C3KB-green.svg)](https://bundlephobia.com/package/@tokiforge/core)
 
 [Documentation](https://tokiforge.github.io/tokiforge) • [Examples](./examples) • [Report Bug](https://github.com/TokiForge/tokiforge/issues) • [Request Feature](https://github.com/TokiForge/tokiforge/issues)
 
 </div>
+
+<!-- SEO Meta Description -->
+<meta name="description" content="TokiForge is a lightweight, framework-agnostic design token and theming engine for React, Vue, Angular, Svelte, Next.js, Remix, and more. Runtime theme switching, CSS variables, TypeScript support, and <3KB bundle size.">
+<meta name="keywords" content="design tokens, theme engine, theming, CSS variables, design system, React theming, Vue theming, Angular theming, Svelte theming, runtime theming, dark mode, light mode, framework-agnostic, TypeScript, design system tools">
 
 ---
 
@@ -40,6 +44,8 @@
 ---
 
 ## 🚀 Quick Start
+
+Get started with TokiForge in minutes. TokiForge works with any JavaScript framework and provides runtime theme switching, CSS variable generation, and comprehensive token management.
 
 ### Installation
 
@@ -375,7 +381,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 
 ## 🗺️ Roadmap
 
-### ✅ Completed (v1.1.2)
+### ✅ Completed (v1.2.0)
 - [x] Core engine + React adapter
 - [x] Vue/Svelte/Angular adapters
 - [x] CLI tooling
@@ -392,7 +398,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 - [x] IDE support (API ready)
 - [x] Tailwind CSS integration
 
-### 🚧 In Progress (v1.1.2+)
+### 🚧 In Progress (v1.2.0+)
 - [ ] Enhanced semantic tokens & aliasing
 - [ ] Multi-platform exporters (iOS, Android, React Native)
 - [ ] Type generation CLI (`generate:types`)
@@ -414,7 +420,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 
 ## 📄 License
 
-MIT License — free for personal and commercial use.
+AGPL-3.0 License — This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 ---
 

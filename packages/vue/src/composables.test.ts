@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { createApp, h, defineComponent } from 'vue';
+import { createApp, h, defineComponent, nextTick, onMounted, computed } from 'vue';
 import { provideTheme, useTheme, type ExtractTokenType } from './composables';
 import type { DesignTokens, TokenValue, ThemeConfig } from '@tokiforge/core';
 
@@ -162,16 +162,17 @@ describe('Type-Safe Token Access', () => {
         defaultTheme: 'light',
       };
 
+      let themeContext: ReturnType<typeof provideTheme> | null = null;
       const ParentComponent = defineComponent({
         setup() {
-          provideTheme(config);
+          themeContext = provideTheme(config);
           return () => h(ChildComponent);
         },
       });
 
       const ChildComponent = defineComponent({
         setup() {
-          const { tokens, setTheme } = useTheme<TestDesignTokens>();
+          const { tokens } = useTheme<TestDesignTokens>();
 
           const primaryColor = tokens.value.color.primary.value;
           const radius = tokens.value.radius.lg.value;
@@ -179,10 +180,11 @@ describe('Type-Safe Token Access', () => {
           expect(primaryColor).toBe('#7C3AED');
           expect(radius).toBe('12px');
 
-          setTheme('dark');
-          expect(tokens.value.color.primary.value).toBe('#A78BFA');
+          // Use computed to ensure reactivity
+          const displayColor = computed(() => tokens.value.color.primary.value);
 
-          return () => h('div', `Color: ${tokens.value.color.primary.value}`);
+          // Render function that reactively tracks tokens via computed
+          return () => h('div', `Color: ${displayColor.value}`);
         },
       });
 
@@ -191,7 +193,19 @@ describe('Type-Safe Token Access', () => {
       const app = createApp(ParentComponent);
       app.mount(container);
       
-      await new Promise(resolve => setTimeout(resolve, 10));
+      // Wait for initial render
+      await nextTick();
+      
+      // Call setTheme from the context and wait for it to complete
+      if (themeContext) {
+        await themeContext.setTheme('dark');
+        expect(themeContext.tokens.value.color.primary.value).toBe('#A78BFA');
+      }
+      
+      // Wait for Vue to re-render after tokens change
+      await nextTick();
+      await nextTick();
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       expect(container.textContent).toContain('#A78BFA');
       app.unmount();
@@ -454,16 +468,18 @@ describe('Type-Safe Token Access', () => {
         defaultTheme: 'light',
       };
 
+      let themeContext2: ReturnType<typeof provideTheme> | null = null;
       const TestComponent = defineComponent({
         setup() {
-          const { tokens, setTheme } = useTheme<TestDesignTokens>();
+          const { tokens } = useTheme<TestDesignTokens>();
 
           expect(tokens.value.color.primary.value).toBe('#7C3AED');
 
-          setTheme('dark');
-          expect(tokens.value.color.primary.value).toBe('#A78BFA');
+          // Use computed to ensure reactivity
+          const displayColor = computed(() => tokens.value.color.primary.value);
 
-          return () => h('div', tokens.value.color.primary.value);
+          // Render function that reactively tracks tokens via computed
+          return () => h('div', displayColor.value);
         },
       });
 
@@ -471,13 +487,25 @@ describe('Type-Safe Token Access', () => {
       document.body.appendChild(container);
       const app = createApp({
         setup() {
-          provideTheme(config);
+          themeContext2 = provideTheme(config);
           return () => h(TestComponent);
         },
       });
       app.mount(container);
 
-      await new Promise(resolve => setTimeout(resolve, 10));
+      // Wait for initial render
+      await nextTick();
+      
+      // Call setTheme from the context and wait for it to complete
+      if (themeContext2) {
+        await themeContext2.setTheme('dark');
+        expect(themeContext2.tokens.value.color.primary.value).toBe('#A78BFA');
+      }
+      
+      // Wait for Vue to re-render after tokens change
+      await nextTick();
+      await nextTick();
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       expect(container.textContent).toContain('#A78BFA');
       app.unmount();

@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://tokiforge.dev/tokiforge/sitemap.xml
+
+# Disallow build artifacts
+Disallow: /node_modules/
+Disallow: /.vitepress/
+Disallow: /dist/
+
+# Allow important paths
+Allow: /guide/
+Allow: /api/
+Allow: /examples/
+Allow: /cli/
+

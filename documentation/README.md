@@ -1,6 +1,13 @@
 # TokiForge Documentation
 
-This is the documentation site for TokiForge v1.1.2, built with [VitePress](https://vitepress.dev/).
+This is the documentation site for TokiForge v1.2.0, built with [VitePress](https://vitepress.dev/).
+
+## New Features in v1.2.0
+
+- **Performance Optimization**: Caching, lazy loading, and compression integrated into ThemeRuntime
+- **Accessibility**: High contrast mode, reduced motion, color blind support, font size scaling
+- **Advanced Token Features**: Functions, expressions, references with fallbacks, scoping, theming API, validation plugins, transformation pipeline
+- **Integrations**: Storybook addon, enhanced Figma sync, Sketch/Adobe XD adapters, CMS integration (Contentful, Strapi, Sanity), Zeroheight, InVision DSM
 
 ## Development
 

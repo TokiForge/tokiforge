@@ -2,6 +2,8 @@
 
 This example demonstrates how to use TokiForge with Svelte.
 
+> **TokiForge v1.2.0** | **Svelte 4+**
+
 ## Getting Started
 
 ### Prerequisites
@@ -31,6 +33,10 @@ npm install
 ```
 
 The example uses `file:` protocol to link to the local packages, so they must be built first.
+
+## Browser Compatibility
+
+This example includes browser-compatible stubs for Node.js modules (`module`, `zlib`, `util`, `yaml`, `fs`, `path`) to ensure successful builds in browser environments. The Vite configuration automatically resolves these modules to stubs located in `src/stubs/`.
 
 ### Development
 

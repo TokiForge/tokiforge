@@ -15,7 +15,7 @@ export default defineConfig({
   clean: true,
   minify: true,
   treeshake: true,
-  external: ['fs', 'path'],
+  external: ['fs', 'path', 'module', 'yaml', 'zlib', 'util', 'fs/promises', 'worker_threads'],
   noExternal: [],
 });
 

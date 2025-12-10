@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/vue",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Vue adapter for TokiForge theming",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -30,7 +30,7 @@
   ],
   "sideEffects": false,
   "peerDependencies": {
-    "@tokiforge/core": "^1.1.2",
+    "@tokiforge/core": "^1.2.0",
     "vue": ">=3.0.0"
   },
   "devDependencies": {
@@ -42,7 +42,7 @@
     "vue": "^3.4.0"
   },
   "dependencies": {
-    "@tokiforge/core": "^1.1.2"
+    "@tokiforge/core": "^1.2.0"
   },
   "keywords": [
     "vue",
@@ -50,7 +50,7 @@
     "design-tokens"
   ],
   "author": "TokiForge Community",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/TokiForge/tokiforge.git"

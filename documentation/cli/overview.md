@@ -1,3 +1,8 @@
+---
+title: CLI Overview | TokiForge
+description: Overview of TokiForge CLI tool. Learn how to initialize, build, validate, and analyze design tokens from the command line.
+---
+
 # CLI Overview
 
 The TokiForge CLI is a powerful command-line tool for managing design tokens.
@@ -7,13 +12,13 @@ The TokiForge CLI is a powerful command-line tool for managing design tokens.
 ### Global Installation
 
 ```bash
-npm install -g tokiforge-cli@^1.1.2
+npm install -g tokiforge-cli@^1.2.0
 ```
 
 ### Local Usage
 
 ```bash
-npx tokiforge-cli@^1.1.2 <command>
+npx tokiforge-cli@^1.2.0 <command>
 ```
 
 ## Commands

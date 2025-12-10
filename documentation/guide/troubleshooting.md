@@ -1,3 +1,8 @@
+---
+title: Troubleshooting | TokiForge
+description: Common issues and solutions for TokiForge. Fix installation problems, theme switching issues, and token parsing errors.
+---
+
 # Troubleshooting
 
 Common issues and solutions.
@@ -90,6 +95,89 @@ if (typeof window !== 'undefined') {
 - Check for trailing commas
 - Use `tokiforge lint` to find issues
 
+## Build Issues
+
+### Browser Build Errors
+
+**Error:** `createRequire is not available in browser environment`  
+**Error:** `Could not resolve "module"`  
+**Error:** `Could not resolve "zlib"`
+
+**Solution:**
+
+TokiForge v1.2.0 includes browser-compatible stubs for Node.js modules. If you encounter these errors:
+
+1. **For Vite projects (React, Vue, Svelte):**
+   - Ensure `vite.config.ts` includes aliases for Node.js modules:
+   ```typescript
+   resolve: {
+     alias: {
+       'module': resolve(__dirname, 'src/stubs/module.ts'),
+       'zlib': resolve(__dirname, 'src/stubs/zlib.ts'),
+       'util': resolve(__dirname, 'src/stubs/util.ts'),
+       'yaml': resolve(__dirname, 'src/stubs/yaml.ts'),
+       'fs': resolve(__dirname, 'src/stubs/fs.ts'),
+       'path': resolve(__dirname, 'src/stubs/path.ts'),
+     },
+   },
+   ```
+   - Create stub files in `src/stubs/` (see example projects for reference)
+
+2. **For Angular projects:**
+   - Add path mappings in `tsconfig.json` and `tsconfig.app.json`:
+   ```json
+   "paths": {
+     "module": ["./src/stubs/module.ts"],
+     "zlib": ["./src/stubs/zlib.ts"],
+     "util": ["./src/stubs/util.ts"],
+     "yaml": ["./src/stubs/yaml.ts"],
+     "fs": ["./src/stubs/fs.ts"],
+     "path": ["./src/stubs/path.ts"]
+   }
+   ```
+   - Add to `allowedCommonJsDependencies` in `angular.json`:
+   ```json
+   "allowedCommonJsDependencies": [
+     "@tokiforge/core",
+     "@tokiforge/angular",
+     "util",
+     "inherits",
+     "is-arguments",
+     "is-generator-function",
+     "which-typed-array",
+     "is-typed-array"
+   ]
+   ```
+
+3. **Reference implementations:**
+   - See `examples/react-example/src/stubs/` for Vite stub examples
+   - See `examples/angular-example/src/stubs/` for Angular stub examples
+
+### TypeScript Build Errors
+
+**Error:** `Property 'then' does not exist on type 'void'`  
+**Error:** `Property 'catch' does not exist on type 'void'`
+
+**Solution:**
+
+In TokiForge v1.2.0, `ThemeRuntime.init()` and `ThemeRuntime.applyTheme()` are synchronous methods. Remove `.then()` and `.catch()` calls:
+
+```typescript
+// ❌ Incorrect (v1.1.x style)
+runtime.init(selector, prefix).then(() => {
+  // ...
+});
+
+// ✅ Correct (v1.2.0)
+runtime.init(selector, prefix);
+// or with error handling
+try {
+  runtime.init(selector, prefix);
+} catch (err) {
+  console.error('Failed to initialize:', err);
+}
+```
+
 ## Framework-Specific
 
 ### React: Hook Errors
@@ -121,11 +209,11 @@ const { tokens } = useTheme();
 **Error:** `Failed to resolve entry for package "@tokiforge/vue". The package may have incorrect main/module/exports specified in its package.json`
 
 **Solution:**
-This issue was fixed in v1.1.2. If you're experiencing this:
+This issue was fixed in v1.2.0. If you're experiencing this:
 
 1. Ensure you're using the latest version:
    ```bash
-   npm install @tokiforge/vue@^1.1.2
+   npm install @tokiforge/vue@^1.2.0
    ```
 
 2. Clear your node_modules and reinstall:
@@ -137,7 +225,7 @@ This issue was fixed in v1.1.2. If you're experiencing this:
 3. Clear npm cache if the issue persists:
    ```bash
    npm cache clean --force
-   npm install @tokiforge/vue@^1.1.2
+   npm install @tokiforge/vue@^1.2.0
    ```
 
 **Note:** This was caused by incorrect package.json exports that didn't match the actual build output. The fix aligns exports with the built files (`index.cjs` for CommonJS, `index.js` for ESM).
@@ -164,10 +252,10 @@ $themeStore.theme
 **Solution:**
 ```bash
 # Install globally
-npm install -g tokiforge-cli@^1.1.2
+npm install -g tokiforge-cli@^1.2.0
 
 # Or use npx
-npx tokiforge-cli@^1.1.2 init
+npx tokiforge-cli@^1.2.0 init
 ```
 
 ### Build Errors

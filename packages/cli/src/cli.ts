@@ -10,14 +10,14 @@ import { diffCommand } from './commands/diff';
 import { validateCommand } from './commands/validate';
 import { figmaDiffCommand } from './commands/figma-diff';
 import { analyticsCommand } from './commands/analytics';
-import { showSplash, showCompactSplash } from './splash';
+import { showSplash, showCompactSplash, getVersion } from './splash';
 
 const program = new Command();
 
 program
   .name('tokiforge')
   .description('Modern Design Token & Theme Engine CLI')
-  .version('1.1.1')
+  .version(getVersion())
   .hook('preAction', (_thisCommand, actionCommand) => {
     if (!process.argv.includes('--help') && !process.argv.includes('-h') && actionCommand) {
       showCompactSplash();

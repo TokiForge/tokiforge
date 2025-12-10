@@ -1,3 +1,8 @@
+---
+title: CLI Commands | TokiForge
+description: Complete reference for all TokiForge CLI commands. Initialize, build, validate, analyze, and manage design tokens from the command line.
+---
+
 # CLI Commands
 
 Complete reference for all TokiForge CLI commands.

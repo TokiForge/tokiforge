@@ -1,3 +1,8 @@
+---
+title: Angular API Reference | TokiForge
+description: Complete API reference for @tokiforge/angular package. Angular service with Signals, theme management, and SSR support for Angular 17+.
+---
+
 # Angular API Reference
 
 Complete API reference for `@tokiforge/angular`.

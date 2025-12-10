@@ -1,0 +1,58 @@
+{
+    "name": "@tokiforge/solid",
+    "version": "1.2.0",
+    "description": "Solid.js adapter for TokiForge theming",
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+        }
+    },
+    "scripts": {
+        "build": "tsup",
+        "build:all": "npm run build",
+        "dev": "tsup --watch",
+        "clean": "rm -rf dist"
+    },
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "sideEffects": false,
+    "peerDependencies": {
+        "solid-js": ">=1.8.0",
+        "@tokiforge/core": "^1.2.0"
+    },
+    "devDependencies": {
+        "solid-js": "^1.8.0",
+        "tsup": "^8.0.0",
+        "typescript": "^5.3.3"
+    },
+    "dependencies": {
+        "@tokiforge/core": "^1.2.0"
+    },
+    "keywords": [
+        "solid",
+        "solidjs",
+        "theming",
+        "design-tokens"
+    ],
+    "author": "TokiForge Community",
+    "license": "AGPL-3.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/TokiForge/tokiforge.git"
+    },
+    "homepage": "https://github.com/TokiForge/tokiforge#readme",
+    "bugs": {
+        "url": "https://github.com/TokiForge/tokiforge/issues"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

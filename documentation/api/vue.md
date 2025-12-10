@@ -1,203 +1,478 @@
+---
+title: Vue API Reference | TokiForge
+description: Complete API reference for @tokiforge/vue package. Vue 3 composables, provideTheme, and theme management for Vue applications.
+---
+
 # Vue API Reference
 
-Complete API reference for `@tokiforge/vue`.
+Complete API reference for `@tokiforge/vue` package.
 
-## provideTheme
+---
 
-Provides theme context to Vue components. Supports type-safe token access through generic type parameters.
+## provideTheme()
 
-### Signature
+Provide theme context to child components.
 
 ```typescript
-// Type-safe version (infers token type from config)
-function provideTheme<T extends DesignTokens>(
-  config: { themes: Array<{ name: string; tokens: T }>; defaultTheme?: string },
-  options?: ProvideThemeOptions
-): ThemeContext<T>;
-
-// Backward compatible version
-function provideTheme(
+function provideTheme<T extends DesignTokens = DesignTokens>(
   config: ThemeConfig,
-  options?: ProvideThemeOptions
-): ThemeContext<DesignTokens>;
+  options?: ThemeInitOptions
+): ThemeContext<T>
 ```
 
-### Parameters
+**Parameters:**
+- `config: ThemeConfig` - Theme configuration
+- `options?: ThemeInitOptions` - Initialization options
 
-- `config: ThemeConfig | { themes: Array<{ name: string; tokens: T }>; defaultTheme?: string }` - Theme configuration object. When using the typed version, the token type is inferred from the config.
-- `options?: ProvideThemeOptions` - Configuration options
+**Returns:** `ThemeContext<T>` - Theme context object
 
-### Options
-
-```typescript
-interface ProvideThemeOptions {
-  selector?: string;           // CSS selector (default: ':root')
-  prefix?: string;            // CSS variable prefix (default: 'hf')
-  defaultTheme?: string;      // Override default theme
-  mode?: 'dynamic' | 'static'; // Theme mode (default: 'dynamic')
-  persist?: boolean;          // Save to localStorage (default: true)
-  watchSystemTheme?: boolean; // Auto-detect system theme (default: false)
-  bodyClassPrefix?: string;   // Body class prefix for static mode (default: 'theme')
-}
-```
-
-### Returns
-
-`ThemeContext<T>` - Context object with theme state and methods, where `T` is the token type (inferred or explicitly provided)
-
-### Example
-
+**Example:**
 ```vue
-<script setup lang="ts">
+<script setup>
 import { provideTheme } from '@tokiforge/vue';
 
-// Type-safe: token type is inferred from config
-const themeConfig = {
+const { theme, tokens, setTheme, availableThemes } = provideTheme({
   themes: [
-    { name: 'light', tokens: lightTokens },
-    { name: 'dark', tokens: darkTokens },
+    {
+      name: 'light',
+      tokens: {
+        color: {
+          primary: { value: '#3b82f6' },
+          background: { value: '#ffffff' },
+        },
+      },
+    },
+    {
+      name: 'dark',
+      tokens: {
+        color: {
+          primary: { value: '#60a5fa' },
+          background: { value: '#1f2937' },
+        },
+      },
+    },
   ],
   defaultTheme: 'light',
-};
-
-provideTheme(themeConfig, {
-  mode: 'static',
+}, {
+  mode: 'dynamic',
   persist: true,
-  watchSystemTheme: true,
+  selector: ':root',
+  prefix: 'app',
 });
 </script>
+
+<template>
+  <div>
+    <p>Current theme: {{ theme }}</p>
+    <button @click="setTheme('dark')">Switch to Dark</button>
+  </div>
+</template>
 ```
 
-## useTheme
+---
 
-Composable to access theme context. Supports type-safe token access through generic type parameters.
+## useTheme()
 
-### Signature
+Access theme context in child components.
 
 ```typescript
 function useTheme<T extends DesignTokens = DesignTokens>(): ThemeContext<T>
 ```
 
-### Returns
+**Returns:** `ThemeContext<T>` - Theme context object
 
-```typescript
-interface ThemeContext<T extends DesignTokens = DesignTokens> {
-  theme: Ref<string>;
-  tokens: ComputedRef<T>;  // Type-safe tokens!
-  setTheme: (themeName: string) => void;
-  nextTheme: () => void;
-  availableThemes: ComputedRef<string[]>;
-  runtime: ThemeRuntime;
-  generateCSS?: (themeName?: string) => string; // Available in static mode
-}
-```
+**Throws:**
+- Error if called outside of theme provider
 
-### Type-Safe Usage
-
+**Example:**
 ```vue
-<script setup lang="ts">
+<script setup>
 import { useTheme } from '@tokiforge/vue';
 
-// Define your token type
-interface MyDesignTokens extends DesignTokens {
-  color: {
-    primary: TokenValue;
-    secondary: TokenValue;
-  };
-  radius: {
-    sm: TokenValue;
-    lg: TokenValue;
-  };
-}
+const { theme, tokens, setTheme, nextTheme } = useTheme();
 
-// Use with type parameter for full type safety
-const { tokens, setTheme } = useTheme<MyDesignTokens>();
-
-// Now tokens.value.color.primary is fully typed!
-const primaryColor = tokens.value.color.primary.value;
-const borderRadius = tokens.value.radius.lg.value;
+const handleThemeToggle = async () => {
+  await nextTheme();
+};
 </script>
 
 <template>
-  <button
-    :style="{
-      backgroundColor: tokens.value.color.primary.value,
-      borderRadius: tokens.value.radius.lg.value,
-    }"
-    @click="setTheme('dark')"
-  >
-    Switch Theme
+  <button @click="handleThemeToggle">
+    Toggle Theme (Current: {{ theme }})
   </button>
 </template>
 ```
 
-### Backward Compatible Usage
+---
+
+## ThemeContext
+
+Returned by `provideTheme()` and `useTheme()`.
+
+### Properties
+
+#### theme
+
+```typescript
+theme: Ref<string>
+```
+
+Reactive reference to current theme name.
+
+**Example:**
+```vue
+<script setup>
+const { theme } = useTheme();
+</script>
+
+<template>
+  <p>Active theme: {{ theme }}</p>
+</template>
+```
+
+---
+
+#### tokens
+
+```typescript
+tokens: Ref<T>
+```
+
+Reactive reference to current theme tokens.
+
+**Example:**
+```vue
+<script setup>
+const { tokens } = useTheme();
+</script>
+
+<template>
+  <div :style="{ color: tokens.color.primary.value }">
+    Styled with tokens
+  </div>
+</template>
+```
+
+---
+
+#### availableThemes
+
+```typescript
+availableThemes: ComputedRef<string[]>
+```
+
+Computed ref of available theme names.
+
+**Example:**
+```vue
+<script setup>
+const { availableThemes, setTheme } = useTheme();
+</script>
+
+<template>
+  <select @change="setTheme($event.target.value)">
+    <option v-for="t in availableThemes" :key="t" :value="t">
+      {{ t }}
+    </option>
+  </select>
+</template>
+```
+
+---
+
+### Methods
+
+#### setTheme()
+
+```typescript
+setTheme(themeName: string): Promise<void>
+```
+
+Switch to a different theme.
+
+**Parameters:**
+- `themeName: string` - Theme to switch to
+
+**Throws:**
+- Error if theme doesn't exist
+
+**Example:**
+```vue
+<script setup>
+const { setTheme } = useTheme();
+
+const switchToDark = async () => {
+  await setTheme('dark');
+  console.log('Theme switched!');
+};
+</script>
+```
+
+---
+
+#### nextTheme()
+
+```typescript
+nextTheme(): Promise<void>
+```
+
+Switch to the next theme in rotation.
+
+**Example:**
+```vue
+<script setup>
+const { nextTheme } = useTheme();
+</script>
+
+<template>
+  <button @click="nextTheme">Next Theme</button>
+</template>
+```
+
+---
+
+#### generateCSS()
+
+```typescript
+generateCSS(themeName?: string): string
+```
+
+Generate CSS for a theme (static mode only).
+
+**Parameters:**
+- `themeName?: string` - Theme name (defaults to current)
+
+**Returns:** `string` - CSS output
+
+**Example:**
+```vue
+<script setup>
+const { generateCSS } = useTheme();
+
+const downloadCSS = () => {
+  const css = generateCSS('dark');
+  const blob = new Blob([css], { type: 'text/css' });
+  // ... download logic
+};
+</script>
+```
+
+---
+
+## ThemeInitOptions
+
+Configuration options for theme initialization.
+
+```typescript
+interface ThemeInitOptions {
+  selector?: string;        // CSS selector (default: ':root')
+  prefix?: string;          // Variable prefix (default: 'hf')
+  mode?: 'dynamic' | 'static'; // Mode (default: 'dynamic')
+  persist?: boolean;        // LocalStorage persistence (default: true)
+  watchSystemTheme?: boolean; // Watch system theme (default: false)
+  bodyClassPrefix?: string; // Class prefix for static mode (default: 'theme')
+  defaultTheme?: string;    // Override default theme
+}
+```
+
+### mode Options
+
+#### Dynamic Mode (Recommended)
+
+```vue
+<script setup>
+provideTheme(config, {
+  mode: 'dynamic',
+  selector: ':root',
+  prefix: 'app',
+});
+</script>
+```
+
+**Features:**
+- CSS variables injected at runtime
+- Theme switching without page reload
+- Full token access in components
+- Smooth transitions
+
+**Best for:** SPAs, complex applications, frequent theme changes
+
+---
+
+#### Static Mode
+
+```vue
+<script setup>
+provideTheme(config, {
+  mode: 'static',
+  bodyClassPrefix: 'theme',
+});
+</script>
+```
+
+**Features:**
+- Class-based theme switching
+- Pre-generated CSS classes
+- Smaller runtime overhead
+
+**Best for:** Static sites, simple applications
+
+---
+
+## Composable Patterns
+
+### Theme Switcher
 
 ```vue
 <script setup>
 import { useTheme } from '@tokiforge/vue';
 
-// Works without type parameter (defaults to DesignTokens)
-const { theme, tokens, setTheme } = useTheme();
-
-function toggleTheme() {
-  setTheme(theme.value === 'light' ? 'dark' : 'light');
-}
+const { theme, availableThemes, setTheme } = useTheme();
 </script>
 
 <template>
-  <button @click="toggleTheme">
-    Current: {{ theme }}
-  </button>
+  <div class="theme-switcher">
+    <button
+      v-for="t in availableThemes"
+      :key="t"
+      :class="{ active: theme === t }"
+      @click="setTheme(t)"
+    >
+      {{ t }}
+    </button>
+  </div>
 </template>
 ```
 
-## CSS Generation Utilities
+---
 
-### `generateThemeCSS(config, options?)`
+### System Theme Sync
 
-Generate separate CSS files for each theme.
+```vue
+<script setup>
+import { provideTheme } from '@tokiforge/vue';
+import { watch } from 'vue';
+
+const config = { /* ... */ };
+
+const { runtime } = provideTheme(config, {
+  watchSystemTheme: true, // Auto-sync with system
+});
+</script>
+```
+
+---
+
+### Lazy Loading Themes
+
+```vue
+<script setup>
+import { provideTheme } from '@tokiforge/vue';
+
+const config = {
+  themes: [
+    {
+      name: 'light',
+      tokens: lightTokens, // Loaded immediately
+    },
+    {
+      name: 'dark',
+      tokens: async () => {
+        const { default: darkTokens } = await import('./themes/dark');
+        return darkTokens;
+      },
+    },
+  ],
+};
+
+provideTheme(config);
+</script>
+```
+
+---
+
+### Accessing Tokens in Script
+
+```vue
+<script setup>
+import { useTheme, computed } from 'vue';
+
+const { tokens } = useTheme();
+
+const primaryColor = computed(() => tokens.value.color.primary.value);
+
+console.log(primaryColor.value); // '#3b82f6'
+</script>
+```
+
+---
+
+## TypeScript Support
+
+Full TypeScript support with generic types:
 
 ```typescript
-import { generateThemeCSS } from '@tokiforge/vue';
+import { provideTheme, useTheme } from '@tokiforge/vue';
 
-const files = generateThemeCSS(themeConfig, {
-  bodyClassPrefix: 'theme',
-  prefix: 'hf',
-  format: 'css',
+interface MyTokens {
+  color: {
+    primary: { value: string };
+    background: { value: string };
+  };
+  spacing: {
+    sm: { value: string };
+    md: { value: string };
+  };
+}
+
+// Type-safe theme context
+const { tokens } = provideTheme<MyTokens>(config);
+
+// Auto-complete and type checking
+tokens.value.color.primary.value; // ✅ string
+tokens.value.invalid; // ❌ Type error
+```
+
+---
+
+## SSR Support
+
+### Nuxt 3
+
+```vue
+<!-- app.vue -->
+<script setup>
+import { provideTheme } from '@tokiforge/vue';
+import { useCookie } from '#app';
+
+const themeCookie = useCookie('theme');
+
+provideTheme(config, {
+  defaultTheme: themeCookie.value || 'light',
+});
+</script>
+```
+
+### Vue SSR
+
+```typescript
+// server.ts
+app.get('*', (req, res) => {
+  const themeCookie = req.cookies.theme || 'light';
+  
+  const html = renderToString(app, {
+    theme: themeCookie,
+  });
+  
+  res.send(html);
 });
 ```
 
-### `generateCombinedThemeCSS(config, options?)`
+---
 
-Generate a single CSS file with all themes.
+## See Also
 
-```typescript
-import { generateCombinedThemeCSS } from '@tokiforge/vue';
-
-const css = generateCombinedThemeCSS(themeConfig, {
-  bodyClassPrefix: 'theme',
-  prefix: 'hf',
-});
-```
-
-## Static Mode
-
-When using static mode, themes are applied via body classes instead of runtime injection:
-
-```typescript
-provideTheme(themeConfig, {
-  mode: 'static',
-  bodyClassPrefix: 'theme',
-});
-```
-
-This adds classes like `theme-light` or `theme-dark` to the body element. CSS variables are scoped by these classes, providing zero JavaScript overhead.
-
-## Types
-
-All types are exported from `@tokiforge/core`. See [Core API](/api/core) for details.
-
-## Examples
-
-See [Vue Example](/examples/vue) for complete usage examples.
+- [Core API](/api/core)
+- [React API](/api/react)
+- [Best Practices](/guides/best-practices)
+- [Performance Guide](/guides/performance)

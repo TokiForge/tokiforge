@@ -1,7 +1,7 @@
 {
   "name": "@tokiforge/core",
-  "version": "1.1.2",
-  "description": "Core design token engine for TokiForge",
+  "version": "1.2.0",
+  "description": "Core design token and theming engine for TokiForge. Framework-agnostic runtime theme switching, CSS variables, token parsing, validation, and export. Supports React, Vue, Angular, Svelte, and more.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -19,6 +19,7 @@
     "dev": "tsup --watch",
     "lint": "eslint src --ext .ts",
     "clean": "rm -rf dist",
+    "analyze": "tsup --metafile && echo 'Bundle analysis complete. Upload dist/metafile.json to https://esbuild.github.io/analyze/'",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui"
@@ -39,7 +40,7 @@
     "framework-agnostic"
   ],
   "author": "TokiForge Community",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/TokiForge/tokiforge.git"
@@ -53,6 +54,7 @@
   },
   "devDependencies": {
     "@vitest/ui": "^4.0.7",
+    "fake-indexeddb": "^6.2.5",
     "jsdom": "^23.0.0",
     "tsup": "^8.0.0",
     "typescript": "^5.3.3",

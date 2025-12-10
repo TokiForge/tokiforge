@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { createServer } from 'http';
 import { TokenParser } from '@tokiforge/core';
+import type { DesignTokens } from '@tokiforge/core';
 import chokidar from 'chokidar';
 
 const PORT = 3000;
@@ -22,9 +23,9 @@ export async function devCommand(projectPath: string = process.cwd()): Promise<v
     process.exit(1);
   }
 
-  const generateHTML = (tokens: any) => {
+  const generateHTML = (tokens: DesignTokens) => {
     const themes = config.themes || [{ name: 'default', tokens }];
-    const themeOptions = themes.map((t: any) => `<option value="${t.name}">${t.name}</option>`).join('');
+    const themeOptions = themes.map((t: { name: string; tokens?: DesignTokens }) => `<option value="${t.name}">${t.name}</option>`).join('');
 
     return `<!DOCTYPE html>
 <html lang="en">

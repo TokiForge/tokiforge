@@ -1,13 +1,18 @@
+---
+title: Vue Example | TokiForge
+description: Complete Vue 3 example using TokiForge. See how to use provideTheme, composables, and implement theme switching in a Vue application.
+---
+
 # Vue Example
 
-> **TokiForge v1.1.2**
+> **TokiForge v1.2.0**
 
 Complete Vue example using TokiForge.
 
 ## Setup
 
 ```bash
-npm install @tokiforge/vue@^1.1.2 @tokiforge/core@^1.1.2 vue
+npm install @tokiforge/vue@^1.2.0 @tokiforge/core@^1.2.0 vue
 ```
 
 ## Code

@@ -2,6 +2,8 @@
 
 This is a complete example demonstrating how to use TokiForge with Vue 3.
 
+> **TokiForge v1.2.0** | **Vue 3+**
+
 ## Setup
 
 Before running this example, make sure you've built the TokiForge packages from the root of the monorepo:
@@ -16,6 +18,10 @@ Then install dependencies:
 ```bash
 npm install
 ```
+
+## Browser Compatibility
+
+This example includes browser-compatible stubs for Node.js modules (`module`, `zlib`, `util`, `yaml`, `fs`, `path`) to ensure successful builds in browser environments. The Vite configuration automatically resolves these modules to stubs located in `src/stubs/`.
 
 ## Running
 

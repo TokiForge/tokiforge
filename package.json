@@ -1,7 +1,7 @@
 {
   "name": "tokiforge",
-  "version": "1.1.2",
-  "description": "Framework-agnostic design token and theming engine for React, Vue, Svelte, Angular. Runtime theme switching, CSS variables, smart color utilities. <3KB gzipped.",
+  "version": "1.2.0",
+  "description": "Framework-agnostic design token and theming engine for React, Vue, Svelte, Angular, Next.js, Remix, and more. Runtime theme switching, CSS variables, TypeScript support, dark mode, accessibility features, and <3KB gzipped. Perfect for design systems and multi-framework projects.",
   "private": true,
   "workspaces": [
     "packages/*",
@@ -80,7 +80,7 @@
     "ssr"
   ],
   "author": "TokiForge Community",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/TokiForge/tokiforge.git"

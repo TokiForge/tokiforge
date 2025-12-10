@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "TokiForge Design Token Engine",
+  "name_for_model": "tokiforge",
+  "description_for_human": "Framework-agnostic design token and theming engine for React, Vue, Angular, Svelte, and more. Runtime theme switching, CSS variables, and smart color utilities.",
+  "description_for_model": "TokiForge is a design token and theming engine that helps developers manage design tokens, switch themes at runtime, and generate CSS variables. It supports multiple frameworks and provides TypeScript support.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://tokiforge.dev/tokiforge/api/openapi.json"
+  },
+  "logo_url": "https://tokiforge.dev/tokiforge/logo.svg",
+  "contact_email": "support@tokiforge.dev",
+  "legal_info_url": "https://tokiforge.dev/tokiforge/legal"
+}
+

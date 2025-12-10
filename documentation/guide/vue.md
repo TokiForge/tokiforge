@@ -1,13 +1,18 @@
+---
+title: Vue Guide | TokiForge
+description: Complete guide to using TokiForge with Vue 3. Learn how to use provideTheme, composables, and manage themes in Vue applications.
+---
+
 # Vue Guide
 
-> **TokiForge v1.1.2** | **Vue 3+**
+> **TokiForge v1.2.0** | **Vue 3+**
 
 Complete guide to using TokiForge with Vue 3.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/vue@^1.1.2 @tokiforge/core@^1.1.2
+npm install @tokiforge/vue@^1.2.0 @tokiforge/core@^1.2.0
 ```
 
 ## Setup

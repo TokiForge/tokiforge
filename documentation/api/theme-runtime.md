@@ -1,3 +1,8 @@
+---
+title: ThemeRuntime API Reference | TokiForge
+description: Complete API reference for ThemeRuntime class. Manage theme lifecycle, CSS variable injection, caching, loading, and accessibility features.
+---
+
 # ThemeRuntime API Reference
 
 Complete API reference for the `ThemeRuntime` class from `@tokiforge/core`.
@@ -34,11 +39,47 @@ constructor(config: ThemeConfig)
 interface ThemeConfig {
   themes: Theme[];
   defaultTheme?: string;
+  performance?: PerformanceConfig;
+  accessibility?: AccessibilityConfig;
 }
 
 interface Theme {
   name: string;
-  tokens: DesignTokens;
+  tokens: DesignTokens | (() => Promise<DesignTokens>);
+}
+
+interface PerformanceConfig {
+  cache?: {
+    strategy: 'memory' | 'localStorage' | 'indexedDB' | 'serviceWorker';
+    ttl?: number;
+    maxSize?: number;
+    namespace?: string;
+  };
+  loading?: {
+    source: string | CDNConfig;
+    lazy?: boolean;
+    timeout?: number;
+    retries?: number;
+  };
+}
+
+interface AccessibilityConfig {
+  highContrast?: boolean | {
+    useVariants?: boolean;
+    autoDetect?: boolean;
+  };
+  reducedMotion?: boolean | {
+    autoDetect?: boolean;
+    disableTransitions?: boolean;
+  };
+  colorBlind?: boolean | {
+    type?: 'protanopia' | 'deuteranopia' | 'tritanopia';
+    autoApply?: boolean;
+  };
+  fontSizeScaling?: boolean | {
+    baseSize?: number;
+    autoDetect?: boolean;
+  };
 }
 ```
 
@@ -79,7 +120,10 @@ init(selector?: string, prefix?: string): void
 runtime.init(':root', 'hf');
 ```
 
-**Note:** This method is SSR-safe and does nothing in server environments.
+**Note:** 
+- This method is **synchronous** (returns `void`, not a Promise)
+- This method is SSR-safe and does nothing in server environments
+- In v1.2.0, this method is synchronous - do not use `.then()` or `await`
 
 ### `applyTheme(themeName, selector?, prefix?)`
 
@@ -107,6 +151,10 @@ applyTheme(
 runtime.applyTheme('dark');
 runtime.applyTheme('light', ':root', 'myapp');
 ```
+
+**Note:**
+- This method is **synchronous** (returns `void`, not a Promise)
+- In v1.2.0, this method is synchronous - do not use `.then()`, `.catch()`, or `await`
 
 **Throws:**
 
@@ -216,6 +264,87 @@ runtime.applyTheme(newTheme);
 - Returns first theme if no current theme is set
 - Note: This method returns the next theme name but does not apply it. Use `applyTheme()` to actually switch themes.
 
+### `loadChunk(chunk)`
+
+Load token chunks lazily (requires loader configuration).
+
+**Signature:**
+
+```typescript
+loadChunk(chunk: string | string[]): Promise<DesignTokens>
+```
+
+**Parameters:**
+
+- `chunk: string | string[]` - Chunk name(s) to load
+
+**Returns:** `Promise<DesignTokens>` - Merged design tokens from loaded chunks
+
+**Example:**
+
+```typescript
+const tokens = await runtime.loadChunk('color');
+const multiple = await runtime.loadChunk(['typography', 'spacing']);
+```
+
+### `isChunkLoaded(chunk)`
+
+Check if a chunk has been loaded.
+
+**Signature:**
+
+```typescript
+isChunkLoaded(chunk: string): boolean
+```
+
+**Returns:** `boolean` - True if chunk is loaded
+
+### `preloadChunks(chunks)`
+
+Preload chunks in background.
+
+**Signature:**
+
+```typescript
+preloadChunks(chunks: string | string[]): void
+```
+
+### `getAccessibilityPreferences()`
+
+Get current accessibility preferences.
+
+**Signature:**
+
+```typescript
+getAccessibilityPreferences(): AccessibilityPreferences | null
+```
+
+**Returns:** `AccessibilityPreferences | null` - Current preferences or null if not configured
+
+### `setColorBlindMode(type)`
+
+Manually set color blind mode.
+
+**Signature:**
+
+```typescript
+setColorBlindMode(type: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia'): void
+```
+
+### `setFontSizeScale(scale)`
+
+Manually set font size scale.
+
+**Signature:**
+
+```typescript
+setFontSizeScale(scale: number): void
+```
+
+**Parameters:**
+
+- `scale: number` - Scale factor (0.5 to 3.0)
+
 ### `destroy()`
 
 Cleanup runtime and remove injected CSS.
@@ -297,6 +426,43 @@ runtime.applyTheme(systemTheme);
 **Note:** Returns `'light'` in server environments.
 
 ## Usage Examples
+
+### Performance Configuration
+
+```typescript
+const runtime = new ThemeRuntime({
+  themes: [
+    { name: 'light', tokens: lightTokens },
+    { name: 'dark', tokens: darkTokens },
+  ],
+  performance: {
+    cache: {
+      strategy: 'localStorage',
+      ttl: 3600,
+    },
+    loading: {
+      source: '/tokens',
+    },
+  },
+});
+```
+
+### Accessibility Configuration
+
+```typescript
+const runtime = new ThemeRuntime({
+  themes: [
+    { name: 'light', tokens: lightTokens },
+    { name: 'dark', tokens: darkTokens },
+  ],
+  accessibility: {
+    highContrast: { autoDetect: true },
+    reducedMotion: { autoDetect: true },
+    colorBlind: { type: 'protanopia', autoApply: true },
+    fontSizeScaling: { autoDetect: true },
+  },
+});
+```
 
 ### Basic Setup
 

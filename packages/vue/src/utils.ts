@@ -8,10 +8,10 @@ export interface GenerateCSSOptions {
   format?: 'css' | 'scss';
 }
 
-export function generateThemeCSS(
+export async function generateThemeCSS(
   config: ThemeConfig,
   options: GenerateCSSOptions = {}
-): Record<string, string> {
+): Promise<Record<string, string>> {
   const {
     bodyClassPrefix = 'theme',
     prefix = 'hf',
@@ -22,14 +22,19 @@ export function generateThemeCSS(
 
   for (const theme of config.themes) {
     const selector = `body.${bodyClassPrefix}-${theme.name}`;
-    
+
+    const tokens = typeof theme.tokens === 'function'
+      ? await (theme.tokens as () => Promise<any>)()
+      : theme.tokens;
+
     if (format === 'css') {
-      cssFiles[`${theme.name}.css`] = TokenExporter.exportCSS(theme.tokens, {
+      cssFiles[`${theme.name}.css`] = TokenExporter.exportCSS(tokens, {
         selector,
         prefix,
       });
     } else {
-      cssFiles[`${theme.name}.scss`] = TokenExporter.exportSCSS(theme.tokens, {
+
+      cssFiles[`${theme.name}.scss`] = TokenExporter.exportSCSS(tokens, {
         prefix,
       });
     }
@@ -38,10 +43,10 @@ export function generateThemeCSS(
   return cssFiles;
 }
 
-export function generateCombinedThemeCSS(
+export async function generateCombinedThemeCSS(
   config: ThemeConfig,
   options: GenerateCSSOptions = {}
-): string {
+): Promise<string> {
   const {
     bodyClassPrefix = 'theme',
     prefix = 'hf',
@@ -51,7 +56,11 @@ export function generateCombinedThemeCSS(
 
   for (const theme of config.themes) {
     const selector = `body.${bodyClassPrefix}-${theme.name}`;
-    const css = TokenExporter.exportCSS(theme.tokens, {
+    const tokens = typeof theme.tokens === 'function'
+      ? await (theme.tokens as () => Promise<any>)()
+      : theme.tokens;
+
+    const css = TokenExporter.exportCSS(tokens, {
       selector,
       prefix,
     });

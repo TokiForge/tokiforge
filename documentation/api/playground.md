@@ -1,3 +1,8 @@
+---
+title: API Playground | TokiForge
+description: Interactive API playground for TokiForge. Try theme switching, token parsing, and export functions directly in your browser.
+---
+
 # API Playground
 
 Try TokiForge APIs interactively in your browser.

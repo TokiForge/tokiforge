@@ -1,3 +1,8 @@
+---
+title: TokenExporter API Reference | TokiForge
+description: Complete API reference for TokenExporter class. Export design tokens to CSS, SCSS, JavaScript, TypeScript, and JSON formats.
+---
+
 # TokenExporter API Reference
 
 Complete API reference for the `TokenExporter` class from `@tokiforge/core`.

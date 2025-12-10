@@ -1,4 +1,4 @@
-import type { DesignTokens } from '@tokiforge/core';
+import type { DesignTokens, TokenValue } from '@tokiforge/core';
 import { TokenParser } from '@tokiforge/core';
 import type { Config } from 'tailwindcss';
 
@@ -38,15 +38,15 @@ export interface TailwindConfigOptions {
 function flattenTokens(
   tokens: DesignTokens,
   prefix: string = '',
-  result: Record<string, any> = {}
-): Record<string, any> {
+  result: Record<string, unknown> = {}
+): Record<string, unknown> {
   for (const key in tokens) {
     const value = tokens[key];
     const path = prefix ? `${prefix}.${key}` : key;
 
     if (value && typeof value === 'object' && !Array.isArray(value)) {
       if ('value' in value || '$value' in value || '$alias' in value) {
-        const token = value as any;
+        const token = value as TokenValue | { $value?: unknown; $alias?: string };
         const tokenValue = 'value' in token ? token.value : ('$value' in token ? token.$value : null);
         result[path] = tokenValue;
       } else {
@@ -141,7 +141,7 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
     }
   }
 
-  const fontSize: Record<string, any> = {};
+  const fontSize: Record<string, string> = {};
   for (const path in flattened) {
     if (fontSizePaths.some((p) => path.startsWith(p))) {
       const value = flattened[path];
