@@ -378,8 +378,8 @@ export default defineConfig({
     ],
 
     footer: {
-      message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2025 TokiForge Community',
+      message: 'Released under the <a href="https://github.com/TokiForge/tokiforge/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">GNU Affero General Public License v3.0 (AGPL-3.0)</a>.',
+      copyright: 'Copyright © 2026 TokiForge Community',
     },
 
     search: {
