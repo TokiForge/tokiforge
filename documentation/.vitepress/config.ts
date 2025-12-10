@@ -19,10 +19,10 @@ export default defineConfig({
       },
     },
     optimizeDeps: {
-      exclude: ['@tokiforge/core'],
+      exclude: ['@tokiforge/core', '@tokiforge/vue'],
     },
     ssr: {
-      noExternal: ['@tokiforge/core'],
+      noExternal: ['@tokiforge/core', '@tokiforge/vue'],
     },
     build: {
       rollupOptions: {
