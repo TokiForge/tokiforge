@@ -71,11 +71,11 @@ const theme = getThemeFromCookies(Astro.cookies) || 'light';
 
 ## Features
 
-- ✅ Astro 4.0+ support
-- ✅ Framework-agnostic
-- ✅ Cookie-based persistence
-- ✅ Static CSS generation option
-- ✅ TypeScript support
+- Astro 4.0+ support
+- Framework-agnostic
+- Cookie-based persistence
+- Static CSS generation option
+- TypeScript support
 
 ## License
 

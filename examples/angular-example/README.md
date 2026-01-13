@@ -7,11 +7,11 @@ This example demonstrates how to use TokiForge with Angular 17+ using standalone
 
 ## Features
 
-- ✅ Angular 17+ standalone components
-- ✅ Theme switching with `ThemeService`
-- ✅ CSS variables for theming
-- ✅ Direct token access
-- ✅ SSR-safe (works with `@angular/ssr`)
+- Angular 17+ standalone components
+- Theme switching with `ThemeService`
+- CSS variables for theming
+- Direct token access
+- SSR-safe (works with `@angular/ssr`)
 
 ## Getting Started
 

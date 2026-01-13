@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌈 TokiForge
+# TokiForge
 
 **Framework-agnostic design token engine for React, Vue, Angular, Svelte & vanilla JS**
 
@@ -20,30 +20,30 @@
 
 ---
 
-## ✨ Features
+## Features
 
-- 🚀 **Framework-agnostic** - Works with React, Vue, Angular, Svelte, Next.js, Remix, Solid, Qwik, or vanilla JS
-- 🎨 **Runtime theme switching** - Change themes instantly without page reload
-- 📦 **Lightweight** - Less than 3KB gzipped
-- 🔒 **Full TypeScript support** - Type-safe tokens with autocomplete
-- 🛠️ **Powerful CLI** - Initialize, build, validate, and analyze tokens
-- 🎯 **CSS custom properties** - Native browser support with smart fallbacks
-- 🌓 **Dark mode ready** - Built-in light/dark theme support
-- 🔄 **Token versioning** - Track versions, deprecations, and migrations
-- 🎭 **Component theming** - Scoped themes for individual components
-- 🔌 **Plugin system** - Extensible with custom exporters and validators
-- ♿ **Accessibility** - Built-in WCAG compliance checking and contrast analysis
-- 📱 **Responsive tokens** - Breakpoint and state-aware token variations
-- 🔍 **Figma sync** - Compare and sync tokens with Figma designs
-- ✅ **CI/CD ready** - Automated validation for PRs and pipelines
-- 📊 **Analytics** - Token usage tracking and bundle impact analysis
-- 📚 **Multi-team support** - Versioned token registry for design systems
-- 💻 **IDE support** - Autocomplete and hover previews (VSCode ready)
-- 🎨 **Tailwind integration** - Generate Tailwind config from tokens
+- **Framework-agnostic** - Works with React, Vue, Angular, Svelte, Next.js, Remix, Solid, Qwik, or vanilla JS
+- **Runtime theme switching** - Change themes instantly without page reload
+- **Lightweight** - Less than 3KB gzipped
+- **Full TypeScript support** - Type-safe tokens with autocomplete
+- **Powerful CLI** - Initialize, build, validate, and analyze tokens
+- **CSS custom properties** - Native browser support with smart fallbacks
+- **Dark mode ready** - Built-in light/dark theme support
+- **Token versioning** - Track versions, deprecations, and migrations
+- **Component theming** - Scoped themes for individual components
+- **Plugin system** - Extensible with custom exporters and validators
+- **Accessibility** - Built-in WCAG compliance checking and contrast analysis
+- **Responsive tokens** - Breakpoint and state-aware token variations
+- **Figma sync** - Compare and sync tokens with Figma designs
+- **CI/CD ready** - Automated validation for PRs and pipelines
+- **Analytics** - Token usage tracking and bundle impact analysis
+- **Multi-team support** - Versioned token registry for design systems
+- **IDE support** - Autocomplete and hover previews (VSCode ready)
+- **Tailwind integration** - Generate Tailwind config from tokens
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 Get started with TokiForge in minutes. TokiForge works with any JavaScript framework and provides runtime theme switching, CSS variable generation, and comprehensive token management.
 
@@ -141,11 +141,11 @@ function ThemeSwitcher() {
 }
 ```
 
-👉 **[View full documentation →](https://tokiforge.dev)**
+**[View full documentation →](https://tokiforge.dev)**
 
 ---
 
-## 🎯 Why TokiForge?
+## Why TokiForge?
 
 | Feature | TokiForge | Others |
 |---------|-----------|--------|
@@ -158,7 +158,7 @@ function ThemeSwitcher() {
 
 ---
 
-## 📦 Packages
+## Packages
 
 | Package | Description | npm |
 |---------|-------------|-----|
@@ -171,7 +171,7 @@ function ThemeSwitcher() {
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌──────────────────────────────┐
@@ -199,7 +199,7 @@ function ThemeSwitcher() {
 
 ---
 
-## 🎨 Framework Examples
+## Framework Examples
 
 ### React
 
@@ -254,11 +254,11 @@ const primaryColor = runtime.getToken('color.primary');
 runtime.applyTheme('dark');
 ```
 
-👉 **[View complete examples →](./examples)**
+**[View complete examples →](./examples)**
 
 ---
 
-## 🛠️ CLI Tool
+## CLI Tool
 
 Install the CLI globally:
 
@@ -293,7 +293,7 @@ tokiforge analytics
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 - **[Getting Started](https://tokiforge.dev/guide/getting-started)** - Quick setup guide
 - **[Installation](https://tokiforge.dev/guide/installation)** - Framework-specific setup
@@ -305,15 +305,15 @@ tokiforge analytics
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Here's how you can help:
 
-1. ⭐ **Star the project** - It helps others discover TokiForge
-2. 🐛 **Report bugs** - Open an issue on GitHub
-3. 💡 **Suggest features** - Share your ideas
-4. 🔧 **Submit PRs** - Fix bugs or add features
-5. 📖 **Improve docs** - Help make documentation better
+1. **Star the project** - It helps others discover TokiForge
+2. **Report bugs** - Open an issue on GitHub
+3. **Suggest features** - Share your ideas
+4. **Submit PRs** - Fix bugs or add features
+5. **Improve docs** - Help make documentation better
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
@@ -339,7 +339,7 @@ npm test
 
 ---
 
-## ❓ FAQ
+## FAQ
 
 <details>
 <summary><b>What is TokiForge?</b></summary>
@@ -379,9 +379,9 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
-### ✅ Completed (v1.2.0)
+### Completed (v1.2.0)
 - [x] Core engine + React adapter
 - [x] Vue/Svelte/Angular adapters
 - [x] CLI tooling
@@ -398,7 +398,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 - [x] IDE support (API ready)
 - [x] Tailwind CSS integration
 
-### 🚧 In Progress (v1.2.0+)
+### In Progress (v1.2.0+)
 - [ ] Enhanced semantic tokens & aliasing
 - [ ] Multi-platform exporters (iOS, Android, React Native)
 - [ ] Type generation CLI (`generate:types`)
@@ -407,26 +407,26 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 - [ ] Zero-JS + SSR improvements
 - [ ] Enhanced Figma integration (Tokens Studio)
 
-### 📋 Planned
+### Planned
 - [ ] VS Code extension
 - [ ] Visual playground enhancements
 - [ ] CI/Visual regression integration
 - [ ] Enhanced usage analytics
 - [ ] Community plugin examples
 
-📖 **[View Full Roadmap →](./ROADMAP.md)**
+**[View Full Roadmap →](./ROADMAP.md)**
 
 ---
 
-## 📄 License
+## License
 
 AGPL-3.0 License — This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-Built with 💜 by the TokiForge Community.
+Built by the TokiForge Community.
 
 Inspired by the intersection of **design and code**.
 
@@ -434,10 +434,10 @@ Inspired by the intersection of **design and code**.
 
 <div align="center">
 
-**⭐ If you find TokiForge useful, please consider giving it a star on GitHub! ⭐**
+**If you find TokiForge useful, please consider giving it a star on GitHub!**
 
 [![Star History Chart](https://api.star-history.com/svg?repos=TokiForge/tokiforge&type=Date)](https://star-history.com/#TokiForge/tokiforge&Date)
 
-Made with ❤️ by [TokiForge Community](https://github.com/TokiForge)
+Made by [TokiForge Community](https://github.com/TokiForge)
 
 </div>
