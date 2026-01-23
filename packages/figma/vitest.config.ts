@@ -4,12 +4,7 @@ import path from 'path';
 export default defineConfig({
   test: {
     globals: true,
-    environment: 'happy-dom',
-    setupFiles: [],
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-    },
+    environment: 'node',
   },
   resolve: {
     alias: {
