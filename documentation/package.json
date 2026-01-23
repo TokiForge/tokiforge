@@ -31,6 +31,7 @@
   "dependencies": {
     "@tokiforge/core": "workspace:^2.0.0",
     "@tokiforge/vue": "workspace:^2.0.0",
+    "@vueuse/core": "^10.7.0",
     "vite": "7.2.1",
     "vitest": "4.0.7"
   },
