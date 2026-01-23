@@ -12,7 +12,7 @@ import { analyticsCommand } from './commands/analytics';
 import { generateTypesCommand } from './commands/generate-types';
 import { watchCommand } from './commands/watch';
 import { migrateCommand } from './commands/migrate';
-import { diffCommand as diffCommandEnhanced, type DiffOptions } from './commands/diff';
+import { diffCommand as diffCommandEnhanced } from './commands/diff';
 import { generateChangelogCommand } from './commands/changelog';
 import { showSplash, showCompactSplash, getVersion } from './splash';
 

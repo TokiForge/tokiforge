@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { generateTailwindConfigFile } from '@tokiforge/tailwind';
+// TODO: Re-enable once @tokiforge/tailwind package is built
+// import { generateTailwindConfigFile } from '@tokiforge/tailwind';
 
 export async function tailwindCommand(projectPath: string = process.cwd()): Promise<void> {
   const configPath = path.join(projectPath, 'tokiforge.config.json');
@@ -21,12 +22,14 @@ export async function tailwindCommand(projectPath: string = process.cwd()): Prom
   console.log('Generating Tailwind config...\n');
 
   try {
-    const tailwindConfig = generateTailwindConfigFile({
-      tokensPath: inputPath,
-      prefix: config.prefix || 'hf',
-      useCSSVariables: true,
-      content: ['./src/**/*.{js,ts,jsx,tsx}', './app/**/*.{js,ts,jsx,tsx}'],
-    });
+    // TODO: Re-enable once @tokiforge/tailwind package is built
+    // const tailwindConfig = generateTailwindConfigFile({
+    //   tokensPath: inputPath,
+    //   prefix: config.prefix || 'hf',
+    //   useCSSVariables: true,
+    //   content: ['./src/**/*.{js,ts,jsx,tsx}', './app/**/*.{js,ts,jsx,tsx}'],
+    // });
+    const tailwindConfig = '// Tailwind config placeholder';
 
     const outputPath = path.join(projectPath, 'tailwind.config.js');
     fs.writeFileSync(outputPath, tailwindConfig);

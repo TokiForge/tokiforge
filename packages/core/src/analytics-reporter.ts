@@ -585,7 +585,7 @@ export class AnalyticsReporter {
   /**
    * Analyze tokens by format usage
    */
-  private analyzeTokensByFormat(analytics: TokenAnalytics): Map<string, number> {
+  private analyzeTokensByFormat(_analytics: TokenAnalytics): Map<string, number> {
     // This would need access to internal usage data from TokenAnalytics
     // For now, return empty map
     return new Map();

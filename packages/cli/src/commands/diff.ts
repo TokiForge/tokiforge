@@ -97,6 +97,7 @@ export async function diffCommand(
 
     // Write output to file if specified
     if (options.output) {
+      const suggestions: any[] = [];
       const report = generateReport(diff, breakingChanges, suggestions);
       fs.writeFileSync(options.output, report);
       console.log(`📝 Report saved to: ${options.output}\n`);
