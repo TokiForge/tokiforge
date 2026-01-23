@@ -31,47 +31,42 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install root dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build core and vue packages
-        run: npm run build:core && npm run build --workspace @tokiforge/vue
+        run: pnpm run build:core && pnpm run build --filter @tokiforge/vue
 
       - name: Install documentation dependencies
         run: |
           cd documentation
-          echo "Current directory: $(pwd)"
-          echo "Checking for package-lock.json..."
-          if [ -f package-lock.json ]; then
-            echo "package-lock.json exists"
-            if [ -s package-lock.json ]; then
-              echo "package-lock.json is not empty"
-              if grep -q '"lockfileVersion"' package-lock.json; then
-                echo "package-lock.json has valid lockfileVersion"
-                echo "Running npm ci..."
-                npm ci || {
-                  echo "npm ci failed, falling back to npm install"
-                  npm install
-                }
-              else
-                echo "package-lock.json missing lockfileVersion, using npm install"
-                npm install
-              fi
-            else
-              echo "package-lock.json is empty, using npm install"
-              npm install
-            fi
-          else
-            echo "package-lock.json not found, using npm install"
-            npm install
-          fi
+          pnpm install --frozen-lockfile
 
       - name: Build documentation
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           cd documentation
-          npm run build
+          pnpm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
