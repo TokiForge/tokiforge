@@ -12,7 +12,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@tokiforge/core': path.resolve(__dirname, '../core/dist/index.d.ts'),
+      '@tokiforge/core': path.resolve(__dirname, '../core/src'),
     },
   },
 });
