@@ -50,7 +50,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@tokiforge/core": "^2.0.0",
+    "@tokiforge/core": "workspace:^2.0.0",
     "axios": "^1.6.0"
   }
 }

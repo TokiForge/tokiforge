@@ -37,7 +37,7 @@
     "react": "^18.0.0"
   },
   "dependencies": {
-    "@tokiforge/core": "^2.0.0"
+    "@tokiforge/core": "workspace:^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

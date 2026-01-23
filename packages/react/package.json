@@ -29,7 +29,7 @@
   ],
   "sideEffects": false,
   "peerDependencies": {
-    "@tokiforge/core": "^2.0.0",
+    "@tokiforge/core": "workspace:^2.0.0",
     "react": ">=16.8.0"
   },
   "devDependencies": {
@@ -42,7 +42,7 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@tokiforge/core": "^2.0.0"
+    "@tokiforge/core": "workspace:^2.0.0"
   },
   "keywords": [
     "react",

@@ -26,7 +26,7 @@
     "sideEffects": false,
     "peerDependencies": {
         "solid-js": ">=1.8.0",
-        "@tokiforge/core": "^2.0.0"
+        "@tokiforge/core": "workspace:^2.0.0"
     },
     "devDependencies": {
         "solid-js": "^1.8.0",
@@ -34,7 +34,7 @@
         "typescript": "^5.3.3"
     },
     "dependencies": {
-        "@tokiforge/core": "^2.0.0"
+        "@tokiforge/core": "workspace:^2.0.0"
     },
     "keywords": [
         "solid",

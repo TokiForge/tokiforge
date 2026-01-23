@@ -30,7 +30,7 @@
   ],
   "sideEffects": false,
   "peerDependencies": {
-    "@tokiforge/core": "^2.0.0",
+    "@tokiforge/core": "workspace:^2.0.0",
     "vue": ">=3.0.0"
   },
   "devDependencies": {
@@ -42,7 +42,7 @@
     "vue": "^3.4.0"
   },
   "dependencies": {
-    "@tokiforge/core": "^2.0.0"
+    "@tokiforge/core": "workspace:^2.0.0"
   },
   "keywords": [
     "vue",
