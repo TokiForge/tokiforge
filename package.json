@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "Framework-agnostic design token and theming engine for React, Vue, Svelte, Angular, Next.js, Remix, and more. Runtime theme switching, CSS variables, TypeScript support, dark mode, accessibility features, and <3KB gzipped. Perfect for design systems and multi-framework projects.",
   "private": true,
+  "packageManager": "pnpm@9.0.0",
   "workspaces": [
     "packages/*",
     "documentation"
