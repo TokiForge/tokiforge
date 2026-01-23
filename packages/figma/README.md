@@ -2,17 +2,18 @@
 
 **Figma integration for TokiForge design tokens. Sync tokens between Figma and code, compare designs, and manage design system consistency.**
 
-Figma integration for TokiForge design tokens (v1.2.0). Sync tokens between Figma and your codebase.
+Figma integration for TokiForge design tokens (v2.0.0). Sync tokens between Figma and your codebase.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/figma@^1.2.0 @tokiforge/core@^1.2.0
+npm install @tokiforge/figma@^2.0.0 @tokiforge/core@^2.0.0
 ```
 
 ## Setup
 
 1. Get your Figma Personal Access Token:
+
    - Go to Figma Settings → Account → Personal Access Tokens
    - Create a new token
 
@@ -25,26 +26,26 @@ npm install @tokiforge/figma@^1.2.0 @tokiforge/core@^1.2.0
 ### Pull tokens from Figma
 
 ```typescript
-import { pullFromFigma } from '@tokiforge/figma';
+import { pullFromFigma } from "@tokiforge/figma";
 
 const tokens = await pullFromFigma({
-  accessToken: 'your-figma-token',
-  fileKey: 'your-file-key',
+  accessToken: "your-figma-token",
+  fileKey: "your-file-key",
 });
 
 // Save to file
-import { writeFileSync } from 'fs';
-writeFileSync('tokens.json', JSON.stringify(tokens, null, 2));
+import { writeFileSync } from "fs";
+writeFileSync("tokens.json", JSON.stringify(tokens, null, 2));
 ```
 
 ### Push tokens to Figma
 
 ```typescript
-import { pushToFigma } from '@tokiforge/figma';
+import { pushToFigma } from "@tokiforge/figma";
 
-await pushToFigma('./tokens.json', {
-  accessToken: 'your-figma-token',
-  fileKey: 'your-file-key',
+await pushToFigma("./tokens.json", {
+  accessToken: "your-figma-token",
+  fileKey: "your-file-key",
 });
 ```
 
@@ -61,4 +62,3 @@ tokiforge figma:push --token YOUR_TOKEN --file-key FILE_KEY
 ## Note
 
 Figma API has limitations for creating styles. For full bidirectional sync, use the Figma plugin (coming soon).
-

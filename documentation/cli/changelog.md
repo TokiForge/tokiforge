@@ -36,6 +36,7 @@ tokiforge generate:changelog tokens \
 Output format for the changelog.
 
 **Values:**
+
 - `markdown` - Markdown format (default, recommended for documentation)
 - `json` - Structured JSON format (useful for automation)
 - `html` - HTML format (for web viewing)
@@ -43,6 +44,7 @@ Output format for the changelog.
 **Default:** `markdown`
 
 **Example:**
+
 ```bash
 tokiforge generate:changelog tokens --format json --output changelog.json
 ```
@@ -52,11 +54,13 @@ tokiforge generate:changelog tokens --format json --output changelog.json
 Write the changelog to a file. If not specified, outputs to stdout.
 
 **Extensions:**
+
 - `.md` - Markdown format
 - `.json` - JSON format
 - `.html` - HTML format
 
 **Example:**
+
 ```bash
 tokiforge generate:changelog tokens --output CHANGELOG.md
 ```
@@ -125,24 +129,29 @@ Or simply the tokens without metadata (version/date extracted from filename):
 ## v1.1.0 - 2024-01-15
 
 ### 🚨 Breaking Changes
+
 - Removed token: color.deprecated
 - Significant value change in spacing.lg: 32px → 48px
 
 ### ✨ Added
+
 - `color.brand.primary`
 - `color.brand.secondary`
 - `typography.display`
 
 ### 🗑️ Removed
+
 - `color.deprecated`
 - `color.legacy.primary`
 
 ### 📝 Changed
+
 - `color.primary`
 - `spacing.lg`
 - `typography.body.font-size`
 
 ### ⚠️ Deprecated
+
 - (none)
 
 **Statistics**: +3 ~2 -2
@@ -152,6 +161,7 @@ Or simply the tokens without metadata (version/date extracted from filename):
 ## v1.0.0 - 2024-01-01
 
 ### ✨ Added
+
 - `color.primary`
 - `color.secondary`
 - `spacing.xs`
@@ -177,15 +187,8 @@ Or simply the tokens without metadata (version/date extracted from filename):
         "color.brand.secondary",
         "typography.display"
       ],
-      "removed": [
-        "color.deprecated",
-        "color.legacy.primary"
-      ],
-      "changed": [
-        "color.primary",
-        "spacing.lg",
-        "typography.body.font-size"
-      ],
+      "removed": ["color.deprecated", "color.legacy.primary"],
+      "changed": ["color.primary", "spacing.lg", "typography.body.font-size"],
       "deprecated": []
     },
     "stats": {
@@ -220,22 +223,42 @@ Or simply the tokens without metadata (version/date extracted from filename):
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Token Changelog</title>
-  <style>
-    body { font-family: sans-serif; max-width: 900px; margin: 0 auto; }
-    .breaking { background: #fff3cd; padding: 10px; border-left: 4px solid #ffc107; }
-    .added { background: #d4edda; padding: 10px; border-left: 4px solid #28a745; }
-    .removed { background: #f8d7da; padding: 10px; border-left: 4px solid #dc3545; }
-    code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
-  </style>
-</head>
-<body>
-  <h1>📋 Token Changelog</h1>
-  <h2>v1.1.0 - 2024-01-15</h2>
-  <!-- Full formatted HTML changelog -->
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Token Changelog</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .breaking {
+        background: #fff3cd;
+        padding: 10px;
+        border-left: 4px solid #ffc107;
+      }
+      .added {
+        background: #d4edda;
+        padding: 10px;
+        border-left: 4px solid #28a745;
+      }
+      .removed {
+        background: #f8d7da;
+        padding: 10px;
+        border-left: 4px solid #dc3545;
+      }
+      code {
+        background: #f4f4f4;
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📋 Token Changelog</h1>
+    <h2>v1.1.0 - 2024-01-15</h2>
+    <!-- Full formatted HTML changelog -->
+  </body>
 </html>
 ```
 
@@ -276,28 +299,28 @@ name: Generate Changelog
 on:
   push:
     branches: [main]
-    paths: ['tokens/**']
+    paths: ["tokens/**"]
 
 jobs:
   changelog:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Generate changelog
         run: |
           tokiforge generate:changelog tokens \
             --format markdown \
             --output CHANGELOG.md
-      
+
       - name: Commit changes
         run: |
           git config user.name "TokiForge Bot"
@@ -326,12 +349,12 @@ generate_changelog:
 
 The command automatically detects version numbers from filenames:
 
-| Filename Pattern | Version Extracted |
-|---|---|
-| `tokens-v1.0.0.json` | `v1.0.0` |
-| `tokens-1.0.0.json` | `v1.0.0` |
-| `tokens-1.0.0.json` | `v1.0.0` |
-| `tokens-v1.0.0-beta.json` | `v1.0.0` |
+| Filename Pattern          | Version Extracted |
+| ------------------------- | ----------------- |
+| `tokens-v1.0.0.json`      | `v1.0.0`          |
+| `tokens-1.0.0.json`       | `v1.0.0`          |
+| `tokens-1.0.0.json`       | `v1.0.0`          |
+| `tokens-v1.0.0-beta.json` | `v1.0.0`          |
 
 Files are sorted using semantic versioning rules.
 

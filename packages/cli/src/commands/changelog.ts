@@ -5,7 +5,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { compareTokens, detectBreakingChanges, type DiffResult } from './diff-utils';
+import { compareTokens, detectBreakingChanges, type DiffResult } from './diff-utils.js';
 
 export interface ChangelogOptions {
   from?: string;
@@ -129,7 +129,7 @@ function loadVersionedTokens(tokensDir: string): VersionedTokens[] {
 
     // Extract version and date
     let version = content.version || extractVersionFromFilename(file);
-    let date = content.date || new Date(fs.statSync(filePath).mtime).toISOString().split('T')[0];
+    const date = content.date || new Date(fs.statSync(filePath).mtime).toISOString().split('T')[0];
 
     if (!version) {
       version = `v${versions.length + 1}`;
@@ -208,7 +208,7 @@ function categorizeChanges(
     breaking: breakingChanges,
     added: diff.added,
     removed: diff.removed,
-    changed: diff.changed.map(c => c.path),
+    changed: diff.changed.map((c: { path: string }) => c.path),
     deprecated: [] // Would need additional metadata to populate this
   };
 }

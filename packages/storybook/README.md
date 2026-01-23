@@ -15,7 +15,7 @@ npm install @tokiforge/storybook @tokiforge/core
 ```js
 export default {
   addons: [
-    '@tokiforge/storybook',
+    "@tokiforge/storybook",
     // ... other addons
   ],
 };
@@ -24,8 +24,8 @@ export default {
 ### 2. Configure in `.storybook/preview.js`
 
 ```js
-import { withTokiForge, tokiforgeParameters } from '@tokiforge/storybook';
-import { themeConfig } from '../src/themes';
+import { withTokiForge, tokiforgeParameters } from "@tokiforge/storybook";
+import { themeConfig } from "../src/themes";
 
 export const decorators = [
   withTokiForge({
@@ -46,13 +46,12 @@ export const parameters = {
 
 ## Features
 
-- ✅ Theme switcher in toolbar
-- ✅ Token viewer in addon panel
-- ✅ Automatic theme initialization
-- ✅ Theme change events
-- ✅ TypeScript support
+- Theme switcher in toolbar
+- Token viewer in addon panel
+- Automatic theme initialization
+- Theme change events
+- TypeScript support
 
 ## License
 
 AGPL-3.0
-

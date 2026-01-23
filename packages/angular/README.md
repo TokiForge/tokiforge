@@ -2,12 +2,12 @@
 
 **Angular adapter for TokiForge design token and theming engine. Provides Angular service with Signals for easy theme management in Angular applications. Supports Angular 17+ and SSR.**
 
-Angular adapter for TokiForge theming engine (v1.2.0).
+Angular adapter for TokiForge theming engine (v2.0.0).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/angular@^1.2.0 @tokiforge/core@^1.2.0
+npm install @tokiforge/angular@^2.0.0 @tokiforge/core@^2.0.0
 ```
 
 ## Requirements
@@ -19,8 +19,8 @@ npm install @tokiforge/angular@^1.2.0 @tokiforge/core@^1.2.0
 ## Quick Start
 
 ```typescript
-import { ThemeService } from '@tokiforge/angular';
-import { inject } from '@angular/core';
+import { ThemeService } from "@tokiforge/angular";
+import { inject } from "@angular/core";
 
 export class AppComponent implements OnInit {
   private themeService = inject(ThemeService);
@@ -32,4 +32,3 @@ export class AppComponent implements OnInit {
 ```
 
 See the [Angular Guide](/guide/angular) for complete documentation.
-

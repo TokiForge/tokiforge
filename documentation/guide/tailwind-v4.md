@@ -521,7 +521,7 @@ export default {
 
 - [Tailwind CSS v4 Docs](https://tailwindcss.com/docs)
 - [Tailwind Configuration](https://tailwindcss.com/docs/configuration)
-- [@tokiforge/tailwind API](/api/tailwind)
+- [Tailwind Plugin Guide](/guide/tailwind-plugin)
 - [Design Tokens Guide](/guide/design-tokens)
 - [Theming Guide](/guide/theming)
 
@@ -554,4 +554,4 @@ export default {
 
 - Check [Dynamic Theming](/guide/theming) guide
 - Explore [Performance Optimization](/guide/performance-optimization)
-- Review [Tailwind API Documentation](/api/tailwind)
+- Review [Tailwind Plugin Documentation](/guide/tailwind-plugin)

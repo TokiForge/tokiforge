@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-import { generateChangelogCommand, type ChangelogEntry } from './changelog';
+import { generateChangelogCommand } from './changelog.js';
 
 describe('changelog command', () => {
   let tempDir: string;

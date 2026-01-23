@@ -1,0 +1,208 @@
+.theme-comparison {
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.theme-comparison h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.comparison-placeholder {
+  padding: 3rem;
+  text-align: center;
+  color: #9ca3af;
+  border: 2px dashed #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.comparison-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.comparison-stat {
+  padding: 1rem;
+  border-radius: 6px;
+  text-align: center;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+}
+
+.comparison-stat.same {
+  background: #f0fdf4;
+  border-color: #22c55e;
+}
+
+.comparison-stat.different {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+.comparison-stat.percentage {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+  color: white;
+}
+
+.comparison-stat .stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.comparison-stat.same .stat-value {
+  color: #166534;
+}
+
+.comparison-stat.different .stat-value {
+  color: #991b1b;
+}
+
+.comparison-stat .stat-label {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.comparison-stat.same .stat-label {
+  color: #166534;
+}
+
+.comparison-stat.different .stat-label {
+  color: #991b1b;
+}
+
+.comparison-table-container {
+  max-height: 600px;
+  overflow: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.comparison-table thead {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  box-shadow: 0 1px 0 #e5e7eb;
+}
+
+.comparison-table th {
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: #555;
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.comparison-table .token-path-header {
+  min-width: 200px;
+  position: sticky;
+  left: 0;
+  z-index: 11;
+  background: #f9fafb;
+}
+
+.comparison-table .status-header {
+  width: 100px;
+  text-align: center;
+}
+
+.comparison-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.comparison-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.comparison-table tbody tr.has-difference {
+  background: #fef2f2;
+}
+
+.comparison-table tbody tr.has-difference:hover {
+  background: #fee2e2;
+}
+
+.comparison-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.comparison-table .token-path {
+  font-family: "Monaco", "Courier New", monospace;
+  font-size: 0.85rem;
+  color: #333;
+  font-weight: 500;
+  position: sticky;
+  left: 0;
+  background: inherit;
+}
+
+.comparison-table .token-value {
+  font-family: "Monaco", "Courier New", monospace;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.comparison-table .token-value.missing {
+  text-align: center;
+  color: #d1d5db;
+}
+
+.missing-indicator {
+  font-size: 1.2rem;
+}
+
+.color-token-value {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.color-swatch-tiny {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  border: 1px solid #e5e7eb;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.token-status {
+  text-align: center;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.same {
+  background: #d1fae5;
+  color: #064e3b;
+}
+
+.status-badge.different {
+  background: #fee2e2;
+  color: #991b1b;
+}

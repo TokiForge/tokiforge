@@ -40,6 +40,7 @@ tokiforge diff tokens.old.json tokens.new.json --no-migrations
 Output format for the diff report.
 
 **Values:**
+
 - `compact` - Brief summary view (default: abbreviated)
 - `detailed` - Full report with complete change details
 - `json` - Structured JSON output
@@ -47,6 +48,7 @@ Output format for the diff report.
 **Default:** `detailed`
 
 **Example:**
+
 ```bash
 tokiforge diff old.json new.json --format compact
 ```
@@ -58,6 +60,7 @@ Skip generation of migration suggestions. Useful for CI/CD pipelines where you o
 **Default:** Migrations are shown (enabled)
 
 **Example:**
+
 ```bash
 tokiforge diff old.json new.json --no-migrations
 ```
@@ -69,6 +72,7 @@ Fail with exit code 1 if breaking changes are detected. Useful for CI/CD pipelin
 **Default:** Disabled (warnings only)
 
 **Example:**
+
 ```bash
 tokiforge diff old.json new.json --strict
 ```
@@ -78,11 +82,13 @@ tokiforge diff old.json new.json --strict
 Write the diff report to a file instead of stdout.
 
 **Formats:**
+
 - `.md` - Markdown format (recommended)
 - `.json` - JSON format
 - `.html` - HTML format
 
 **Example:**
+
 ```bash
 tokiforge diff old.json new.json --output CHANGELOG.md
 tokiforge diff old.json new.json --format json --output diff.json
@@ -179,15 +185,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Compare tokens
         run: |
           tokiforge diff \
@@ -195,7 +201,7 @@ jobs:
             src/tokens/latest.json \
             --format detailed \
             --output diff-report.md
-      
+
       - name: Check for breaking changes
         run: |
           tokiforge diff \
@@ -212,10 +218,10 @@ jobs:
 
 if git diff --cached --name-only | grep -q "tokens.json"; then
   echo "🔍 Checking token changes..."
-  
+
   # Get the old version from git
   git show HEAD:tokens.json > /tmp/old-tokens.json 2>/dev/null
-  
+
   if [ -f /tmp/old-tokens.json ]; then
     if ! tokiforge diff /tmp/old-tokens.json tokens.json --no-migrations; then
       echo "❌ Token validation failed"
@@ -235,18 +241,21 @@ Recommended for documentation and reports:
 
 ```markdown
 # Token Diff Report
+
 Generated: 2024-01-23T10:30:00Z
 
 ## Summary
+
 - Added: 5
 - Removed: 2
 - Changed: 3
 - Breaking Changes: 2
 
 ## Added Tokens
+
 - `color.brand.primary`
 - `color.brand.secondary`
-...
+  ...
 ```
 
 ### JSON Format
@@ -280,13 +289,13 @@ For web-based review:
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Token Diff Report</title>
-</head>
-<body>
-  <h1>📋 Token Diff Report</h1>
-  <!-- Full formatted HTML report -->
-</body>
+  <head>
+    <title>Token Diff Report</title>
+  </head>
+  <body>
+    <h1>📋 Token Diff Report</h1>
+    <!-- Full formatted HTML report -->
+  </body>
 </html>
 ```
 

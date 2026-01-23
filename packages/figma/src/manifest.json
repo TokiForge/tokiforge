@@ -1,0 +1,10 @@
+{
+  "name": "TokiForge Figma Plugin",
+  "id": "tokiforge-sync",
+  "api": "1.0.0",
+  "main": "dist/plugin.js",
+  "ui": "dist/ui.html",
+  "permissions": [
+    "currentuser"
+  ]
+}

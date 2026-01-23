@@ -96,7 +96,9 @@ program
 program
   .command('analytics')
   .description('Generate token usage analytics and bundle impact report')
-  .action(() => analyticsCommand());
+  .option('--format <format>', 'Export format: json, html, csv, markdown', 'json')
+  .option('--output <file>', 'Output file path')
+  .action((options) => analyticsCommand(process.cwd(), { format: options.format as any, output: options.output }));
 
 program
   .command('generate:types')

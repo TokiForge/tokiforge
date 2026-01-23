@@ -2,7 +2,7 @@
 
 This example demonstrates how to use TokiForge with Svelte.
 
-> **TokiForge v1.2.0** | **Svelte 4+**
+> **TokiForge v2.0.0** | **Svelte 4+**
 
 ## Getting Started
 
@@ -74,8 +74,6 @@ svelte-example/
 ├── vite.config.ts
 └── tsconfig.json
 ```
-
-
 
 ## Improvements
 

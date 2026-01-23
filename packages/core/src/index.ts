@@ -59,9 +59,17 @@ export { CICDValidator } from './cicd-validator';
 export { SemanticTokenManager } from './semantic-tokens';
 export { TokenVersioning } from './token-versioning';
 export { TokenAnalytics } from './token-analytics';
+export { AnalyticsReporter } from './analytics-reporter';
 export { IDESupport } from './ide-support';
 export { TokenRegistry } from './token-registry';
+export { SSRUtils } from './ssr-utils';
 
 // Platform Exporters
 export { IOSExporter, AndroidExporter, ReactNativeExporter, PlatformExporter } from './platform-exporters';
 export type { IOSExportOptions, AndroidExportOptions, ReactNativeExportOptions, PlatformExporterOptions } from './platform-exporters';
+
+// SSR Types
+export type { SSRThemeOptions, CriticalCSSOptions } from './ssr-utils';
+
+// Analytics Types
+export type { AnalyticsReport, TrendDataPoint, ComparisonReport, ExportFormat } from './analytics-reporter';

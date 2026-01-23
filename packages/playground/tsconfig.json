@@ -15,9 +15,13 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "paths": {
+      "@tokiforge/core": ["../core/dist/index.d.ts"]
+    }
   },
   "include": ["src"],
+  "exclude": ["src/**/__tests__", "src/**/*.test.tsx", "src/**/*.test.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
 

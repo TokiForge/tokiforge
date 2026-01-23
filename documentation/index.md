@@ -6,7 +6,7 @@ description: TokiForge is a lightweight, framework-agnostic design token and the
 hero:
   name: TokiForge
   text: Design Token & Theme Engine
-  tagline: Forge your colors. Shape your UI. (v1.2.0)
+  tagline: Forge your colors. Shape your UI. (v2.0.0)
   image:
     src: /logo.svg
     alt: TokiForge Logo - Design Token and Theme Engine
@@ -19,30 +19,28 @@ hero:
       link: https://github.com/TokiForge/tokiforge
 
 features:
-  - title: 🚀 Zero JS Overhead (Static Mode)
+  - title: Zero JS Overhead (Static Mode)
     details: Use static mode with body classes for zero JavaScript overhead. Or use dynamic mode for runtime injection. Best of both worlds!
-  - title: 🎨 Works With Any Framework
+  - title: Works With Any Framework
     details: React, Vue, Svelte, Angular, Next.js, Remix, Solid, Qwik, and more. Framework-agnostic by design.
-  - title: 📦 <3KB Runtime
+  - title: <3KB Runtime
     details: Ultra-lightweight core engine. With static mode, achieve zero JS overhead by generating CSS at build time.
-  - title: ⚡ Performance Optimized
+  - title: Performance Optimized
     details: Built-in caching, lazy loading, and compression for optimal performance and reduced bundle size.
-  - title: 🛠️ Powerful CLI
+  - title: Powerful CLI
     details: Initialize, build, lint, and preview your themes with a single command.
-  - title: 🎯 Type Safe
+  - title: Type Safe
     details: Full TypeScript support with auto-generated types from your tokens.
-  - title: ♿ Accessible
+  - title: Accessible
     details: Built-in accessibility features including high contrast mode, reduced motion, color blind support, and font scaling.
-  - title: 🔄 Versioning
+  - title: Versioning
     details: Track token versions, deprecations, and migrations with full history support.
-  - title: 🔌 Extensible
+  - title: Extensible
     details: Plugin system for custom exporters, validators, and formatters. Token functions, expressions, and transformation pipeline.
-  - title: 📱 Responsive
+  - title: Responsive
     details: Breakpoint and state-aware tokens for responsive and interactive designs.
-  - title: 🔍 Design Tool Integration
+  - title: Design Tool Integration
     details: Sync with Figma, Sketch, Adobe XD, and design system tools like Zeroheight and InVision DSM.
-  - title: ✅ CI/CD Ready
+  - title: CI/CD Ready
     details: Automated validation and testing in your CI/CD pipelines.
 ---
-
-

@@ -1,13 +1,16 @@
 # TokiForge Documentation
 
-This is the documentation site for TokiForge v1.2.0, built with [VitePress](https://vitepress.dev/).
+This is the documentation site for TokiForge v2.0.0, built with [VitePress](https://vitepress.dev/).
 
-## New Features in v1.2.0
+## Features in v2.0.0
 
-- **Performance Optimization**: Caching, lazy loading, and compression integrated into ThemeRuntime
-- **Accessibility**: High contrast mode, reduced motion, color blind support, font size scaling
-- **Advanced Token Features**: Functions, expressions, references with fallbacks, scoping, theming API, validation plugins, transformation pipeline
-- **Integrations**: Storybook addon, enhanced Figma sync, Sketch/Adobe XD adapters, CMS integration (Contentful, Strapi, Sanity), Zeroheight, InVision DSM
+- **Production-Ready Release**: Comprehensive design token and theming engine with full framework support
+- **Performance Optimization**: Multi-tier caching, lazy loading, and compression integrated into ThemeRuntime
+- **Accessibility**: High contrast mode, reduced motion, color blind support (protanopia/deuteranopia/tritanopia), font size scaling, WCAG AAA compliance
+- **Advanced Token Features**: Functions, expressions, references with fallbacks, component scoping, fluent theming API, validation plugins, transformation pipeline
+- **Framework Support**: React, Vue, Svelte, Angular, Next.js, Remix, Astro, Solid, SvelteKit with SSR utilities
+- **Integrations**: Storybook addon, enhanced Figma sync with conflict resolution, Sketch/Adobe XD adapters, CMS integration (Contentful, Strapi, Sanity), Zeroheight, InVision DSM
+- **Developer Tools**: Powerful CLI (init, build, validate, analyze, diff, watch, migrate), token analytics, CI/CD integration, visual regression testing
 
 ## Development
 

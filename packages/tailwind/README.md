@@ -2,12 +2,12 @@
 
 **Tailwind CSS integration for TokiForge design tokens. Generate Tailwind configuration from design tokens and keep your design system in sync.**
 
-Tailwind CSS integration for TokiForge design tokens (v1.2.0).
+Tailwind CSS integration for TokiForge design tokens (v2.0.0).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/tailwind@^1.2.0 @tokiforge/core@^1.2.0 tailwindcss
+npm install @tokiforge/tailwind@^2.0.0 @tokiforge/core@^2.0.0 tailwindcss
 ```
 
 ## Usage
@@ -21,31 +21,31 @@ npx tokiforge tailwind:generate
 Or programmatically:
 
 ```typescript
-import { generateTailwindConfigFile } from '@tokiforge/tailwind';
+import { generateTailwindConfigFile } from "@tokiforge/tailwind";
 
 const config = generateTailwindConfigFile({
-  tokensPath: './tokens.json',
-  prefix: 'hf',
+  tokensPath: "./tokens.json",
+  prefix: "hf",
   useCSSVariables: true,
-  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
 });
 
 // Write to tailwind.config.js
-import { writeFileSync } from 'fs';
-writeFileSync('tailwind.config.js', config);
+import { writeFileSync } from "fs";
+writeFileSync("tailwind.config.js", config);
 ```
 
 ### Option 2: Use in tailwind.config.js
 
 ```javascript
-import { generateTailwindConfig } from '@tokiforge/tailwind';
+import { generateTailwindConfig } from "@tokiforge/tailwind";
 
 export default {
-  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: generateTailwindConfig({
-      tokensPath: './tokens.json',
-      prefix: 'hf',
+      tokensPath: "./tokens.json",
+      prefix: "hf",
       useCSSVariables: true,
     }).theme.extend,
   },
@@ -100,8 +100,5 @@ Generates Tailwind config:
 Then use in your components:
 
 ```jsx
-<div className="bg-primary p-md">
-  Content
-</div>
+<div className="bg-primary p-md">Content</div>
 ```
-

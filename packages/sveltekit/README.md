@@ -13,11 +13,11 @@ npm install @tokiforge/sveltekit @tokiforge/core svelte @sveltejs/kit
 ### +layout.server.ts
 
 ```ts
-import { getThemeFromCookie } from '@tokiforge/sveltekit';
-import type { LayoutServerLoad } from './$types';
+import { getThemeFromCookie } from "@tokiforge/sveltekit";
+import type { LayoutServerLoad } from "./$types";
 
 export const load: LayoutServerLoad = ({ cookies }) => {
-  const theme = cookies.get('tokiforge-theme') || 'light';
+  const theme = cookies.get("tokiforge-theme") || "light";
   return { theme };
 };
 ```
@@ -44,11 +44,11 @@ export const load: LayoutServerLoad = ({ cookies }) => {
 
 ## Features
 
-- ✅ SvelteKit 2.0+ support
-- ✅ SSR-aware theme store
-- ✅ Cookie-based persistence
-- ✅ Flash-free hydration
-- ✅ TypeScript support
+- SvelteKit 2.0+ support
+- SSR-aware theme store
+- Cookie-based persistence
+- Flash-free hydration
+- TypeScript support
 
 ## License
 

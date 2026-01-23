@@ -5,14 +5,14 @@ description: Complete guide to using TokiForge with React. Learn how to set up T
 
 # React Guide
 
-> **TokiForge v1.2.0**
+> **TokiForge v2.0.0**
 
 TokiForge works seamlessly with React through the `@tokiforge/react` package.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/react@^1.2.0 @tokiforge/core@^1.2.0
+npm install @tokiforge/react@^2.0.0 @tokiforge/core@^2.0.0
 ```
 
 ## Setup
@@ -22,14 +22,14 @@ npm install @tokiforge/react@^1.2.0 @tokiforge/core@^1.2.0
 Use the `ThemeProvider` to make themes available throughout your app:
 
 ```tsx
-import { ThemeProvider } from '@tokiforge/react';
+import { ThemeProvider } from "@tokiforge/react";
 
 const themeConfig = {
   themes: [
-    { name: 'light', tokens: lightTokens },
-    { name: 'dark', tokens: darkTokens },
+    { name: "light", tokens: lightTokens },
+    { name: "dark", tokens: darkTokens },
   ],
-  defaultTheme: 'light',
+  defaultTheme: "light",
 };
 
 function App() {
@@ -46,17 +46,15 @@ function App() {
 Access theme data with the `useTheme` hook:
 
 ```tsx
-import { useTheme } from '@tokiforge/react';
+import { useTheme } from "@tokiforge/react";
 
 function MyComponent() {
   const { tokens, theme, setTheme, availableThemes } = useTheme();
-  
+
   return (
     <div>
       <p>Current theme: {theme}</p>
-      <button onClick={() => setTheme('dark')}>
-        Switch to Dark
-      </button>
+      <button onClick={() => setTheme("dark")}>Switch to Dark</button>
     </div>
   );
 }
@@ -96,11 +94,13 @@ Returns:
 ```tsx
 function ThemeSwitcher() {
   const { theme, setTheme, availableThemes } = useTheme();
-  
+
   return (
     <select value={theme} onChange={(e) => setTheme(e.target.value)}>
-      {availableThemes.map(name => (
-        <option key={name} value={name}>{name}</option>
+      {availableThemes.map((name) => (
+        <option key={name} value={name}>
+          {name}
+        </option>
       ))}
     </select>
   );
@@ -112,7 +112,7 @@ function ThemeSwitcher() {
 ```tsx
 function Button() {
   const { tokens } = useTheme();
-  
+
   return (
     <button
       style={{
@@ -137,10 +137,10 @@ function Card() {
   return (
     <div
       style={{
-        backgroundColor: 'var(--hf-color-background-default)',
-        color: 'var(--hf-color-text-primary)',
-        borderRadius: 'var(--hf-radius-md)',
-        padding: 'var(--hf-spacing-lg)',
+        backgroundColor: "var(--hf-color-background-default)",
+        color: "var(--hf-color-text-primary)",
+        borderRadius: "var(--hf-radius-md)",
+        padding: "var(--hf-spacing-lg)",
       }}
     >
       Content
@@ -161,7 +161,7 @@ function Card() {
 ```
 
 ```tsx
-import styles from './styles.module.css';
+import styles from "./styles.module.css";
 
 function Card() {
   return <div className={styles.card}>Content</div>;
@@ -171,7 +171,7 @@ function Card() {
 ### With Styled Components
 
 ```tsx
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Button = styled.button`
   background-color: var(--hf-color-primary);
@@ -203,12 +203,10 @@ The theme will be applied on the client side after hydration.
 Full TypeScript support is included:
 
 ```tsx
-import { ThemeConfig, DesignTokens } from '@tokiforge/react';
+import { ThemeConfig, DesignTokens } from "@tokiforge/react";
 
 const themeConfig: ThemeConfig = {
-  themes: [
-    { name: 'light', tokens: lightTokens },
-  ],
+  themes: [{ name: "light", tokens: lightTokens }],
 };
 
 function Component() {
@@ -230,5 +228,3 @@ function Component() {
 - See [React Example](/examples/react) for a complete example
 - Learn about [Advanced Theming](/guide/theming)
 - Check the [API Reference](/api/react)
-
-

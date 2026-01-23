@@ -14,6 +14,7 @@ Common issues and solutions.
 **Error:** `Cannot find module '@tokiforge/core'`
 
 **Solution:**
+
 ```bash
 npm install @tokiforge/core
 # Or reinstall all
@@ -25,6 +26,7 @@ npm install
 **Error:** `Could not find a declaration file`
 
 **Solution:**
+
 - Ensure TypeScript 5.0+
 - Check `tsconfig.json` includes node_modules
 - Restart TypeScript server
@@ -36,6 +38,7 @@ npm install
 **Problem:** Theme changes but nothing updates
 
 **Solution:**
+
 - Check CSS variables are being used
 - Verify `runtime.init()` was called
 - Check browser console for errors
@@ -45,12 +48,13 @@ npm install
 **Problem:** CSS variables don't appear
 
 **Solution:**
+
 ```typescript
 // Ensure runtime is initialized
-runtime.init(':root', 'hf');
+runtime.init(":root", "hf");
 
 // Check selector matches
-runtime.applyTheme('dark', '.my-app', 'custom');
+runtime.applyTheme("dark", ".my-app", "custom");
 ```
 
 ### SSR Errors
@@ -61,7 +65,7 @@ runtime.applyTheme('dark', '.my-app', 'custom');
 TokiForge handles SSR automatically. If issues persist:
 
 ```typescript
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   runtime.init();
 }
 ```
@@ -73,6 +77,7 @@ if (typeof window !== 'undefined') {
 **Error:** `Invalid token value at path`
 
 **Solution:**
+
 - Ensure all tokens have `value` property
 - Check value types match (string/number)
 - Run `tokiforge lint` to validate
@@ -82,6 +87,7 @@ if (typeof window !== 'undefined') {
 **Error:** `Token reference not found: {color.primary}`
 
 **Solution:**
+
 - Check reference path is correct
 - Ensure referenced token exists
 - Verify token is defined before reference
@@ -91,6 +97,7 @@ if (typeof window !== 'undefined') {
 **Error:** `Unexpected token in JSON`
 
 **Solution:**
+
 - Validate JSON syntax
 - Check for trailing commas
 - Use `tokiforge lint` to find issues
@@ -105,10 +112,12 @@ if (typeof window !== 'undefined') {
 
 **Solution:**
 
-TokiForge v1.2.0 includes browser-compatible stubs for Node.js modules. If you encounter these errors:
+TokiForge v2.0.0 includes browser-compatible stubs for Node.js modules. If you encounter these errors:
 
 1. **For Vite projects (React, Vue, Svelte):**
+
    - Ensure `vite.config.ts` includes aliases for Node.js modules:
+
    ```typescript
    resolve: {
      alias: {
@@ -121,10 +130,13 @@ TokiForge v1.2.0 includes browser-compatible stubs for Node.js modules. If you e
      },
    },
    ```
+
    - Create stub files in `src/stubs/` (see example projects for reference)
 
 2. **For Angular projects:**
+
    - Add path mappings in `tsconfig.json` and `tsconfig.app.json`:
+
    ```json
    "paths": {
      "module": ["./src/stubs/module.ts"],
@@ -135,7 +147,9 @@ TokiForge v1.2.0 includes browser-compatible stubs for Node.js modules. If you e
      "path": ["./src/stubs/path.ts"]
    }
    ```
+
    - Add to `allowedCommonJsDependencies` in `angular.json`:
+
    ```json
    "allowedCommonJsDependencies": [
      "@tokiforge/core",
@@ -174,7 +188,7 @@ runtime.init(selector, prefix);
 try {
   runtime.init(selector, prefix);
 } catch (err) {
-  console.error('Failed to initialize:', err);
+  console.error("Failed to initialize:", err);
 }
 ```
 
@@ -185,6 +199,7 @@ try {
 **Error:** `useTheme must be used within ThemeProvider`
 
 **Solution:**
+
 ```tsx
 // Wrap app with ThemeProvider
 <ThemeProvider config={config}>
@@ -197,6 +212,7 @@ try {
 **Error:** `useTheme must be used within provideTheme`
 
 **Solution:**
+
 ```vue
 <script setup>
 provideTheme(config);
@@ -212,11 +228,13 @@ const { tokens } = useTheme();
 This issue was fixed in v1.2.0. If you're experiencing this:
 
 1. Ensure you're using the latest version:
+
    ```bash
    npm install @tokiforge/vue@^1.2.0
    ```
 
 2. Clear your node_modules and reinstall:
+
    ```bash
    rm -rf node_modules package-lock.json
    npm install
@@ -235,6 +253,7 @@ This issue was fixed in v1.2.0. If you're experiencing this:
 **Error:** Store not reactive
 
 **Solution:**
+
 ```svelte
 <script>
 const themeStore = createThemeStore(config);
@@ -250,6 +269,7 @@ $themeStore.theme
 **Error:** `TokiForge: command not found`
 
 **Solution:**
+
 ```bash
 # Install globally
 npm install -g tokiforge-cli@^1.2.0
@@ -263,6 +283,7 @@ npx tokiforge-cli@^1.2.0 init
 **Error:** Build fails
 
 **Solution:**
+
 - Check `tokiforge.config.json` exists
 - Verify token file path is correct
 - Run `tokiforge lint` to find issues
@@ -274,6 +295,7 @@ npx tokiforge-cli@^1.2.0 init
 **Problem:** Theme switching is slow
 
 **Solution:**
+
 - Use CSS variables instead of JS tokens
 - Check for unnecessary re-renders
 - Minimize token file size
@@ -283,6 +305,7 @@ npx tokiforge-cli@^1.2.0 init
 **Problem:** Bundle is too large
 
 **Solution:**
+
 - Tree-shake unused exports
 - Use framework adapter only
 - Don't import entire core if not needed
@@ -292,5 +315,3 @@ npx tokiforge-cli@^1.2.0 init
 1. Check [GitHub Issues](https://github.com/TokiForge/tokiforge/issues)
 2. Review [Examples](/examples/react)
 3. See [API Reference](/api/core)
-
-
