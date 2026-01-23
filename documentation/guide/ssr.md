@@ -7,6 +7,112 @@ description: Complete guide to using TokiForge with Next.js, Remix, and other SS
 
 TokiForge is fully SSR-safe and works seamlessly with Next.js, Remix, Astro, and other server-rendered frameworks.
 
+## SSR Utilities
+
+TokiForge provides a comprehensive `SSRUtils` class for server-side rendering that prevents FOUC (Flash of Unstyled Content) and enables hydration-safe theme switching.
+
+### Quick Start with SSRUtils
+
+```typescript
+import { SSRUtils } from "@tokiforge/core";
+
+// Get theme from cookies
+const theme = SSRUtils.getThemeFromCookie(request.headers.get("Cookie"));
+
+// Generate inline CSS and hydration script
+const { style, script } = SSRUtils.generateSSRHead(themeConfig, {
+  theme: theme || "light",
+  minify: true,
+  includeHydrationScript: true,
+});
+
+// In your HTML
+<html data-theme={theme}>
+  <head>
+    <style dangerouslySetInnerHTML={{ __html: style }} />
+    {script && <script dangerouslySetInnerHTML={{ __html: script }} />}
+  </head>
+</html>;
+```
+
+### SSRUtils API
+
+#### generateInlineCSS()
+
+Generate inline CSS for a specific theme:
+
+```typescript
+const css = SSRUtils.generateInlineCSS(themeConfig, {
+  theme: "dark",
+  selector: ":root",
+  prefix: "hf",
+  minify: true,
+});
+```
+
+#### generateCriticalCSS()
+
+Generate CSS for multiple themes (enables theme switching without JavaScript):
+
+```typescript
+const css = SSRUtils.generateCriticalCSS(themeConfig, {
+  themes: ["light", "dark"],
+  includeThemeSelectors: true, // Uses [data-theme="..."]
+  minify: true,
+});
+```
+
+#### getThemeFromCookie()
+
+Extract theme from cookie string:
+
+```typescript
+const theme = SSRUtils.getThemeFromCookie(
+  request.headers.get("Cookie"),
+  "tokiforge-theme"
+);
+```
+
+#### generateThemeCookie()
+
+Create Set-Cookie header:
+
+```typescript
+const cookie = SSRUtils.generateThemeCookie("dark", "tokiforge-theme", {
+  maxAge: 31536000,
+  path: "/",
+  sameSite: "Lax",
+  secure: true,
+});
+
+response.headers.set("Set-Cookie", cookie);
+```
+
+#### generateHydrationScript()
+
+Generate script to apply theme before React hydrates:
+
+```typescript
+const script = SSRUtils.generateHydrationScript(
+  "tokiforge-theme",
+  "theme",
+  "light"
+);
+```
+
+#### generateSSRHead()
+
+All-in-one helper for SSR:
+
+```typescript
+const { style, script } = SSRUtils.generateSSRHead(themeConfig, {
+  theme: "light",
+  cookieName: "tokiforge-theme",
+  includeHydrationScript: true,
+  minify: true,
+});
+```
+
 ## How TokiForge Handles SSR
 
 TokiForge detects the server environment and:
@@ -500,7 +606,7 @@ return (
 
 ## Related Guides
 
-- [Next.js Integration](/guide/nextjs)
+- [Framework Support](/guide/framework-support)
 - [React with TokiForge](/guide/react)
 - [Performance Optimization](/guide/performance-optimization)
 - [Theming Guide](/guide/theming)

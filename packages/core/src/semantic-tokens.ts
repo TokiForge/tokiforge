@@ -1,4 +1,4 @@
-import type { DesignTokens, TokenValue } from './types';
+import type { DesignTokens } from './types';
 
 /**
  * Semantic token layer configuration
@@ -438,7 +438,7 @@ export class SemanticTokenManager {
     const mergedTokens = this.mergeInheritedTokens(layerName);
     const exported: Record<string, any> = {};
 
-    for (const [semanticName, mapping] of Object.entries(mergedTokens)) {
+    for (const [semanticName, _mapping] of Object.entries(mergedTokens)) {
       const resolution = this.resolveSemantic(semanticName, layerName);
       exported[semanticName] = {
         value: resolution.primitiveValue,

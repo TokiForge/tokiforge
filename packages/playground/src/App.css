@@ -49,7 +49,7 @@
 .json-editor {
   width: 100%;
   height: 600px;
-  font-family: 'Monaco', 'Courier New', monospace;
+  font-family: "Monaco", "Courier New", monospace;
   font-size: 14px;
   padding: 1rem;
   border: 2px solid #e5e7eb;
@@ -75,7 +75,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid #e5e7eb;
 }
@@ -89,6 +89,42 @@
   border: 1px solid #e5e7eb;
   border-radius: 4px;
   font-size: 1rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+  overflow-x: auto;
+}
+
+.tab {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: #374151;
+  background: #f9fafb;
+}
+
+.tab.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+  font-weight: 600;
+}
+
+.tab-content {
+  min-height: 400px;
 }
 
 .token-list {
@@ -112,7 +148,7 @@
 }
 
 .token-path {
-  font-family: 'Monaco', monospace;
+  font-family: "Monaco", monospace;
   font-size: 0.875rem;
   color: #6b7280;
   flex: 1;
@@ -178,4 +214,3 @@
     grid-template-columns: 1fr;
   }
 }
-

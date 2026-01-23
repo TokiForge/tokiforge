@@ -2,12 +2,12 @@
 
 **Svelte adapter for TokiForge design token and theming engine. Provides Svelte stores and reactive utilities for easy theme management in Svelte applications.**
 
-Svelte adapter for TokiForge theming (v1.2.0).
+Svelte adapter for TokiForge theming (v2.0.0).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/svelte@^1.2.0 @tokiforge/core@^1.2.0
+npm install @tokiforge/svelte@^2.0.0 @tokiforge/core@^2.0.0
 ```
 
 ## Usage
@@ -45,12 +45,10 @@ npm install @tokiforge/svelte@^1.2.0 @tokiforge/core@^1.2.0
 Creates a Svelte store for theme management.
 
 **Returns:**
+
 - `theme`: Writable store with current theme name
 - `tokens`: Derived store with current theme tokens
 - `setTheme(name)`: Switch to a theme
 - `nextTheme()`: Cycle to next theme
 - `availableThemes`: Derived store with available theme names
 - `runtime`: ThemeRuntime instance
-
-
-

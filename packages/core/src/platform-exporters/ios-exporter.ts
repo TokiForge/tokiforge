@@ -29,7 +29,7 @@ export class IOSExporter {
     options: IOSExportOptions
   ): string {
     const className = options.className || 'DesignTokens';
-    const prefix = options.prefix || '';
+    // const prefix = options.prefix || '';
     const colorFormat = options.colorFormat || 'hex';
 
     const lines: string[] = [];

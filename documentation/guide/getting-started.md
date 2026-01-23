@@ -18,12 +18,12 @@ TokiForge is a modern design token and theming engine that lets you:
 
 ## Installation
 
-> **Version:** TokiForge v1.2.0
+> **Version:** TokiForge v2.0.0
 
 ### Core Package
 
 ```bash
-npm install @tokiforge/core@^1.2.0
+npm install @tokiforge/core@^2.0.0
 ```
 
 ### Framework Adapters
@@ -32,24 +32,24 @@ Choose your framework:
 
 ```bash
 # React
-npm install @tokiforge/react@^1.2.0
+npm install @tokiforge/react@^2.0.0
 
 # Vue
-npm install @tokiforge/vue@^1.2.0
+npm install @tokiforge/vue@^2.0.0
 
 # Angular
-npm install @tokiforge/angular@^1.2.0
+npm install @tokiforge/angular@^2.0.0
 
 # Svelte
-npm install @tokiforge/svelte@^1.2.0
+npm install @tokiforge/svelte@^2.0.0
 ```
 
 ### CLI Tool
 
 ```bash
-npm install -g tokiforge-cli@^1.2.0
+npm install -g tokiforge-cli@^2.0.0
 # or
-npx tokiforge-cli@^1.2.0 init
+npx tokiforge-cli@^2.0.0 init
 ```
 
 ## Quick Example
@@ -80,14 +80,14 @@ Create a `tokens.json` file:
 **React:**
 
 ```tsx
-import { ThemeProvider, useTheme } from '@tokiforge/react';
+import { ThemeProvider, useTheme } from "@tokiforge/react";
 
 const themeConfig = {
   themes: [
-    { name: 'light', tokens: tokens },
-    { name: 'dark', tokens: darkTokens },
+    { name: "light", tokens: tokens },
+    { name: "dark", tokens: darkTokens },
   ],
-  defaultTheme: 'light',
+  defaultTheme: "light",
 };
 
 function App() {
@@ -106,7 +106,7 @@ function Button() {
         backgroundColor: tokens.color.primary,
         borderRadius: tokens.radius.lg,
       }}
-      onClick={() => setTheme('dark')}
+      onClick={() => setTheme("dark")}
     >
       Switch Theme
     </button>
@@ -118,10 +118,10 @@ function Button() {
 
 ```vue
 <script setup>
-import { provideTheme, useTheme } from '@tokiforge/vue';
+import { provideTheme, useTheme } from "@tokiforge/vue";
 
 provideTheme(themeConfig, {
-  mode: 'static', // Zero JS overhead
+  mode: "static", // Zero JS overhead
   persist: true,
 });
 const { tokens, setTheme } = useTheme();
@@ -143,11 +143,11 @@ const { tokens, setTheme } = useTheme();
 **Angular:**
 
 ```typescript
-import { Component, OnInit, inject } from '@angular/core';
-import { ThemeService } from '@tokiforge/angular';
+import { Component, OnInit, inject } from "@angular/core";
+import { ThemeService } from "@tokiforge/angular";
 
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   template: `
     <button
       [style.backgroundColor]="themeService.tokens().color?.primary?.value"
@@ -155,14 +155,14 @@ import { ThemeService } from '@tokiforge/angular';
     >
       Switch Theme
     </button>
-  `
+  `,
 })
 export class AppComponent implements OnInit {
   themeService = inject(ThemeService);
 
   ngOnInit() {
     this.themeService.init(themeConfig, {
-      mode: 'static', // Zero JS overhead
+      mode: "static", // Zero JS overhead
       persist: true,
     });
   }
@@ -192,5 +192,3 @@ const themeStore = createThemeStore(themeConfig);
 - Check out [Framework Guides](/guide/react) for framework-specific instructions
 - Explore [Examples](/examples/react) to see TokiForge in action
 - Learn about [Core Concepts](/guide/core-concepts) to understand how it works
-
-

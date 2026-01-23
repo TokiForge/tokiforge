@@ -2,7 +2,7 @@
 
 This is a complete example demonstrating how to use TokiForge with Vue 3.
 
-> **TokiForge v1.2.0** | **Vue 3+**
+> **TokiForge v2.0.0** | **Vue 3+**
 
 ## Setup
 
@@ -65,14 +65,14 @@ This example demonstrates:
 
 ```vue
 <script setup lang="ts">
-import { provideTheme } from '@tokiforge/vue';
+import { provideTheme } from "@tokiforge/vue";
 
 const themeConfig = {
   themes: [
-    { name: 'light', tokens: lightTokens },
-    { name: 'dark', tokens: darkTokens },
+    { name: "light", tokens: lightTokens },
+    { name: "dark", tokens: darkTokens },
   ],
-  defaultTheme: 'light',
+  defaultTheme: "light",
 };
 
 provideTheme(themeConfig);
@@ -83,7 +83,7 @@ provideTheme(themeConfig);
 
 ```vue
 <script setup lang="ts">
-import { useTheme } from '@tokiforge/vue';
+import { useTheme } from "@tokiforge/vue";
 
 const { theme, tokens, setTheme } = useTheme();
 </script>
@@ -99,4 +99,3 @@ const { theme, tokens, setTheme } = useTheme();
 }
 </style>
 ```
-

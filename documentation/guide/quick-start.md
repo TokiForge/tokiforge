@@ -5,14 +5,14 @@ description: Get started with TokiForge in minutes. Quick installation, basic us
 
 # Quick Start
 
-> **TokiForge v1.2.0**
+> **TokiForge v2.0.0**
 
 Get up and running with TokiForge in 5 minutes!
 
 ## Step 1: Install
 
 ```bash
-npm install @tokiforge/core@^1.2.0 @tokiforge/react@^1.2.0
+npm install @tokiforge/core@^2.0.0 @tokiforge/react@^2.0.0
 ```
 
 ## Step 2: Create Tokens
@@ -34,13 +34,11 @@ Create `tokens.json`:
 ## Step 3: Use in Your App
 
 ```tsx
-import { ThemeProvider, useTheme } from '@tokiforge/react';
+import { ThemeProvider, useTheme } from "@tokiforge/react";
 
 const themeConfig = {
-  themes: [
-    { name: 'light', tokens: tokens },
-  ],
-  defaultTheme: 'light',
+  themes: [{ name: "light", tokens: tokens }],
+  defaultTheme: "light",
 };
 
 function App() {
@@ -72,19 +70,17 @@ function Button() {
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   return (
-    <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+    <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
       Toggle Theme
     </button>
   );
 }
 ```
 
-That's it! 🎉
+That's it!
 
 ## Next Steps
 
 - Learn about [Core Concepts](/guide/core-concepts)
 - See [Framework Guides](/guide/react)
 - Check [Examples](/examples/react)
-
-

@@ -5,14 +5,14 @@ description: Complete guide to using TokiForge with Vue 3. Learn how to use prov
 
 # Vue Guide
 
-> **TokiForge v1.2.0** | **Vue 3+**
+> **TokiForge v2.0.0** | **Vue 3+**
 
 Complete guide to using TokiForge with Vue 3.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/vue@^1.2.0 @tokiforge/core@^1.2.0
+npm install @tokiforge/vue@^2.0.0 @tokiforge/core@^2.0.0
 ```
 
 ## Setup
@@ -23,14 +23,14 @@ Use `provideTheme` to make themes available:
 
 ```vue
 <script setup>
-import { provideTheme } from '@tokiforge/vue';
+import { provideTheme } from "@tokiforge/vue";
 
 const themeConfig = {
   themes: [
-    { name: 'light', tokens: lightTokens },
-    { name: 'dark', tokens: darkTokens },
+    { name: "light", tokens: lightTokens },
+    { name: "dark", tokens: darkTokens },
   ],
-  defaultTheme: 'light',
+  defaultTheme: "light",
 };
 
 provideTheme(themeConfig);
@@ -43,7 +43,7 @@ Access theme data with `useTheme`:
 
 ```vue
 <script setup>
-import { useTheme } from '@tokiforge/vue';
+import { useTheme } from "@tokiforge/vue";
 
 const { tokens, theme, setTheme, availableThemes } = useTheme();
 </script>
@@ -56,10 +56,12 @@ const { tokens, theme, setTheme, availableThemes } = useTheme();
 Provides theme context to Vue components.
 
 **Parameters:**
+
 - `config: ThemeConfig` - Theme configuration
 - `options?: ProvideThemeOptions` - Configuration options
 
 **Options:**
+
 - `mode?: 'dynamic' | 'static'` - Theme mode (default: `'dynamic'`)
   - `'dynamic'`: Runtime CSS injection (default)
   - `'static'`: Body class-based (zero JS overhead)
@@ -77,6 +79,7 @@ Provides theme context to Vue components.
 Composable to access theme context.
 
 **Returns:**
+
 ```typescript
 {
   theme: Ref<string>;                    // Current theme name
@@ -101,13 +104,13 @@ Composable to access theme context.
 </template>
 
 <script setup>
-import { provideTheme, useTheme } from '@tokiforge/vue';
+import { provideTheme, useTheme } from "@tokiforge/vue";
 
 provideTheme(themeConfig);
 const { theme, setTheme } = useTheme();
 
 const toggleTheme = () => {
-  setTheme(theme.value === 'light' ? 'dark' : 'light');
+  setTheme(theme.value === "light" ? "dark" : "light");
 };
 </script>
 ```
@@ -127,7 +130,7 @@ const toggleTheme = () => {
 </template>
 
 <script setup>
-import { provideTheme, useTheme } from '@tokiforge/vue';
+import { provideTheme, useTheme } from "@tokiforge/vue";
 
 provideTheme(themeConfig);
 const { tokens } = useTheme();
@@ -138,9 +141,7 @@ const { tokens } = useTheme();
 
 ```vue
 <template>
-  <div class="card">
-    Content
-  </div>
+  <div class="card">Content</div>
 </template>
 
 <style scoped>
@@ -158,11 +159,11 @@ const { tokens } = useTheme();
 Full TypeScript support:
 
 ```typescript
-import type { ThemeConfig, DesignTokens } from '@tokiforge/vue';
-import { provideTheme, useTheme } from '@tokiforge/vue';
+import type { ThemeConfig, DesignTokens } from "@tokiforge/vue";
+import { provideTheme, useTheme } from "@tokiforge/vue";
 
 const themeConfig: ThemeConfig = {
-  themes: [{ name: 'light', tokens: lightTokens }],
+  themes: [{ name: "light", tokens: lightTokens }],
 };
 
 provideTheme(themeConfig);
@@ -176,11 +177,11 @@ For best performance, use static mode with body classes:
 
 ```vue
 <script setup>
-import { provideTheme } from '@tokiforge/vue';
+import { provideTheme } from "@tokiforge/vue";
 
 provideTheme(themeConfig, {
-  mode: 'static',        // Use body classes
-  persist: true,         // Auto-save preference
+  mode: "static", // Use body classes
+  persist: true, // Auto-save preference
   watchSystemTheme: true, // Follow system theme
 });
 </script>
@@ -188,18 +189,19 @@ provideTheme(themeConfig, {
 <style>
 /* CSS variables scoped by body class */
 body.theme-light {
-  --hf-color-background-default: #FFFFFF;
-  --hf-color-text-primary: #1E293B;
+  --hf-color-background-default: #ffffff;
+  --hf-color-text-primary: #1e293b;
 }
 
 body.theme-dark {
-  --hf-color-background-default: #0F172A;
-  --hf-color-text-primary: #F8FAFC;
+  --hf-color-background-default: #0f172a;
+  --hf-color-text-primary: #f8fafc;
 }
 </style>
 ```
 
 Benefits:
+
 - ✅ Zero JavaScript overhead
 - ✅ Automatic localStorage persistence
 - ✅ System theme detection
@@ -211,15 +213,15 @@ Generate CSS files at build time:
 
 ```javascript
 // generate-themes.js
-import { generateCombinedThemeCSS } from '@tokiforge/vue';
-import { writeFileSync } from 'fs';
+import { generateCombinedThemeCSS } from "@tokiforge/vue";
+import { writeFileSync } from "fs";
 
 const css = generateCombinedThemeCSS(themeConfig, {
-  bodyClassPrefix: 'theme',
-  prefix: 'hf',
+  bodyClassPrefix: "theme",
+  prefix: "hf",
 });
 
-writeFileSync('src/themes/generated.css', css);
+writeFileSync("src/themes/generated.css", css);
 ```
 
 ## Best Practices
@@ -236,5 +238,3 @@ writeFileSync('src/themes/generated.css', css);
 - See [Vue Example](/examples/vue) for complete example
 - Check [API Reference](/api/vue) for full API docs
 - Learn about [Advanced Theming](/guide/theming)
-
-

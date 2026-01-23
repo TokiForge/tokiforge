@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm, yarn, or pnpm
 
 ## Package Installation
@@ -17,7 +17,7 @@ The core package is required for all TokiForge functionality:
 npm install @tokiforge/core@^1.2.0
 ```
 
-> **Note:** TokiForge v1.2.0 includes browser-compatible builds. For browser environments, Node.js-specific features (like `TokenParser.parse()` for file reading) are automatically handled with stubs. See [Troubleshooting](/guide/troubleshooting#browser-build-errors) for build configuration details.
+> **Note:** TokiForge v2.0.0 includes browser-compatible builds. For browser environments, Node.js-specific features (like `TokenParser.parse()` for file reading) are automatically handled with stubs. See [Troubleshooting](/guide/troubleshooting#browser-build-errors) for build configuration details.
 
 ### Framework Adapters
 
@@ -60,13 +60,13 @@ Requires Angular 17.0+.
 Install globally for easy access:
 
 ```bash
-npm install -g tokiforge-cli@^1.2.0
+npm install -g tokiforge-cli@^2.0.0
 ```
 
-Or use with `npx`:
+Or use with npx:
 
 ```bash
-npx tokiforge-cli@^1.2.0 init
+npx tokiforge-cli@^2.0.0 init
 ```
 
 ## TypeScript Support
@@ -79,12 +79,12 @@ For vanilla JavaScript projects, you can use the core package via CDN:
 
 ```html
 <script type="module">
-  import { ThemeRuntime } from 'https://cdn.jsdelivr.net/npm/@tokiforge/core@1.2.0/dist/index.js';
-  
+  import { ThemeRuntime } from "https://cdn.jsdelivr.net/npm/@tokiforge/core@2.0.0/dist/index.js";
+
   const runtime = new ThemeRuntime({
-    themes: [{ name: 'default', tokens: myTokens }],
+    themes: [{ name: "default", tokens: myTokens }],
   });
-  
+
   runtime.init();
 </script>
 ```
@@ -96,7 +96,7 @@ For vanilla JavaScript projects, you can use the core package via CDN:
 ### React
 
 ```tsx
-import { ThemeProvider } from '@tokiforge/react';
+import { ThemeProvider } from "@tokiforge/react";
 
 // Wrap your app
 function App() {
@@ -112,7 +112,7 @@ function App() {
 
 ```vue
 <script setup>
-import { provideTheme } from '@tokiforge/vue';
+import { provideTheme } from "@tokiforge/vue";
 
 provideTheme(themeConfig);
 </script>
@@ -155,7 +155,7 @@ If you get module not found errors:
 
 If you get `Failed to resolve entry for package "@tokiforge/vue"`:
 
-1. Ensure you're using v1.2.0 or later: `npm install @tokiforge/vue@^1.2.0`
+1. Ensure you're using v2.0.0 or later: `npm install @tokiforge/vue@^2.0.0`
 2. Clear node_modules and reinstall: `rm -rf node_modules package-lock.json && npm install`
 3. See [Troubleshooting Guide](/guide/troubleshooting#vue-package-resolution-error) for details
 
@@ -174,5 +174,3 @@ If you encounter build errors:
 1. Make sure all dependencies are installed
 2. Check that you're using compatible versions
 3. See the [Troubleshooting Guide](/guide/troubleshooting) for more help
-
-

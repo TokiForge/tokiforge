@@ -95,8 +95,8 @@ npm install @tokiforge/core
 **2. Use in React:**
 
 ```tsx
-import { ThemeProvider, useToken } from '@tokiforge/react';
-import tokens from './tokens.json';
+import { ThemeProvider, useToken } from "@tokiforge/react";
+import tokens from "./tokens.json";
 
 function App() {
   return (
@@ -107,10 +107,10 @@ function App() {
 }
 
 function Button() {
-  const primaryColor = useToken('color.primary');
-  const spacing = useToken('spacing.md');
-  const radius = useToken('radius.lg');
-  
+  const primaryColor = useToken("color.primary");
+  const spacing = useToken("spacing.md");
+  const radius = useToken("radius.lg");
+
   return (
     <button
       style={{
@@ -128,14 +128,16 @@ function Button() {
 **3. Switch themes at runtime:**
 
 ```tsx
-import { useTheme } from '@tokiforge/react';
+import { useTheme } from "@tokiforge/react";
 
 function ThemeSwitcher() {
   const { setTheme, currentTheme } = useTheme();
-  
+
   return (
-    <button onClick={() => setTheme(currentTheme === 'light' ? 'dark' : 'light')}>
-      Switch to {currentTheme === 'light' ? 'dark' : 'light'} mode
+    <button
+      onClick={() => setTheme(currentTheme === "light" ? "dark" : "light")}
+    >
+      Switch to {currentTheme === "light" ? "dark" : "light"} mode
     </button>
   );
 }
@@ -147,27 +149,27 @@ function ThemeSwitcher() {
 
 ## Why TokiForge?
 
-| Feature | TokiForge | Others |
-|---------|-----------|--------|
-| Runtime theme switching | ✅ | ⚠️ Often requires rebuild |
-| Framework-agnostic | ✅ | ❌ Usually framework-specific |
-| TypeScript support | ✅ | ⚠️ Partial or manual |
-| Bundle size | ✅ <3KB | ❌ Often larger |
-| CSS custom properties | ✅ | ⚠️ JS-heavy runtime |
-| Zero JS overhead (static mode) | ✅ | ❌ Always requires JS |
+| Feature                        | TokiForge | Others                     |
+| ------------------------------ | --------- | -------------------------- |
+| Runtime theme switching        | Yes       | Often requires rebuild     |
+| Framework-agnostic             | Yes       | Usually framework-specific |
+| TypeScript support             | Yes       | Partial or manual          |
+| Bundle size                    | <3KB      | Often larger               |
+| CSS custom properties          | Yes       | JS-heavy runtime           |
+| Zero JS overhead (static mode) | Yes       | Always requires JS         |
 
 ---
 
 ## Packages
 
-| Package | Description | npm |
-|---------|-------------|-----|
-| `@tokiforge/core` | Core engine (works with any framework) | [![npm](https://img.shields.io/npm/v/@tokiforge/core)](https://www.npmjs.com/package/@tokiforge/core) |
-| `@tokiforge/react` | React adapter with hooks | [![npm](https://img.shields.io/npm/v/@tokiforge/react)](https://www.npmjs.com/package/@tokiforge/react) |
-| `@tokiforge/vue` | Vue 3 composables | [![npm](https://img.shields.io/npm/v/@tokiforge/vue)](https://www.npmjs.com/package/@tokiforge/vue) |
-| `@tokiforge/angular` | Angular service with Signals | [![npm](https://img.shields.io/npm/v/@tokiforge/angular)](https://www.npmjs.com/package/@tokiforge/angular) |
-| `@tokiforge/svelte` | Svelte stores | [![npm](https://img.shields.io/npm/v/@tokiforge/svelte)](https://www.npmjs.com/package/@tokiforge/svelte) |
-| `tokiforge-cli` | CLI tool for token management | [![npm](https://img.shields.io/npm/v/tokiforge-cli)](https://www.npmjs.com/package/tokiforge-cli) |
+| Package              | Description                            | npm                                                                                                         |
+| -------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `@tokiforge/core`    | Core engine (works with any framework) | [![npm](https://img.shields.io/npm/v/@tokiforge/core)](https://www.npmjs.com/package/@tokiforge/core)       |
+| `@tokiforge/react`   | React adapter with hooks               | [![npm](https://img.shields.io/npm/v/@tokiforge/react)](https://www.npmjs.com/package/@tokiforge/react)     |
+| `@tokiforge/vue`     | Vue 3 composables                      | [![npm](https://img.shields.io/npm/v/@tokiforge/vue)](https://www.npmjs.com/package/@tokiforge/vue)         |
+| `@tokiforge/angular` | Angular service with Signals           | [![npm](https://img.shields.io/npm/v/@tokiforge/angular)](https://www.npmjs.com/package/@tokiforge/angular) |
+| `@tokiforge/svelte`  | Svelte stores                          | [![npm](https://img.shields.io/npm/v/@tokiforge/svelte)](https://www.npmjs.com/package/@tokiforge/svelte)   |
+| `tokiforge-cli`      | CLI tool for token management          | [![npm](https://img.shields.io/npm/v/tokiforge-cli)](https://www.npmjs.com/package/tokiforge-cli)           |
 
 ---
 
@@ -204,7 +206,7 @@ function ThemeSwitcher() {
 ### React
 
 ```tsx
-import { ThemeProvider, useToken } from '@tokiforge/react';
+import { ThemeProvider, useToken } from "@tokiforge/react";
 
 function App() {
   return (
@@ -219,9 +221,9 @@ function App() {
 
 ```vue
 <script setup>
-import { useToken } from '@tokiforge/vue';
+import { useToken } from "@tokiforge/vue";
 
-const primaryColor = useToken('color.primary');
+const primaryColor = useToken("color.primary");
 </script>
 ```
 
@@ -247,11 +249,11 @@ constructor(private themeService: ThemeService) {
 ### Vanilla JS
 
 ```javascript
-import { ThemeRuntime } from '@tokiforge/core';
+import { ThemeRuntime } from "@tokiforge/core";
 
 const runtime = new ThemeRuntime(tokens);
-const primaryColor = runtime.getToken('color.primary');
-runtime.applyTheme('dark');
+const primaryColor = runtime.getToken("color.primary");
+runtime.applyTheme("dark");
 ```
 
 **[View complete examples →](./examples)**
@@ -345,43 +347,50 @@ npm test
 <summary><b>What is TokiForge?</b></summary>
 
 TokiForge is a framework-agnostic design token and theming engine that enables runtime theme switching using CSS custom properties. It works with React, Vue, Svelte, Angular, and any other JavaScript framework.
+
 </details>
 
 <details>
 <summary><b>How does TokiForge compare to Style Dictionary?</b></summary>
 
 TokiForge provides runtime theme switching capabilities that Style Dictionary doesn't offer. While Style Dictionary focuses on build-time token transformation, TokiForge adds a lightweight runtime engine (<3KB) for dynamic theme management.
+
 </details>
 
 <details>
 <summary><b>Does TokiForge support dark mode?</b></summary>
 
 Yes! TokiForge has built-in support for light/dark themes and can automatically generate dark themes from light theme tokens.
+
 </details>
 
 <details>
 <summary><b>Is TokiForge production-ready?</b></summary>
 
 Yes, TokiForge is production-ready with support for React, Vue, Svelte, and Angular. It's optimized for performance with a <3KB gzipped runtime footprint.
+
 </details>
 
 <details>
 <summary><b>Can I use TokiForge with TypeScript?</b></summary>
 
 Absolutely! TokiForge is written in TypeScript and provides full type safety for design tokens and theme configurations.
+
 </details>
 
 <details>
 <summary><b>Does TokiForge work with SSR?</b></summary>
 
 Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other SSR frameworks.
+
 </details>
 
 ---
 
 ## Roadmap
 
-### Completed (v1.2.0)
+### Completed (v2.0.0)
+
 - [x] Core engine + React adapter
 - [x] Vue/Svelte/Angular adapters
 - [x] CLI tooling
@@ -397,8 +406,15 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 - [x] Versioned token registry
 - [x] IDE support (API ready)
 - [x] Tailwind CSS integration
+- [x] Performance optimization (caching, lazy loading, compression)
+- [x] Advanced accessibility (high contrast, reduced motion, color blind modes)
+- [x] Advanced token features (functions, expressions, references, scoping)
+- [x] Integrations (Storybook, Figma, design tools)
+- [x] Next.js 14+, Remix, Astro, Solid, SvelteKit support
+- [x] SSR utilities with FOUC prevention
 
-### In Progress (v1.2.0+)
+### In Progress (v2.0.0+)
+
 - [ ] Enhanced semantic tokens & aliasing
 - [ ] Multi-platform exporters (iOS, Android, React Native)
 - [ ] Type generation CLI (`generate:types`)
@@ -408,6 +424,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 - [ ] Enhanced Figma integration (Tokens Studio)
 
 ### Planned
+
 - [ ] VS Code extension
 - [ ] Visual playground enhancements
 - [ ] CI/Visual regression integration

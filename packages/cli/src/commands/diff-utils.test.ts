@@ -1,6 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import * as fs from 'fs';
-import * as path from 'path';
+import { describe, it, expect } from 'vitest';
 import {
   compareTokens,
   formatDiffOutput,
@@ -10,7 +8,7 @@ import {
   flattenKeys,
   getNestedValue,
   setNestedValue
-} from './diff-utils';
+} from './diff-utils.js';
 
 describe('diff-utils', () => {
   const mockOldTokens = {
@@ -55,7 +53,7 @@ describe('diff-utils', () => {
 
     it('should detect changed tokens', () => {
       const diff = compareTokens(mockOldTokens, mockNewTokens);
-      const changedPaths = diff.changed.map(c => c.path);
+      const changedPaths = diff.changed.map((c: { path: string }) => c.path);
       expect(changedPaths).toContain('color.primary');
     });
 
@@ -71,7 +69,7 @@ describe('diff-utils', () => {
     it('should detect removed tokens as breaking changes', () => {
       const diff = compareTokens(mockOldTokens, mockNewTokens);
       const breaking = detectBreakingChanges(diff);
-      expect(breaking.some(b => b.includes('color.success'))).toBe(true);
+      expect(breaking.some((b: string) => b.includes('color.success'))).toBe(true);
     });
 
     it('should detect significant value changes', () => {
@@ -90,7 +88,7 @@ describe('diff-utils', () => {
       const newTokens = { color: { brand: '#007bff' } };
       const diff = compareTokens(oldTokens, newTokens);
       const suggestions = generateMigrationSuggestions(diff, oldTokens, newTokens);
-      expect(suggestions.some(s => s.type === 'renamed')).toBe(true);
+      expect(suggestions.some((s: { type: string }) => s.type === 'renamed')).toBe(true);
     });
 
     it('should generate replacement suggestions', () => {

@@ -130,7 +130,7 @@ export class ReactNativeExporter {
   /**
    * Export as JavaScript React Native theme object
    */
-  private static exportJavaScript(tokens: DesignTokens, includeTheme: boolean): string {
+  private static exportJavaScript(tokens: DesignTokens, _includeTheme: boolean): string {
     const lines: string[] = [];
 
     lines.push("import { StyleSheet } from 'react-native';\n");

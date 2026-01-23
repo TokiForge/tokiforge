@@ -1,8 +1,8 @@
-# Release v1.2.1 - Implementation Summary
+# Release v2.0.0 - Major Release
 
 ## Overview
 
-This release introduces automated release management with Changesets and comprehensive CI/CD workflows to streamline future releases.
+TokiForge 2.0.0 is a major milestone release marking the production-ready status of the design token and theming engine. This release consolidates all features from v1.x series and introduces comprehensive framework support, advanced accessibility features, and enterprise-grade developer tools.
 
 ## Changes Implemented
 

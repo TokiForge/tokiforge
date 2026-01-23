@@ -13,14 +13,24 @@ npm install @tokiforge/solid @tokiforge/core solid-js
 ### Basic Setup
 
 ```tsx
-import { ThemeProvider, useTheme } from '@tokiforge/solid';
+import { ThemeProvider, useTheme } from "@tokiforge/solid";
 
 const config = {
   themes: [
-    { name: 'light', tokens: { /* ... */ } },
-    { name: 'dark', tokens: { /* ... */ } },
+    {
+      name: "light",
+      tokens: {
+        /* ... */
+      },
+    },
+    {
+      name: "dark",
+      tokens: {
+        /* ... */
+      },
+    },
   ],
-  defaultTheme: 'light',
+  defaultTheme: "light",
 };
 
 function App() {
@@ -35,7 +45,7 @@ function App() {
 ### Using Theme Context
 
 ```tsx
-import { useTheme } from '@tokiforge/solid';
+import { useTheme } from "@tokiforge/solid";
 
 function ThemeSwitcher() {
   const { theme, setTheme, availableThemes } = useTheme();
@@ -45,9 +55,7 @@ function ThemeSwitcher() {
       <p>Current theme: {theme()}</p>
       <For each={availableThemes()}>
         {(themeName) => (
-          <button onClick={() => setTheme(themeName)}>
-            {themeName}
-          </button>
+          <button onClick={() => setTheme(themeName)}>{themeName}</button>
         )}
       </For>
     </div>
@@ -58,15 +66,15 @@ function ThemeSwitcher() {
 ### Using Standalone (without Provider)
 
 ```tsx
-import { createTheme } from '@tokiforge/solid';
+import { createTheme } from "@tokiforge/solid";
 
 function MyComponent() {
   const { theme, tokens, setTheme } = createTheme(config);
 
   return (
     <div>
-      <p>Theme: {theme()}</p> 
-      <button onClick={() => setTheme('dark')}>Dark Mode</button>
+      <p>Theme: {theme()}</p>
+      <button onClick={() => setTheme("dark")}>Dark Mode</button>
     </div>
   );
 }
@@ -85,6 +93,7 @@ Creates a reactive theme context.
 Context provider component.
 
 **Props:**
+
 - `config`: Theme configuration
 - `options?`: Theme options
 - `children`: Child components
@@ -97,11 +106,11 @@ Hook to access theme context.
 
 ## Features
 
-- ✅ Signal-based reactivity
-- ✅ SSR-safe initialization
-- ✅ Theme persistence (localStorage)
-- ✅ System theme detection
-- ✅ TypeScript support
+- Signal-based reactivity
+- SSR-safe initialization
+- Theme persistence (localStorage)
+- System theme detection
+- TypeScript support
 
 ## License
 

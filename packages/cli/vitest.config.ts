@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config';
+import path from 'path';
 
 export default defineConfig({
   test: {
@@ -14,6 +15,11 @@ export default defineConfig({
         '**/*.test.ts',
         '**/*.spec.ts',
       ],
+    },
+  },
+  resolve: {
+    alias: {
+      '@tokiforge/core': path.resolve(__dirname, '../core/src'),
     },
   },
 });

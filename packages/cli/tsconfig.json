@@ -2,11 +2,14 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@tokiforge/core": ["../../packages/core/src/index.ts"],
+      "@tokiforge/figma": ["../../packages/figma/src/index.ts"],
+      "@tokiforge/tailwind": ["../../packages/tailwind/src/index.ts"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

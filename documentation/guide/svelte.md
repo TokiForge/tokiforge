@@ -5,14 +5,14 @@ description: Complete guide to using TokiForge with Svelte. Learn how to use cre
 
 # Svelte Guide
 
-> **TokiForge v1.2.0**
+> **TokiForge v2.0.0**
 
 Complete guide to using TokiForge with Svelte.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/svelte@^1.2.0 @tokiforge/core@^1.2.0
+npm install @tokiforge/svelte@^2.0.0 @tokiforge/core@^2.0.0
 ```
 
 ## Setup
@@ -60,6 +60,7 @@ Access theme data using Svelte's reactive syntax:
 Creates a reactive theme store.
 
 **Parameters:**
+
 - `config: ThemeConfig` - Theme configuration
 - `selector?: string` - CSS selector (default: `:root`)
 - `prefix?: string` - CSS variable prefix (default: `hf`)
@@ -156,11 +157,11 @@ Creates a reactive theme store.
 Full TypeScript support:
 
 ```typescript
-import { createThemeStore } from '@tokiforge/svelte';
-import type { ThemeConfig } from '@tokiforge/core';
+import { createThemeStore } from "@tokiforge/svelte";
+import type { ThemeConfig } from "@tokiforge/core";
 
 const themeConfig: ThemeConfig = {
-  themes: [{ name: 'light', tokens: lightTokens }],
+  themes: [{ name: "light", tokens: lightTokens }],
 };
 
 const themeStore = createThemeStore(themeConfig);
@@ -179,4 +180,3 @@ const themeStore = createThemeStore(themeConfig);
 - See [Svelte Example](/examples/svelte) for complete example
 - Check [API Reference](/api/svelte) for full API docs
 - Learn about [Advanced Theming](/guide/theming)
-

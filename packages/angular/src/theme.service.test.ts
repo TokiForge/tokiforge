@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { ThemeService } from './theme.service';
 import type { ThemeConfig, DesignTokens } from '@tokiforge/core';
+import { TestBed } from '@angular/core/testing';
 
 function createThemeService(): ThemeService {
   const service = new (ThemeService as any)();

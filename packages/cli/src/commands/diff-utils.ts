@@ -2,8 +2,6 @@
  * Utilities for enhanced token diff visualization and analysis
  */
 
-import * as fs from 'fs';
-
 export interface DiffResult {
   added: string[];
   removed: string[];
@@ -75,7 +73,6 @@ export function detectBreakingChanges(diff: DiffResult): string[] {
  */
 export function generateMigrationSuggestions(diff: DiffResult, oldTokens: Record<string, any>, newTokens: Record<string, any>): MigrationSuggestion[] {
   const suggestions: MigrationSuggestion[] = [];
-  const usedOldTokens = new Set(Object.keys(oldTokens));
 
   // Find renamed tokens by similar structure/values
   diff.removed.forEach(oldPath => {

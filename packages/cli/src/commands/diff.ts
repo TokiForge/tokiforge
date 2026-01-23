@@ -6,8 +6,9 @@ import {
   formatMigrationSuggestions,
   generateMigrationSuggestions,
   detectBreakingChanges,
-  type DiffResult
-} from './diff-utils';
+  type DiffResult,
+  type MigrationSuggestion
+} from './diff-utils.js';
 
 export interface DiffOptions {
   format?: 'compact' | 'detailed' | 'json';
@@ -84,7 +85,7 @@ export async function diffCommand(
     const breakingChanges = detectBreakingChanges(diff);
     if (breakingChanges.length > 0) {
       console.log(`\n⚠️  Breaking Changes Detected (${breakingChanges.length}):\n`);
-      breakingChanges.forEach(change => {
+      breakingChanges.forEach((change: string) => {
         console.log(`  • ${change}`);
       });
       console.log('');
@@ -97,6 +98,7 @@ export async function diffCommand(
 
     // Write output to file if specified
     if (options.output) {
+      const suggestions: MigrationSuggestion[] = [];
       const report = generateReport(diff, breakingChanges, suggestions);
       fs.writeFileSync(options.output, report);
       console.log(`📝 Report saved to: ${options.output}\n`);
@@ -118,7 +120,11 @@ function outputJsonDiff(diff: DiffResult): void {
 /**
  * Generate a comprehensive diff report
  */
-function generateReport(diff: DiffResult, breakingChanges: string[], suggestions: any[]): string {
+function generateReport(
+  diff: DiffResult,
+  breakingChanges: string[],
+  suggestions: MigrationSuggestion[]
+): string {
   const lines: string[] = [
     '# Token Diff Report',
     `Generated: ${new Date().toISOString()}`,
@@ -133,19 +139,19 @@ function generateReport(diff: DiffResult, breakingChanges: string[], suggestions
 
   if (diff.added.length > 0) {
     lines.push('## Added Tokens');
-    diff.added.forEach(token => lines.push(`- ${token}`));
+    diff.added.forEach((token: string) => lines.push(`- ${token}`));
     lines.push('');
   }
 
   if (diff.removed.length > 0) {
     lines.push('## Removed Tokens');
-    diff.removed.forEach(token => lines.push(`- ${token}`));
+    diff.removed.forEach((token: string) => lines.push(`- ${token}`));
     lines.push('');
   }
 
   if (diff.changed.length > 0) {
     lines.push('## Changed Tokens');
-    diff.changed.forEach(({ path: tokenPath, old: oldVal, new: newVal }) => {
+    diff.changed.forEach(({ path: tokenPath, old: oldVal, new: newVal }: { path: string; old: string; new: string }) => {
       lines.push(`- ${tokenPath}: ${oldVal} → ${newVal}`);
     });
     lines.push('');

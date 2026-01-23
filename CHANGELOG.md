@@ -5,9 +5,111 @@ All notable changes to TokiForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-01-23
+
+### Major Release Highlights
+
+TokiForge 2.0.0 is a major milestone release that brings together all the powerful features developed in v1.x into a stable, production-ready package. This release marks the maturity of TokiForge as a comprehensive design token and theming solution.
+
+### Complete Feature Set
+
+#### **Performance & Optimization**
+
+- **Caching System**: Multi-tier caching with Memory, localStorage, IndexedDB, and Service Worker strategies
+- **Lazy Loading**: Progressive token chunk loading with CDN support and preloading
+- **Compression**: Built-in Gzip and Brotli compression for optimized bundle sizes
+- **Bundle Size**: Core package remains under 3KB gzipped
+
+#### **Accessibility Features**
+
+- **High Contrast Mode**: Automatic WCAG AAA compliance with system preference detection
+- **Reduced Motion**: Respects user motion preferences with automatic CSS injection
+- **Color Blind Support**: Protanopia, deuteranopia, and tritanopia color transformations
+- **Font Scaling**: System preference detection with manual scaling controls
+- **WCAG Compliance**: Built-in contrast checking and validation
+
+#### **Advanced Token Features**
+
+- **Token Functions**: Color functions (`darken`, `lighten`, `mix`, `alpha`) and math operations
+- **Expressions**: Mathematical expressions with CSS `calc()` support
+- **Smart References**: Token references with fallback chains (`{token.path || fallback}`)
+- **Token Scoping**: Component-level token isolation and management
+- **Theming API**: Fluent builder pattern for programmatic theme creation
+- **Validation Plugins**: Custom validation rules with plugin system
+- **Transformation Pipeline**: Chainable token transformations before export
+
+#### **Framework Support**
+
+- **React**: Full hooks support with `useTheme`, `useToken`, and `ThemeProvider`
+- **Vue 3**: Composition API with `useTheme` and `useToken` composables
+- **Svelte 5**: Reactive stores with full Runes support
+- **Angular 17+**: Signals-based reactivity with dependency injection
+- **Next.js 14+**: App Router with SSR utilities and `<ThemeScript>`
+- **Remix**: Server-side rendering with cookie-based persistence
+- **Astro**: Static site generation with island architecture support
+- **Solid.js**: Fine-grained reactivity with signal-based theming
+- **SvelteKit**: Full-stack framework support with SSR
+
+#### **Developer Tools**
+
+- **Powerful CLI**: Initialize, build, validate, analyze, diff, and watch tokens
+- **TypeScript Support**: Full type safety with autocomplete and IntelliSense
+- **Token Analytics**: Usage tracking and bundle impact analysis
+- **CI/CD Integration**: Automated validation for PRs with visual regression testing
+- **Figma Sync**: Bidirectional sync with conflict resolution
+- **Storybook Addon**: Theme switcher and token viewer in Storybook
+- **Design Tool Adapters**: Sketch and Adobe XD integration
+
+#### **SSR & Production Ready**
+
+- **SSR Utilities**: FOUC prevention with hydration-safe theme switching
+- **Cookie Persistence**: Server-side theme detection and management
+- **Critical CSS**: Inline critical theme styles for optimal loading
+- **CDN Support**: Token distribution via CDN with version management
+- **Multi-tenant**: Support for multiple design systems in one application
+
+### **Migration from 1.x**
+
+#### Breaking Changes
+
+- All package versions updated to 2.0.0
+- Internal dependencies now use ^2.0.0 range
+- CDN URLs updated to `@tokiforge/core@2.0.0`
+
+#### Upgrade Path
+
+```bash
+# Update all packages
+npm install @tokiforge/core@2.0.0 @tokiforge/react@2.0.0
+# Or with other frameworks
+npm install @tokiforge/core@2.0.0 @tokiforge/vue@2.0.0
+```
+
+### **Package Updates**
+
+- All 16 packages updated to 2.0.0
+- Unified dependency versions across ecosystem
+- Improved package exports and module resolution
+- Enhanced TypeScript definitions
+
+### **What's Next**
+
+- Visual regression testing enhancements
+- Design token registry for team collaboration
+- Enhanced IDE extensions (VSCode, WebStorm)
+- Real-time Figma collaboration
+- Advanced analytics and usage insights
+
+### Changed
+
+- **Major Version Bump**: Updated all packages to 2.0.0
+- **Dependencies**: Updated all @tokiforge internal dependencies to ^2.0.0
+- **Breaking Change**: This version introduces a new major release with updated package versions
+
 ## [1.2.0] - 2025-12-10
 
 ### Added
+
 - Performance optimization features (caching, lazy loading, compression)
 - Accessibility features (high contrast, reduced motion, color blind support, font scaling)
 - Advanced token features (functions, expressions, references with fallbacks, scoping, theming API)
@@ -99,17 +201,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 #### Token Versioning & Deprecation Support
+
 - **Token Versioning**: Track token versions with metadata (introduced, deprecated, removed dates)
 - **Deprecation Management**: Detect and filter deprecated tokens
 - **Migration Helpers**: Automated token migration with replacement tracking
 - **Version Validation**: Validate token versions against minimum requirements
 
 #### Scoped Component Themes
+
 - **Per-Component Theming**: Scoped token namespaces for individual components
 - **Component Theme Registration**: Register and manage component-specific themes
 - **Scoped CSS Generation**: Generate CSS with component-scoped variable names
 
 #### Plugin API
+
 - **Extensible Plugin System**: Create custom exporters, validators, and formatters
 - **Plugin Manager**: Centralized plugin registration and management
 - **Custom Exporters**: Build custom token export formats
@@ -117,6 +222,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Custom Formatters**: Transform tokens with custom logic
 
 #### Accessibility Dashboard
+
 - **Contrast Ratio Calculations**: WCAG-compliant contrast checking
 - **Accessibility Metrics**: WCAG AA/AAA compliance checking
 - **Motion Preference Detection**: Respect user motion preferences
@@ -124,6 +230,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Accessibility Reports**: Comprehensive accessibility analysis
 
 #### Responsive & State-Aware Tokens
+
 - **Breakpoint-Based Tokens**: Responsive token variations by breakpoint
 - **State-Based Tokens**: Hover, active, focus, disabled, loading states
 - **Responsive CSS Generation**: Generate media query-based CSS
@@ -131,12 +238,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Token Flattening**: Flatten tokens for specific breakpoints or states
 
 #### Figma ↔ Code Diff Tool
+
 - **Token Comparison**: Compare Figma and codebase tokens
 - **Diff Reports**: Detailed reports of added, removed, and changed tokens
 - **Color Tolerance**: Configurable color comparison with tolerance
 - **JSON Export**: Export diff results as JSON
 
 #### CI/CD Integration
+
 - **Automated Validation**: Token validation in CI pipelines
 - **Accessibility Checks**: Automated accessibility compliance checking
 - **Deprecation Detection**: Automated deprecation warnings
@@ -144,6 +253,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Exit Codes**: Proper exit codes for CI integration
 
 #### Design Token Analytics
+
 - **Usage Tracking**: Track token usage across projects
 - **Bundle Impact Analysis**: Analyze token impact on bundle size
 - **Unused Token Detection**: Identify unused tokens
@@ -151,6 +261,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Size Estimation**: Estimate token size impact
 
 #### Versioned Token Registry
+
 - **Multi-Team Support**: Manage tokens across multiple teams
 - **Version Management**: Track token versions per team
 - **Token Tagging**: Organize tokens with tags
@@ -158,6 +269,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Registry Merging**: Merge multiple token registries
 
 #### IDE Extension Support
+
 - **Token Hover Information**: Hover previews for tokens
 - **Autocomplete Support**: Token path autocomplete
 - **Token Documentation**: Generate token documentation
@@ -165,17 +277,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **VSCode Integration**: Ready for VSCode extension development
 
 #### CLI Enhancements
+
 - **validate Command**: CI/CD token validation
 - **figma:diff Command**: Compare Figma and code tokens
 - **analytics Command**: Generate token analytics reports
 - **Enhanced Error Messages**: Better error reporting and diagnostics
 
 #### Tailwind CSS Integration
+
 - **Tailwind Config Generation**: Generate Tailwind config from tokens
 - **CSS Variable Support**: Use CSS variables in Tailwind config
 - **Token Mapping**: Custom theme key mappings
 
 #### Figma Integration
+
 - **Pull Tokens from Figma**: Sync tokens from Figma files
 - **Push Tokens to Figma**: Sync tokens to Figma (limited API support)
 - **Figma API Client**: Full Figma API integration
@@ -241,7 +356,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed unnecessary comments from stub files
   - Fixed Vite CJS deprecation warnings by using ES modules
   - Updated bundle size budgets for Angular example
-- **TypeScript Configuration**: 
+- **TypeScript Configuration**:
   - Fixed Svelte example tsconfig.json to work independently
   - Updated root tsconfig.json to properly exclude examples
   - Resolved TypeScript declaration file errors
@@ -287,4 +402,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.2.1]: https://github.com/tokiforge/tokiforge/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/tokiforge/tokiforge/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/tokiforge/tokiforge/releases/tag/v0.1.0
-

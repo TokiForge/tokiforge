@@ -2,7 +2,7 @@
 
 This is a complete example demonstrating how to use TokiForge with React.
 
-> **TokiForge v1.2.0** | **React 18+**
+> **TokiForge v2.0.0** | **React 18+**
 
 ## Setup
 
@@ -65,7 +65,7 @@ This example demonstrates:
 ### Theme Provider
 
 ```tsx
-import { ThemeProvider } from '@tokiforge/react';
+import { ThemeProvider } from "@tokiforge/react";
 
 function App() {
   return (
@@ -79,11 +79,11 @@ function App() {
 ### Using Theme in Components
 
 ```tsx
-import { useTheme } from '@tokiforge/react';
+import { useTheme } from "@tokiforge/react";
 
 function MyComponent() {
   const { theme, tokens, setTheme } = useTheme();
-  
+
   return (
     <div style={{ color: tokens.color.text.primary }}>
       Current theme: {theme}
@@ -95,11 +95,12 @@ function MyComponent() {
 ### Using CSS Variables
 
 ```tsx
-<div style={{
-  backgroundColor: 'var(--hf-color-background-default)',
-  color: 'var(--hf-color-text-primary)',
-}}>
+<div
+  style={{
+    backgroundColor: "var(--hf-color-background-default)",
+    color: "var(--hf-color-text-primary)",
+  }}
+>
   Content
 </div>
 ```
-

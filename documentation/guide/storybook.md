@@ -495,12 +495,12 @@ npm run build-storybook
 
 - [Storybook Documentation](https://storybook.js.org/docs)
 - [Storybook Addons](https://storybook.js.org/addons)
-- [@tokiforge/storybook API](/api/storybook)
+- [CI/CD Integration](/guides/ci-cd-visual-regression)
 - [Design Tokens Guide](/guide/design-tokens)
-- [Component Testing](/guide/testing)
+- [Visual Testing](/guides/ci-cd-visual-regression)
 
 ## Next Steps
 
 - Explore [Storybook best practices](https://storybook.js.org/docs/react/writing-stories/introduction)
-- Set up [visual testing](/guide/testing)
+- Set up [visual testing](/guides/ci-cd-visual-regression)
 - Configure [CI/CD integration](/guides/ci-recipes)

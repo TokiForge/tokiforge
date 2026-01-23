@@ -2,12 +2,12 @@
 
 **Vue 3 adapter for TokiForge design token and theming engine. Provides Vue composables and provide/inject for easy theme management in Vue applications.**
 
-Vue adapter for TokiForge theming (v1.2.0).
+Vue adapter for TokiForge theming (v2.0.0).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/vue@^1.2.0 @tokiforge/core@^1.2.0
+npm install @tokiforge/vue@^2.0.0 @tokiforge/core@^2.0.0
 ```
 
 ## Usage
@@ -20,21 +20,21 @@ npm install @tokiforge/vue@^1.2.0 @tokiforge/core@^1.2.0
 </template>
 
 <script setup lang="ts">
-import { provideTheme, useTheme } from '@tokiforge/vue';
+import { provideTheme, useTheme } from "@tokiforge/vue";
 
 const themeConfig = {
   themes: [
-    { name: 'light', tokens: lightTokens },
-    { name: 'dark', tokens: darkTokens },
+    { name: "light", tokens: lightTokens },
+    { name: "dark", tokens: darkTokens },
   ],
-  defaultTheme: 'light',
+  defaultTheme: "light",
 };
 
 provideTheme(themeConfig);
 const { theme, tokens, setTheme } = useTheme();
 
 const toggleTheme = () => {
-  setTheme(theme.value === 'light' ? 'dark' : 'light');
+  setTheme(theme.value === "light" ? "dark" : "light");
 };
 </script>
 ```
@@ -50,12 +50,10 @@ Provides theme context to Vue components.
 Composable to access theme context.
 
 **Returns:**
+
 - `theme`: Reactive ref with current theme name
 - `tokens`: Computed ref with current theme tokens
 - `setTheme(name)`: Switch to a theme
 - `nextTheme()`: Cycle to next theme
 - `availableThemes`: Computed ref with available theme names
 - `runtime`: ThemeRuntime instance
-
-
-

@@ -12,7 +12,7 @@ import { analyticsCommand } from './commands/analytics';
 import { generateTypesCommand } from './commands/generate-types';
 import { watchCommand } from './commands/watch';
 import { migrateCommand } from './commands/migrate';
-import { diffCommand as diffCommandEnhanced, type DiffOptions } from './commands/diff';
+import { diffCommand as diffCommandEnhanced } from './commands/diff';
 import { generateChangelogCommand } from './commands/changelog';
 import { showSplash, showCompactSplash, getVersion } from './splash';
 
@@ -96,7 +96,9 @@ program
 program
   .command('analytics')
   .description('Generate token usage analytics and bundle impact report')
-  .action(() => analyticsCommand());
+  .option('--format <format>', 'Export format: json, html, csv, markdown', 'json')
+  .option('--output <file>', 'Output file path')
+  .action((options) => analyticsCommand(process.cwd(), { format: options.format as any, output: options.output }));
 
 program
   .command('generate:types')
