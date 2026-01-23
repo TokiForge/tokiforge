@@ -17,7 +17,8 @@
     "build": "tsup",
     "build:all": "npm run build",
     "dev": "tsup --watch",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "vitest"
   },
   "files": [
     "dist",
@@ -46,8 +47,10 @@
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
+    "jsdom": "^27.4.0",
     "tsup": "^8.0.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.7"
   },
   "dependencies": {
     "@tokiforge/core": "workspace:^2.0.0",

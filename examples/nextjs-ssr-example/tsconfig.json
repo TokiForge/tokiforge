@@ -20,8 +20,8 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@tokiforge/core": ["../../packages/core/dist/index.d.ts"],
-      "@tokiforge/react": ["../../packages/react/dist/index.d.ts"]
+      "@tokiforge/core": ["../../packages/core/src"],
+      "@tokiforge/react": ["../../packages/react/src"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
