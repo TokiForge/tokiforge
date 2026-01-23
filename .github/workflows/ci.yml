@@ -41,4 +41,4 @@ jobs:
         run: pnpm test
 
       - name: Build
-        run: pnpm run build
+        run: pnpm --filter @tokiforge/core run build && pnpm --filter @tokiforge/vue run build

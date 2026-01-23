@@ -40,7 +40,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build core and vue packages
-        run: pnpm run build:core && pnpm run build --filter @tokiforge/vue
+        run: pnpm --filter @tokiforge/core run build && pnpm --filter @tokiforge/vue run build
 
       - name: Install documentation dependencies
         run: |
