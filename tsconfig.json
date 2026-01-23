@@ -22,7 +22,9 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@tokiforge/core": ["./packages/core/src/index.ts"]
+      "@tokiforge/core": ["./packages/core/src/index.ts"],
+      "@tokiforge/figma": ["./packages/figma/src/index.ts"],
+      "@tokiforge/tailwind": ["./packages/tailwind/src/index.ts"]
     }
   },
   "include": ["packages/core/src/**/*", "packages/cli/src/**/*", "packages/angular/src/**/*"],
