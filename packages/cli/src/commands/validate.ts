@@ -1,8 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { CICDValidator } from '@tokiforge/core';
-// TODO: Re-enable once @tokiforge/figma package is built
-// import { pullFromFigma } from '@tokiforge/figma';
+import { pullFromFigma } from '@tokiforge/figma';
 
 export interface ValidateOptions {
   strict?: boolean;
@@ -47,12 +46,10 @@ export async function validateCommand(
     if (options.checkFigma && options.figmaToken && options.figmaFileKey) {
       console.log('Fetching tokens from Figma...');
       try {
-        // TODO: Re-enable once @tokiforge/figma package is built
-        // const figmaTokens = await pullFromFigma({
-        //   accessToken: options.figmaToken,
-        //   fileKey: options.figmaFileKey,
-        // });
-        const figmaTokens = {}; // Placeholder
+        const figmaTokens = await pullFromFigma({
+          accessToken: options.figmaToken,
+          fileKey: options.figmaFileKey,
+        });
         validationOptions.figmaTokens = figmaTokens;
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : String(error);

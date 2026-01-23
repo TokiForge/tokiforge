@@ -1,13 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { FigmaDiff } from '@tokiforge/core';
-// TODO: Re-enable once @tokiforge/figma package is built
-// import { pullFromFigma } from '@tokiforge/figma';
+import { pullFromFigma } from '@tokiforge/figma';
 import { TokenParser } from '@tokiforge/core';
 
 export async function figmaDiffCommand(
-  _accessToken: string,
-  _fileKey: string,
+  accessToken: string,
+  fileKey: string,
   projectPath: string = process.cwd()
 ): Promise<void> {
   const configPath = path.join(projectPath, 'tokiforge.config.json');
@@ -29,12 +28,10 @@ export async function figmaDiffCommand(
 
   try {
     console.log('Fetching tokens from Figma...');
-    // TODO: Re-enable once @tokiforge/figma package is built
-    // const figmaTokens = await pullFromFigma({
-    //   accessToken,
-    //   fileKey,
-    // });
-    const figmaTokens = {}; // Placeholder
+    const figmaTokens = await pullFromFigma({
+      accessToken,
+      fileKey,
+    });
 
     console.log('Loading code tokens...');
     const codeTokens = TokenParser.parse(tokenPath);

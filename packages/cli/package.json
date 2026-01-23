@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "@tokiforge/core": "workspace:^2.0.0",
+    "@tokiforge/figma": "workspace:^2.0.0",
     "@tokiforge/tailwind": "workspace:^2.0.0",
     "chalk": "^5.3.0",
     "chokidar": "^3.5.3",

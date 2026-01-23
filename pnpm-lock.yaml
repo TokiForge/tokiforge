@@ -119,6 +119,9 @@ importers:
       '@tokiforge/core':
         specifier: workspace:^2.0.0
         version: link:../core
+      '@tokiforge/figma':
+        specifier: workspace:^2.0.0
+        version: link:../figma
       '@tokiforge/tailwind':
         specifier: workspace:^2.0.0
         version: link:../tailwind
