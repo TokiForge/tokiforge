@@ -173,11 +173,11 @@
   - Watch token files for changes
   - Auto-regenerate exports
   - Hot reload support
-- [ ] Enhance `tokiforge diff` command
+- [x] Enhance `tokiforge diff` command
   - Visual diff output
   - Change summary
   - Migration suggestions
-- [ ] Add `tokiforge generate:changelog` command
+- [x] Add `tokiforge generate:changelog` command
   - Generate token changelogs
   - Version comparison
   - Breaking changes detection

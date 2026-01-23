@@ -6,13 +6,14 @@ import { buildCommand } from './commands/build';
 import { devCommand } from './commands/dev';
 import { lintCommand } from './commands/lint';
 import { tailwindCommand } from './commands/tailwind';
-import { diffCommand } from './commands/diff';
 import { validateCommand } from './commands/validate';
 import { figmaDiffCommand } from './commands/figma-diff';
 import { analyticsCommand } from './commands/analytics';
 import { generateTypesCommand } from './commands/generate-types';
 import { watchCommand } from './commands/watch';
 import { migrateCommand } from './commands/migrate';
+import { diffCommand as diffCommandEnhanced, type DiffOptions } from './commands/diff';
+import { generateChangelogCommand } from './commands/changelog';
 import { showSplash, showCompactSplash, getVersion } from './splash';
 
 const program = new Command();
@@ -59,10 +60,19 @@ program
 
 program
   .command('diff')
-  .description('Compare two token files and show differences')
+  .description('Compare two token files with visual diff, change summary, and migration suggestions')
   .argument('[old]', 'Path to old token file')
   .argument('[new]', 'Path to new token file')
-  .action((old, new_) => diffCommand(old, new_));
+  .option('--format <type>', 'Output format (compact, detailed, json)', 'detailed')
+  .option('--no-migrations', 'Skip migration suggestions')
+  .option('--strict', 'Fail on breaking changes')
+  .option('--output <file>', 'Write report to file')
+  .action((old, new_, options) => diffCommandEnhanced(old, new_, {
+    format: options.format,
+    showMigrations: options.migrations,
+    strict: options.strict,
+    output: options.output
+  }));
 
 program
   .command('validate')
@@ -114,6 +124,17 @@ program
     from: options.from,
     to: options.to,
     backup: options.backup,
+  }));
+
+program
+  .command('generate:changelog')
+  .description('Generate token changelog with version comparison and breaking changes detection')
+  .argument('[input]', 'Input tokens directory with version history', 'tokens')
+  .option('--format <type>', 'Output format (markdown, json, html)', 'markdown')
+  .option('--output <file>', 'Write changelog to file')
+  .action((input, options) => generateChangelogCommand(input, {
+    format: options.format,
+    output: options.output
   }));
 
 program.parse();

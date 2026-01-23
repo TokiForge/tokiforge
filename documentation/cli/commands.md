@@ -377,6 +377,106 @@ tokiforge migrate figma-tokens.json --from figma-tokens --to tokens.json
 tokiforge migrate design-tokens.json --from theo --no-backup
 ```
 
+## diff
+
+Compare two token files with visual diff, change summary, and migration suggestions.
+
+```bash
+tokiforge diff <old-file> <new-file> [options]
+```
+
+### What it does
+
+- Compares token files
+- Shows detailed differences
+- Generates migration suggestions
+- Detects breaking changes
+- Exports reports in multiple formats
+
+### Options
+
+- `--format <type>` - Output format: `compact`, `detailed`, `json` (default: `detailed`)
+- `--no-migrations` - Skip migration suggestions
+- `--strict` - Fail on breaking changes
+- `--output <file>` - Write report to file
+
+### Exit Codes
+
+- `0` - No changes or non-breaking changes
+- `1` - Breaking changes detected (in strict mode)
+
+### Example
+
+```bash
+# Basic comparison
+tokiforge diff old-tokens.json new-tokens.json
+
+# Compact output
+tokiforge diff old-tokens.json new-tokens.json --format compact
+
+# With migration suggestions and output file
+tokiforge diff old-tokens.json new-tokens.json --output diff-report.md
+
+# Strict mode (fail on breaking changes)
+tokiforge diff old-tokens.json new-tokens.json --strict
+```
+
+### See Also
+
+For complete documentation, see [diff command](/cli/diff)
+
+## generate:changelog
+
+Generate token changelogs from versioned token files.
+
+```bash
+tokiforge generate:changelog [input] [options]
+```
+
+### What it does
+
+- Scans directory for versioned token files
+- Compares versions sequentially
+- Detects breaking changes
+- Categorizes modifications
+- Generates formatted changelogs
+
+### Options
+
+- `--format <type>` - Output format: `markdown`, `json`, `html` (default: `markdown`)
+- `--output <file>` - Write changelog to file
+
+### Supported Version Formats
+
+- `tokens-v1.0.0.json`
+- `tokens-1.0.0.json`
+- `tokens-v1.1.0.json`
+
+### Exit Codes
+
+- `0` - Changelog generated successfully
+- `1` - Error occurred
+
+### Example
+
+```bash
+# Generate markdown changelog
+tokiforge generate:changelog tokens
+
+# Generate JSON format
+tokiforge generate:changelog tokens --format json
+
+# Save to file
+tokiforge generate:changelog tokens --output CHANGELOG.md
+
+# Generate HTML for web viewing
+tokiforge generate:changelog tokens --format html --output CHANGELOG.html
+```
+
+### See Also
+
+For complete documentation, see [generate:changelog command](/cli/changelog)
+
 ## Global Options
 
 All commands support:
