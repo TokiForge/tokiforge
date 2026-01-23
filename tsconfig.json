@@ -19,6 +19,7 @@
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo",
     "verbatimModuleSyntax": true,
+    "types": ["node"],
     "baseUrl": ".",
     "paths": {
       "@tokiforge/core": ["./packages/core/src/index.ts"]

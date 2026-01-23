@@ -3,6 +3,8 @@
 // Using native DOM queries and standard vitest assertions instead
 
 // Extend Vitest matchers if jest-dom is available
+export {};
+
 declare global {
   namespace Vi {
     interface Assertion<T = any> {
