@@ -10,6 +10,7 @@ export async function watchCommand(input = 'tokens.json', output = 'tokens.gener
     console.log(`👀 Watching ${input} for changes...`);
     console.log(`💾 Output directory: ${output}`);
 
+    // eslint-disable-next-line no-undef
     let timeout: NodeJS.Timeout;
     let lastContent = fs.readFileSync(input, 'utf-8');
 
