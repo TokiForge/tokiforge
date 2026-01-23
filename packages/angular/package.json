@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/angular",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Angular adapter for TokiForge theming",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -19,9 +19,9 @@
     "dev": "tsup --watch",
     "lint": "eslint src --ext .ts",
     "clean": "rm -rf dist",
-    "test": "echo 'Angular tests require full Angular testing infrastructure. See packages/angular/src/theme.service.test.ts for test examples.'",
-    "test:watch": "echo 'Angular tests require full Angular testing infrastructure.'",
-    "test:ui": "echo 'Angular tests require full Angular testing infrastructure.'"
+    "test": "echo 'Angular tests skipped - requires full Angular test environment'",
+    "test:watch": "echo 'Angular tests skipped'",
+    "test:ui": "echo 'Angular tests skipped'"
   },
   "files": [
     "dist",
@@ -32,18 +32,20 @@
   "peerDependencies": {
     "@angular/common": ">=17.0.0 <22.0.0",
     "@angular/core": ">=17.0.0 <22.0.0",
-    "@tokiforge/core": "^1.2.0"
+    "@tokiforge/core": "^1.2.1"
   },
   "devDependencies": {
     "@angular/common": "^21.0.0-rc.0",
     "@angular/core": "^21.0.0-rc.0",
     "@swc/core": "^1.15.0",
+    "@vitest/ui": "^4.0.18",
     "sharp": "^0.34.5",
     "tsup": "^8.0.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@tokiforge/core": "^1.2.0"
+    "@tokiforge/core": "^1.2.1"
   },
   "keywords": [
     "angular",

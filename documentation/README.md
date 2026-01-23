@@ -44,5 +44,14 @@ npm run docs:preview
 
 See the main project's CONTRIBUTING.md file for guidelines on contributing to the documentation.
 
+## Release Process
 
+Automated releases are managed with Changesets and GitHub Actions.
 
+- **Propose changes:** run `npm run changeset` to create a changeset with package bumps and a summary.
+- **Versioning:** CI will run `npm run version` to update versions and changelogs via Changesets.
+- **Build & Publish:** `release` workflow builds all workspaces and publishes to npm when changesets are present.
+- **Manual publish (fallback):** `npm run publish:all` publishes individual packages without Changesets.
+- **Docs:** build with `npm run docs:build`; deploy via existing `docs.yml` workflow.
+
+Prerequisites: set `NPM_TOKEN` in repository secrets for publishing.

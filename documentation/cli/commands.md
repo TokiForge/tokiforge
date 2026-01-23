@@ -218,6 +218,165 @@ tokiforge analytics
 # ✅ Analytics saved to: token-analytics.json
 ```
 
+## generate:types
+
+Generate TypeScript type definitions for tokens.
+
+```bash
+tokiforge generate:types [input] [output]
+```
+
+### What it does
+
+- Reads tokens from input file
+- Generates TypeScript declarations
+- Creates token path constants
+- Generates type-safe resolver function
+
+### Arguments
+
+- `input` - Input tokens file (default: `tokens.json`)
+- `output` - Output TypeScript file (default: `tokens.d.ts`)
+
+### Output
+
+- `.d.ts` file with complete type definitions
+- Token path exports for autocomplete
+- TypeScript utility functions
+
+### Example
+
+```bash
+# Generate types from tokens.json
+tokiforge generate:types
+
+# Custom paths
+tokiforge generate:types ./design/tokens.json ./src/tokens.d.ts
+```
+
+Generated file:
+
+```typescript
+export const tokens = { /* ... */ };
+export type TokenPath = 'colors.primary' | 'colors.secondary' | ...;
+export function resolveToken(path: TokenPath): any;
+```
+
+## watch
+
+Watch token files for changes and regenerate exports.
+
+```bash
+tokiforge watch [input] [output] [options]
+```
+
+### What it does
+
+- Monitors token files for changes
+- Auto-regenerates exports on change
+- Supports debouncing
+- Generates TypeScript, JSON, CSS, SCSS
+
+### Arguments
+
+- `input` - Input tokens file (default: `tokens.json`)
+- `output` - Output directory (default: `tokens.generated`)
+
+### Options
+
+- `--debounce <ms>` - Debounce time in milliseconds (default: 300)
+
+### Example
+
+```bash
+# Watch and generate
+tokiforge watch
+
+# Custom paths with faster debounce
+tokiforge watch ./tokens.json ./dist --debounce 100
+```
+
+Output:
+
+```
+👀 Watching tokens.json for changes...
+💾 Output directory: tokens.generated
+✅ [12:34:56] Tokens updated
+✅ [12:35:01] Tokens updated
+```
+
+## migrate
+
+Migrate tokens from another format.
+
+```bash
+tokiforge migrate [input] [options]
+```
+
+### What it does
+
+- Converts tokens from Style Dictionary, Figma Tokens, or Theo format
+- Normalizes token structure
+- Validates migration
+- Creates backup automatically
+
+### Arguments
+
+- `input` - Input tokens file (default: `tokens.json`)
+
+### Options
+
+- `--from <format>` - Source format: `style-dictionary`, `figma-tokens`, `theo` (default: `style-dictionary`)
+- `--to <file>` - Output file (defaults to input file)
+- `--no-backup` - Skip creating backup
+
+### Supported Formats
+
+**From Style Dictionary:**
+
+```json
+{
+  "color": {
+    "primary": { "value": "#007AFF", "type": "color" }
+  }
+}
+```
+
+**From Figma Tokens:**
+
+```json
+{
+  "colors": {
+    "primary": { "value": "#007AFF", "type": "color" }
+  }
+}
+```
+
+**From Theo:**
+
+```json
+{
+  "global": {
+    "color": {
+      "primary": { "value": "#007AFF", "type": "color" }
+    }
+  }
+}
+```
+
+### Example
+
+```bash
+# Migrate from Style Dictionary
+tokiforge migrate tokens.json --from style-dictionary
+
+# Migrate from Figma Tokens to new file
+tokiforge migrate figma-tokens.json --from figma-tokens --to tokens.json
+
+# Migrate without backup
+tokiforge migrate design-tokens.json --from theo --no-backup
+```
+
 ## Global Options
 
 All commands support:
@@ -229,5 +388,3 @@ All commands support:
 
 - See [Configuration](/cli/configuration) for setup options
 - Check [Overview](/cli/overview) for workflow
-
-

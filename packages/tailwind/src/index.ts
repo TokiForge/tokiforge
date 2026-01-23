@@ -2,6 +2,8 @@ import type { DesignTokens, TokenValue } from '@tokiforge/core';
 import { TokenParser } from '@tokiforge/core';
 import type { Config } from 'tailwindcss';
 
+export * from './plugin';
+
 export interface TailwindConfigOptions {
   /**
    * Path to tokens file (JSON or YAML)

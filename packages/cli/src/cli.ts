@@ -10,6 +10,9 @@ import { diffCommand } from './commands/diff';
 import { validateCommand } from './commands/validate';
 import { figmaDiffCommand } from './commands/figma-diff';
 import { analyticsCommand } from './commands/analytics';
+import { generateTypesCommand } from './commands/generate-types';
+import { watchCommand } from './commands/watch';
+import { migrateCommand } from './commands/migrate';
 import { showSplash, showCompactSplash, getVersion } from './splash';
 
 const program = new Command();
@@ -84,6 +87,34 @@ program
   .command('analytics')
   .description('Generate token usage analytics and bundle impact report')
   .action(() => analyticsCommand());
+
+program
+  .command('generate:types')
+  .description('Generate TypeScript type definitions for tokens')
+  .argument('[input]', 'Input tokens file', 'tokens.json')
+  .argument('[output]', 'Output TypeScript file', 'tokens.d.ts')
+  .action((input, output) => generateTypesCommand(input, output));
+
+program
+  .command('watch')
+  .description('Watch token files for changes and regenerate exports')
+  .argument('[input]', 'Input tokens file to watch', 'tokens.json')
+  .argument('[output]', 'Output directory for generated files', 'tokens.generated')
+  .option('--debounce <ms>', 'Debounce time in milliseconds', '300')
+  .action((input, output, options) => watchCommand(input, output, parseInt(options.debounce)));
+
+program
+  .command('migrate')
+  .description('Migrate tokens from another format (style-dictionary, figma-tokens, theo)')
+  .argument('[input]', 'Input tokens file', 'tokens.json')
+  .option('--from <format>', 'Source format (style-dictionary, figma-tokens, theo)', 'style-dictionary')
+  .option('--to <file>', 'Output file (defaults to input file)')
+  .option('--no-backup', 'Skip creating backup file')
+  .action((input, options) => migrateCommand(input, {
+    from: options.from,
+    to: options.to,
+    backup: options.backup,
+  }));
 
 program.parse();
 

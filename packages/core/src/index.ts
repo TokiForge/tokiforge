@@ -29,6 +29,14 @@ export type {
   RegistryConfig,
 } from './types';
 
+export type {
+  SemanticTokenLayer,
+  SemanticTokenMapping,
+  SemanticResolutionContext,
+  SemanticTokenResolution,
+  SemanticTokenValidation,
+} from './semantic-tokens';
+
 export {
   TokenError,
   ValidationError,
@@ -48,8 +56,12 @@ export { pluginManager } from './plugin-manager';
 export { ResponsiveTokens } from './responsive-tokens';
 export { FigmaDiff } from './figma-diff';
 export { CICDValidator } from './cicd-validator';
+export { SemanticTokenManager } from './semantic-tokens';
 export { TokenVersioning } from './token-versioning';
 export { TokenAnalytics } from './token-analytics';
 export { IDESupport } from './ide-support';
 export { TokenRegistry } from './token-registry';
 
+// Platform Exporters
+export { IOSExporter, AndroidExporter, ReactNativeExporter, PlatformExporter } from './platform-exporters';
+export type { IOSExportOptions, AndroidExportOptions, ReactNativeExportOptions, PlatformExporterOptions } from './platform-exporters';
