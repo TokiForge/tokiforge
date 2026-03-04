@@ -2,7 +2,7 @@
 
 This example demonstrates how to use TokiForge with Svelte.
 
-> **TokiForge v2.0.0** | **Svelte 4+**
+> **TokiForge v2.0.1** | **Svelte 4+**
 
 ## Getting Started
 

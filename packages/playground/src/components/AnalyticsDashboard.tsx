@@ -46,13 +46,14 @@ export function AnalyticsDashboard({ tokens }: AnalyticsDashboardProps) {
       other: 0,
     };
 
-    const analyze = (obj: any, path: string = ''): void => {
+    const analyze = (obj: unknown, path: string = ''): void => {
       if (!obj || typeof obj !== 'object') return;
 
       if ('value' in obj || '$value' in obj) {
         total++;
-        const value = obj.value || obj.$value;
-        const type = obj.type || '';
+        const o = obj as { value?: unknown; $value?: unknown; type?: string };
+        const value = o.value ?? o.$value;
+        const type = o.type ?? '';
         const pathLower = path.toLowerCase();
 
         // Estimate size
@@ -74,9 +75,10 @@ export function AnalyticsDashboard({ tokens }: AnalyticsDashboardProps) {
           bundleByType.other += tokenSize;
         }
       } else {
-        for (const key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            analyze(obj[key], path ? `${path}.${key}` : key);
+        const record = obj as Record<string, unknown>;
+        for (const key in record) {
+          if (Object.prototype.hasOwnProperty.call(record, key)) {
+            analyze(record[key], path ? `${path}.${key}` : key);
           }
         }
       }
@@ -137,18 +139,21 @@ export function AnalyticsDashboard({ tokens }: AnalyticsDashboardProps) {
 
       <div className="dashboard-tabs">
         <button
+          type="button"
           className={`dashboard-tab ${activeTab === 'overview' ? 'active' : ''}`}
           onClick={() => setActiveTab('overview')}
         >
           Overview
         </button>
         <button
+          type="button"
           className={`dashboard-tab ${activeTab === 'trends' ? 'active' : ''}`}
           onClick={() => setActiveTab('trends')}
         >
           Trends
         </button>
         <button
+          type="button"
           className={`dashboard-tab ${activeTab === 'bundle' ? 'active' : ''}`}
           onClick={() => setActiveTab('bundle')}
         >
@@ -271,7 +276,7 @@ export function AnalyticsDashboard({ tokens }: AnalyticsDashboardProps) {
               <p>Track token count and bundle size over time</p>
             </div>
             
-            <div className="trend-chart">
+            <div className="trend-chart" role="img" aria-label={`Token count trend over last 7 days. Max value ${maxTrendValue} tokens.`}>
               <h5>Token Count</h5>
               <div className="chart-container">
                 <div className="chart-y-axis">
@@ -294,7 +299,7 @@ export function AnalyticsDashboard({ tokens }: AnalyticsDashboardProps) {
               </div>
             </div>
 
-            <div className="trend-chart">
+            <div className="trend-chart" role="img" aria-label={`Bundle size trend over last 7 days. Max value ${formatBytes(maxBundleValue)}.`}>
               <h5>Bundle Size</h5>
               <div className="chart-container">
                 <div className="chart-y-axis">

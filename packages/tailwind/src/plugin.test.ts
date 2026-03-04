@@ -109,10 +109,20 @@ describe('Tailwind Plugin v4', () => {
       expect(plugin).toBeDefined();
     });
 
-    it('should handle missing tokens file gracefully', () => {
+    it('should handle missing tokens file gracefully when strict is false', () => {
       expect(() => {
         createTailwindPlugin({
           tokensPath: '/nonexistent/tokens.json',
+          strict: false,
+        });
+      }).not.toThrow();
+    });
+
+    it('should throw when tokens file is missing and strict is true', () => {
+      expect(() => {
+        createTailwindPlugin({
+          tokensPath: '/nonexistent/tokens.json',
+          strict: true,
         });
       }).toThrow('Tokens file not found');
     });

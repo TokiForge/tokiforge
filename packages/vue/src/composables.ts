@@ -10,6 +10,10 @@ export interface ProvideThemeOptions {
   defaultTheme?: string;
   mode?: 'dynamic' | 'static';
   persist?: boolean;
+  /** LocalStorage key for persisting selected theme (default: 'tokiforge-theme') */
+  storageKey?: string;
+  /** Callback when theme changes (e.g. analytics) */
+  onThemeChange?: (themeName: string) => void;
   watchSystemTheme?: boolean;
   bodyClassPrefix?: string;
 }
@@ -48,6 +52,8 @@ export function provideTheme<T extends DesignTokens = DesignTokens>(
     defaultTheme,
     mode = 'dynamic',
     persist = true,
+    storageKey = 'tokiforge-theme',
+    onThemeChange,
     watchSystemTheme = false,
     bodyClassPrefix = 'theme',
   } = options;
@@ -61,7 +67,8 @@ export function provideTheme<T extends DesignTokens = DesignTokens>(
   if (typeof window !== 'undefined') {
     if (persist && window.localStorage && typeof window.localStorage.getItem === 'function') {
       try {
-        const saved = window.localStorage.getItem('tokiforge-theme');
+        const key = options.storageKey ?? 'tokiforge-theme';
+        const saved = window.localStorage.getItem(key);
         if (saved && availableThemesList.includes(saved)) {
           initialTheme = saved;
         }
@@ -127,11 +134,12 @@ export function provideTheme<T extends DesignTokens = DesignTokens>(
 
     if (typeof window !== 'undefined' && persist && window.localStorage && typeof window.localStorage.setItem === 'function') {
       try {
-        window.localStorage.setItem('tokiforge-theme', name);
+        window.localStorage.setItem(storageKey, name);
       } catch (e) {
         // Ignore localStorage access errors
       }
     }
+    onThemeChange?.(name);
   };
 
   if (typeof window !== 'undefined') {

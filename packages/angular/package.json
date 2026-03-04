@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/angular",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Angular adapter for TokiForge theming",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -32,7 +32,7 @@
   "peerDependencies": {
     "@angular/common": ">=17.0.0 <22.0.0",
     "@angular/core": ">=17.0.0 <22.0.0",
-    "@tokiforge/core": "workspace:^2.0.0"
+    "@tokiforge/core": "workspace:^2.0.1"
   },
   "devDependencies": {
     "@angular/common": "^21.0.0-rc.0",
@@ -45,7 +45,7 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.0.0"
+    "@tokiforge/core": "workspace:^2.0.1"
   },
   "keywords": [
     "angular",

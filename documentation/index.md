@@ -6,7 +6,7 @@ description: TokiForge is a lightweight, framework-agnostic design token and the
 hero:
   name: TokiForge
   text: Design Token & Theme Engine
-  tagline: Forge your colors. Shape your UI. (v2.0.0)
+  tagline: Forge your colors. Shape your UI. (v2.0.1)
   image:
     src: /logo.svg
     alt: TokiForge Logo - Design Token and Theme Engine

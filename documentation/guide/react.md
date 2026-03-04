@@ -5,14 +5,14 @@ description: Complete guide to using TokiForge with React. Learn how to set up T
 
 # React Guide
 
-> **TokiForge v2.0.0**
+> **TokiForge v2.0.1**
 
 TokiForge works seamlessly with React through the `@tokiforge/react` package.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/react@^2.0.0 @tokiforge/core@^2.0.0
+npm install @tokiforge/react@^2.0.1 @tokiforge/core@^2.0.1
 ```
 
 ## Setup

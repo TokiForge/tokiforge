@@ -1,8 +1,8 @@
-# TokiForge Roadmap v2.0.0+
+# TokiForge Roadmap v2.0.1+
 
 ## Current Status Analysis
 
-### Already Implemented (v2.0.0)
+### Already Implemented (v2.0.1)
 
 1. **Semantic Tokens & Aliasing** - Partially implemented
 
@@ -465,4 +465,4 @@ We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guideline
 ---
 
 _Last updated: January 2025_  
-_Version: 2.0.0_
+_Version: 2.0.1_

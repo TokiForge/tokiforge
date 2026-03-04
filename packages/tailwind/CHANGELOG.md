@@ -1,5 +1,11 @@
 # @tokiforge/tailwind
 
+## 2.0.1
+
+### Patch Changes
+
+- Options: baseSelector, strict, includeUtilities, excludePaths, tokens, debug, themeMappings, customUtilityPrefix.
+
 ## 2.0.0
 
 ### Major Changes

@@ -1,5 +1,11 @@
 # @tokiforge/vue
 
+## 2.0.1
+
+### Patch Changes
+
+- Provider options: storageKey, persist, onThemeChange.
+
 ## 2.0.0
 
 ### Major Changes

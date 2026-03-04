@@ -85,7 +85,7 @@ export default function Home() {
             }}>
               Primary Button
             </h3>
-            <button style={{
+            <button type="button" style={{
               backgroundColor: 'var(--hf-primary)',
               color: 'var(--hf-background)',
               padding: 'var(--hf-sm) var(--hf-lg)',
@@ -112,7 +112,7 @@ export default function Home() {
             }}>
               Secondary Button
             </h3>
-            <button style={{
+            <button type="button" style={{
               backgroundColor: 'var(--hf-secondary)',
               color: 'var(--hf-background)',
               padding: 'var(--hf-sm) var(--hf-lg)',

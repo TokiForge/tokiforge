@@ -5,6 +5,29 @@ All notable changes to TokiForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2026-03-04
+
+### Fixed
+
+- **Playground**: ThemeRuntime no longer re-created every render; held in state with effect-based init/destroy.
+- **React ThemeContext**: Single init effect with proper cleanup (removed duplicate `runtime.init()`).
+- **Remix/Next theme providers**: Effect dependencies fixed; refs used to avoid stale closures; `runtime.destroy()` on cleanup.
+- **Build**: Removed unused `cookieMaxAge` destructure in `generateSSRHead` (ssr-utils) to fix TS6133.
+
+### Added
+
+- **Playground**: Error boundary, lazy-loaded tab panels, virtualized token list (threshold 50), memoized runtime/flatTokens, manualChunks (react-vendor, tokiforge), tab a11y (ARIA + keyboard), `type="button"` on buttons, label associations.
+- **Theme providers (React/Vue/Next/Remix)**: `storageKey`, `persist`, `onThemeChange`; React also supports initial theme from localStorage.
+- **Tailwind plugin**: `baseSelector`, `strict`, `includeUtilities`, `excludePaths`, `customUtilityPrefix`, `tokens` (inline), `debug`, `themeMappings.boxShadow` (and lineHeight/animation in types).
+- **SSR**: `cookieName` and `cookieMaxAge` in `SSRThemeOptions` and `generateSSRHead` options.
+- **Core**: Generic `Plugin<TOptions>` and optional `optionsSchema` on Plugin interface.
+- **Root**: Prettier config and `format` script.
+
+### Changed
+
+- **Playground**: Replaced `any` with proper types / `unknown` in catch; design-systems catch blocks use `unknown` + narrow.
+- **Examples**: Error boundaries (react-example, nextjs-ssr-example), `type="button"` on buttons.
+
 ## [2.0.0] - 2026-01-23
 
 ### Major Release Highlights

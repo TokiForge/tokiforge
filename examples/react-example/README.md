@@ -2,7 +2,7 @@
 
 This is a complete example demonstrating how to use TokiForge with React.
 
-> **TokiForge v2.0.0** | **React 18+**
+> **TokiForge v2.0.1** | **React 18+**
 
 ## Setup
 

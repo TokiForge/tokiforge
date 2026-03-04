@@ -70,6 +70,12 @@
 .preview-actions {
   display: flex;
   gap: 0.5rem;
+  align-items: center;
+}
+
+.export-error {
+  font-size: 0.85rem;
+  color: #dc2626;
 }
 
 .btn-icon {

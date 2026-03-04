@@ -13,6 +13,7 @@ export function ExportShare({ tokens, themeName }: ExportShareProps) {
   const [cssPrefix, setCssPrefix] = useState('tf');
   const [copied, setCopied] = useState(false);
   const [shareUrl, setShareUrl] = useState<string>('');
+  const [copyError, setCopyError] = useState<string | null>(null);
 
   const generateExport = (): string => {
     switch (exportFormat) {
@@ -36,11 +37,14 @@ export function ExportShare({ tokens, themeName }: ExportShareProps) {
   const exportContent = generateExport();
 
   const handleCopy = async () => {
+    setCopyError(null);
     try {
       await navigator.clipboard.writeText(exportContent);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to copy';
+      setCopyError(message);
       console.error('Failed to copy:', err);
     }
   };
@@ -75,8 +79,8 @@ export function ExportShare({ tokens, themeName }: ExportShareProps) {
     try {
       await navigator.clipboard.writeText(shareUrl);
       alert('Share link copied to clipboard!');
-    } catch (err) {
-      console.error('Failed to copy share link:', err);
+    } catch (err: unknown) {
+      console.error('Failed to copy share link:', err instanceof Error ? err.message : err);
     }
   };
 
@@ -89,7 +93,7 @@ export function ExportShare({ tokens, themeName }: ExportShareProps) {
           <label>Export Format</label>
           <select 
             value={exportFormat} 
-            onChange={(e) => setExportFormat(e.target.value as any)}
+            onChange={(e) => setExportFormat(e.target.value as 'json' | 'css' | 'typescript' | 'scss')}
           >
             <option value="json">JSON</option>
             <option value="css">CSS Variables</option>
@@ -115,10 +119,11 @@ export function ExportShare({ tokens, themeName }: ExportShareProps) {
         <div className="preview-header">
           <span className="preview-title">Preview</span>
           <div className="preview-actions">
-            <button onClick={handleCopy} className="btn-icon" title="Copy to clipboard">
+            <button type="button" onClick={handleCopy} className="btn-icon" title="Copy to clipboard">
               {copied ? '✓ Copied!' : '📋 Copy'}
             </button>
-            <button onClick={handleDownload} className="btn-icon" title="Download file">
+            {copyError && <span className="export-error" role="alert">{copyError}</span>}
+            <button type="button" onClick={handleDownload} className="btn-icon" title="Download file">
               💾 Download
             </button>
           </div>
@@ -134,7 +139,7 @@ export function ExportShare({ tokens, themeName }: ExportShareProps) {
           Generate a shareable link to your token configuration
         </p>
         
-        <button onClick={handleGenerateShareLink} className="btn-primary">
+        <button type="button" onClick={handleGenerateShareLink} className="btn-primary">
           🔗 Generate Share Link
         </button>
 
@@ -146,7 +151,7 @@ export function ExportShare({ tokens, themeName }: ExportShareProps) {
               readOnly
               className="share-url-input"
             />
-            <button onClick={handleCopyShareLink} className="btn-secondary">
+            <button type="button" onClick={handleCopyShareLink} className="btn-secondary">
               Copy Link
             </button>
           </div>

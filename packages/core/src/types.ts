@@ -80,17 +80,24 @@ export interface ComponentTheme {
   tokens: DesignTokens;
 }
 
-export interface Plugin {
+export interface PluginOptions {
+  [key: string]: any;
+}
+
+/**
+ * Plugin interface with optional typed options.
+ * Use Plugin<TOptions> for type-safe exporter/validator options.
+ * optionsSchema can be used by CLI/IDE to validate plugin options (e.g. JSON Schema).
+ */
+export interface Plugin<TOptions = PluginOptions> {
   name: string;
-  exporter?: (tokens: DesignTokens, options?: any) => string;
-  validator?: (tokens: DesignTokens, options?: any) => boolean | {
+  exporter?: (tokens: DesignTokens, options?: TOptions) => string;
+  validator?: (tokens: DesignTokens, options?: TOptions) => boolean | {
     valid: boolean;
     errors: string[];
   };
-}
-
-export interface PluginOptions {
-  [key: string]: any;
+  /** Optional schema for plugin options (e.g. JSON Schema) for validation by CLI/IDE */
+  optionsSchema?: Record<string, unknown>;
 }
 
 export interface AccessibilityMetrics {

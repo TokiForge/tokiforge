@@ -2,12 +2,12 @@
 
 **Figma integration for TokiForge design tokens. Sync tokens between Figma and code, compare designs, and manage design system consistency.**
 
-Figma integration for TokiForge design tokens (v2.0.0). Sync tokens between Figma and your codebase.
+Figma integration for TokiForge design tokens (v2.0.1). Sync tokens between Figma and your codebase.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/figma@^2.0.0 @tokiforge/core@^2.0.0
+npm install @tokiforge/figma@^2.0.1 @tokiforge/core@^2.0.1
 ```
 
 ## Setup

@@ -22,6 +22,10 @@ export interface TailwindConfigOptions {
    */
   useCSSVariables?: boolean;
   /**
+   * Where CSS variables are attached (default: ':root')
+   */
+  baseSelector?: string;
+  /**
    * Custom theme key mappings
    */
   themeMappings?: {
@@ -31,6 +35,9 @@ export interface TailwindConfigOptions {
     fontSize?: string[];
     fontFamily?: string[];
     fontWeight?: string[];
+    boxShadow?: string[];
+    lineHeight?: string[];
+    animation?: string[];
   };
 }
 
@@ -103,6 +110,7 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
   const fontSizePaths = themeMappings.fontSize || ['fontSize', 'typography.size'];
   const fontFamilyPaths = themeMappings.fontFamily || ['fontFamily', 'typography.family'];
   const fontWeightPaths = themeMappings.fontWeight || ['fontWeight', 'typography.weight'];
+  const boxShadowPaths = themeMappings.boxShadow || ['shadow', 'boxShadow'];
 
   const colors: Record<string, string> = {};
   for (const path in flattened) {
@@ -178,6 +186,19 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
     }
   }
 
+  const boxShadow: Record<string, string> = {};
+  for (const path in flattened) {
+    if (boxShadowPaths.some((p) => path.startsWith(p))) {
+      const value = flattened[path];
+      if (typeof value === 'string' && (value.includes('px') || value.includes('shadow') || value.includes('rgba') || value.includes('rgb'))) {
+        const key = toTailwindKey(path.replace(/^(shadow|boxShadow)\.?/, ''));
+        boxShadow[key] = useCSSVariables
+          ? `var(--${prefix}-${path.replace(/\./g, '-')})`
+          : String(value);
+      }
+    }
+  }
+
   if (Object.keys(colors).length > 0) {
     config.theme!.extend!.colors = colors;
   }
@@ -195,6 +216,9 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
   }
   if (Object.keys(fontWeight).length > 0) {
     config.theme!.extend!.fontWeight = fontWeight;
+  }
+  if (Object.keys(boxShadow).length > 0) {
+    config.theme!.extend!.boxShadow = boxShadow;
   }
 
   return config;
@@ -222,12 +246,13 @@ export default {
  * Tailwind CSS plugin for TokiForge
  */
 export function tokiforgeTailwindPlugin(options: TailwindConfigOptions) {
+  const baseSelector = options.baseSelector ?? ':root';
   return {
-    handler: (pluginAPI: any) => {
+    handler: (pluginAPI: { addBase: (base: Record<string, Record<string, unknown>>) => void }) => {
       const config = generateTailwindConfig(options);
       if (config.theme?.extend) {
         pluginAPI.addBase({
-          ':root': {},
+          [baseSelector]: {},
         });
       }
     },

@@ -4,7 +4,7 @@ import type { DesignTokens } from '@tokiforge/core';
 import './ContrastVisualizer.css';
 
 interface ContrastVisualizerProps {
-  tokens: DesignTokens;
+  readonly tokens: DesignTokens;
 }
 
 interface ColorToken {
@@ -19,9 +19,9 @@ export function ContrastVisualizer({ tokens }: ContrastVisualizerProps) {
   const colorTokens = useMemo(() => {
     const colors: ColorToken[] = [];
     
-    const extractColors = (obj: any, path: string = ''): void => {
+    const extractColors = (obj: unknown, path: string = ''): void => {
       if (!obj || typeof obj !== 'object') return;
-      
+
       if (Array.isArray(obj)) {
         obj.forEach((item, index) => {
           extractColors(item, `${path}[${index}]`);
@@ -29,13 +29,14 @@ export function ContrastVisualizer({ tokens }: ContrastVisualizerProps) {
         return;
       }
 
-      if ('value' in obj && obj.type === 'color') {
-        colors.push({ path, value: obj.value });
+      const o = obj as Record<string, unknown>;
+      if ('value' in o && o.type === 'color' && typeof o.value === 'string') {
+        colors.push({ path, value: o.value });
       } else {
-        for (const key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        for (const key in o) {
+          if (Object.prototype.hasOwnProperty.call(o, key)) {
             const newPath = path ? `${path}.${key}` : key;
-            extractColors(obj[key], newPath);
+            extractColors(o[key], newPath);
           }
         }
       }
@@ -60,10 +61,12 @@ export function ContrastVisualizer({ tokens }: ContrastVisualizerProps) {
       
       <div className="color-selectors">
         <div className="color-selector">
-          <label>Foreground Color</label>
-          <select 
-            value={selectedColor1} 
+          <label htmlFor="contrast-foreground">Foreground Color</label>
+          <select
+            id="contrast-foreground"
+            value={selectedColor1}
             onChange={(e) => setSelectedColor1(e.target.value)}
+            aria-label="Select foreground color"
           >
             <option value="">Select a color...</option>
             {colorTokens.map((token) => (
@@ -81,10 +84,12 @@ export function ContrastVisualizer({ tokens }: ContrastVisualizerProps) {
         </div>
 
         <div className="color-selector">
-          <label>Background Color</label>
-          <select 
-            value={selectedColor2} 
+          <label htmlFor="contrast-background">Background Color</label>
+          <select
+            id="contrast-background"
+            value={selectedColor2}
             onChange={(e) => setSelectedColor2(e.target.value)}
+            aria-label="Select background color"
           >
             <option value="">Select a color...</option>
             {colorTokens.map((token) => (

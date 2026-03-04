@@ -49,8 +49,8 @@ export class ZeroheightAdapter {
       await this.api.post(endpoint, {
         tokens: this.formatTokensForZeroheight(tokens),
       });
-    } catch (error: any) {
-      throw new Error(`Failed to push tokens to Zeroheight: ${error.message}`);
+    } catch (error: unknown) {
+      throw new Error(`Failed to push tokens to Zeroheight: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
@@ -65,8 +65,8 @@ export class ZeroheightAdapter {
 
       const response = await this.api.get(endpoint);
       return this.parseZeroheightTokens(response.data);
-    } catch (error: any) {
-      throw new Error(`Failed to fetch tokens from Zeroheight: ${error.message}`);
+    } catch (error: unknown) {
+      throw new Error(`Failed to fetch tokens from Zeroheight: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

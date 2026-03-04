@@ -5,9 +5,9 @@ description: Advanced features for enterprise-grade design systems. Learn about 
 
 # Advanced Features
 
-TokiForge v2.0.0 introduces powerful advanced features for enterprise-grade design systems.
+TokiForge v2.0.1 introduces powerful advanced features for enterprise-grade design systems.
 
-> **Included in v2.0.0**: Check out [Advanced Token Features](/guide/advanced-token-features), [Performance Optimization](/guide/performance-optimization), [Accessibility](/guide/accessibility), and [Integrations](/guide/integrations) for the latest features.
+> **Included in v2.0.1**: Check out [Advanced Token Features](/guide/advanced-token-features), [Performance Optimization](/guide/performance-optimization), [Accessibility](/guide/accessibility), and [Integrations](/guide/integrations) for the latest features.
 
 ## Token Versioning & Deprecation
 

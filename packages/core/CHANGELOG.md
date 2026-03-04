@@ -1,5 +1,11 @@
 # @tokiforge/core
 
+## 2.0.1
+
+### Patch Changes
+
+- Plugin<TOptions> generic and optional optionsSchema. SSR: cookieName/cookieMaxAge in options; fixed unused cookieMaxAge in generateSSRHead.
+
 ## 2.0.0
 
 ### Major Changes
