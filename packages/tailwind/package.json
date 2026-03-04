@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/tailwind",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Tailwind CSS integration for TokiForge design tokens",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -56,7 +56,7 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.0.0",
+    "@tokiforge/core": "workspace:^2.0.1",
     "vite": "7.2.1"
   },
   "peerDependencies": {

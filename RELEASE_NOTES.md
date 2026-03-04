@@ -1,3 +1,11 @@
+# Release v2.0.1 - Patch Release (2026-03-04)
+
+## Overview
+
+Patch release with frontend audit fixes, new plugin and provider options, and documentation updates. All packages updated to 2.0.1. See [CHANGELOG.md](CHANGELOG.md) for full 2.0.1 details.
+
+---
+
 # Release v2.0.0 - Major Release
 
 ## Overview

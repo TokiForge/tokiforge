@@ -47,6 +47,9 @@ importers:
       jsdom:
         specifier: ^27.4.0
         version: 27.4.0
+      prettier:
+        specifier: ^3.4.2
+        version: 3.8.1
       typescript:
         specifier: ^5.3.3
         version: 5.9.3
@@ -54,10 +57,10 @@ importers:
   documentation:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../packages/core
       '@tokiforge/vue':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../packages/vue
       '@vueuse/core':
         specifier: ^10.7.0
@@ -289,7 +292,7 @@ importers:
   packages/angular:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../core
     devDependencies:
       '@angular/common':
@@ -320,7 +323,7 @@ importers:
   packages/astro:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../core
     devDependencies:
       astro:
@@ -336,13 +339,13 @@ importers:
   packages/cli:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../core
       '@tokiforge/figma':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../figma
       '@tokiforge/tailwind':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../tailwind
       chalk:
         specifier: ^5.3.0
@@ -407,7 +410,7 @@ importers:
   packages/figma:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../core
       axios:
         specifier: ^1.6.0
@@ -432,7 +435,7 @@ importers:
   packages/nextjs:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../core
     devDependencies:
       '@types/react':
@@ -453,8 +456,11 @@ importers:
 
   packages/playground:
     dependencies:
+      '@tanstack/react-virtual':
+        specifier: ^3.13.2
+        version: 3.13.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../core
       react:
         specifier: ^18.2.0
@@ -522,7 +528,7 @@ importers:
   packages/remix:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../core
     devDependencies:
       '@remix-run/node':
@@ -547,7 +553,7 @@ importers:
   packages/solid:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../core
     devDependencies:
       solid-js:
@@ -570,9 +576,9 @@ importers:
         version: 7.6.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@storybook/components':
         specifier: ^7.0.0 || ^8.0.0
-        version: 8.6.14(storybook@8.6.15(prettier@2.8.8))
+        version: 8.6.14(storybook@8.6.15(prettier@3.8.1))
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../core
       react:
         specifier: ^18.0.0
@@ -594,7 +600,7 @@ importers:
   packages/svelte:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../core
     devDependencies:
       '@types/node':
@@ -619,7 +625,7 @@ importers:
   packages/sveltekit:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../core
     devDependencies:
       '@sveltejs/kit':
@@ -638,7 +644,7 @@ importers:
   packages/tailwind:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.0.0
+        specifier: workspace:^2.0.1
         version: link:../core
       vite:
         specifier: 7.2.1
@@ -3378,6 +3384,15 @@ packages:
   '@swc/types@0.1.25':
     resolution: {integrity: sha512-iAoY/qRhNH8a/hBvm3zKj9qQ4oc2+3w1unPJa2XvTK3XjeLXtzcCingVPw/9e5mn1+0yPqxcBGp9Jf0pkfMb1g==}
 
+  '@tanstack/react-virtual@3.13.19':
+    resolution: {integrity: sha512-KzwmU1IbE0IvCZSm6OXkS+kRdrgW2c2P3Ho3NC+zZXWK6oObv/L+lcV/2VuJ+snVESRlMJ+w/fg4WXI/JzoNGQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  '@tanstack/virtual-core@3.13.19':
+    resolution: {integrity: sha512-/BMP7kNhzKOd7wnDeB8NrIRNLwkf5AhCYCvtfZV2GXWbBieFm/el0n6LOAXlTi6ZwHICSNnQcIxRCWHrLzDY+g==}
+
   '@testing-library/dom@10.4.1':
     resolution: {integrity: sha512-o4PXJQidqJl82ckFaXUeoAW+XysPLauYI43Abki5hABd853iMhitooc6znOnczgbTYmEP6U6/y1ZyKAIsvMKGg==}
     engines: {node: '>=18'}
@@ -3402,7 +3417,7 @@ packages:
     peerDependencies:
       '@angular/common': '>=17.0.0 <22.0.0'
       '@angular/core': '>=17.0.0 <22.0.0'
-      '@tokiforge/core': workspace:^2.0.0
+      '@tokiforge/core': workspace:^2.0.1
 
   '@tokiforge/core@file:packages/core':
     resolution: {directory: packages/core, type: directory}
@@ -3410,19 +3425,19 @@ packages:
   '@tokiforge/react@file:packages/react':
     resolution: {directory: packages/react, type: directory}
     peerDependencies:
-      '@tokiforge/core': workspace:^2.0.0
+      '@tokiforge/core': workspace:^2.0.1
       react: '>=16.8.0'
 
   '@tokiforge/svelte@file:packages/svelte':
     resolution: {directory: packages/svelte, type: directory}
     peerDependencies:
-      '@tokiforge/core': workspace:^2.0.0
+      '@tokiforge/core': workspace:^2.0.1
       svelte: '>=3.0.0'
 
   '@tokiforge/vue@file:packages/vue':
     resolution: {directory: packages/vue, type: directory}
     peerDependencies:
-      '@tokiforge/core': workspace:^2.0.0
+      '@tokiforge/core': workspace:^2.0.1
       vue: '>=3.0.0'
 
   '@tufjs/canonical-json@2.0.0':
@@ -7189,6 +7204,11 @@ packages:
   prettier@2.8.8:
     resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
+    hasBin: true
+
+  prettier@3.8.1:
+    resolution: {integrity: sha512-UOnG6LftzbdaHZcKoPFtOcCKztrQ57WkHDeRD9t/PTQtmT0NHSeWWepj6pS0z/N7+08BHFDQVUrfmfMRcZwbMg==}
+    engines: {node: '>=14'}
     hasBin: true
 
   pretty-format@27.5.1:
@@ -11692,17 +11712,17 @@ snapshots:
     dependencies:
       '@storybook/global': 5.0.0
 
-  '@storybook/components@8.6.14(storybook@8.6.15(prettier@2.8.8))':
+  '@storybook/components@8.6.14(storybook@8.6.15(prettier@3.8.1))':
     dependencies:
-      storybook: 8.6.15(prettier@2.8.8)
+      storybook: 8.6.15(prettier@3.8.1)
 
   '@storybook/core-events@7.6.17':
     dependencies:
       ts-dedent: 2.2.0
 
-  '@storybook/core@8.6.15(prettier@2.8.8)(storybook@8.6.15(prettier@2.8.8))':
+  '@storybook/core@8.6.15(prettier@3.8.1)(storybook@8.6.15(prettier@3.8.1))':
     dependencies:
-      '@storybook/theming': 8.6.15(storybook@8.6.15(prettier@2.8.8))
+      '@storybook/theming': 8.6.15(storybook@8.6.15(prettier@3.8.1))
       better-opn: 3.0.2
       browser-assert: 1.2.1
       esbuild: 0.25.12
@@ -11714,7 +11734,7 @@ snapshots:
       util: 0.12.5
       ws: 8.19.0
     optionalDependencies:
-      prettier: 2.8.8
+      prettier: 3.8.1
     transitivePeerDependencies:
       - bufferutil
       - storybook
@@ -11779,9 +11799,9 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@storybook/theming@8.6.15(storybook@8.6.15(prettier@2.8.8))':
+  '@storybook/theming@8.6.15(storybook@8.6.15(prettier@3.8.1))':
     dependencies:
-      storybook: 8.6.15(prettier@2.8.8)
+      storybook: 8.6.15(prettier@3.8.1)
 
   '@storybook/types@7.6.17':
     dependencies:
@@ -11912,6 +11932,14 @@ snapshots:
   '@swc/types@0.1.25':
     dependencies:
       '@swc/counter': 0.1.3
+
+  '@tanstack/react-virtual@3.13.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@tanstack/virtual-core': 3.13.19
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  '@tanstack/virtual-core@3.13.19': {}
 
   '@testing-library/dom@10.4.1':
     dependencies:
@@ -16909,6 +16937,8 @@ snapshots:
 
   prettier@2.8.8: {}
 
+  prettier@3.8.1: {}
+
   pretty-format@27.5.1:
     dependencies:
       ansi-regex: 5.0.1
@@ -17828,11 +17858,11 @@ snapshots:
 
   store2@2.14.4: {}
 
-  storybook@8.6.15(prettier@2.8.8):
+  storybook@8.6.15(prettier@3.8.1):
     dependencies:
-      '@storybook/core': 8.6.15(prettier@2.8.8)(storybook@8.6.15(prettier@2.8.8))
+      '@storybook/core': 8.6.15(prettier@3.8.1)(storybook@8.6.15(prettier@3.8.1))
     optionalDependencies:
-      prettier: 2.8.8
+      prettier: 3.8.1
     transitivePeerDependencies:
       - bufferutil
       - supports-color

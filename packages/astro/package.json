@@ -1,6 +1,6 @@
 {
     "name": "@tokiforge/astro",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Astro integration for TokiForge theming",
     "type": "module",
     "main": "./dist/index.cjs",
@@ -25,7 +25,7 @@
     "sideEffects": false,
     "peerDependencies": {
         "astro": ">=4.0.0",
-        "@tokiforge/core": "workspace:^2.0.0"
+        "@tokiforge/core": "workspace:^2.0.1"
     },
     "devDependencies": {
         "astro": "^4.0.0",
@@ -33,7 +33,7 @@
         "typescript": "^5.3.3"
     },
     "dependencies": {
-        "@tokiforge/core": "workspace:^2.0.0"
+        "@tokiforge/core": "workspace:^2.0.1"
     },
     "keywords": [
         "astro",

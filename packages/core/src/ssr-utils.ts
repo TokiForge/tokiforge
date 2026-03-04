@@ -31,6 +31,14 @@ export interface SSRThemeOptions {
    * Minify the output CSS (default: false)
    */
   minify?: boolean;
+  /**
+   * Cookie name for theme persistence (default: 'tokiforge-theme')
+   */
+  cookieName?: string;
+  /**
+   * Max age for theme cookie in seconds (e.g. 31536000 for 1 year)
+   */
+  cookieMaxAge?: number;
 }
 
 export interface CriticalCSSOptions {
@@ -331,6 +339,7 @@ export class SSRUtils {
     options: {
       theme: string;
       cookieName?: string;
+      cookieMaxAge?: number;
       bodyClassPrefix?: string;
       includeHydrationScript?: boolean;
       minify?: boolean;

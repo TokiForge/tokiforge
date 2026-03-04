@@ -43,6 +43,7 @@ function Button() {
   
   return (
     <button
+      type="button"
       className="theme-button"
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
     >

@@ -31,6 +31,10 @@ export default defineConfig({
           'fs': 'fs',
           'path': 'path',
         },
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'tokiforge': ['@tokiforge/core'],
+        },
       },
       onwarn(warning, warn) {
         if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;

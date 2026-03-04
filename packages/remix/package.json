@@ -1,6 +1,6 @@
 {
     "name": "@tokiforge/remix",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Remix integration for TokiForge theming",
     "type": "module",
     "main": "./dist/index.cjs",
@@ -32,7 +32,7 @@
         "@remix-run/react": ">=2.0.0",
         "@remix-run/node": ">=2.0.0",
         "react": ">=18.0.0",
-        "@tokiforge/core": "workspace:^2.0.0"
+        "@tokiforge/core": "workspace:^2.0.1"
     },
     "devDependencies": {
         "@remix-run/react": "^2.0.0",
@@ -43,7 +43,7 @@
         "typescript": "^5.3.3"
     },
     "dependencies": {
-        "@tokiforge/core": "workspace:^2.0.0"
+        "@tokiforge/core": "workspace:^2.0.1"
     },
     "keywords": [
         "remix",

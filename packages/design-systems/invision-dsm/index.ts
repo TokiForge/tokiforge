@@ -49,8 +49,8 @@ export class InVisionDSMAdapter {
       await this.api.post(endpoint, {
         tokens: this.formatTokensForDSM(tokens),
       });
-    } catch (error: any) {
-      throw new Error(`Failed to push tokens to InVision DSM: ${error.message}`);
+    } catch (error: unknown) {
+      throw new Error(`Failed to push tokens to InVision DSM: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
@@ -65,8 +65,8 @@ export class InVisionDSMAdapter {
 
       const response = await this.api.get(endpoint);
       return this.parseDSMTokens(response.data);
-    } catch (error: any) {
-      throw new Error(`Failed to fetch tokens from InVision DSM: ${error.message}`);
+    } catch (error: unknown) {
+      throw new Error(`Failed to fetch tokens from InVision DSM: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { ThemeRuntime } from '@tokiforge/core';
 import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
 
@@ -20,58 +20,63 @@ interface ThemeProviderProps {
   selector?: string;
   prefix?: string;
   defaultTheme?: string;
+  /** LocalStorage key for persisting selected theme (e.g. 'tokiforge-theme') */
+  storageKey?: string;
+  /** Whether to read/write theme from storage (default: true when storageKey is set) */
+  persist?: boolean;
+  /** Callback when theme changes (e.g. analytics) */
+  onThemeChange?: (themeName: string) => void;
+  /** Pass-through to root/body when applying theme class to avoid hydration warnings */
+  suppressHydrationWarning?: boolean;
   children: React.ReactNode;
 }
+
+const DEFAULT_STORAGE_KEY = 'tokiforge-theme';
 
 export function ThemeProvider({
   config,
   selector = ':root',
   prefix = 'hf',
   defaultTheme,
+  storageKey = DEFAULT_STORAGE_KEY,
+  persist = true,
+  onThemeChange,
   children,
 }: ThemeProviderProps) {
   const [runtime] = useState(() => new ThemeRuntime(config));
-  const [theme, setThemeState] = useState(defaultTheme || config.defaultTheme || config.themes[0]?.name || 'default');
+  const initialTheme =
+    defaultTheme || config.defaultTheme || config.themes[0]?.name || 'default';
+  const [theme, setThemeState] = useState(() => {
+    if (typeof window === 'undefined' || persist === false) return initialTheme;
+    try {
+      const key = storageKey ?? DEFAULT_STORAGE_KEY;
+      const saved = window.localStorage.getItem(key);
+      if (saved && runtime.getAvailableThemes().includes(saved)) return saved;
+    } catch {
+      // ignore
+    }
+    return initialTheme;
+  });
   const [tokens, setTokens] = useState<DesignTokens>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  // Initialize tokens
+  const themeRef = useRef(theme);
+  themeRef.current = theme;
   useEffect(() => {
-    const initProps = async () => {
-      setIsLoading(true);
-      try {
-        if (defaultTheme) {
-          await runtime.applyTheme(defaultTheme, selector, prefix);
-        } else {
-          await runtime.init(selector, prefix);
-        }
-        setThemeState(runtime.getCurrentTheme() || 'default');
-        // We rely on the event listener for token updates, or we can set them here if needed
-        // But runtime.init/applyTheme dispatches the event.
-        // However, React state updates might be safer here too?
-        // The event listener below handles it.
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setIsLoading(false);
-      }
+    setIsLoading(true);
+    try {
+      const initial = themeRef.current || defaultTheme || config.defaultTheme || config.themes[0]?.name || 'default';
+      runtime.applyTheme(initial, selector, prefix);
+      setThemeState(runtime.getCurrentTheme() || initial);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
     }
-    initProps();
-  }, [runtime, selector, prefix, defaultTheme]);
-
-  /*
-  const [tokens, setTokens] = useState<DesignTokens>(() => runtime.getThemeTokens(theme)); 
-  // Initial state for tokens is tricky with async, so start empty or try sync if available?
-  // Ideally, getThemeTokens throws if not loaded. 
-  // We'll let the effect handle population.
-  */
-
-  useEffect(() => {
-    runtime.init(selector, prefix);
     return () => {
       runtime.destroy();
     };
-  }, [runtime, selector, prefix]);
+  }, [runtime, selector, prefix, defaultTheme, config.defaultTheme, config.themes]);
 
   useEffect(() => {
     const handleThemeChange = (e: Event) => {
@@ -86,18 +91,28 @@ export function ThemeProvider({
     };
   }, []);
 
-  const setTheme = useCallback(async (themeName: string) => {
-    setIsLoading(true);
-    try {
-      await runtime.applyTheme(themeName, selector, prefix);
-      setThemeState(themeName);
-      // setTokens is handled by event listener
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [runtime, selector, prefix]);
+  const setTheme = useCallback(
+    async (themeName: string) => {
+      setIsLoading(true);
+      try {
+        runtime.applyTheme(themeName, selector, prefix);
+        setThemeState(themeName);
+        if (persist && typeof window !== 'undefined' && window.localStorage) {
+          try {
+            window.localStorage.setItem(storageKey ?? DEFAULT_STORAGE_KEY, themeName);
+          } catch {
+            // ignore
+          }
+        }
+        onThemeChange?.(themeName);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [runtime, selector, prefix, storageKey, persist, onThemeChange]
+  );
 
   const nextTheme = useCallback(async () => {
     const newTheme = runtime.nextTheme();

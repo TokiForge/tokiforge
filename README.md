@@ -389,7 +389,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 
 ## Roadmap
 
-### Completed (v2.0.0)
+### Completed (v2.0.1)
 
 - [x] Core engine + React adapter
 - [x] Vue/Svelte/Angular adapters
@@ -413,7 +413,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 - [x] Next.js 14+, Remix, Astro, Solid, SvelteKit support
 - [x] SSR utilities with FOUC prevention
 
-### In Progress (v2.0.0+)
+### In Progress (v2.0.1+)
 
 - [ ] Enhanced semantic tokens & aliasing
 - [ ] Multi-platform exporters (iOS, Android, React Native)

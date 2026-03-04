@@ -1,6 +1,6 @@
 {
   "name": "tokiforge",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "module",
   "description": "Framework-agnostic design token and theming engine for React, Vue, Svelte, Angular, Next.js, Remix, and more. Runtime theme switching, CSS variables, TypeScript support, dark mode, accessibility features, and <3KB gzipped. Perfect for design systems and multi-framework projects.",
   "private": true,
@@ -42,7 +42,8 @@
     "publish:cli": "cd packages/cli && pnpm publish",
     "publish:all": "pnpm run publish:core && pnpm run publish:react && pnpm run publish:vue && pnpm run publish:svelte && pnpm run publish:angular && pnpm run publish:tailwind && pnpm run publish:figma && pnpm run publish:cli",
     "publish:ci": "changeset publish",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "format": "prettier --write \"packages/**/*.{ts,tsx,js,jsx,json,css,md}\" \"examples/**/*.{ts,tsx,js,jsx,json,css,md}\" \"documentation/**/*.{md,vue}\" \"*.{json,md}\""
   },
   "keywords": [
     "design-tokens",
@@ -104,6 +105,7 @@
     "globals": "^17.1.0",
     "happy-dom": "^20.3.7",
     "jsdom": "^27.4.0",
+    "prettier": "^3.4.2",
     "typescript": "^5.3.3"
   },
   "engines": {

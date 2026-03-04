@@ -1,5 +1,11 @@
 # @tokiforge/react
 
+## 2.0.1
+
+### Patch Changes
+
+- ThemeContext single init; provider options: storageKey, persist, onThemeChange. Effect deps and cleanup fixes (Remix/Next).
+
 ## 2.0.0
 
 ### Major Changes

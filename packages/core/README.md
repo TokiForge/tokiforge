@@ -2,12 +2,12 @@
 
 **Framework-agnostic design token and theming engine. Runtime theme switching, CSS variables, token parsing, validation, and export. Supports React, Vue, Angular, Svelte, Next.js, Remix, and more.**
 
-Core design token engine for TokiForge v2.0.0.
+Core design token engine for TokiForge v2.0.1.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/core@^2.0.0
+npm install @tokiforge/core@^2.0.1
 ```
 
 ## Usage
@@ -51,7 +51,7 @@ runtime.init();
 runtime.applyTheme("dark");
 ```
 
-## Features (v2.0.0)
+## Features (v2.0.1)
 
 - **Performance Optimization** - Multi-tier caching, lazy loading, and compression
 - **Accessibility** - High contrast mode, reduced motion, color blind support, font scaling

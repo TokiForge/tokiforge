@@ -5,14 +5,14 @@ description: Complete guide to using TokiForge with Vue 3. Learn how to use prov
 
 # Vue Guide
 
-> **TokiForge v2.0.0** | **Vue 3+**
+> **TokiForge v2.0.1** | **Vue 3+**
 
 Complete guide to using TokiForge with Vue 3.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/vue@^2.0.0 @tokiforge/core@^2.0.0
+npm install @tokiforge/vue@^2.0.1 @tokiforge/core@^2.0.1
 ```
 
 ## Setup

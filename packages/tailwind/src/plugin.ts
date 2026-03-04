@@ -7,7 +7,11 @@ export interface TailwindPluginOptions {
   /**
    * Path to tokens file (JSON)
    */
-  tokensPath: string;
+  tokensPath?: string;
+  /**
+   * Design tokens object (alternative to tokensPath; e.g. for Vite/HMR)
+   */
+  tokens?: DesignTokens;
   /**
    * CSS variable prefix (default: 'hf')
    */
@@ -25,11 +29,38 @@ export interface TailwindPluginOptions {
     borderRadius?: string[];
     fontSize?: string[];
     fontFamily?: string[];
+    boxShadow?: string[];
+    lineHeight?: string[];
+    animation?: string[];
   };
   /**
    * Tailwind v4 support
    */
   v4?: boolean;
+  /**
+   * Where CSS variables are attached (default: ':root')
+   */
+  baseSelector?: string;
+  /**
+   * If true, fail build when tokens are missing/invalid; if false, warn and skip (default: false)
+   */
+  strict?: boolean;
+  /**
+   * When false, only inject CSS variables, no .spacing-* / .gap-* utilities (default: true)
+   */
+  includeUtilities?: boolean;
+  /**
+   * Token path prefixes to exclude from mapping (e.g. ['internal.', 'legacy.'])
+   */
+  excludePaths?: string[];
+  /**
+   * Prefix for generated utility classes (independent of CSS variable prefix)
+   */
+  customUtilityPrefix?: string;
+  /**
+   * Log resolved paths and mapped key count (dev only, default: false)
+   */
+  debug?: boolean;
 }
 
 interface TokenUtilityMapping {
@@ -38,6 +69,7 @@ interface TokenUtilityMapping {
   borderRadius: Record<string, string>;
   fontSize: Record<string, string>;
   fontFamily: Record<string, string>;
+  boxShadow: Record<string, string>;
 }
 
 /**
@@ -69,12 +101,17 @@ function flattenTokensForUtilities(tokens: DesignTokens, prefix = ''): Record<st
 /**
  * Map tokens to Tailwind utilities
  */
-export function mapTokensToUtilities(tokens: DesignTokens, themeMappings?: TailwindPluginOptions['themeMappings']): TokenUtilityMapping {
+export function mapTokensToUtilities(
+  tokens: DesignTokens,
+  themeMappings?: TailwindPluginOptions['themeMappings'],
+  excludePaths?: string[]
+): TokenUtilityMapping {
   const colorPaths = themeMappings?.colors || ['colors'];
   const spacingPaths = themeMappings?.spacing || ['spacing'];
   const radiusPaths = themeMappings?.borderRadius || ['borderRadius', 'radius'];
   const fontSizePaths = themeMappings?.fontSize || ['typography', 'fontSize'];
   const fontFamilyPaths = themeMappings?.fontFamily || ['fontFamily'];
+  const boxShadowPaths = themeMappings?.boxShadow || ['shadow', 'boxShadow'];
 
   const flattened = flattenTokensForUtilities(tokens);
 
@@ -84,9 +121,11 @@ export function mapTokensToUtilities(tokens: DesignTokens, themeMappings?: Tailw
     borderRadius: {},
     fontSize: {},
     fontFamily: {},
+    boxShadow: {},
   };
 
   for (const [path, value] of Object.entries(flattened)) {
+    if (excludePaths?.some((p) => path.startsWith(p))) continue;
     const pathLower = path.toLowerCase();
 
     // Color mapping
@@ -137,6 +176,14 @@ export function mapTokensToUtilities(tokens: DesignTokens, themeMappings?: Tailw
         utilities.fontFamily[key] = value;
       }
     }
+
+    // Box shadow mapping
+    if (boxShadowPaths.some((p) => pathLower.includes(p.toLowerCase()))) {
+      if (typeof value === 'string' && (value.includes('px') || value.includes('shadow') || value.includes('rgba') || value.includes('rgb'))) {
+        const key = path.split('.').slice(1).join('-').toLowerCase();
+        utilities.boxShadow[key] = value;
+      }
+    }
   }
 
   return utilities;
@@ -151,7 +198,12 @@ function loadTokensWithWatch(tokensPath: string, options: TailwindPluginOptions)
   }
 
   const content = fs.readFileSync(tokensPath, 'utf-8');
-  const tokens = JSON.parse(content);
+  let tokens: DesignTokens;
+  try {
+    tokens = JSON.parse(content);
+  } catch (parseError) {
+    throw new Error(`Invalid tokens JSON: ${parseError}`);
+  }
 
   if (options.watch) {
     fs.watchFile(tokensPath, () => {
@@ -170,32 +222,59 @@ function loadTokensWithWatch(tokensPath: string, options: TailwindPluginOptions)
   return tokens;
 }
 
+function getTokens(options: TailwindPluginOptions): DesignTokens {
+  if (options.tokens) {
+    return options.tokens;
+  }
+  if (!options.tokensPath) {
+    throw new Error('Either tokensPath or tokens must be provided');
+  }
+  return loadTokensWithWatch(options.tokensPath, options);
+}
+
 /**
  * Create Tailwind plugin for token integration
  */
 export function createTailwindPlugin(options: TailwindPluginOptions) {
   const {
-    tokensPath,
     prefix = 'hf',
-    watch = false,
     themeMappings,
+    baseSelector = ':root',
+    strict = false,
+    includeUtilities = true,
+    excludePaths,
+    customUtilityPrefix,
+    debug = false,
   } = options;
+
+  const utilityPrefix = customUtilityPrefix ?? prefix;
 
   return plugin(
     function ({ addBase, addUtilities, e }) {
-      // Load tokens
       let tokens: DesignTokens;
       try {
-        tokens = loadTokensWithWatch(tokensPath, { watch } as TailwindPluginOptions);
+        tokens = getTokens(options);
       } catch (error) {
+        if (strict) {
+          throw error;
+        }
         console.warn(`⚠️ Failed to load tokens: ${error}`);
         return;
       }
 
-      // Map tokens to utilities
-      const utilities = mapTokensToUtilities(tokens, themeMappings);
+      const utilities = mapTokensToUtilities(tokens, themeMappings, excludePaths);
 
-      // Add CSS variables for colors
+      if (debug) {
+        const totalKeys =
+          Object.keys(utilities.colors).length +
+          Object.keys(utilities.spacing).length +
+          Object.keys(utilities.borderRadius).length +
+          Object.keys(utilities.fontSize).length +
+          Object.keys(utilities.fontFamily).length +
+          Object.keys(utilities.boxShadow).length;
+        console.log(`[TokiForge Tailwind] Mapped ${totalKeys} token keys for ${baseSelector}`);
+      }
+
       const colorVars: Record<string, string> = {};
       for (const [key, value] of Object.entries(utilities.colors)) {
         colorVars[`--${prefix}-${key}`] = value;
@@ -203,82 +282,94 @@ export function createTailwindPlugin(options: TailwindPluginOptions) {
 
       if (Object.keys(colorVars).length > 0) {
         addBase({
-          ':root': colorVars,
+          [baseSelector]: colorVars,
         });
       }
 
-      // Add utilities for spacing
-      const spacingUtilities: Record<string, any> = {};
-      for (const [key, value] of Object.entries(utilities.spacing)) {
-        spacingUtilities[`.${e(`spacing-${key}`)}}`] = {
-          padding: value,
-        };
-        spacingUtilities[`.${e(`gap-${key}`)}}`] = {
-          gap: value,
-        };
-      }
-
-      if (Object.keys(spacingUtilities).length > 0) {
-        addUtilities(spacingUtilities);
+      if (includeUtilities) {
+        const spacingUtilities: Record<string, Record<string, string>> = {};
+        for (const [key, value] of Object.entries(utilities.spacing)) {
+          spacingUtilities[`.${e(`${utilityPrefix}-spacing-${key}`)}`] = {
+            padding: value,
+          };
+          spacingUtilities[`.${e(`${utilityPrefix}-gap-${key}`)}`] = {
+            gap: value,
+          };
+        }
+        if (Object.keys(spacingUtilities).length > 0) {
+          addUtilities(spacingUtilities);
+        }
       }
     },
-    {
-      theme: {
-        extend: {
-          colors: mapTokensToUtilities(
-            loadTokensWithWatch(tokensPath, options),
-            themeMappings
-          ).colors,
-          spacing: mapTokensToUtilities(
-            loadTokensWithWatch(tokensPath, options),
-            themeMappings
-          ).spacing,
-          borderRadius: mapTokensToUtilities(
-            loadTokensWithWatch(tokensPath, options),
-            themeMappings
-          ).borderRadius,
-          fontSize: mapTokensToUtilities(
-            loadTokensWithWatch(tokensPath, options),
-            themeMappings
-          ).fontSize,
-          fontFamily: mapTokensToUtilities(
-            loadTokensWithWatch(tokensPath, options),
-            themeMappings
-          ).fontFamily,
+    (() => {
+      let tokens: DesignTokens;
+      try {
+        tokens = getTokens(options);
+      } catch (error) {
+        if (strict) throw error;
+        return { theme: { extend: {} } };
+      }
+      const utilities = mapTokensToUtilities(tokens, themeMappings, excludePaths);
+      return {
+        theme: {
+          extend: {
+            colors: utilities.colors,
+            spacing: utilities.spacing,
+            borderRadius: utilities.borderRadius,
+            fontSize: utilities.fontSize,
+            fontFamily: utilities.fontFamily,
+            boxShadow: Object.keys(utilities.boxShadow).length > 0 ? utilities.boxShadow : undefined,
+          },
         },
-      },
-    }
+      };
+    })()
   );
 }
 
 /**
  * Generate Tailwind config with token presets
  */
-export function generateTailwindPreset(tokensPath: string, options: Partial<TailwindPluginOptions> = {}): Partial<Config> {
-  const { themeMappings } = options;
+export function generateTailwindPreset(
+  tokensPathOrOptions: string | (Partial<TailwindPluginOptions> & { tokensPath?: string }),
+  options: Partial<TailwindPluginOptions> = {}
+): Partial<Config> {
+  const opts =
+    typeof tokensPathOrOptions === 'string'
+      ? { ...options, tokensPath: tokensPathOrOptions }
+      : { ...tokensPathOrOptions };
+  const { themeMappings, excludePaths } = opts;
 
-  if (!fs.existsSync(tokensPath)) {
-    throw new Error(`Tokens file not found: ${tokensPath}`);
+  const tokens = opts.tokens
+    ? opts.tokens
+    : (() => {
+        const path = opts.tokensPath;
+        if (!path || !fs.existsSync(path)) {
+          throw new Error(`Tokens file not found: ${path ?? 'tokensPath'}`);
+        }
+        const content = fs.readFileSync(path, 'utf-8');
+        return JSON.parse(content) as DesignTokens;
+      })();
+
+  const utilities = mapTokensToUtilities(tokens, themeMappings, excludePaths);
+
+  const extend: Record<string, unknown> = {
+    colors: utilities.colors,
+    spacing: utilities.spacing,
+    borderRadius: utilities.borderRadius,
+    fontSize: utilities.fontSize,
+    fontFamily: utilities.fontFamily,
+  };
+  if (Object.keys(utilities.boxShadow).length > 0) {
+    extend.boxShadow = utilities.boxShadow;
   }
-
-  const content = fs.readFileSync(tokensPath, 'utf-8');
-  const tokens = JSON.parse(content);
-  const utilities = mapTokensToUtilities(tokens, themeMappings);
 
   const config: Partial<Config> = {
     theme: {
-      extend: {
-        colors: utilities.colors,
-        spacing: utilities.spacing,
-        borderRadius: utilities.borderRadius,
-        fontSize: utilities.fontSize,
-        fontFamily: utilities.fontFamily,
-      },
+      extend,
     },
   };
 
-  if (options.v4) {
-    // Tailwind v4 uses @theme variables
+  if (opts.v4) {
     const cssVariables: Record<string, string> = {};
     for (const [key, value] of Object.entries(utilities.colors)) {
       cssVariables[`--color-${key}`] = value as string;

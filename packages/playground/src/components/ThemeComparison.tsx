@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
 import './ThemeComparison.css';
 
@@ -6,54 +6,90 @@ interface ThemeComparisonProps {
   config: ThemeConfig;
 }
 
-export function ThemeComparison({ config }: ThemeComparisonProps) {
-  const themes = config.themes || [];
+interface FlatEntry { value: unknown; type?: string }
 
-  if (themes.length < 2) {
-    return (
-      <div className="theme-comparison">
-        <h3>Theme Comparison</h3>
-        <div className="comparison-placeholder">
-          Add at least two themes to enable comparison
-        </div>
-      </div>
-    );
-  }
+interface ComparisonRowData {
+  path: string;
+  values: (FlatEntry | undefined)[];
+  hasDifference: boolean;
+}
 
-  const flattenTokens = (tokens: DesignTokens, prefix: string = ''): Map<string, any> => {
-    const flat = new Map();
-    
-    const flatten = (obj: any, path: string) => {
-      if (!obj || typeof obj !== 'object') return;
-      
-      if (Array.isArray(obj)) {
-        obj.forEach((item, index) => {
-          flatten(item, `${path}[${index}]`);
-        });
-        return;
-      }
+const ComparisonTableRow = memo(function ComparisonTableRow({ row }: { row: ComparisonRowData }) {
+  return (
+    <tr className={row.hasDifference ? 'has-difference' : ''}>
+      <td className="token-path">{row.path}</td>
+      {row.values.map((value, idx) => {
+        if (!value) {
+          return (
+            <td key={`${row.path}-${idx}-missing`} className="token-value missing">
+              <span className="missing-indicator">—</span>
+            </td>
+          );
+        }
+        const isColor = value.type === 'color' && typeof value.value === 'string' && value.value.startsWith('#');
+        return (
+          <td key={`${row.path}-${idx}`} className="token-value">
+            {isColor ? (
+              <div className="color-token-value">
+                <div className="color-swatch-tiny" style={{ backgroundColor: value.value as string }} />
+                <span>{String(value.value)}</span>
+              </div>
+            ) : (
+              <span>{String(value.value)}</span>
+            )}
+          </td>
+        );
+      })}
+      <td className="token-status">
+        {row.hasDifference ? (
+          <span className="status-badge different">Different</span>
+        ) : (
+          <span className="status-badge same">Same</span>
+        )}
+      </td>
+    </tr>
+  );
+});
 
-      if ('value' in obj || '$value' in obj) {
-        flat.set(path, { value: obj.value || obj.$value, type: obj.type });
-      } else {
-        for (const key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            const newPath = path ? `${path}.${key}` : key;
-            flatten(obj[key], newPath);
-          }
+function flattenTokensImpl(tokens: DesignTokens, prefix: string): Map<string, FlatEntry> {
+  const flat = new Map<string, FlatEntry>();
+
+  const flatten = (obj: unknown, path: string): void => {
+    if (!obj || typeof obj !== 'object') return;
+
+    if (Array.isArray(obj)) {
+      obj.forEach((item, index) => {
+        flatten(item, `${path}[${index}]`);
+      });
+      return;
+    }
+
+    if ('value' in obj || '$value' in obj) {
+      const o = obj as { value?: unknown; $value?: unknown; type?: string };
+      flat.set(path, { value: o.value ?? o.$value, type: o.type });
+    } else {
+      const record = obj as Record<string, unknown>;
+      for (const key in record) {
+        if (Object.prototype.hasOwnProperty.call(record, key)) {
+          const newPath = path ? `${path}.${key}` : key;
+          flatten(record[key], newPath);
         }
       }
-    };
-
-    flatten(tokens, prefix);
-    return flat;
+    }
   };
+
+  flatten(tokens, prefix);
+  return flat;
+}
+
+export function ThemeComparison({ config }: Readonly<ThemeComparisonProps>) {
+  const themes = config.themes || [];
 
   const comparisonData = useMemo(() => {
     const allTokenPaths = new Set<string>();
     const themeData = themes.map((theme) => ({
       name: theme.name,
-      tokens: flattenTokens(theme.tokens),
+      tokens: flattenTokensImpl(theme.tokens, ''),
     }));
 
     // Collect all token paths across all themes
@@ -92,6 +128,21 @@ export function ThemeComparison({ config }: ThemeComparisonProps) {
     };
   }, [comparisonData]);
 
+  if (themes.length < 2) {
+    return (
+      <div className="theme-comparison">
+        <h3>Theme Comparison</h3>
+        <div className="comparison-placeholder">
+          Add at least two themes to enable comparison
+        </div>
+      </div>
+    );
+  }
+
+  const sortedRows = [...comparisonData.rows].sort((a, b) =>
+    a.hasDifference === b.hasDifference ? 0 : a.hasDifference ? -1 : 1
+  );
+
   return (
     <div className="theme-comparison">
       <h3>Theme Comparison</h3>
@@ -129,47 +180,9 @@ export function ThemeComparison({ config }: ThemeComparisonProps) {
             </tr>
           </thead>
           <tbody>
-            {comparisonData.rows
-              .sort((a, b) => (a.hasDifference === b.hasDifference ? 0 : a.hasDifference ? -1 : 1))
-              .map((row) => (
-                <tr key={row.path} className={row.hasDifference ? 'has-difference' : ''}>
-                  <td className="token-path">{row.path}</td>
-                  {row.values.map((value, idx) => {
-                    if (!value) {
-                      return (
-                        <td key={idx} className="token-value missing">
-                          <span className="missing-indicator">—</span>
-                        </td>
-                      );
-                    }
-
-                    const isColor = value.type === 'color' && typeof value.value === 'string' && value.value.startsWith('#');
-
-                    return (
-                      <td key={idx} className="token-value">
-                        {isColor ? (
-                          <div className="color-token-value">
-                            <div
-                              className="color-swatch-tiny"
-                              style={{ backgroundColor: value.value }}
-                            />
-                            <span>{value.value}</span>
-                          </div>
-                        ) : (
-                          <span>{String(value.value)}</span>
-                        )}
-                      </td>
-                    );
-                  })}
-                  <td className="token-status">
-                    {row.hasDifference ? (
-                      <span className="status-badge different">Different</span>
-                    ) : (
-                      <span className="status-badge same">Same</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
+            {sortedRows.map((row) => (
+              <ComparisonTableRow key={row.path} row={row} />
+            ))}
           </tbody>
         </table>
       </div>

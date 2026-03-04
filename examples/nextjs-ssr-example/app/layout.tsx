@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { SSRUtils } from '@tokiforge/core';
 import { themeConfig } from '../config/tokens';
 import { ClientThemeProvider } from './ThemeProvider';
+import { ErrorBoundary } from './ErrorBoundary';
 
 export const metadata: Metadata = {
   title: 'Next.js SSR Example - TokiForge',
@@ -39,9 +40,11 @@ export default function RootLayout({
         {script && <script dangerouslySetInnerHTML={{ __html: script }} />}
       </head>
       <body className={bodyClass} suppressHydrationWarning>
-        <ClientThemeProvider initialTheme={theme}>
-          {children}
-        </ClientThemeProvider>
+        <ErrorBoundary>
+          <ClientThemeProvider initialTheme={theme}>
+            {children}
+          </ClientThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

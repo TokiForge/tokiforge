@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/storybook",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Storybook addon for TokiForge design tokens",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -37,7 +37,7 @@
     "react": "^18.0.0"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.0.0"
+    "@tokiforge/core": "workspace:^2.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

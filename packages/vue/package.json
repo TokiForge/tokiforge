@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/vue",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Vue adapter for TokiForge theming",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -30,7 +30,7 @@
   ],
   "sideEffects": false,
   "peerDependencies": {
-    "@tokiforge/core": "workspace:^2.0.0",
+    "@tokiforge/core": "workspace:^2.0.1",
     "vue": ">=3.0.0"
   },
   "devDependencies": {
