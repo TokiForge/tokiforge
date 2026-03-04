@@ -3,7 +3,7 @@
 ## v2.0.1 - Patch Release (2026-03-04)
 
 - Frontend audit: playground ThemeRuntime/effect cleanup, React ThemeContext single init, Remix/Next effect deps and cleanup, error boundaries, a11y (tab ARIA/keyboard, button types, labels), Prettier, reduced `any`/`unknown` in catch.
-- Plugin options: Tailwind (baseSelector, strict, includeUtilities, excludePaths, tokens, debug, themeMappings), theme providers (storageKey, persist, onThemeChange), SSR (cookieName, cookieMaxAge), core Plugin<TOptions> + optionsSchema.
+- Plugin options: Tailwind (baseSelector, strict, includeUtilities, excludePaths, tokens, debug, themeMappings), theme providers (storageKey, persist, onThemeChange), SSR (cookieName, cookieMaxAge), core Plugin&lt;TOptions&gt; + optionsSchema.
 - Fix: unused cookieMaxAge destructure in generateSSRHead removed.
 
 ## v2.0.0 - Major Release: Production-Ready Design Token Engine
