@@ -154,11 +154,18 @@ Creates a Tailwind CSS plugin for token integration.
 
 **Parameters:**
 
-- `tokensPath` (string, required): Path to your tokens JSON file
-- `prefix` (string, optional): CSS variable prefix (default: 'hf')
+- `tokensPath` (string): Path to your tokens JSON file (omit if using `tokens`)
+- `tokens` (object, optional): Inline design tokens (alternative to `tokensPath`; useful for Vite/HMR)
+- `prefix` (string, optional): CSS variable prefix (default: `'hf'`)
 - `watch` (boolean, optional): Enable file watching (default: false)
-- `themeMappings` (object, optional): Custom token path mappings
+- `themeMappings` (object, optional): Custom token path mappings (see [Theme Mappings](#theme-mappings))
 - `v4` (boolean, optional): Enable Tailwind v4 features (default: false)
+- **v2.0.1:** `baseSelector` (string, optional): Selector for CSS variables (default: `':root'`)
+- **v2.0.1:** `strict` (boolean, optional): Fail build on missing/invalid tokens; false = warn and skip (default: false)
+- **v2.0.1:** `includeUtilities` (boolean, optional): Generate spacing/color utilities; false = only CSS variables (default: true)
+- **v2.0.1:** `excludePaths` (string[], optional): Token path prefixes to exclude (e.g. `['internal.', 'legacy.']`)
+- **v2.0.1:** `customUtilityPrefix` (string, optional): Prefix for generated utility classes
+- **v2.0.1:** `debug` (boolean, optional): Log resolved paths and mapped key count (default: false)
 
 **Returns:** Tailwind plugin function
 
@@ -197,7 +204,7 @@ Maps design tokens to Tailwind utility values.
 
 ## Theme Mappings
 
-Customize which token categories map to which utilities:
+Customize which token categories map to which utilities. In v2.0.1, `boxShadow`, `lineHeight`, and `animation` are supported in addition to colors, spacing, typography, and radius:
 
 ```javascript
 createTailwindPlugin({
@@ -208,6 +215,9 @@ createTailwindPlugin({
     borderRadius: ["radius", "borderRadius"],
     fontSize: ["typography", "fontSize"],
     fontFamily: ["fonts", "fontFamily"],
+    boxShadow: ["shadows", "elevation"],
+    lineHeight: ["typography", "lineHeight"],
+    animation: ["motion", "animation"],
   },
 });
 ```

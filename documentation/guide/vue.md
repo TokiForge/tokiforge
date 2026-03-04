@@ -66,6 +66,8 @@ Provides theme context to Vue components.
   - `'dynamic'`: Runtime CSS injection (default)
   - `'static'`: Body class-based (zero JS overhead)
 - `persist?: boolean` - Save theme to localStorage (default: `true`)
+- **v2.0.1:** `storageKey?: string` - LocalStorage key for persisting theme (default: `'tokiforge-theme'`)
+- **v2.0.1:** `onThemeChange?: (themeName: string) => void` - Callback when theme changes (e.g. analytics)
 - `watchSystemTheme?: boolean` - Auto-detect system theme (default: `false`)
 - `bodyClassPrefix?: string` - Body class prefix for static mode (default: `'theme'`)
 - `selector?: string` - CSS selector (default: `:root`)

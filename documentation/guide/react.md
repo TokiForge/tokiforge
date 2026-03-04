@@ -70,6 +70,10 @@ Props:
 - `selector?: string` - CSS selector for theme injection (default: `:root`)
 - `prefix?: string` - CSS variable prefix (default: `hf`)
 - `defaultTheme?: string` - Override default theme name
+- **v2.0.1:** `storageKey?: string` - LocalStorage key for persisting theme (default: `'tokiforge-theme'`)
+- **v2.0.1:** `persist?: boolean` - Read/write theme from storage (default: `true`)
+- **v2.0.1:** `onThemeChange?: (themeName: string) => void` - Callback when theme changes (e.g. analytics)
+- **v2.0.1:** `suppressHydrationWarning?: boolean` - Pass-through to root/body to avoid hydration warnings
 - `children: ReactNode` - Your app components
 
 ### `useTheme()`

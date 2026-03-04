@@ -102,12 +102,19 @@ const script = SSRUtils.generateHydrationScript(
 
 #### generateSSRHead()
 
-All-in-one helper for SSR:
+All-in-one helper for SSR. Options (v2.0.1):
+
+- `theme` – Theme name to render
+- `cookieName` – Cookie name for theme persistence (default: `'tokiforge-theme'`)
+- `cookieMaxAge` – Max age in seconds for the theme cookie (optional)
+- `includeHydrationScript` – Include script to apply theme before hydration
+- `minify` – Minify output CSS/script
 
 ```typescript
 const { style, script } = SSRUtils.generateSSRHead(themeConfig, {
   theme: "light",
   cookieName: "tokiforge-theme",
+  cookieMaxAge: 31536000, // 1 year
   includeHydrationScript: true,
   minify: true,
 });
@@ -535,7 +542,7 @@ const ThemeProvider = dynamic(() => import("@tokiforge/react"), {
 
 ### Hydration Mismatch
 
-```error
+```text
 Error: Hydration failed because the server rendered HTML didn't match the client.
 ```
 

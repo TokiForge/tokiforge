@@ -20,6 +20,8 @@ TokiForge is a modern design token and theming engine that lets you:
 
 > **Version:** TokiForge v2.0.1
 
+> **What's new in v2.0.1:** Theme providers (React, Vue, Next, Remix) support `storageKey`, `persist`, and `onThemeChange`. Tailwind plugin adds `baseSelector`, `strict`, `includeUtilities`, `excludePaths`, `tokens`, `debug`, and extended `themeMappings` (boxShadow, lineHeight, animation). SSR options include `cookieName` and `cookieMaxAge`. See the [project CHANGELOG](https://github.com/TokiForge/tokiforge/blob/main/CHANGELOG.md) for full details.
+
 ### Core Package
 
 ```bash

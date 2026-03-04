@@ -50,7 +50,7 @@ npm install @tokiforge/figma
 
 Create a `.env` file with your Tokens Studio credentials:
 
-```env
+```bash
 TOKENS_STUDIO_API_URL=https://tokens.studio/api/v1
 TOKENS_STUDIO_PROJECT_ID=your-project-id
 TOKENS_STUDIO_ACCESS_TOKEN=your-access-token
