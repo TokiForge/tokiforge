@@ -61,7 +61,7 @@ export function createTheme<T extends DesignTokens = DesignTokens>(
     const updateTokens = (themeName: string) => {
         try {
             const t = runtime.getThemeTokens(themeName);
-            setTokens(t as T);
+            setTokens(() => t as T);
         } catch (e) {
             // Ignore
         }
@@ -91,15 +91,14 @@ export function createTheme<T extends DesignTokens = DesignTokens>(
     };
 
     if (typeof window !== 'undefined') {
-        runtime.init(selector, prefix).then(() => {
-            updateTokens(runtime.getCurrentTheme() || initialTheme);
-        }).catch(console.error);
+        runtime.init(selector, prefix);
+        updateTokens(runtime.getCurrentTheme() || initialTheme);
 
         const handleThemeChange = (e: Event) => {
             const customEvent = e as CustomEvent;
             setThemeSignal(customEvent.detail.theme);
             if (customEvent.detail.tokens) {
-                setTokens(customEvent.detail.tokens);
+                setTokens(() => customEvent.detail.tokens as T);
             } else {
                 updateTokens(customEvent.detail.theme);
             }

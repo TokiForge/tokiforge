@@ -37,9 +37,8 @@ export function createThemeStore(
     updateTokens(initialTheme);
 
     if (typeof window !== 'undefined') {
-        runtime.init(selector, prefix).then(() => {
-            updateTokens(runtime.getCurrentTheme() || initialTheme);
-        });
+        runtime.init(selector, prefix);
+        updateTokens(runtime.getCurrentTheme() || initialTheme);
 
         const handleThemeChange = (e: Event) => {
             const customEvent = e as CustomEvent;

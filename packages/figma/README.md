@@ -2,12 +2,12 @@
 
 **Figma integration for TokiForge design tokens. Sync tokens between Figma and code, compare designs, and manage design system consistency.**
 
-Figma integration for TokiForge design tokens (v2.0.1). Sync tokens between Figma and your codebase.
+Figma integration for TokiForge design tokens (v2.0.2). Sync tokens between Figma and your codebase.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/figma@^2.0.1 @tokiforge/core@^2.0.1
+npm install @tokiforge/figma@^2.0.2 @tokiforge/core@^2.0.2
 ```
 
 ## Setup
@@ -61,4 +61,4 @@ tokiforge figma:push --token YOUR_TOKEN --file-key FILE_KEY
 
 ## Note
 
-Figma API has limitations for creating styles. For full bidirectional sync, use the Figma plugin (coming soon).
+Figma API has limitations for creating styles. The CLI now supports `figma:pull`, `figma:push`, and `figma:diff`; for style creation/update operations, use the Figma plugin workflow.

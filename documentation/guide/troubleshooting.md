@@ -112,7 +112,7 @@ if (typeof window !== "undefined") {
 
 **Solution:**
 
-TokiForge v2.0.1 includes browser-compatible stubs for Node.js modules. If you encounter these errors:
+TokiForge v2.0.2 includes browser-compatible stubs for Node.js modules. If you encounter these errors:
 
 1. **For Vite projects (React, Vue, Svelte):**
 

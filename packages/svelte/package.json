@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/svelte",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Svelte adapter for TokiForge theming",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -31,19 +31,19 @@
   ],
   "sideEffects": false,
   "peerDependencies": {
-    "@tokiforge/core": "workspace:^2.0.1",
+    "@tokiforge/core": "workspace:^2.0.2",
     "svelte": ">=3.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
-    "@vitest/ui": "^4.0.18",
-    "svelte": "^5.48.0",
+    "@vitest/ui": "^4.1.5",
+    "svelte": "^5.55.5",
     "tsup": "^8.0.0",
-    "typescript": "^5.3.3",
-    "vitest": "^4.0.18"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.0.1"
+    "@tokiforge/core": "workspace:^2.0.2"
   },
   "keywords": [
     "svelte",

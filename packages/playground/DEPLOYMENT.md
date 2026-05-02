@@ -271,5 +271,5 @@ npm run preview
 For issues or questions:
 
 - GitHub Issues: https://github.com/your-org/tokiforge/issues
-- Documentation: https://tokiforge.dev
+- Documentation: https://www.sachindilshan.com/
 - Discord: https://discord.gg/tokiforge

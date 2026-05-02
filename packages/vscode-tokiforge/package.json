@@ -1,0 +1,55 @@
+{
+  "name": "tokiforge-vscode",
+  "displayName": "TokiForge Design Tokens",
+  "description": "Hover, completions, validation, and quick fixes for TokiForge token JSON files.",
+  "version": "0.1.0",
+  "publisher": "tokiforge",
+  "license": "AGPL-3.0",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other", "Linters"],
+  "keywords": ["design tokens", "tokiforge", "theming", "css variables"],
+  "activationEvents": [
+    "onLanguage:json",
+    "onLanguage:jsonc"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "TokiForge",
+      "properties": {
+        "tokiforge.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable TokiForge language features for JSON token files."
+        },
+        "tokiforge.tokenFilePattern": {
+          "type": "string",
+          "default": "**/{tokens,tokens.*,theme,toki,tokiforge}.json",
+          "description": "Glob (relative to workspace folder) for token JSON files to index."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -watch -p .",
+    "vscode:prepublish": "pnpm run compile",
+    "lint": "echo skip"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "jsonc-parser": "^3.3.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TokiForge/tokiforge.git",
+    "directory": "packages/vscode-tokiforge"
+  },
+  "private": true
+}

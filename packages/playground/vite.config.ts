@@ -31,9 +31,14 @@ export default defineConfig({
           'fs': 'fs',
           'path': 'path',
         },
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'tokiforge': ['@tokiforge/core'],
+        // Rolldown (Vite 8+) requires manualChunks to be a function, not a mapping object.
+        manualChunks(id: string) {
+          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')) {
+            return 'react-vendor';
+          }
+          if (id.includes('@tokiforge/core')) {
+            return 'tokiforge';
+          }
         },
       },
       onwarn(warning, warn) {

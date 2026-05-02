@@ -5,14 +5,14 @@ description: Complete guide to using TokiForge with Svelte. Learn how to use cre
 
 # Svelte Guide
 
-> **TokiForge v2.0.1**
+> **TokiForge v2.0.2**
 
 Complete guide to using TokiForge with Svelte.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/svelte@^2.0.1 @tokiforge/core@^2.0.1
+npm install @tokiforge/svelte@^2.0.2 @tokiforge/core@^2.0.2
 ```
 
 ## Setup

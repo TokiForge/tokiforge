@@ -38,8 +38,9 @@ ehthumbs.db
 Thumbs.db
 desktop.ini
 
-# IDE
-.vscode/
+# IDE (track shared editor settings; ignore personal workspace state)
+.vscode/*
+!.vscode/settings.json
 .idea/
 *.swp
 *.swo

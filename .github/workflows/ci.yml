@@ -13,7 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node: [18, 20]
+        # Vitest 4 + Rolldown require util.styleText (Node >=20.12); Node 18 is unsupported for tests
+        node: [20, 22]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,4 +42,20 @@ jobs:
         run: pnpm test
 
       - name: Build
-        run: pnpm --filter @tokiforge/core run build && pnpm --filter @tokiforge/vue run build
+        run: >
+          pnpm
+          --filter @tokiforge/core
+          --filter @tokiforge/react
+          --filter @tokiforge/vue
+          --filter @tokiforge/svelte
+          --filter @tokiforge/angular
+          --filter @tokiforge/nextjs
+          --filter @tokiforge/remix
+          --filter @tokiforge/astro
+          --filter @tokiforge/solid
+          --filter @tokiforge/sveltekit
+          --filter @tokiforge/storybook
+          --filter @tokiforge/tailwind
+          --filter @tokiforge/figma
+          --filter tokiforge-cli
+          run build

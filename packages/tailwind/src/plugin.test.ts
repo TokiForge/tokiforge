@@ -192,7 +192,8 @@ describe('Tailwind Plugin v4', () => {
       const preset = generateTailwindPreset(tokensTestFile, { v4: true });
 
       expect(preset).toBeDefined();
-      expect(preset.corePlugins).toBeDefined();
+      expect(preset.plugins).toBeDefined();
+      expect(Array.isArray(preset.plugins)).toBe(true);
     });
 
     it('should throw error for missing file', () => {
@@ -235,7 +236,7 @@ describe('Tailwind Plugin v4', () => {
       const preset = generateTailwindPreset(tokensTestFile, { v4: true });
 
       expect(preset.theme?.extend).toBeDefined();
-      expect(preset.corePlugins).toBeDefined();
+      expect(preset.plugins).toBeDefined();
     });
 
     it('should support @theme syntax variables', () => {

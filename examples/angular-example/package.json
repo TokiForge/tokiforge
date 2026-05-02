@@ -12,24 +12,23 @@
   },
   "dependencies": {
     "@angular/animations": "^17.0.0",
-    "@angular/common": "^17.0.0",
-    "@angular/compiler": "^17.0.0",
-    "@angular/core": "^17.0.0",
+    "@angular/common": "^21.2.11",
+    "@angular/compiler": "^21.2.11",
+    "@angular/core": "^21.2.11",
     "@angular/platform-browser": "^17.0.0",
     "@angular/platform-browser-dynamic": "^17.0.0",
     "@angular/router": "^17.0.0",
+    "@tokiforge/angular": "file:../../packages/angular",
+    "@tokiforge/core": "file:../../packages/core",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.14.0",
-    "@tokiforge/core": "file:../../packages/core",
-    "@tokiforge/angular": "file:../../packages/angular"
+    "zone.js": "~0.16.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.0.0",
     "@angular/cli": "^17.0.0",
     "@angular/compiler-cli": "^17.0.0",
     "@types/node": "^20.10.0",
-    "typescript": "~5.2.0"
+    "typescript": "~6.0.3"
   }
 }
-

@@ -232,10 +232,14 @@ function getTokens(options: TailwindPluginOptions): DesignTokens {
   return loadTokensWithWatch(options.tokensPath, options);
 }
 
+function escapeClassName(value: string): string {
+  return value.replace(/[^a-zA-Z0-9_-]/g, (char) => `\\${char}`);
+}
+
 /**
  * Create Tailwind plugin for token integration
  */
-export function createTailwindPlugin(options: TailwindPluginOptions) {
+export function createTailwindPlugin(options: TailwindPluginOptions): any {
   const {
     prefix = 'hf',
     themeMappings,
@@ -250,7 +254,7 @@ export function createTailwindPlugin(options: TailwindPluginOptions) {
   const utilityPrefix = customUtilityPrefix ?? prefix;
 
   return plugin(
-    function ({ addBase, addUtilities, e }) {
+    function ({ addBase, addUtilities }) {
       let tokens: DesignTokens;
       try {
         tokens = getTokens(options);
@@ -289,10 +293,10 @@ export function createTailwindPlugin(options: TailwindPluginOptions) {
       if (includeUtilities) {
         const spacingUtilities: Record<string, Record<string, string>> = {};
         for (const [key, value] of Object.entries(utilities.spacing)) {
-          spacingUtilities[`.${e(`${utilityPrefix}-spacing-${key}`)}`] = {
+          spacingUtilities[`.${escapeClassName(`${utilityPrefix}-spacing-${key}`)}`] = {
             padding: value,
           };
-          spacingUtilities[`.${e(`${utilityPrefix}-gap-${key}`)}`] = {
+          spacingUtilities[`.${escapeClassName(`${utilityPrefix}-gap-${key}`)}`] = {
             gap: value,
           };
         }
@@ -352,7 +356,7 @@ export function generateTailwindPreset(
 
   const utilities = mapTokensToUtilities(tokens, themeMappings, excludePaths);
 
-  const extend: Record<string, unknown> = {
+  const extend: Record<string, any> = {
     colors: utilities.colors,
     spacing: utilities.spacing,
     borderRadius: utilities.borderRadius,
@@ -378,9 +382,7 @@ export function generateTailwindPreset(
       cssVariables[`--spacing-${key}`] = value as string;
     }
 
-    config.corePlugins = {
-      preflight: true,
-    };
+    config.plugins = config.plugins ?? [];
   }
 
   return config;

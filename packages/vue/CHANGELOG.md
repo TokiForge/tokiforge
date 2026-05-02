@@ -1,5 +1,11 @@
 # @tokiforge/vue
 
+## 2.0.2
+
+### Patch Changes
+
+- Version bump to 2.0.2.
+
 ## 2.0.1
 
 ### Patch Changes

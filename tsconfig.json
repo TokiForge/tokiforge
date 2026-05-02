@@ -2,7 +2,10 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ESNext",
-    "lib": ["ES2020", "DOM"],
+    "lib": [
+      "ES2020",
+      "DOM"
+    ],
     "moduleResolution": "bundler",
     "declaration": true,
     "declarationMap": true,
@@ -13,21 +16,28 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "jsx": "react-jsx",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo",
     "verbatimModuleSyntax": true,
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "baseUrl": ".",
     "paths": {
-      "@tokiforge/core": ["./packages/core/src/index.ts"],
-      "@tokiforge/figma": ["./packages/figma/src/index.ts"],
-      "@tokiforge/tailwind": ["./packages/tailwind/src/index.ts"]
-    }
-  },
-  "include": ["packages/core/src/**/*", "packages/cli/src/**/*", "packages/angular/src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts", "**/.tsbuildinfo", "**/vitest.config.ts", "examples/**", "documentation/**", "packages/react/**", "packages/vue/**", "packages/svelte/**", "packages/figma/**"]
+      "@tokiforge/core": [
+        "./packages/core/src/index.ts"
+      ],
+      "@tokiforge/figma": [
+        "./packages/figma/src/index.ts"
+      ],
+      "@tokiforge/tailwind": [
+        "./packages/tailwind/src/index.ts"
+      ]
+    },
+    "ignoreDeprecations": "6.0"
+  }
 }
-

@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/tailwind",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Tailwind CSS integration for TokiForge design tokens",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -49,15 +49,15 @@
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
-    "@vitest/ui": "^4.0.18",
-    "tailwindcss": "^3.0.0",
+    "@vitest/ui": "^4.1.5",
+    "tailwindcss": "^4.2.4",
     "tsup": "^8.0.0",
-    "typescript": "^5.3.3",
-    "vitest": "^4.0.18"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.0.1",
-    "vite": "7.2.1"
+    "@tokiforge/core": "workspace:^2.0.2",
+    "vite": "8.0.10"
   },
   "peerDependencies": {
     "tailwindcss": "^3.0.0"

@@ -227,7 +227,11 @@ function App() {
             onChange={(e) => setJsonInput(e.target.value)}
             spellCheck={false}
           />
-          {error && <div className="error">Error: {error}</div>}
+          {error && (
+          <div className="error" role="alert" aria-live="assertive">
+            Error: {error}
+          </div>
+        )}
         </div>
 
         <div className="preview-panel">

@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/storybook",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Storybook addon for TokiForge design tokens",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -32,20 +32,19 @@
   ],
   "peerDependencies": {
     "@storybook/addons": "^7.0.0 || ^8.0.0",
-    "@storybook/components": "^7.0.0 || ^8.0.0",
     "@storybook/api": "^7.0.0 || ^8.0.0",
+    "@storybook/components": "^7.0.0 || ^8.0.0",
     "react": "^18.0.0"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.0.1"
+    "@tokiforge/core": "workspace:^2.0.2"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
-    "@types/react": "^18.0.0",
+    "@types/react": "^19.2.14",
     "tsup": "^8.0.0",
-    "typescript": "^5.3.3"
+    "typescript": "^6.0.3"
   },
   "author": "TokiForge Community",
   "license": "AGPL-3.0"
 }
-

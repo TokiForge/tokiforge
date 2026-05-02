@@ -9,10 +9,10 @@
   },
   "api": {
     "type": "openapi",
-    "url": "https://tokiforge.dev/tokiforge/api/openapi.json"
+    "url": "https://www.sachindilshan.com/tokiforge/api/openapi.json"
   },
-  "logo_url": "https://tokiforge.dev/tokiforge/logo.svg",
+  "logo_url": "https://www.sachindilshan.com/tokiforge/logo.svg",
   "contact_email": "support@tokiforge.dev",
-  "legal_info_url": "https://tokiforge.dev/tokiforge/legal"
+  "legal_info_url": "https://www.sachindilshan.com/tokiforge/legal"
 }
 
