@@ -12,7 +12,7 @@ addons.register('tokiforge', () => {
     match: ({ viewMode }) => viewMode === 'story',
     render: ({ active, key }) => (
       active ? (
-        <AddonPanel active={active} key={key}>
+        <AddonPanel active={active} key={key as React.Key}>
           <TokenViewer />
         </AddonPanel>
       ) : null
@@ -22,6 +22,8 @@ addons.register('tokiforge', () => {
 
 addons.register('tokiforge-toolbar', () => {
   addons.add('tokiforge-toolbar', {
+    type: types.TOOL,
+    title: 'TokiForge Theme',
     match: ({ viewMode }) => viewMode === 'story',
     render: () => <ThemeSwitcher />,
   });

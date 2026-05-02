@@ -41,4 +41,20 @@ jobs:
         run: pnpm test
 
       - name: Build
-        run: pnpm --filter @tokiforge/core run build && pnpm --filter @tokiforge/vue run build
+        run: >
+          pnpm
+          --filter @tokiforge/core
+          --filter @tokiforge/react
+          --filter @tokiforge/vue
+          --filter @tokiforge/svelte
+          --filter @tokiforge/angular
+          --filter @tokiforge/nextjs
+          --filter @tokiforge/remix
+          --filter @tokiforge/astro
+          --filter @tokiforge/solid
+          --filter @tokiforge/sveltekit
+          --filter @tokiforge/storybook
+          --filter @tokiforge/tailwind
+          --filter @tokiforge/figma
+          --filter tokiforge-cli
+          run build

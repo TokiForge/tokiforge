@@ -157,6 +157,13 @@ describe('ThemeRuntime', () => {
 
       global.document = originalDocument;
     });
+
+    it('should remain synchronous and return void', () => {
+      const runtime = new ThemeRuntime(config);
+      const result = runtime.init();
+      expect(result).toBeUndefined();
+      expect(runtime.getCurrentTheme()).toBe('light');
+    });
   });
 
   describe('applyTheme', () => {

@@ -18,14 +18,14 @@ TokiForge is a modern design token and theming engine that lets you:
 
 ## Installation
 
-> **Version:** TokiForge v2.0.1
+> **Version:** TokiForge v2.0.2
 
-> **What's new in v2.0.1:** Theme providers (React, Vue, Next, Remix) support `storageKey`, `persist`, and `onThemeChange`. Tailwind plugin adds `baseSelector`, `strict`, `includeUtilities`, `excludePaths`, `tokens`, `debug`, and extended `themeMappings` (boxShadow, lineHeight, animation). SSR options include `cookieName` and `cookieMaxAge`. See the [project CHANGELOG](https://github.com/TokiForge/tokiforge/blob/main/CHANGELOG.md) for full details.
+> **What's new in v2.0.2:** Theme providers (React, Vue, Next, Remix) support `storageKey`, `persist`, and `onThemeChange`. Tailwind plugin adds `baseSelector`, `strict`, `includeUtilities`, `excludePaths`, `tokens`, `debug`, and extended `themeMappings` (boxShadow, lineHeight, animation). SSR options include `cookieName` and `cookieMaxAge`. See the [project CHANGELOG](https://github.com/TokiForge/tokiforge/blob/main/CHANGELOG.md) for full details.
 
 ### Core Package
 
 ```bash
-npm install @tokiforge/core@^2.0.1
+npm install @tokiforge/core@^2.0.2
 ```
 
 ### Framework Adapters
@@ -34,24 +34,24 @@ Choose your framework:
 
 ```bash
 # React
-npm install @tokiforge/react@^2.0.1
+npm install @tokiforge/react@^2.0.2
 
 # Vue
-npm install @tokiforge/vue@^2.0.1
+npm install @tokiforge/vue@^2.0.2
 
 # Angular
-npm install @tokiforge/angular@^2.0.1
+npm install @tokiforge/angular@^2.0.2
 
 # Svelte
-npm install @tokiforge/svelte@^2.0.1
+npm install @tokiforge/svelte@^2.0.2
 ```
 
 ### CLI Tool
 
 ```bash
-npm install -g tokiforge-cli@^2.0.1
+npm install -g tokiforge-cli@^2.0.2
 # or
-npx tokiforge-cli@^2.0.1 init
+npx tokiforge-cli@^2.0.2 init
 ```
 
 ## Quick Example

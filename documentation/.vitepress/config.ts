@@ -98,7 +98,7 @@ export default defineConfig({
       gtag('config', 'G-QMSD2BCYDK');
     `],
     ['link', { rel: 'icon', href: '/favicon.ico' }],
-    ['link', { rel: 'canonical', href: 'https://tokiforge.dev/tokiforge/' }],
+    ['link', { rel: 'canonical', href: 'https://www.sachindilshan.com/tokiforge/' }],
     ['meta', { name: 'theme-color', content: '#7C3AED' }],
     ['meta', { name: 'keywords', content: 'design tokens, theme engine, theming, CSS variables, design system, theme switching, runtime theming, React theming, Vue theming, Angular theming, Svelte theming, design tokens library, color tokens, design system tools, frontend theming, dark mode, light mode, theme management, token parser, style dictionary, CSS custom properties, design system framework, token management, theme builder, design system automation, UI theming library, component theming, responsive design tokens, accessibility tokens, WCAG compliance, design token workflow, Figma tokens, design system integration, multi-framework theming, SSR theming, server-side rendering, Next.js theming, Remix theming, SvelteKit theming, Astro theming, Solid.js theming, Qwik theming' }],
     ['meta', { name: 'author', content: 'TokiForge Community' }],
@@ -109,17 +109,17 @@ export default defineConfig({
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'TokiForge - Modern Design Token & Theme Engine | Framework-Agnostic Theming' }],
     ['meta', { property: 'og:description', content: 'Framework-agnostic design token and theming engine. Runtime theme switching, CSS variables, and smart color utilities for React, Vue, Svelte, Angular, Next.js, Remix, and more. <3KB gzipped.' }],
-    ['meta', { property: 'og:image', content: 'https://tokiforge.dev/tokiforge/logo.svg' }],
+    ['meta', { property: 'og:image', content: 'https://www.sachindilshan.com/tokiforge/logo.svg' }],
     ['meta', { property: 'og:image:width', content: '1200' }],
     ['meta', { property: 'og:image:height', content: '630' }],
     ['meta', { property: 'og:image:alt', content: 'TokiForge - Design Token & Theme Engine' }],
-    ['meta', { property: 'og:url', content: 'https://tokiforge.dev/tokiforge/' }],
+    ['meta', { property: 'og:url', content: 'https://www.sachindilshan.com/tokiforge/' }],
     ['meta', { property: 'og:site_name', content: 'TokiForge' }],
     ['meta', { property: 'og:locale', content: 'en_US' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'TokiForge - Modern Design Token & Theme Engine' }],
     ['meta', { name: 'twitter:description', content: 'Framework-agnostic design token and theming engine. Runtime theme switching, CSS variables, and smart color utilities for React, Vue, Svelte, Angular, and more.' }],
-    ['meta', { name: 'twitter:image', content: 'https://tokiforge.dev/tokiforge/logo.svg' }],
+    ['meta', { name: 'twitter:image', content: 'https://www.sachindilshan.com/tokiforge/logo.svg' }],
     ['meta', { name: 'twitter:image:alt', content: 'TokiForge - Design Token & Theme Engine' }],
     ['meta', { name: 'twitter:creator', content: '@tokiforge' }],
     ['meta', { name: 'twitter:site', content: '@tokiforge' }],
@@ -141,7 +141,7 @@ export default defineConfig({
         'ratingCount': '1'
       },
       'description': 'Framework-agnostic design token and theming engine for React, Vue, Svelte, Angular, Next.js, Remix, and more. Runtime theme switching, CSS variables, and smart color utilities. Less than 3KB gzipped.',
-      'url': 'https://tokiforge.dev',
+      'url': 'https://www.sachindilshan.com',
       'downloadUrl': 'https://www.npmjs.com/package/@tokiforge/core',
       'author': {
         '@type': 'Organization',
@@ -165,23 +165,23 @@ export default defineConfig({
         'CLI tools',
         'Figma integration'
       ],
-      'screenshot': 'https://tokiforge.dev/tokiforge/logo.svg',
+      'screenshot': 'https://www.sachindilshan.com/tokiforge/logo.svg',
       'softwareHelp': {
         '@type': 'CreativeWork',
-        'url': 'https://tokiforge.dev/tokiforge/guide/getting-started'
+        'url': 'https://www.sachindilshan.com/tokiforge/guide/getting-started'
       }
     })],
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       'name': 'TokiForge',
-      'url': 'https://tokiforge.dev',
+      'url': 'https://www.sachindilshan.com',
       'description': 'Framework-agnostic design token and theming engine',
       'potentialAction': {
         '@type': 'SearchAction',
         'target': {
           '@type': 'EntryPoint',
-          'urlTemplate': 'https://tokiforge.dev/tokiforge/?q={search_term_string}'
+          'urlTemplate': 'https://www.sachindilshan.com/tokiforge/?q={search_term_string}'
         },
         'query-input': 'required name=search_term_string'
       },
@@ -397,7 +397,7 @@ export default defineConfig({
   },
 
   sitemap: {
-    hostname: 'https://tokiforge.dev',
+    hostname: 'https://www.sachindilshan.com',
   },
 });
 

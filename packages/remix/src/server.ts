@@ -6,7 +6,7 @@ export function createThemeSessionStorage(secret: string) {
     const sessionStorage = createCookieSessionStorage({
         cookie: {
             name: '__tokiforge_theme',
-            secret,
+            secrets: [secret],
             sameSite: 'lax',
             path: '/',
             httpOnly: true,

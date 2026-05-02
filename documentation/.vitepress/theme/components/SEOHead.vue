@@ -10,7 +10,7 @@
       <meta property="og:description" :content="frontmatter.description" />
       <meta name="twitter:description" :content="frontmatter.description" />
     </template>
-    <link rel="canonical" :href="`https://tokiforge.dev/tokiforge${$route.path}`" />
+    <link rel="canonical" :href="`https://www.sachindilshan.com/tokiforge${$route.path}`" />
   </Head>
 </template>
 

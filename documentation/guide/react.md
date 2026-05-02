@@ -5,14 +5,14 @@ description: Complete guide to using TokiForge with React. Learn how to set up T
 
 # React Guide
 
-> **TokiForge v2.0.1**
+> **TokiForge v2.0.2**
 
 TokiForge works seamlessly with React through the `@tokiforge/react` package.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/react@^2.0.1 @tokiforge/core@^2.0.1
+npm install @tokiforge/react@^2.0.2 @tokiforge/core@^2.0.2
 ```
 
 ## Setup
@@ -70,10 +70,10 @@ Props:
 - `selector?: string` - CSS selector for theme injection (default: `:root`)
 - `prefix?: string` - CSS variable prefix (default: `hf`)
 - `defaultTheme?: string` - Override default theme name
-- **v2.0.1:** `storageKey?: string` - LocalStorage key for persisting theme (default: `'tokiforge-theme'`)
-- **v2.0.1:** `persist?: boolean` - Read/write theme from storage (default: `true`)
-- **v2.0.1:** `onThemeChange?: (themeName: string) => void` - Callback when theme changes (e.g. analytics)
-- **v2.0.1:** `suppressHydrationWarning?: boolean` - Pass-through to root/body to avoid hydration warnings
+- **v2.0.2:** `storageKey?: string` - LocalStorage key for persisting theme (default: `'tokiforge-theme'`)
+- **v2.0.2:** `persist?: boolean` - Read/write theme from storage (default: `true`)
+- **v2.0.2:** `onThemeChange?: (themeName: string) => void` - Callback when theme changes (e.g. analytics)
+- **v2.0.2:** `suppressHydrationWarning?: boolean` - Pass-through to root/body to avoid hydration warnings
 - `children: ReactNode` - Your app components
 
 ### `useTheme()`

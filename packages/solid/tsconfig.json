@@ -6,7 +6,7 @@
             "ES2020",
             "DOM"
         ],
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "outDir": "./dist",
         "rootDir": "./src",
         "declaration": true,
@@ -16,7 +16,8 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
-        "isolatedModules": true
+        "isolatedModules": true,
+        "ignoreDeprecations": "6.0"
     },
     "include": [
         "src"

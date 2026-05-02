@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://tokiforge.dev/tokiforge/sitemap.xml
+Sitemap: https://www.sachindilshan.com/tokiforge/sitemap.xml
 
 # Disallow build artifacts
 Disallow: /node_modules/

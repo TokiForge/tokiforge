@@ -1,5 +1,11 @@
 # @tokiforge/angular
 
+## 2.0.2
+
+### Patch Changes
+
+- Version bump; @tokiforge/core@^2.0.2.
+
 ## 2.0.1
 
 ### Patch Changes

@@ -245,7 +245,10 @@ export default {
 /**
  * Tailwind CSS plugin for TokiForge
  */
-export function tokiforgeTailwindPlugin(options: TailwindConfigOptions) {
+export function tokiforgeTailwindPlugin(options: TailwindConfigOptions): {
+  handler: (pluginAPI: { addBase: (base: Record<string, Record<string, unknown>>) => void }) => void;
+  config: Partial<Config>;
+} {
   const baseSelector = options.baseSelector ?? ':root';
   return {
     handler: (pluginAPI: { addBase: (base: Record<string, Record<string, unknown>>) => void }) => {

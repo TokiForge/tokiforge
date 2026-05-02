@@ -1,0 +1,37 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "packages/core/src/**/*.ts",
+    "packages/cli/src/**/*.ts",
+    "packages/react/src/**/*.ts",
+    "packages/react/src/**/*.tsx",
+    "packages/vue/src/**/*.ts",
+    "packages/svelte/src/**/*.ts",
+    "packages/angular/src/**/*.ts",
+    "packages/nextjs/src/**/*.ts",
+    "packages/nextjs/src/**/*.tsx",
+    "packages/remix/src/**/*.ts",
+    "packages/remix/src/**/*.tsx",
+    "packages/astro/src/**/*.ts",
+    "packages/solid/src/**/*.ts",
+    "packages/solid/src/**/*.tsx",
+    "packages/sveltekit/src/**/*.ts",
+    "packages/tailwind/src/**/*.ts",
+    "packages/figma/src/**/*.ts",
+    "packages/storybook/src/**/*.ts",
+    "packages/storybook/src/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "packages/*/dist",
+    "packages/*/src/**/*.test.ts",
+    "packages/*/src/**/*.test.tsx",
+    "packages/*/src/**/*.spec.ts",
+    "packages/*/src/**/*.spec.tsx",
+    "packages/*/src/**/*.type-test.ts",
+    "packages/*/src/**/__tests__/**",
+    "examples/**",
+    "documentation/**"
+  ]
+}

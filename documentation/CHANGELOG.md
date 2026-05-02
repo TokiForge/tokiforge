@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.2 - Patch release (2026-05-02)
+
+- Monorepo version bump to 2.0.2; install commands and docs updated to the current release.
+
 ## v2.0.1 - Patch Release (2026-03-04)
 
 - Frontend audit: playground ThemeRuntime/effect cleanup, React ThemeContext single init, Remix/Next effect deps and cleanup, error boundaries, a11y (tab ARIA/keyboard, button types, labels), Prettier, reduced `any`/`unknown` in catch.
@@ -135,11 +139,11 @@ npm install @tokiforge/react@2.0.0  # or your framework
 
 ### **Documentation**
 
-- [Full Documentation](https://tokiforge.github.io/tokiforge)
-- [Quick Start Guide](https://tokiforge.github.io/tokiforge/guide/quick-start)
-- [API Reference](https://tokiforge.github.io/tokiforge/api)
+- [Full Documentation](https://www.sachindilshan.com/)
+- [Quick Start Guide](https://www.sachindilshan.com/)
+- [API Reference](https://www.sachindilshan.com/)
 - [Examples](https://github.com/TokiForge/tokiforge/tree/main/examples)
-- [Video Tutorials](https://tokiforge.github.io/tokiforge/tutorials)
+- [Video Tutorials](https://www.sachindilshan.com/)
 
 ### **Acknowledgments**
 

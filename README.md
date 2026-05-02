@@ -10,7 +10,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
 [![Bundle Size](https://img.shields.io/badge/bundle%20size-%3C3KB-green.svg)](https://bundlephobia.com/package/@tokiforge/core)
 
-[Documentation](https://tokiforge.github.io/tokiforge) • [Examples](./examples) • [Report Bug](https://github.com/TokiForge/tokiforge/issues) • [Request Feature](https://github.com/TokiForge/tokiforge/issues)
+[Documentation](https://www.sachindilshan.com/) • [Examples](./examples) • [Report Bug](https://github.com/TokiForge/tokiforge/issues) • [Request Feature](https://github.com/TokiForge/tokiforge/issues)
 
 </div>
 
@@ -143,7 +143,7 @@ function ThemeSwitcher() {
 }
 ```
 
-**[View full documentation →](https://tokiforge.dev)**
+**[View full documentation →](https://www.sachindilshan.com/)**
 
 ---
 
@@ -297,12 +297,12 @@ tokiforge analytics
 
 ## Documentation
 
-- **[Getting Started](https://tokiforge.dev/guide/getting-started)** - Quick setup guide
-- **[Installation](https://tokiforge.dev/guide/installation)** - Framework-specific setup
-- **[React Guide](https://tokiforge.dev/guide/react)** - React integration
-- **[Vue Guide](https://tokiforge.dev/guide/vue)** - Vue integration
-- **[Angular Guide](https://tokiforge.dev/guide/angular)** - Angular integration
-- **[Svelte Guide](https://tokiforge.dev/guide/svelte)** - Svelte integration
+- **[Getting Started](https://www.sachindilshan.com/)** - Quick setup guide
+- **[Installation](https://www.sachindilshan.com/)** - Framework-specific setup
+- **[React Guide](https://www.sachindilshan.com/)** - React integration
+- **[Vue Guide](https://www.sachindilshan.com/)** - Vue integration
+- **[Angular Guide](https://www.sachindilshan.com/)** - Angular integration
+- **[Svelte Guide](https://www.sachindilshan.com/)** - Svelte integration
 - **[Examples](./examples)** - Complete example projects
 
 ---
@@ -389,7 +389,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 
 ## Roadmap
 
-### Completed (v2.0.1)
+### Completed (v2.0.2)
 
 - [x] Core engine + React adapter
 - [x] Vue/Svelte/Angular adapters
@@ -413,15 +413,12 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 - [x] Next.js 14+, Remix, Astro, Solid, SvelteKit support
 - [x] SSR utilities with FOUC prevention
 
-### In Progress (v2.0.1+)
+### In Progress (v2.1.x)
 
-- [ ] Enhanced semantic tokens & aliasing
-- [ ] Multi-platform exporters (iOS, Android, React Native)
-- [ ] Type generation CLI (`generate:types`)
-- [ ] Enhanced Tailwind plugin format
-- [ ] CLI enhancements (`migrate`, `watch`)
-- [ ] Zero-JS + SSR improvements
-- [ ] Enhanced Figma integration (Tokens Studio)
+- [ ] VS Code extension package and marketplace publishing
+- [ ] Community plugin examples (Framer, Sketch, Adobe XD)
+- [ ] Expanded visual regression presets and CI templates
+- [ ] Additional hosted playground collaboration features
 
 ### Planned
 
@@ -455,6 +452,6 @@ Inspired by the intersection of **design and code**.
 
 [![Star History Chart](https://api.star-history.com/svg?repos=TokiForge/tokiforge&type=Date)](https://star-history.com/#TokiForge/tokiforge&Date)
 
-Made by [TokiForge Community](https://github.com/TokiForge)
+Project site: [sachindilshan.com](https://www.sachindilshan.com/) · Upstream: [TokiForge](https://github.com/TokiForge/tokiforge)
 
 </div>

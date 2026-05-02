@@ -41,7 +41,7 @@ See [CHANGELOG.md](../CHANGELOG.md) for complete details.
 
 ### 🔗 Links
 
-- [Documentation](https://tokiforge.github.io/tokiforge)
+- [Documentation](https://www.sachindilshan.com/)
 - [Examples](../examples)
 - [GitHub Repository](https://github.com/TokiForge/tokiforge)
 

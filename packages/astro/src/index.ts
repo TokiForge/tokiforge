@@ -1,5 +1,5 @@
 import type { AstroIntegration } from 'astro';
-import { ThemeRuntime, TokenExporter, type ThemeConfig } from '@tokiforge/core';
+import { TokenExporter, type ThemeConfig } from '@tokiforge/core';
 
 export interface TokiForgeOptions {
     config: ThemeConfig;
@@ -22,21 +22,19 @@ export default function tokiforge(options: TokiForgeOptions): AstroIntegration {
           const savedTheme = localStorage.getItem('tokiforge-theme');
           const initialTheme = savedTheme || config.defaultTheme || config.themes[0]?.name;
           
-          runtime.init(':root', 'hf').then(() => {
-            runtime.applyTheme(initialTheme, ':root', 'hf');
-          });
+          runtime.init(':root', 'hf');
+          runtime.applyTheme(initialTheme, ':root', 'hf');
           
           // Make runtime globally available
           window.__tokiforge = runtime;
         `);
             },
 
-            'astro:config:done': ({ config }) => {
+            'astro:config:done': () => {
                 if (options.generateStaticCSS) {
                     // Generate static CSS for each theme
-                    const runtime = new ThemeRuntime(options.config);
                     options.config.themes.forEach((theme) => {
-                        const css = TokenExporter.exportCSS(theme.tokens, {
+                        TokenExporter.exportCSS(theme.tokens, {
                             selector: `[data-theme="${theme.name}"]`,
                             prefix: 'hf',
                         });

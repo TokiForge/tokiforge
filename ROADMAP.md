@@ -1,8 +1,8 @@
-# TokiForge Roadmap v2.0.1+
+# TokiForge Roadmap v2.0.2+
 
 ## Current Status Analysis
 
-### Already Implemented (v2.0.1)
+### Already Implemented (v2.0.2)
 
 1. **Semantic Tokens & Aliasing** - Partially implemented
 
@@ -379,22 +379,22 @@
 
 ### Immediate Next Steps (Week 1-2)
 
-- [ ] **1.1** Enhanced Semantic Tokens & Aliasing
-- [ ] **1.3** Type Generation CLI (`generate:types`)
-- [ ] **1.4** Enhanced Tailwind Plugin Format
-- [ ] **2.1** CLI Enhancements (`migrate`, `watch`)
+- [x] **1.1** Enhanced Semantic Tokens & Aliasing
+- [x] **1.3** Type Generation CLI (`generate:types`)
+- [x] **1.4** Enhanced Tailwind Plugin Format
+- [x] **2.1** CLI Enhancements (`migrate`, `watch`)
 
 ### Short-term Goals (Month 1)
 
-- [ ] **1.2** Multi-Platform Exporters (iOS, Android, React Native)
-- [ ] **2.2** Zero-JS + SSR Enhancements
-- [ ] **2.3** Enhanced Figma Integration
-- [ ] **3.2** CI/Visual Regression Integration
+- [x] **1.2** Multi-Platform Exporters (iOS, Android, React Native)
+- [x] **2.2** Zero-JS + SSR Enhancements
+- [x] **2.3** Enhanced Figma Integration
+- [x] **3.2** CI/Visual Regression Integration
 
 ### Medium-term Goals (Month 2-3)
 
-- [ ] **3.1** Visual Playground Enhancements
-- [ ] **3.3** Enhanced Usage Analytics
+- [x] **3.1** Visual Playground Enhancements
+- [x] **3.3** Enhanced Usage Analytics
 - [ ] **4.1** VSCode Extension Development
 
 ### Long-term Goals (Quarter 2+)
@@ -432,11 +432,11 @@
 
 - [ ] Semantic tokens guide
 - [ ] Multi-platform export guide
-- [ ] Type generation guide
-- [ ] CLI command reference (complete)
+- [x] Type generation guide
+- [x] CLI command reference (complete)
 - [ ] VSCode extension guide
 - [ ] Plugin development guide
-- [ ] CI/CD integration guide
+- [x] CI/CD integration guide
 - [ ] Visual regression testing guide
 
 ---
@@ -465,4 +465,4 @@ We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guideline
 ---
 
 _Last updated: January 2025_  
-_Version: 2.0.1_
+_Version: 2.0.2_

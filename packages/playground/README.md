@@ -262,7 +262,7 @@ MIT © 2024 TokiForge
 
 ## Links
 
-- [Documentation](https://tokiforge.dev)
+- [Documentation](https://www.sachindilshan.com/)
 - [GitHub](https://github.com/your-org/tokiforge)
 - [npm](https://www.npmjs.com/package/@tokiforge/playground)
 

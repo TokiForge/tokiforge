@@ -8,6 +8,8 @@ import { lintCommand } from './commands/lint';
 import { tailwindCommand } from './commands/tailwind';
 import { validateCommand } from './commands/validate';
 import { figmaDiffCommand } from './commands/figma-diff';
+import { figmaPullCommand } from './commands/figma-pull';
+import { figmaPushCommand } from './commands/figma-push';
 import { analyticsCommand } from './commands/analytics';
 import { generateTypesCommand } from './commands/generate-types';
 import { watchCommand } from './commands/watch';
@@ -92,6 +94,22 @@ program
   .requiredOption('--token <token>', 'Figma access token')
   .requiredOption('--file-key <key>', 'Figma file key')
   .action((options) => figmaDiffCommand(options.token, options.fileKey));
+
+program
+  .command('figma:pull')
+  .description('Pull tokens from Figma and save to a local file')
+  .requiredOption('--token <token>', 'Figma access token')
+  .requiredOption('--file-key <key>', 'Figma file key')
+  .option('--output <file>', 'Output tokens file (defaults to tokiforge config input path)')
+  .action((options) => figmaPullCommand(options.token, options.fileKey, options.output));
+
+program
+  .command('figma:push')
+  .description('Push local tokens to Figma')
+  .requiredOption('--token <token>', 'Figma access token')
+  .requiredOption('--file-key <key>', 'Figma file key')
+  .option('--input <file>', 'Input tokens file (defaults to tokiforge config input path)')
+  .action((options) => figmaPushCommand(options.token, options.fileKey, options.input));
 
 program
   .command('analytics')

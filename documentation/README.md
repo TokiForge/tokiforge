@@ -1,8 +1,8 @@
 # TokiForge Documentation
 
-This is the documentation site for TokiForge v2.0.1, built with [VitePress](https://vitepress.dev/).
+This is the documentation site for TokiForge v2.0.2, built with [VitePress](https://vitepress.dev/).
 
-## Features in v2.0.1
+## Features in v2.0.2
 
 - **Production-Ready Release**: Comprehensive design token and theming engine with full framework support
 - **Performance Optimization**: Multi-tier caching, lazy loading, and compression integrated into ThemeRuntime
