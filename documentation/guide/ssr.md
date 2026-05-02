@@ -1,4 +1,4 @@
----
+﻿---
 title: Server-Side Rendering (SSR) | Guide
 description: Complete guide to using TokiForge with Next.js, Remix, and other SSR frameworks. Learn theme switching, hydration, and performance optimization for server-rendered applications.
 ---
@@ -102,7 +102,7 @@ const script = SSRUtils.generateHydrationScript(
 
 #### generateSSRHead()
 
-All-in-one helper for SSR. Options (v2.0.2):
+All-in-one helper for SSR. Options (v2.2.3):
 
 - `theme` – Theme name to render
 - `cookieName` – Cookie name for theme persistence (default: `'tokiforge-theme'`)

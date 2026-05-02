@@ -1,18 +1,18 @@
----
+﻿---
 title: Vanilla JavaScript Guide | TokiForge
 description: Learn how to use TokiForge with vanilla JavaScript. No framework required. Runtime theme switching, CSS variables, and token management.
 ---
 
 # Vanilla JavaScript Guide
 
-> **TokiForge v2.0.2**
+> **TokiForge v2.2.3**
 
 Use TokiForge with vanilla JavaScript, no framework required!
 
 ## Installation
 
 ```bash
-npm install @tokiforge/core@^2.0.2
+npm install @tokiforge/core@^2.2.3
 ```
 
 ## Basic Usage
@@ -27,7 +27,7 @@ Or with CDN:
 
 ```html
 <script type="module">
-  import { ThemeRuntime } from "https://cdn.jsdelivr.net/npm/@tokiforge/core@2.0.2/dist/index.js";
+  import { ThemeRuntime } from "https://cdn.jsdelivr.net/npm/@tokiforge/core@2.2.3/dist/index.js";
 </script>
 ```
 

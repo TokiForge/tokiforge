@@ -1,5 +1,11 @@
 # @tokiforge/svelte
 
+## 2.2.3
+
+### Patch Changes
+
+- Version bump; dependency range ^2.2.3.
+
 ## 2.0.2
 
 ### Patch Changes

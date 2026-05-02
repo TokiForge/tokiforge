@@ -1,13 +1,13 @@
-# @tokiforge/vue
+﻿# @tokiforge/vue
 
 **Vue 3 adapter for TokiForge design token and theming engine. Provides Vue composables and provide/inject for easy theme management in Vue applications.**
 
-Vue adapter for TokiForge theming (v2.0.2).
+Vue adapter for TokiForge theming (v2.2.3).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/vue@^2.0.2 @tokiforge/core@^2.0.2
+npm install @tokiforge/vue@^2.2.3 @tokiforge/core@^2.2.3
 ```
 
 ## Usage

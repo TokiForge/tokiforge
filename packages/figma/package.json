@@ -1,6 +1,6 @@
-{
+﻿{
   "name": "@tokiforge/figma",
-  "version": "2.0.2",
+  "version": "2.2.3",
   "description": "Figma integration for TokiForge design tokens",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -53,7 +53,7 @@
     "vitest": "^4.1.5"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.0.2",
+    "@tokiforge/core": "workspace:^2.2.3",
     "axios": "^1.6.0"
   }
 }

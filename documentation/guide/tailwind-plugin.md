@@ -1,4 +1,4 @@
-# Enhanced Tailwind Plugin
+﻿# Enhanced Tailwind Plugin
 
 The TokiForge Tailwind plugin provides seamless integration between design tokens and Tailwind CSS, with support for Tailwind v4, automatic token mapping, and watch mode capabilities.
 
@@ -160,12 +160,12 @@ Creates a Tailwind CSS plugin for token integration.
 - `watch` (boolean, optional): Enable file watching (default: false)
 - `themeMappings` (object, optional): Custom token path mappings (see [Theme Mappings](#theme-mappings))
 - `v4` (boolean, optional): Enable Tailwind v4 features (default: false)
-- **v2.0.2:** `baseSelector` (string, optional): Selector for CSS variables (default: `':root'`)
-- **v2.0.2:** `strict` (boolean, optional): Fail build on missing/invalid tokens; false = warn and skip (default: false)
-- **v2.0.2:** `includeUtilities` (boolean, optional): Generate spacing/color utilities; false = only CSS variables (default: true)
-- **v2.0.2:** `excludePaths` (string[], optional): Token path prefixes to exclude (e.g. `['internal.', 'legacy.']`)
-- **v2.0.2:** `customUtilityPrefix` (string, optional): Prefix for generated utility classes
-- **v2.0.2:** `debug` (boolean, optional): Log resolved paths and mapped key count (default: false)
+- **v2.2.3:** `baseSelector` (string, optional): Selector for CSS variables (default: `':root'`)
+- **v2.2.3:** `strict` (boolean, optional): Fail build on missing/invalid tokens; false = warn and skip (default: false)
+- **v2.2.3:** `includeUtilities` (boolean, optional): Generate spacing/color utilities; false = only CSS variables (default: true)
+- **v2.2.3:** `excludePaths` (string[], optional): Token path prefixes to exclude (e.g. `['internal.', 'legacy.']`)
+- **v2.2.3:** `customUtilityPrefix` (string, optional): Prefix for generated utility classes
+- **v2.2.3:** `debug` (boolean, optional): Log resolved paths and mapped key count (default: false)
 
 **Returns:** Tailwind plugin function
 
@@ -204,7 +204,7 @@ Maps design tokens to Tailwind utility values.
 
 ## Theme Mappings
 
-Customize which token categories map to which utilities. In v2.0.2, `boxShadow`, `lineHeight`, and `animation` are supported in addition to colors, spacing, typography, and radius:
+Customize which token categories map to which utilities. In v2.2.3, `boxShadow`, `lineHeight`, and `animation` are supported in addition to colors, spacing, typography, and radius:
 
 ```javascript
 createTailwindPlugin({

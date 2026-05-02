@@ -1,5 +1,11 @@
 # tokiforge-cli
 
+## 2.2.3
+
+### Patch Changes
+
+- Version bump; workspace deps ^2.2.3.
+
 ## 2.0.2
 
 ### Patch Changes

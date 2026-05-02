@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 # TokiForge
 
@@ -389,7 +389,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 
 ## Roadmap
 
-### Completed (v2.0.2)
+### Completed (v2.2.3)
 
 - [x] Core engine + React adapter
 - [x] Vue/Svelte/Angular adapters

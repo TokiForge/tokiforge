@@ -1,13 +1,13 @@
-# @tokiforge/tailwind
+﻿# @tokiforge/tailwind
 
 **Tailwind CSS integration for TokiForge design tokens. Generate Tailwind configuration from design tokens and keep your design system in sync.**
 
-Tailwind CSS integration for TokiForge design tokens (v2.0.2).
+Tailwind CSS integration for TokiForge design tokens (v2.2.3).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/tailwind@^2.0.2 @tokiforge/core@^2.0.2 tailwindcss
+npm install @tokiforge/tailwind@^2.2.3 @tokiforge/core@^2.2.3 tailwindcss
 ```
 
 ## Usage

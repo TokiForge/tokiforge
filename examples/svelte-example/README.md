@@ -1,8 +1,8 @@
-# TokiForge Svelte Example
+﻿# TokiForge Svelte Example
 
 This example demonstrates how to use TokiForge with Svelte.
 
-> **TokiForge v2.0.2** | **Svelte 4+**
+> **TokiForge v2.2.3** | **Svelte 4+**
 
 ## Getting Started
 

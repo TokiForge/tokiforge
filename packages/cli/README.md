@@ -1,8 +1,8 @@
-# tokiforge-cli
+﻿# tokiforge-cli
 
 **CLI tool for TokiForge design token management. Initialize, build, validate, analyze, and manage design tokens from the command line.**
 
-Command-line tool for TokiForge design tokens (v2.0.2).
+Command-line tool for TokiForge design tokens (v2.2.3).
 
 ## Installation
 

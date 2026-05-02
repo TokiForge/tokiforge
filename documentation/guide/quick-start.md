@@ -1,18 +1,18 @@
----
+﻿---
 title: Quick Start | TokiForge
 description: Get started with TokiForge in minutes. Quick installation, basic usage, and first theme setup for React, Vue, Angular, Svelte, or vanilla JS.
 ---
 
 # Quick Start
 
-> **TokiForge v2.0.2**
+> **TokiForge v2.2.3**
 
 Get up and running with TokiForge in 5 minutes!
 
 ## Step 1: Install
 
 ```bash
-npm install @tokiforge/core@^2.0.2 @tokiforge/react@^2.0.2
+npm install @tokiforge/core@^2.2.3 @tokiforge/react@^2.2.3
 ```
 
 ## Step 2: Create Tokens

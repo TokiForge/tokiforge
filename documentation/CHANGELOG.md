@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.3 - Patch release (2026-05-02)
+
+- Monorepo version bump to 2.2.3; install commands and docs updated to the current release.
+
 ## v2.0.2 - Patch release (2026-05-02)
 
 - Monorepo version bump to 2.0.2; install commands and docs updated to the current release.

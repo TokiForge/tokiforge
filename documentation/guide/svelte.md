@@ -1,18 +1,18 @@
----
+﻿---
 title: Svelte Guide | TokiForge
 description: Complete guide to using TokiForge with Svelte. Learn how to use createThemeStore, Svelte stores, and manage themes in Svelte applications.
 ---
 
 # Svelte Guide
 
-> **TokiForge v2.0.2**
+> **TokiForge v2.2.3**
 
 Complete guide to using TokiForge with Svelte.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/svelte@^2.0.2 @tokiforge/core@^2.0.2
+npm install @tokiforge/svelte@^2.2.3 @tokiforge/core@^2.2.3
 ```
 
 ## Setup

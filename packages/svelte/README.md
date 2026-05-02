@@ -1,13 +1,13 @@
-# @tokiforge/svelte
+﻿# @tokiforge/svelte
 
 **Svelte adapter for TokiForge design token and theming engine. Provides Svelte stores and reactive utilities for easy theme management in Svelte applications.**
 
-Svelte adapter for TokiForge theming (v2.0.2).
+Svelte adapter for TokiForge theming (v2.2.3).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/svelte@^2.0.2 @tokiforge/core@^2.0.2
+npm install @tokiforge/svelte@^2.2.3 @tokiforge/core@^2.2.3
 ```
 
 ## Usage

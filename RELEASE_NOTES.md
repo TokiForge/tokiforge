@@ -1,3 +1,11 @@
+# Release v2.2.3 - Patch Release (2026-05-02)
+
+## Overview
+
+Monorepo version alignment: all publishable packages and docs set to **2.2.3**; workspace dependency ranges and install examples updated. See [CHANGELOG.md](CHANGELOG.md) for details.
+
+---
+
 # Release v2.0.2 - Patch Release (2026-05-02)
 
 ## Overview

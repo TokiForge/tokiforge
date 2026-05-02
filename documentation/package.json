@@ -1,6 +1,6 @@
-{
+﻿{
   "name": "tokiforge-docs",
-  "version": "2.0.2",
+  "version": "2.2.3",
   "description": "TokiForge Documentation Site",
   "private": true,
   "type": "module",
@@ -29,8 +29,8 @@
     "url": "https://github.com/TokiForge/tokiforge/issues"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.0.2",
-    "@tokiforge/vue": "workspace:^2.0.2",
+    "@tokiforge/core": "workspace:^2.2.3",
+    "@tokiforge/vue": "workspace:^2.2.3",
     "@vueuse/core": "^14.3.0",
     "vite": "8.0.10",
     "vitest": "^4.1.5"

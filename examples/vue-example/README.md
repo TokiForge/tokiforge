@@ -1,8 +1,8 @@
-# TokiForge Vue Example
+﻿# TokiForge Vue Example
 
 This is a complete example demonstrating how to use TokiForge with Vue 3.
 
-> **TokiForge v2.0.2** | **Vue 3+**
+> **TokiForge v2.2.3** | **Vue 3+**
 
 ## Setup
 

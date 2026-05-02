@@ -1,6 +1,6 @@
-{
+﻿{
   "name": "@tokiforge/vue",
-  "version": "2.0.2",
+  "version": "2.2.3",
   "description": "Vue adapter for TokiForge theming",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -30,7 +30,7 @@
   ],
   "sideEffects": false,
   "peerDependencies": {
-    "@tokiforge/core": "workspace:^2.0.2",
+    "@tokiforge/core": "workspace:^2.2.3",
     "vue": ">=3.0.0"
   },
   "devDependencies": {
@@ -42,7 +42,7 @@
     "vue": "^3.5.33"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.0.0"
+    "@tokiforge/core": "workspace:^2.2.3"
   },
   "keywords": [
     "vue",

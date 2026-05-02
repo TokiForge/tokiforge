@@ -1,13 +1,13 @@
-# @tokiforge/angular
+﻿# @tokiforge/angular
 
 **Angular adapter for TokiForge design token and theming engine. Provides Angular service with Signals for easy theme management in Angular applications. Supports Angular 17+ and SSR.**
 
-Angular adapter for TokiForge theming engine (v2.0.2).
+Angular adapter for TokiForge theming engine (v2.2.3).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/angular@^2.0.2 @tokiforge/core@^2.0.2
+npm install @tokiforge/angular@^2.2.3 @tokiforge/core@^2.2.3
 ```
 
 ## Requirements
