@@ -59,7 +59,8 @@
    - `pushToFigma()` function
    - `FigmaDiff` class for comparison
    - CLI `figma:diff` command
-   - **Enhancement needed**: Tokens Studio integration, Figma plugin
+   - Bidirectional sync stores token snapshots keyed by content hash so change detection no longer uses empty reconstructed state
+   - **Enhancement needed**: Tokens Studio integration, dedicated Figma plugin UI
 
 8. **Tailwind Integration** - Implemented
 
@@ -344,32 +345,32 @@
 
 #### 4.1 VSCode Extension
 
-**Status**: API ready, needs extension development  
+**Status**: Extension implemented in-repo (`packages/vscode-tokiforge`); marketplace publish optional  
 **Priority**: Medium
 
 **Tasks**:
 
-- [ ] Create VSCode extension project
-- [ ] Implement token autocomplete
-- [ ] Add hover previews
-- [ ] Add token validation
-- [ ] Add quick fixes
+- [x] Create VSCode extension project
+- [x] Implement token autocomplete
+- [x] Add hover previews
+- [x] Add token validation
+- [x] Add quick fixes
 - [ ] Publish to VSCode marketplace
 
 **Estimated Effort**: 10-14 days
 
 #### 4.2 Community Plugin Examples
 
-**Status**: Plugin system exists, needs examples  
+**Status**: Examples + docs + stub generator shipped  
 **Priority**: Low
 
 **Tasks**:
 
-- [ ] Create Framer exporter plugin example
-- [ ] Create Sketch exporter plugin example
-- [ ] Create Adobe XD exporter plugin example
-- [ ] Create documentation for plugin development
-- [ ] Create plugin template generator
+- [x] Create Framer exporter plugin example
+- [x] Create Sketch exporter plugin example
+- [x] Create Adobe XD exporter plugin example
+- [x] Create documentation for plugin development
+- [x] Create plugin template generator (`examples/plugin-examples/scripts/new-plugin-stub.mjs`)
 
 **Estimated Effort**: 5-7 days
 
@@ -395,14 +396,14 @@
 
 - [x] **3.1** Visual Playground Enhancements
 - [x] **3.3** Enhanced Usage Analytics
-- [ ] **4.1** VSCode Extension Development
+- [x] **4.1** VSCode Extension Development
 
 ### Long-term Goals (Quarter 2+)
 
-- [ ] **4.2** Community Plugin Examples
+- [x] **4.2** Community Plugin Examples
 - [ ] Advanced token governance features
-- [ ] Enterprise features (SSO, team management)
-- [ ] Cloud-hosted token registry
+- [ ] Enterprise features (SSO, team management) — documented in [documentation/guide/enterprise-and-registry.md](./documentation/guide/enterprise-and-registry.md)
+- [ ] Cloud-hosted token registry — documented in [documentation/guide/enterprise-and-registry.md](./documentation/guide/enterprise-and-registry.md)
 
 ---
 
@@ -430,14 +431,14 @@
 
 ## Documentation Updates Needed
 
-- [ ] Semantic tokens guide
-- [ ] Multi-platform export guide
+- [x] Semantic tokens guide (`documentation/guide/semantic-tokens.md`)
+- [x] Multi-platform export guide (`documentation/guide/platform-exporters.md`)
 - [x] Type generation guide
 - [x] CLI command reference (complete)
-- [ ] VSCode extension guide
-- [ ] Plugin development guide
+- [x] VSCode extension guide (`documentation/guide/vscode-extension.md`)
+- [x] Plugin development guide (`documentation/guide/plugin-development.md`)
 - [x] CI/CD integration guide
-- [ ] Visual regression testing guide
+- [x] Visual regression testing guide (`documentation/guide/visual-regression-testing.md`)
 
 ---
 
@@ -464,5 +465,5 @@ We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guideline
 
 ---
 
-_Last updated: January 2025_  
+_Last updated: May 2026_  
 _Version: 2.0.2_

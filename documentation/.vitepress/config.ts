@@ -287,6 +287,12 @@ export default defineConfig({
           items: [
             { text: 'Advanced Features', link: '/guide/advanced-features' },
             { text: 'Advanced Token Features', link: '/guide/advanced-token-features' },
+            { text: 'Semantic Tokens', link: '/guide/semantic-tokens' },
+            { text: 'Multi-Platform Exporters', link: '/guide/platform-exporters' },
+            { text: 'VS Code extension', link: '/guide/vscode-extension' },
+            { text: 'Plugin development', link: '/guide/plugin-development' },
+            { text: 'Visual regression testing', link: '/guide/visual-regression-testing' },
+            { text: 'Enterprise & registry (roadmap)', link: '/guide/enterprise-and-registry' },
             { text: 'Performance Optimization', link: '/guide/performance-optimization' },
             { text: 'Accessibility', link: '/guide/accessibility' },
             { text: 'Integrations', link: '/guide/integrations' },

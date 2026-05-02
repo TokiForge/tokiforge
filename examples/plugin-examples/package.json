@@ -1,0 +1,14 @@
+{
+  "name": "tokiforge-plugin-examples",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Example TokiForge Plugin exporters (Framer, Sketch, Adobe XD patterns)",
+  "scripts": {
+    "demo": "node register-demo.mjs",
+    "new-plugin": "node scripts/new-plugin-stub.mjs"
+  },
+  "dependencies": {
+    "@tokiforge/core": "workspace:^2.0.2"
+  }
+}

@@ -51,6 +51,9 @@ export class FigmaSync {
   private api: AxiosInstance;
   private config: FigmaConfig;
   private syncState: Map<string, BidirectionalSyncState>;
+  /** Content snapshots keyed by `computeHash(JSON.stringify(tokens))` for diffing across syncs */
+  private hashSnapshots = new Map<string, DesignTokens>();
+  private static readonly MAX_HASH_SNAPSHOTS = 64;
 
   constructor(config: FigmaConfig) {
     this.config = config;
@@ -193,6 +196,8 @@ export class FigmaSync {
 
     const localHash = this.computeHash(JSON.stringify(localTokens));
     const remoteHash = this.computeHash(JSON.stringify(remoteTokens));
+    this.rememberSnapshot(localHash, localTokens);
+    this.rememberSnapshot(remoteHash, remoteTokens);
     const previousState = this.syncState.get(stateKey);
 
     // Detect what changed
@@ -433,13 +438,25 @@ export class FigmaSync {
     return current;
   }
 
+  private rememberSnapshot(hash: string, tokens: DesignTokens): void {
+    if (!hash) return;
+    try {
+      const clone = JSON.parse(JSON.stringify(tokens)) as DesignTokens;
+      this.hashSnapshots.set(hash, clone);
+      while (this.hashSnapshots.size > FigmaSync.MAX_HASH_SNAPSHOTS) {
+        const first = this.hashSnapshots.keys().next().value as string | undefined;
+        if (first !== undefined) this.hashSnapshots.delete(first);
+      }
+    } catch {
+      /* ignore clone failures */
+    }
+  }
+
   /**
-   * Reconstruct tokens from hash (placeholder - in real implementation, store full state)
+   * Reconstruct tokens from a content hash previously recorded via {@link rememberSnapshot}.
    */
-  private reconstructTokens(_hash: string): DesignTokens {
-    // This is a placeholder. In production, you'd store the full token state
-    // associated with each hash
-    return {};
+  private reconstructTokens(hash: string): DesignTokens {
+    return this.hashSnapshots.get(hash) ?? {};
   }
 
   /**
