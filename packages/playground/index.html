@@ -3,11 +3,75 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TokiForge Playground</title>
+    
+    <!-- Primary SEO Metadata -->
+    <title>TokiForge Playground - Live Design Token & Theme Engine</title>
+    <meta name="description" content="Generate, visualize, and export framework-agnostic design tokens dynamically. Build customized color systems, inspect WCAG accessibility standards, and ship to CSS, React, Svelte, Angular, Tailwind, and Figma." />
+    <meta name="keywords" content="design tokens, design tokens playground, theme switching, theme generator, design systems, css variables, react theming, tailwind tokens, figma tokens, wcag contrast checker" />
+    <meta name="author" content="TokiForge Community" />
+    
+    <!-- Search Engine Robots Policies -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    
+    <!-- Canonical link -->
+    <link rel="canonical" href="https://www.sachindilshan.com/tokiforge/playground/" />
+    
+    <!-- Theme color for browser bars -->
+    <meta name="theme-color" content="#7c3aed" />
+
+    <!-- Open Graph / Facebook / LinkedIn / Slack -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="TokiForge Playground - Interactive Design System Engine" />
+    <meta property="og:description" content="Design, preview, and export responsive design tokens in real time. Validate WCAG contrast, sync with Figma, and export to any modern web framework." />
+    <meta property="og:image" content="https://www.sachindilshan.com/tokiforge/logo.svg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="TokiForge Logo" />
+    <meta property="og:url" content="https://www.sachindilshan.com/tokiforge/playground/" />
+    <meta property="og:site_name" content="TokiForge" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TokiForge Playground - Live Design System Builder" />
+    <meta name="twitter:description" content="Dynamically generate, test, and ship design tokens. Framework-agnostic theme switcher, real-time styling previews, and instant multi-target exporting." />
+    <meta name="twitter:image" content="https://www.sachindilshan.com/tokiforge/logo.svg" />
+    <meta name="twitter:image:alt" content="TokiForge Logo" />
+    <meta name="twitter:site" content="@tokiforge" />
+    <meta name="twitter:creator" content="@tokiforge" />
+
+    <!-- Structured Data / JSON-LD for rich snippets -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "TokiForge Playground",
+        "url": "https://www.sachindilshan.com/tokiforge/playground/",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "description": "An interactive environment to design, audit, and export semantic design tokens and themes to React, Vue, Svelte, Tailwind, and more.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "TokiForge Community",
+          "url": "https://github.com/TokiForge/tokiforge"
+        }
+      }
+    </script>
   </head>
   <body>
+    <noscript>
+      <div style="padding: 2rem; text-align: center; font-family: sans-serif;">
+        <h2>JavaScript is required</h2>
+        <p>Please enable JavaScript in your browser to run the TokiForge Playground.</p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
