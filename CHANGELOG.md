@@ -5,6 +5,23 @@ All notable changes to TokiForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.4] - 2026-05-19 (Monorepo Alignment & Recovery)
+
+### Fixed
+
+- **Playground (Dynamic HMR Imports)**: Added a robust `lazyWithRetry()` helper utility to handle browser-cache dynamic chunk failures (black screen crashes) on hot reload/redeployments.
+- **Dependency Resolvers**: Standardized and aligned root ESLint to `^9.39.2` to resolve ERESOLVE installation tree conflicts and peer restrictions.
+- **Port Alignment**: Aligned Playwright E2E configuration to match standard playground port `5173`.
+
+### Added
+
+- **SEO Metadata Playgrounds**: Injected rich web application JSON-LD schemas, OpenGraph card protocols, Twitter Card tags, and canonical indices into the visual playground.
+
+### Changed
+
+- **Monorepo Alignment**: Aligned all 19 workspace `package.json` package release footprints and cross-package workspace dependencies to `v2.2.4`.
+- **Ecosystem Cleanups**: Cleaned up conflicting lockfiles (`package-lock.json`) and untracked output caches (`playwright-report/` and `test-results/`).
+
 ## [2.2.3] - 2026-05-19 (Maintenance Update)
 
 ### Fixed

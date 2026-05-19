@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.2.4 - Monorepo Version Alignment & Recovery (2026-05-19)
+
+- **Hot Reload Dynamic Recovery**: Integrated a highly resilient `lazyWithRetry()` dynamic importer boundary to handle and auto-recover browser-cached dynamic chunk failures without screen crashes.
+- **Dependency Alignments**: Adjusted root ESLint package configurations to `^9.39.2` to ensure ERESOLVE compatibility and clean installations.
+- **SEO & Metas**: Configured schema markups (JSON-LD WebApplication structures), OpenGraph, and Twitter social cards directly inside the playground.
+- **Monorepo Version Bump**: Sync of all 19 workspace package versions and cross-package dependencies to `2.2.4`, cleaning up all redundant lockfiles, and setting standard E2E test port to `5173`.
+
 ## v2.2.3 - Maintenance release (2026-05-19)
 
 - **React ThemeContext & Hooks**: Marked component props as read-only, eliminated the unused `suppressHydrationWarning` prop definition to comply with SonarLint standard `S6767`, and resolved duplicate React/TypeScript type conflicts on the `children` prop. Refactored the internal state logic in React `ThemeProvider` to use React `useRef` for static `ThemeRuntime` initialization, implemented clean nullish coalescing assignments (`??=`), and memoized the context value to eliminate duplicate consumer component re-renders.

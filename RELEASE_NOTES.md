@@ -1,3 +1,31 @@
+# Release v2.2.4 - Monorepo Version Alignment & Robust Recovery (2026-05-19)
+
+## Overview
+
+Complete monorepo alignment, automatic browser-cache hot-reload chunk recovery, full repository SEO optimization, and port standardizations. All publishable packages and docs set to **2.2.4**.
+
+### Changes Implemented
+
+#### 1. Hot Reload (HMR) Cache Mismatch Recovery
+- Added a robust `lazyWithRetry()` dynamic importer helper in `packages/playground/src/App.tsx`.
+- Automatically catches asset loading failures, tracks attempts via Session Storage, and performs a graceful one-time reload to pull fresh bundles, preventing runtime browser tab blackouts.
+
+#### 2. Fully Search-Engine Optimized Playground Page
+- Complete SEO enhancements in `packages/playground/index.html`:
+  - Structured JSON-LD metadata schema for `WebApplication` indexing.
+  - Social sharing integrations via standardized OpenGraph and Twitter Card properties.
+  - Standardized HTML5 `<link rel="canonical">` element, robot instructions, and `<noscript>` fallback containers.
+
+#### 3. Monorepo Alignment & Dependencies Cleanups
+- Bumped all 19 workspace `package.json` configurations and peer cross-package dependencies to **`v2.2.4`**.
+- Resolved peer dependency conflicts with `eslint-plugin-react-hooks` by aligning root ESLint to `^9.39.2`.
+- Purged all redundant and untracked `package-lock.json` configurations to keep `pnpm-lock.yaml` as the ultra-clean single source of truth.
+- Aligned Playwright visual E2E test suite environment settings with Vite configurations to serve cleanly on standard port **`5173`**.
+
+See [CHANGELOG.md](CHANGELOG.md) for full details.
+
+---
+
 # Release v2.2.3 - Maintenance & Patch Release (2026-05-19)
 
 ## Overview
