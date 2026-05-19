@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/design-systems",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "Design system integration tools for TokiForge (Zeroheight, InVision DSM)",
   "type": "module",
   "main": "./dist/index.cjs",

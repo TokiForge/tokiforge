@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/playground",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "Visual web UI for TokiForge design token playground",
   "type": "module",
   "scripts": {
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.13.2",
-    "@tokiforge/core": "workspace:^2.2.3",
+    "@tokiforge/core": "workspace:^2.2.4",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },

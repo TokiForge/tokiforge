@@ -60,10 +60,10 @@ importers:
   documentation:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../packages/core
       '@tokiforge/vue':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../packages/vue
       '@vueuse/core':
         specifier: ^14.3.0
@@ -171,7 +171,7 @@ importers:
   examples/plugin-examples:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../../packages/core
 
   examples/react-example:
@@ -301,7 +301,7 @@ importers:
   packages/angular:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
     devDependencies:
       '@angular/common':
@@ -332,7 +332,7 @@ importers:
   packages/astro:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
     devDependencies:
       astro:
@@ -348,13 +348,13 @@ importers:
   packages/cli:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
       '@tokiforge/figma':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../figma
       '@tokiforge/tailwind':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../tailwind
       chalk:
         specifier: ^5.3.0
@@ -435,7 +435,7 @@ importers:
   packages/figma:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
       axios:
         specifier: ^1.6.0
@@ -460,7 +460,7 @@ importers:
   packages/nextjs:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
     devDependencies:
       '@types/react':
@@ -485,7 +485,7 @@ importers:
         specifier: ^3.13.2
         version: 3.13.19(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
       react:
         specifier: ^19.2.5
@@ -522,7 +522,7 @@ importers:
   packages/react:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
       react:
         specifier: '>=16.8.0'
@@ -553,7 +553,7 @@ importers:
   packages/remix:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
     devDependencies:
       '@remix-run/node':
@@ -578,7 +578,7 @@ importers:
   packages/solid:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
     devDependencies:
       solid-js:
@@ -603,7 +603,7 @@ importers:
         specifier: ^7.0.0 || ^8.0.0
         version: 8.6.14(storybook@8.6.15(prettier@3.8.1))
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
       react:
         specifier: ^18.0.0
@@ -625,7 +625,7 @@ importers:
   packages/svelte:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
     devDependencies:
       '@types/node':
@@ -650,7 +650,7 @@ importers:
   packages/sveltekit:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
     devDependencies:
       '@sveltejs/kit':
@@ -669,7 +669,7 @@ importers:
   packages/tailwind:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
       vite:
         specifier: 8.0.10
@@ -713,7 +713,7 @@ importers:
   packages/vue:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.3
+        specifier: workspace:^2.2.4
         version: link:../core
     devDependencies:
       '@types/node':
@@ -4006,7 +4006,7 @@ packages:
     peerDependencies:
       '@angular/common': '>=17.0.0 <22.0.0'
       '@angular/core': '>=17.0.0 <22.0.0'
-      '@tokiforge/core': workspace:^2.2.3
+      '@tokiforge/core': workspace:^2.2.4
 
   '@tokiforge/core@file:packages/core':
     resolution: {directory: packages/core, type: directory}
@@ -4014,19 +4014,19 @@ packages:
   '@tokiforge/react@file:packages/react':
     resolution: {directory: packages/react, type: directory}
     peerDependencies:
-      '@tokiforge/core': workspace:^2.2.3
+      '@tokiforge/core': workspace:^2.2.4
       react: '>=16.8.0'
 
   '@tokiforge/svelte@file:packages/svelte':
     resolution: {directory: packages/svelte, type: directory}
     peerDependencies:
-      '@tokiforge/core': workspace:^2.2.3
+      '@tokiforge/core': workspace:^2.2.4
       svelte: '>=3.0.0'
 
   '@tokiforge/vue@file:packages/vue':
     resolution: {directory: packages/vue, type: directory}
     peerDependencies:
-      '@tokiforge/core': workspace:^2.2.3
+      '@tokiforge/core': workspace:^2.2.4
       vue: '>=3.0.0'
 
   '@tufjs/canonical-json@2.0.0':
