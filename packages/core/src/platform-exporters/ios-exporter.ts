@@ -7,6 +7,8 @@ export interface IOSExportOptions {
   colorFormat?: 'hex' | 'rgb' | 'uicolor';
 }
 
+type TokenNode = Record<string, unknown>;
+
 export class IOSExporter {
   /**
    * Export tokens to iOS Swift format
@@ -29,15 +31,31 @@ export class IOSExporter {
     options: IOSExportOptions
   ): string {
     const className = options.className || 'DesignTokens';
-    // const prefix = options.prefix || '';
     const colorFormat = options.colorFormat || 'hex';
 
     const lines: string[] = [];
-    lines.push('import UIKit\n');
-    lines.push(`public enum ${className} {`);
+    lines.push(
+      'import UIKit\n',
+      `public enum ${className} {`
+    );
 
-    // Export colors
     const colorTokens = this.extractTokensByType(tokens, 'color');
+    this.writeColorsSwift(lines, colorTokens, colorFormat);
+
+    const typographyTokens = this.extractTokensByType(tokens, 'typography');
+    this.writeTypographySwift(lines, typographyTokens);
+
+    const spacingTokens = this.extractTokensByType(tokens, 'spacing');
+    this.writeSpacingSwift(lines, spacingTokens);
+
+    const sizingTokens = this.extractTokensByType(tokens, 'sizing');
+    this.writeSizingSwift(lines, sizingTokens);
+
+    lines.push('}');
+    return lines.join('\n');
+  }
+
+  private static writeColorsSwift(lines: string[], colorTokens: Record<string, TokenValue>, colorFormat: string): void {
     if (Object.keys(colorTokens).length > 0) {
       lines.push('  // MARK: - Colors');
       for (const [key, value] of Object.entries(colorTokens)) {
@@ -47,9 +65,9 @@ export class IOSExporter {
       }
       lines.push('');
     }
+  }
 
-    // Export typography
-    const typographyTokens = this.extractTokensByType(tokens, 'typography');
+  private static writeTypographySwift(lines: string[], typographyTokens: Record<string, TokenValue>): void {
     if (Object.keys(typographyTokens).length > 0) {
       lines.push('  // MARK: - Typography');
       for (const [key, value] of Object.entries(typographyTokens)) {
@@ -59,43 +77,44 @@ export class IOSExporter {
       }
       lines.push('');
     }
+  }
 
-    // Export spacing
-    const spacingTokens = this.extractTokensByType(tokens, 'spacing');
+  private static writeSpacingSwift(lines: string[], spacingTokens: Record<string, TokenValue>): void {
     if (Object.keys(spacingTokens).length > 0) {
       lines.push('  // MARK: - Spacing');
       for (const [key, value] of Object.entries(spacingTokens)) {
         const swiftKey = this.camelCase(key);
-        if (typeof value === 'number' || (typeof value === 'object' && 'value' in value)) {
-          const numValue = typeof value === 'number' ? value : (value as any).value;
-          lines.push(`  public static let ${swiftKey}: CGFloat = ${numValue}`);
+        if (typeof value === 'number') {
+          lines.push(`  public static let ${swiftKey}: CGFloat = ${value}`);
+        } else if (value && typeof value === 'object' && 'value' in value) {
+          const valObj = value as unknown as Record<string, unknown>;
+          lines.push(`  public static let ${swiftKey}: CGFloat = ${valObj.value}`);
         } else if (typeof value === 'string') {
-          const numValue = parseFloat(value);
+          const numValue = Number.parseFloat(value);
           lines.push(`  public static let ${swiftKey}: CGFloat = ${numValue}`);
         }
       }
       lines.push('');
     }
+  }
 
-    // Export sizing
-    const sizingTokens = this.extractTokensByType(tokens, 'sizing');
+  private static writeSizingSwift(lines: string[], sizingTokens: Record<string, TokenValue>): void {
     if (Object.keys(sizingTokens).length > 0) {
       lines.push('  // MARK: - Sizing');
       for (const [key, value] of Object.entries(sizingTokens)) {
         const swiftKey = this.camelCase(key);
-        if (typeof value === 'number' || (typeof value === 'object' && 'value' in value)) {
-          const numValue = typeof value === 'number' ? value : (value as any).value;
-          lines.push(`  public static let ${swiftKey}: CGFloat = ${numValue}`);
+        if (typeof value === 'number') {
+          lines.push(`  public static let ${swiftKey}: CGFloat = ${value}`);
+        } else if (value && typeof value === 'object' && 'value' in value) {
+          const valObj = value as unknown as Record<string, unknown>;
+          lines.push(`  public static let ${swiftKey}: CGFloat = ${valObj.value}`);
         } else if (typeof value === 'string') {
-          const numValue = parseFloat(value);
+          const numValue = Number.parseFloat(value);
           lines.push(`  public static let ${swiftKey}: CGFloat = ${numValue}`);
         }
       }
       lines.push('');
     }
-
-    lines.push('}');
-    return lines.join('\n');
   }
 
   /**
@@ -109,10 +128,12 @@ export class IOSExporter {
     const colorFormat = options.colorFormat || 'hex';
 
     const lines: string[] = [];
-    lines.push('import SwiftUI\n');
-    lines.push(`struct ${className}: EnvironmentKey {`);
-    lines.push('  static let defaultValue = Self()');
-    lines.push('');
+    lines.push(
+      'import SwiftUI\n',
+      `struct ${className}: EnvironmentKey {`,
+      '  static let defaultValue = Self()',
+      ''
+    );
 
     const colorTokens = this.extractTokensByType(tokens, 'color');
     for (const [key, value] of Object.entries(colorTokens)) {
@@ -121,14 +142,16 @@ export class IOSExporter {
       lines.push(`  var ${swiftKey}: Color = ${swiftValue}`);
     }
 
-    lines.push('}');
-    lines.push('');
-    lines.push('extension EnvironmentValues {');
-    lines.push(`  var designTokens: ${className} {`);
-    lines.push(`    get { self[${className}.self] }`);
-    lines.push(`    set { self[${className}.self] = newValue }`);
-    lines.push('  }');
-    lines.push('}');
+    lines.push(
+      '}',
+      '',
+      'extension EnvironmentValues {',
+      `  var designTokens: ${className} {`,
+      `    get { self[${className}.self] }`,
+      `    set { self[${className}.self] = newValue }`,
+      '  }',
+      '}'
+    );
 
     return lines.join('\n');
   }
@@ -139,7 +162,7 @@ export class IOSExporter {
   ): Record<string, TokenValue> {
     const result: Record<string, TokenValue> = {};
 
-    const traverse = (obj: any, prefix: string = '') => {
+    const traverse = (obj: TokenNode, prefix = '') => {
       for (const [key, value] of Object.entries(obj)) {
         const fullKey = prefix ? `${prefix}.${key}` : key;
 
@@ -148,7 +171,7 @@ export class IOSExporter {
         }
 
         if (typeof value === 'object' && !('value' in value)) {
-          traverse(value, fullKey);
+          traverse(value as TokenNode, fullKey);
         } else if (typeof value === 'object' && 'type' in value && value.type === type) {
           result[fullKey] = value as TokenValue;
         } else if (
@@ -161,7 +184,7 @@ export class IOSExporter {
       }
     };
 
-    traverse(tokens);
+    traverse(tokens as unknown as TokenNode);
     return result;
   }
 
@@ -184,16 +207,16 @@ export class IOSExporter {
     }
 
     if (format === 'rgb') {
-      const r = parseInt(hexValue.slice(0, 2), 16);
-      const g = parseInt(hexValue.slice(2, 4), 16);
-      const b = parseInt(hexValue.slice(4, 6), 16);
+      const r = Number.parseInt(hexValue.slice(0, 2), 16);
+      const g = Number.parseInt(hexValue.slice(2, 4), 16);
+      const b = Number.parseInt(hexValue.slice(4, 6), 16);
       return `UIColor(red: ${(r / 255).toFixed(3)}, green: ${(g / 255).toFixed(3)}, blue: ${(b / 255).toFixed(3)}, alpha: 1.0)`;
     }
 
     if (format === 'uicolor') {
-      const r = parseInt(hexValue.slice(0, 2), 16);
-      const g = parseInt(hexValue.slice(2, 4), 16);
-      const b = parseInt(hexValue.slice(4, 6), 16);
+      const r = Number.parseInt(hexValue.slice(0, 2), 16);
+      const g = Number.parseInt(hexValue.slice(2, 4), 16);
+      const b = Number.parseInt(hexValue.slice(4, 6), 16);
       return `UIColor(red: ${r}/255.0, green: ${g}/255.0, blue: ${b}/255.0, alpha: 1.0)`;
     }
 
@@ -201,9 +224,9 @@ export class IOSExporter {
   }
 
   private static formatTypographyValue(value: TokenValue): string {
-    if (typeof value === 'object' && 'value' in value && typeof value.value === 'object') {
-      const typog = value.value as any;
-      const fontSize = typog.fontSize || 12;
+    if (typeof value === 'object' && 'value' in value && typeof value.value === 'object' && value.value !== null) {
+      const typog = value.value as Record<string, unknown>;
+      const fontSize = (typog.fontSize as number | undefined) || 12;
       const fontWeight = typog.fontWeight || 'regular';
 
       let weight = '.regular';

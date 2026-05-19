@@ -6,6 +6,8 @@ export interface ReactNativeExportOptions {
   colorFormat?: 'hex' | 'rgb';
 }
 
+type TokenNode = Record<string, unknown>;
+
 export class ReactNativeExporter {
   /**
    * Export tokens to React Native format
@@ -30,45 +32,101 @@ export class ReactNativeExporter {
     lines.push("import { StyleSheet } from 'react-native';\n");
 
     if (includeTheme) {
-      lines.push('export interface Theme {');
-
-      const colorTokens = this.extractTokensByType(tokens, 'color');
-      if (Object.keys(colorTokens).length > 0) {
-        lines.push('  colors: {');
-        for (const key of Object.keys(colorTokens)) {
-          const tsKey = this.camelCase(key);
-          lines.push(`    ${tsKey}: string;`);
-        }
-        lines.push('  };');
-      }
-
-      const typographyTokens = this.extractTokensByType(tokens, 'typography');
-      if (Object.keys(typographyTokens).length > 0) {
-        lines.push('  typography: {');
-        for (const key of Object.keys(typographyTokens)) {
-          const tsKey = this.camelCase(key);
-          lines.push(`    ${tsKey}: TextStyle;`);
-        }
-        lines.push('  };');
-      }
-
-      const spacingTokens = this.extractTokensByType(tokens, 'spacing');
-      if (Object.keys(spacingTokens).length > 0) {
-        lines.push('  spacing: {');
-        for (const key of Object.keys(spacingTokens)) {
-          const tsKey = this.camelCase(key);
-          lines.push(`    ${tsKey}: number;`);
-        }
-        lines.push('  };');
-      }
-
-      lines.push('}\n');
+      this.writeThemeInterface(lines, tokens);
     }
 
     lines.push('export const tokens = {');
 
-    // Export colors
     const colorTokens = this.extractTokensByType(tokens, 'color');
+    this.writeColors(lines, colorTokens);
+
+    const typographyTokens = this.extractTokensByType(tokens, 'typography');
+    this.writeTypography(lines, typographyTokens);
+
+    const spacingTokens = this.extractTokensByType(tokens, 'spacing');
+    this.writeSpacing(lines, spacingTokens);
+
+    const sizingTokens = this.extractTokensByType(tokens, 'sizing');
+    this.writeSizing(lines, sizingTokens);
+
+    lines.push(
+      '} as const;',
+      '',
+      "export type Tokens = typeof tokens;\n",
+      "export function useTokens() {",
+      '  return tokens;',
+      '}'
+    );
+
+    return lines.join('\n');
+  }
+
+  private static exportJavaScript(tokens: DesignTokens, _includeTheme: boolean): string {
+    const lines: string[] = [];
+
+    lines.push("import { StyleSheet } from 'react-native';\n");
+
+    lines.push('export const tokens = {');
+
+    const colorTokens = this.extractTokensByType(tokens, 'color');
+    this.writeColors(lines, colorTokens);
+
+    const typographyTokens = this.extractTokensByType(tokens, 'typography');
+    this.writeTypography(lines, typographyTokens);
+
+    const spacingTokens = this.extractTokensByType(tokens, 'spacing');
+    this.writeSpacing(lines, spacingTokens);
+
+    const sizingTokens = this.extractTokensByType(tokens, 'sizing');
+    this.writeSizing(lines, sizingTokens);
+
+    lines.push(
+      '};\n',
+      'export function useTokens() {',
+      '  return tokens;',
+      '}'
+    );
+
+    return lines.join('\n');
+  }
+
+  private static writeThemeInterface(lines: string[], tokens: DesignTokens): void {
+    lines.push('export interface Theme {');
+
+    const colorTokens = this.extractTokensByType(tokens, 'color');
+    if (Object.keys(colorTokens).length > 0) {
+      lines.push('  colors: {');
+      for (const key of Object.keys(colorTokens)) {
+        const tsKey = this.camelCase(key);
+        lines.push(`    ${tsKey}: string;`);
+      }
+      lines.push('  };');
+    }
+
+    const typographyTokens = this.extractTokensByType(tokens, 'typography');
+    if (Object.keys(typographyTokens).length > 0) {
+      lines.push('  typography: {');
+      for (const key of Object.keys(typographyTokens)) {
+        const tsKey = this.camelCase(key);
+        lines.push(`    ${tsKey}: TextStyle;`);
+      }
+      lines.push('  };');
+    }
+
+    const spacingTokens = this.extractTokensByType(tokens, 'spacing');
+    if (Object.keys(spacingTokens).length > 0) {
+      lines.push('  spacing: {');
+      for (const key of Object.keys(spacingTokens)) {
+        const tsKey = this.camelCase(key);
+        lines.push(`    ${tsKey}: number;`);
+      }
+      lines.push('  };');
+    }
+
+    lines.push('}\n');
+  }
+
+  private static writeColors(lines: string[], colorTokens: Record<string, TokenValue>): void {
     if (Object.keys(colorTokens).length > 0) {
       lines.push('  colors: {');
       for (const [key, value] of Object.entries(colorTokens)) {
@@ -78,9 +136,9 @@ export class ReactNativeExporter {
       }
       lines.push('  },');
     }
+  }
 
-    // Export typography
-    const typographyTokens = this.extractTokensByType(tokens, 'typography');
+  private static writeTypography(lines: string[], typographyTokens: Record<string, TokenValue>): void {
     if (Object.keys(typographyTokens).length > 0) {
       lines.push('  typography: {');
       for (const [key, value] of Object.entries(typographyTokens)) {
@@ -90,109 +148,30 @@ export class ReactNativeExporter {
       }
       lines.push('  },');
     }
-
-    // Export spacing
-    const spacingTokens = this.extractTokensByType(tokens, 'spacing');
-    if (Object.keys(spacingTokens).length > 0) {
-      lines.push('  spacing: {');
-      for (const [key, value] of Object.entries(spacingTokens)) {
-        const tsKey = this.camelCase(key);
-        const numValue = this.getNumericValue(value);
-        lines.push(`    ${tsKey}: ${numValue},`);
-      }
-      lines.push('  },');
-    }
-
-    // Export sizing
-    const sizingTokens = this.extractTokensByType(tokens, 'sizing');
-    if (Object.keys(sizingTokens).length > 0) {
-      lines.push('  sizing: {');
-      for (const [key, value] of Object.entries(sizingTokens)) {
-        const tsKey = this.camelCase(key);
-        const numValue = this.getNumericValue(value);
-        lines.push(`    ${tsKey}: ${numValue},`);
-      }
-      lines.push('  },');
-    }
-
-    lines.push('} as const;');
-    lines.push('');
-    lines.push("export type Tokens = typeof tokens;\n");
-
-    // Add convenience hook
-    lines.push("export function useTokens() {");
-    lines.push('  return tokens;');
-    lines.push('}');
-
-    return lines.join('\n');
   }
 
-  /**
-   * Export as JavaScript React Native theme object
-   */
-  private static exportJavaScript(tokens: DesignTokens, _includeTheme: boolean): string {
-    const lines: string[] = [];
-
-    lines.push("import { StyleSheet } from 'react-native';\n");
-
-    lines.push('export const tokens = {');
-
-    // Export colors
-    const colorTokens = this.extractTokensByType(tokens, 'color');
-    if (Object.keys(colorTokens).length > 0) {
-      lines.push('  colors: {');
-      for (const [key, value] of Object.entries(colorTokens)) {
-        const jsKey = this.camelCase(key);
-        const colorValue = this.formatColorValue(value);
-        lines.push(`    ${jsKey}: '${colorValue}',`);
-      }
-      lines.push('  },');
-    }
-
-    // Export typography
-    const typographyTokens = this.extractTokensByType(tokens, 'typography');
-    if (Object.keys(typographyTokens).length > 0) {
-      lines.push('  typography: {');
-      for (const [key, value] of Object.entries(typographyTokens)) {
-        const jsKey = this.camelCase(key);
-        const typogValue = this.formatTypographyValue(value);
-        lines.push(`    ${jsKey}: ${typogValue},`);
-      }
-      lines.push('  },');
-    }
-
-    // Export spacing
-    const spacingTokens = this.extractTokensByType(tokens, 'spacing');
+  private static writeSpacing(lines: string[], spacingTokens: Record<string, TokenValue>): void {
     if (Object.keys(spacingTokens).length > 0) {
       lines.push('  spacing: {');
       for (const [key, value] of Object.entries(spacingTokens)) {
-        const jsKey = this.camelCase(key);
+        const tsKey = this.camelCase(key);
         const numValue = this.getNumericValue(value);
-        lines.push(`    ${jsKey}: ${numValue},`);
+        lines.push(`    ${tsKey}: ${numValue},`);
       }
       lines.push('  },');
     }
+  }
 
-    // Export sizing
-    const sizingTokens = this.extractTokensByType(tokens, 'sizing');
+  private static writeSizing(lines: string[], sizingTokens: Record<string, TokenValue>): void {
     if (Object.keys(sizingTokens).length > 0) {
       lines.push('  sizing: {');
       for (const [key, value] of Object.entries(sizingTokens)) {
-        const jsKey = this.camelCase(key);
+        const tsKey = this.camelCase(key);
         const numValue = this.getNumericValue(value);
-        lines.push(`    ${jsKey}: ${numValue},`);
+        lines.push(`    ${tsKey}: ${numValue},`);
       }
       lines.push('  },');
     }
-
-    lines.push('};\n');
-
-    // Add convenience hook
-    lines.push('export function useTokens() {');
-    lines.push('  return tokens;');
-    lines.push('}');
-
-    return lines.join('\n');
   }
 
   private static extractTokensByType(
@@ -201,7 +180,7 @@ export class ReactNativeExporter {
   ): Record<string, TokenValue> {
     const result: Record<string, TokenValue> = {};
 
-    const traverse = (obj: any, prefix: string = '') => {
+    const traverse = (obj: TokenNode, prefix = '') => {
       for (const [key, value] of Object.entries(obj)) {
         const fullKey = prefix ? `${prefix}.${key}` : key;
 
@@ -210,7 +189,7 @@ export class ReactNativeExporter {
         }
 
         if (typeof value === 'object' && !('value' in value)) {
-          traverse(value, fullKey);
+          traverse(value as TokenNode, fullKey);
         } else if (typeof value === 'object' && 'type' in value && value.type === type) {
           result[fullKey] = value as TokenValue;
         } else if (
@@ -223,7 +202,7 @@ export class ReactNativeExporter {
       }
     };
 
-    traverse(tokens);
+    traverse(tokens as unknown as TokenNode);
     return result;
   }
 
@@ -238,8 +217,8 @@ export class ReactNativeExporter {
   }
 
   private static formatTypographyValue(value: TokenValue): string {
-    if (typeof value === 'object' && 'value' in value && typeof value.value === 'object') {
-      const typog = value.value as any;
+    if (typeof value === 'object' && 'value' in value && typeof value.value === 'object' && value.value !== null) {
+      const typog = value.value as Record<string, unknown>;
       const props: string[] = [];
 
       if (typog.fontSize) props.push(`fontSize: ${typog.fontSize}`);
@@ -261,10 +240,10 @@ export class ReactNativeExporter {
 
   private static getNumericValue(value: TokenValue): number {
     if (typeof value === 'number') return value;
-    if (typeof value === 'string') return parseFloat(value);
+    if (typeof value === 'string') return Number.parseFloat(value);
     if (typeof value === 'object' && 'value' in value) {
       if (typeof value.value === 'number') return value.value;
-      if (typeof value.value === 'string') return parseFloat(value.value);
+      if (typeof value.value === 'string') return Number.parseFloat(value.value);
     }
     return 0;
   }

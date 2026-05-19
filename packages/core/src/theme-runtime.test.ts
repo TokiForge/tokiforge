@@ -50,7 +50,7 @@ describe('ThemeRuntime', () => {
     };
 
     // Mock document for browser environment
-    Object.defineProperty(global, 'document', {
+    Object.defineProperty(globalThis, 'document', {
       value: {
         createElement: vi.fn(() => ({
           id: '',
@@ -66,7 +66,7 @@ describe('ThemeRuntime', () => {
       configurable: true,
     });
 
-    Object.defineProperty(global, 'window', {
+    Object.defineProperty(globalThis, 'window', {
       value: {
         dispatchEvent: vi.fn(),
         addEventListener: vi.fn(),
@@ -99,13 +99,13 @@ describe('ThemeRuntime', () => {
 
     it('should throw error if no themes provided', () => {
       expect(() => {
-        new ThemeRuntime({ themes: [] });
+        const _ = new ThemeRuntime({ themes: [] });
       }).toThrow(ThemeError);
     });
 
     it('should throw error if theme has no name', () => {
       expect(() => {
-        new ThemeRuntime({
+        const _ = new ThemeRuntime({
           themes: [{ name: '', tokens: lightTokens }],
         });
       }).toThrow(ThemeError);
@@ -113,7 +113,7 @@ describe('ThemeRuntime', () => {
 
     it('should throw error if defaultTheme not found', () => {
       expect(() => {
-        new ThemeRuntime({
+        const _ = new ThemeRuntime({
           themes: [
             { name: 'light', tokens: lightTokens },
             { name: 'dark', tokens: darkTokens },
@@ -148,14 +148,14 @@ describe('ThemeRuntime', () => {
     });
 
     it('should be SSR-safe (no error in server environment)', () => {
-      const originalDocument = global.document;
-      // @ts-ignore
-      delete global.document;
+      const originalDocument = globalThis.document;
+      // @ts-expect-error
+      delete globalThis.document;
 
       const runtime = new ThemeRuntime(config);
       expect(() => runtime.init()).not.toThrow();
 
-      global.document = originalDocument;
+      globalThis.document = originalDocument;
     });
 
     it('should remain synchronous and return void', () => {
@@ -182,7 +182,7 @@ describe('ThemeRuntime', () => {
 
     it('should dispatch theme change event', () => {
       const runtime = new ThemeRuntime(config);
-      const dispatchEventSpy = vi.spyOn(global.window, 'dispatchEvent');
+      const dispatchEventSpy = vi.spyOn(globalThis.window, 'dispatchEvent');
 
       runtime.applyTheme('dark');
 
@@ -301,7 +301,7 @@ describe('ThemeRuntime', () => {
         remove: vi.fn(),
       };
       
-      vi.spyOn(global.document, 'getElementById').mockReturnValue(styleElement as any);
+      vi.spyOn(globalThis.document, 'getElementById').mockReturnValue(styleElement as any);
       
       const runtime = new ThemeRuntime(config);
       runtime.init();
@@ -325,7 +325,7 @@ describe('ThemeRuntime', () => {
         dispatchEvent: vi.fn(),
       };
       
-      vi.spyOn(global.window, 'matchMedia').mockReturnValue(mediaQuery as any);
+      vi.spyOn(globalThis.window, 'matchMedia').mockReturnValue(mediaQuery as any);
       mediaQuery.addEventListener.mockImplementation((event, handler) => {
         mediaQuery.removeEventListener = unwatch;
       });
@@ -361,7 +361,7 @@ describe('ThemeRuntime', () => {
         dispatchEvent: vi.fn(),
       };
       
-      vi.spyOn(global.window, 'matchMedia').mockReturnValue(mediaQuery as any);
+      vi.spyOn(globalThis.window, 'matchMedia').mockReturnValue(mediaQuery as any);
       
       const unwatch = runtime.watchSystemTheme(() => {});
       expect(typeof unwatch).toBe('function');
@@ -377,7 +377,7 @@ describe('ThemeRuntime', () => {
         addEventListener: vi.fn((event, handler) => {
           // Simulate initial call
           if (event === 'change') {
-            handler({ matches: true } as MediaQueryListEvent);
+            handler({ matches: true } as any);
           }
         }),
         removeEventListener: vi.fn(),
@@ -386,7 +386,7 @@ describe('ThemeRuntime', () => {
         dispatchEvent: vi.fn(),
       };
       
-      vi.spyOn(global.window, 'matchMedia').mockReturnValue(mediaQuery as any);
+      vi.spyOn(globalThis.window, 'matchMedia').mockReturnValue(mediaQuery as any);
       
       runtime.watchSystemTheme(callback);
       
@@ -407,7 +407,7 @@ describe('ThemeRuntime', () => {
         dispatchEvent: vi.fn(),
       };
       
-      vi.spyOn(global.window, 'matchMedia').mockReturnValue(mediaQuery as any);
+      vi.spyOn(globalThis.window, 'matchMedia').mockReturnValue(mediaQuery as any);
       
       runtime.watchSystemTheme(callback);
       
@@ -415,9 +415,9 @@ describe('ThemeRuntime', () => {
     });
 
     it('should return no-op function in server environment', () => {
-      const originalWindow = global.window;
-      // @ts-ignore
-      delete global.window;
+      const originalWindow = globalThis.window;
+      // @ts-expect-error
+      delete globalThis.window;
 
       const runtime = new ThemeRuntime(config);
       const unwatch = runtime.watchSystemTheme(() => {});
@@ -425,7 +425,7 @@ describe('ThemeRuntime', () => {
       expect(typeof unwatch).toBe('function');
       expect(() => unwatch()).not.toThrow();
 
-      global.window = originalWindow;
+      globalThis.window = originalWindow;
     });
   });
 
@@ -441,7 +441,7 @@ describe('ThemeRuntime', () => {
         dispatchEvent: vi.fn(),
       };
       
-      vi.spyOn(global.window, 'matchMedia').mockReturnValue(mediaQuery as any);
+      vi.spyOn(globalThis.window, 'matchMedia').mockReturnValue(mediaQuery as any);
       
       const theme = ThemeRuntime.detectSystemTheme();
       expect(theme).toBe('light');
@@ -458,25 +458,25 @@ describe('ThemeRuntime', () => {
         dispatchEvent: vi.fn(),
       };
       
-      vi.spyOn(global.window, 'matchMedia').mockReturnValue(mediaQuery as any);
+      vi.spyOn(globalThis.window, 'matchMedia').mockReturnValue(mediaQuery as any);
       
       const theme = ThemeRuntime.detectSystemTheme();
       expect(theme).toBe('dark');
     });
 
     it('should return light in server environment', () => {
-      const originalWindow = global.window;
-      // @ts-ignore
-      delete global.window;
+      const originalWindow = globalThis.window;
+      // @ts-expect-error
+      delete globalThis.window;
 
       const theme = ThemeRuntime.detectSystemTheme();
       expect(theme).toBe('light');
 
-      global.window = originalWindow;
+      globalThis.window = originalWindow;
     });
 
     it('should return light if matchMedia throws error', () => {
-      vi.spyOn(global.window, 'matchMedia').mockImplementation(() => {
+      vi.spyOn(globalThis.window, 'matchMedia').mockImplementation(() => {
         throw new Error('matchMedia not supported');
       });
 
@@ -520,7 +520,7 @@ describe('ThemeRuntime', () => {
 
     it('should handle theme change events', () => {
       const runtime = new ThemeRuntime(config);
-      const dispatchEventSpy = vi.spyOn(global.window, 'dispatchEvent');
+      const dispatchEventSpy = vi.spyOn(globalThis.window, 'dispatchEvent');
       
       runtime.init();
       runtime.applyTheme('dark');

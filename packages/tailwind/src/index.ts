@@ -113,87 +113,87 @@ export function generateTailwindConfig(options: TailwindConfigOptions = {}): Par
   const boxShadowPaths = themeMappings.boxShadow || ['shadow', 'boxShadow'];
 
   const colors: Record<string, string> = {};
-  for (const path in flattened) {
-    if (colorPaths.some((p) => path.startsWith(p))) {
-      const value = flattened[path];
+  for (const tokenPath in flattened) {
+    if (colorPaths.some((p) => tokenPath.startsWith(p))) {
+      const value = flattened[tokenPath];
       if (typeof value === 'string' && (value.startsWith('#') || value.startsWith('rgb'))) {
-        const key = toTailwindKey(path.replace(/^color\.?/, ''));
+        const key = toTailwindKey(tokenPath.replace(/^color\.?/, ''));
         colors[key] = useCSSVariables
-          ? `var(--${prefix}-${path.replace(/\./g, '-')})`
+          ? `var(--${prefix}-${tokenPath.replace(/\./g, '-')})`
           : String(value);
       }
     }
   }
 
   const spacing: Record<string, string> = {};
-  for (const path in flattened) {
-    if (spacingPaths.some((p) => path.startsWith(p))) {
-      const value = flattened[path];
+  for (const tokenPath in flattened) {
+    if (spacingPaths.some((p) => tokenPath.startsWith(p))) {
+      const value = flattened[tokenPath];
       if (typeof value === 'string' && (value.includes('px') || value.includes('rem') || value.includes('em'))) {
-        const key = toTailwindKey(path.replace(/^(spacing|size)\.?/, ''));
+        const key = toTailwindKey(tokenPath.replace(/^(spacing|size)\.?/, ''));
         spacing[key] = useCSSVariables
-          ? `var(--${prefix}-${path.replace(/\./g, '-')})`
+          ? `var(--${prefix}-${tokenPath.replace(/\./g, '-')})`
           : String(value);
       }
     }
   }
 
   const borderRadius: Record<string, string> = {};
-  for (const path in flattened) {
-    if (borderRadiusPaths.some((p) => path.startsWith(p))) {
-      const value = flattened[path];
+  for (const tokenPath in flattened) {
+    if (borderRadiusPaths.some((p) => tokenPath.startsWith(p))) {
+      const value = flattened[tokenPath];
       if (typeof value === 'string' && (value.includes('px') || value.includes('rem'))) {
-        const key = toTailwindKey(path.replace(/^(radius|borderRadius)\.?/, ''));
+        const key = toTailwindKey(tokenPath.replace(/^(radius|borderRadius)\.?/, ''));
         borderRadius[key] = useCSSVariables
-          ? `var(--${prefix}-${path.replace(/\./g, '-')})`
+          ? `var(--${prefix}-${tokenPath.replace(/\./g, '-')})`
           : String(value);
       }
     }
   }
 
   const fontSize: Record<string, string> = {};
-  for (const path in flattened) {
-    if (fontSizePaths.some((p) => path.startsWith(p))) {
-      const value = flattened[path];
+  for (const tokenPath in flattened) {
+    if (fontSizePaths.some((p) => tokenPath.startsWith(p))) {
+      const value = flattened[tokenPath];
       if (typeof value === 'string') {
-        const key = toTailwindKey(path.replace(/^(fontSize|typography\.size)\.?/, ''));
+        const key = toTailwindKey(tokenPath.replace(/^(fontSize|typography\.size)\.?/, ''));
         fontSize[key] = useCSSVariables
-          ? `var(--${prefix}-${path.replace(/\./g, '-')})`
+          ? `var(--${prefix}-${tokenPath.replace(/\./g, '-')})`
           : String(value);
       }
     }
   }
 
   const fontFamily: Record<string, string[]> = {};
-  for (const path in flattened) {
-    if (fontFamilyPaths.some((p) => path.startsWith(p))) {
-      const value = flattened[path];
+  for (const tokenPath in flattened) {
+    if (fontFamilyPaths.some((p) => tokenPath.startsWith(p))) {
+      const value = flattened[tokenPath];
       if (typeof value === 'string') {
-        const key = toTailwindKey(path.replace(/^(fontFamily|typography\.family)\.?/, ''));
+        const key = toTailwindKey(tokenPath.replace(/^(fontFamily|typography\.family)\.?/, ''));
         fontFamily[key] = [String(value)];
       }
     }
   }
 
   const fontWeight: Record<string, string> = {};
-  for (const path in flattened) {
-    if (fontWeightPaths.some((p) => path.startsWith(p))) {
-      const value = flattened[path];
-      const key = toTailwindKey(path.replace(/^(fontWeight|typography\.weight)\.?/, ''));
+  for (const tokenPath in flattened) {
+    if (fontWeightPaths.some((p) => tokenPath.startsWith(p))) {
+      const value = flattened[tokenPath];
+      const key = toTailwindKey(tokenPath.replace(/^(fontWeight|typography\.weight)\.?/, ''));
       fontWeight[key] = useCSSVariables
-        ? `var(--${prefix}-${path.replace(/\./g, '-')})`
+        ? `var(--${prefix}-${tokenPath.replace(/\./g, '-')})`
         : String(value);
     }
   }
 
   const boxShadow: Record<string, string> = {};
-  for (const path in flattened) {
-    if (boxShadowPaths.some((p) => path.startsWith(p))) {
-      const value = flattened[path];
+  for (const tokenPath in flattened) {
+    if (boxShadowPaths.some((p) => tokenPath.startsWith(p))) {
+      const value = flattened[tokenPath];
       if (typeof value === 'string' && (value.includes('px') || value.includes('shadow') || value.includes('rgba') || value.includes('rgb'))) {
-        const key = toTailwindKey(path.replace(/^(shadow|boxShadow)\.?/, ''));
+        const key = toTailwindKey(tokenPath.replace(/^(shadow|boxShadow)\.?/, ''));
         boxShadow[key] = useCSSVariables
-          ? `var(--${prefix}-${path.replace(/\./g, '-')})`
+          ? `var(--${prefix}-${tokenPath.replace(/\./g, '-')})`
           : String(value);
       }
     }

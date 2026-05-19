@@ -1,8 +1,11 @@
 # Changelog
 
-## v2.2.3 - Patch release (2026-05-02)
+## v2.2.3 - Maintenance release (2026-05-19)
 
-- Monorepo version bump to 2.2.3; install commands and docs updated to the current release.
+- **React ThemeContext & Hooks**: Marked component props as read-only, eliminated the unused `suppressHydrationWarning` prop definition to comply with SonarLint standard `S6767`, and resolved duplicate React/TypeScript type conflicts on the `children` prop. Refactored the internal state logic in React `ThemeProvider` to use React `useRef` for static `ThemeRuntime` initialization, implemented clean nullish coalescing assignments (`??=`), and memoized the context value to eliminate duplicate consumer component re-renders.
+- **Analytics HTML Reporter**: Fixed syntax errors caused by direct JavaScript loops and nested operations inside template literals by refactoring `generateHTMLReport` to pre-compute markup strings safely.
+- **Cognitive Complexity**: Reduced high cognitive complexity across validator, exporter, responsive token, and semantic token resolver systems (`cicd-validator.ts`, `ios-exporter.ts`, `react-native-exporter.ts`, `responsive-tokens.ts`, `semantic-tokens.ts`) by decomposing monolithic functions into highly cohesive sub-methods.
+- **Monorepo Version Bump**: Monorepo version bump to 2.2.3; install commands and docs updated to the current release.
 
 ## v2.0.2 - Patch release (2026-05-02)
 

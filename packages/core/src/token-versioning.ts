@@ -5,33 +5,34 @@ import type {
   TokenValue,
 } from './types';
 
+type TokenNode = Record<string, unknown>;
+
 export class TokenVersioning {
   static getDeprecatedTokens(tokens: DesignTokens): string[] {
     const deprecated: string[] = [];
 
-    const checkTokens = (obj: any, path: string = ''): void => {
+    const checkTokens = (obj: unknown, path = ''): void => {
       if (typeof obj !== 'object' || obj === null) {
         return;
       }
 
       if (Array.isArray(obj)) {
-        obj.forEach((item, index) => {
-          checkTokens(item, `${path}[${index}]`);
-        });
+        for (let i = 0; i < obj.length; i++) {
+          checkTokens(obj[i], `${path}[${i}]`);
+        }
         return;
       }
 
-      if ('value' in obj) {
-        const token = obj as TokenValue;
+      const node = obj as TokenNode;
+      if ('value' in node) {
+        const token = node as unknown as TokenValue;
         if (token.deprecated === true || token.version?.deprecated === true) {
           deprecated.push(path || 'root');
         }
       } else {
-        for (const key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            const newPath = path ? `${path}.${key}` : key;
-            checkTokens(obj[key], newPath);
-          }
+        for (const key of Object.keys(node)) {
+          const newPath = path ? `${path}.${key}` : key;
+          checkTokens(node[key], newPath);
         }
       }
     };
@@ -40,10 +41,10 @@ export class TokenVersioning {
     return deprecated;
   }
 
-  static filterDeprecated(tokens: DesignTokens, includeDeprecated: boolean = false): DesignTokens {
-    const filtered = JSON.parse(JSON.stringify(tokens));
+  static filterDeprecated(tokens: DesignTokens, includeDeprecated = false): DesignTokens {
+    const cloned = JSON.parse(JSON.stringify(tokens)) as DesignTokens;
 
-    const filterTokens = (obj: any): any => {
+    const filterTokens = (obj: unknown): unknown => {
       if (typeof obj !== 'object' || obj === null) {
         return obj;
       }
@@ -52,27 +53,26 @@ export class TokenVersioning {
         return obj.map(filterTokens).filter((item) => item !== null);
       }
 
-      if ('value' in obj) {
-        const token = obj as TokenValue;
+      const node = obj as TokenNode;
+      if ('value' in node) {
+        const token = node as unknown as TokenValue;
         if (token.deprecated === true || token.version?.deprecated === true) {
           return includeDeprecated ? obj : null;
         }
         return obj;
       }
 
-      const filteredObj: any = {};
-      for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-          const filteredValue = filterTokens(obj[key]);
-          if (filteredValue !== null) {
-            filteredObj[key] = filteredValue;
-          }
+      const filteredObj: TokenNode = {};
+      for (const key of Object.keys(node)) {
+        const filteredValue = filterTokens(node[key]);
+        if (filteredValue !== null) {
+          filteredObj[key] = filteredValue;
         }
       }
       return filteredObj;
     };
 
-    return filterTokens(filtered);
+    return filterTokens(cloned) as DesignTokens;
   }
 
   static migrateToken(tokens: DesignTokens, oldPath: string, newPath: string): MigrationResult {
@@ -80,15 +80,15 @@ export class TokenVersioning {
     let migrated = 0;
 
     try {
-      const cloned = JSON.parse(JSON.stringify(tokens));
+      const cloned = JSON.parse(JSON.stringify(tokens)) as DesignTokens;
       
       // Get value at old path
-      const getValue = (obj: any, path: string): any => {
+      const getValue = (obj: TokenNode, path: string): unknown => {
         const parts = path.split('.');
-        let current: any = obj;
+        let current: unknown = obj;
         for (const part of parts) {
-          if (current && typeof current === 'object' && part in current) {
-            current = current[part];
+          if (current && typeof current === 'object' && part in (current as TokenNode)) {
+            current = (current as TokenNode)[part];
           } else {
             return undefined;
           }
@@ -97,41 +97,43 @@ export class TokenVersioning {
       };
 
       // Set value at new path
-      const setValue = (obj: any, path: string, value: any): void => {
+      const setValue = (obj: TokenNode, path: string, value: unknown): void => {
         const parts = path.split('.');
-        let current: any = obj;
+        let current = obj;
         for (let i = 0; i < parts.length - 1; i++) {
           const part = parts[i];
           if (!current[part] || typeof current[part] !== 'object') {
             current[part] = {};
           }
-          current = current[part];
+          current = current[part] as TokenNode;
         }
         current[parts[parts.length - 1]] = value;
       };
 
       // Delete value at old path
-      const deleteValue = (obj: any, path: string): void => {
+      const deleteValue = (obj: TokenNode, path: string): void => {
         const parts = path.split('.');
-        let current: any = obj;
+        let current: unknown = obj;
         for (let i = 0; i < parts.length - 1; i++) {
-          if (current && typeof current === 'object' && parts[i] in current) {
-            current = current[parts[i]];
+          const part = parts[i];
+          if (current && typeof current === 'object' && part in (current as TokenNode)) {
+            current = (current as TokenNode)[part];
           } else {
             return;
           }
         }
         if (current && typeof current === 'object') {
-          delete current[parts[parts.length - 1]];
+          delete (current as TokenNode)[parts[parts.length - 1]];
         }
       };
 
-      const oldValue = getValue(cloned, oldPath);
+      const clonedNode = cloned as unknown as TokenNode;
+      const oldValue = getValue(clonedNode, oldPath);
       if (oldValue === undefined) {
         errors.push(`Token not found at path: ${oldPath}`);
       } else {
-        setValue(cloned, newPath, oldValue);
-        deleteValue(cloned, oldPath);
+        setValue(clonedNode, newPath, oldValue);
+        deleteValue(clonedNode, oldPath);
         migrated = 1;
       }
 
@@ -155,20 +157,21 @@ export class TokenVersioning {
     const migrations: MigrationResult[] = [];
 
     // Check for migration paths
-    const checkMigrations = (obj: any, path: string = ''): void => {
+    const checkMigrations = (obj: unknown, path = ''): void => {
       if (typeof obj !== 'object' || obj === null) {
         return;
       }
 
       if (Array.isArray(obj)) {
-        obj.forEach((item, index) => {
-          checkMigrations(item, `${path}[${index}]`);
-        });
+        for (let i = 0; i < obj.length; i++) {
+          checkMigrations(obj[i], `${path}[${i}]`);
+        }
         return;
       }
 
-      if ('value' in obj) {
-        const token = obj as TokenValue;
+      const node = obj as TokenNode;
+      if ('value' in node) {
+        const token = node as unknown as TokenValue;
         if (token.version?.migration) {
           migrations.push({
             success: false,
@@ -177,11 +180,9 @@ export class TokenVersioning {
           });
         }
       } else {
-        for (const key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            const newPath = path ? `${path}.${key}` : key;
-            checkMigrations(obj[key], newPath);
-          }
+        for (const key of Object.keys(node)) {
+          const newPath = path ? `${path}.${key}` : key;
+          checkMigrations(node[key], newPath);
         }
       }
     };
@@ -195,4 +196,3 @@ export class TokenVersioning {
     };
   }
 }
-

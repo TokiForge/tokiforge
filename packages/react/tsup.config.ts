@@ -6,6 +6,7 @@ export default defineConfig({
   dts: {
     compilerOptions: {
       skipLibCheck: true,
+      ignoreDeprecations: '6.0',
     },
   },
   splitting: false,

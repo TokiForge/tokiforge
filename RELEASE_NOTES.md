@@ -1,8 +1,34 @@
-# Release v2.2.3 - Patch Release (2026-05-02)
+# Release v2.2.3 - Maintenance & Patch Release (2026-05-19)
 
 ## Overview
 
-Monorepo version alignment: all publishable packages and docs set to **2.2.3**; workspace dependency ranges and install examples updated. See [CHANGELOG.md](CHANGELOG.md) for details.
+Monorepo version alignment, major code quality, type-safety, and compiler fixes. All publishable packages and docs set to **2.2.3**.
+
+### Changes Implemented
+
+#### 1. React Adapters & ThemeContext Fixes
+- **Type Safety**: Made `children` optional in `ThemeProviderProps` to avoid type overload matching crashes in React component consumers.
+- **SonarLint Conformity**:
+  - Props marked as read-only (`Readonly<ThemeProviderProps>`) to respect React state model.
+  - Safely removed the unused `suppressHydrationWarning` property definition.
+- **Code Refactoring & Performance**:
+  - Transitioned the static `ThemeRuntime` state instance initialization from `useState` to `useRef` to guarantee clean rendering without warning logs.
+  - Implemented modern nullish coalescing assignments (`??=`) for clean and modern variable initialization.
+  - Wrapped context object in `useMemo` to eliminate unnecessary consumer re-renders.
+  - Standardized direct `undefined` comparison checks across all modules rather than relying on high-overhead `typeof` checks.
+
+#### 2. Template Parsing & Syntax Restructuring
+- **Analytics HTML Reporter**: Restructured `generateHTMLReport` to pre-calculate and pre-compute complex HTML segments inside variable blocks instead of running direct loop statements inside a template literal.
+
+#### 3. Cognitive Complexity Decomposition
+- **Modularization**: Refactored monolithic classes and highly nested operations into modular helper methods across several components:
+  - `cicd-validator.ts`
+  - `ios-exporter.ts`
+  - `react-native-exporter.ts`
+  - `responsive-tokens.ts`
+  - `semantic-tokens.ts`
+
+See [CHANGELOG.md](CHANGELOG.md) for full details.
 
 ---
 

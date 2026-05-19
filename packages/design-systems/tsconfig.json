@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./",
+    "skipLibCheck": true,
+    "paths": {
+      "@tokiforge/core": ["../core/dist/index.d.ts"]
+    }
+  },
+  "include": [
+    "index.ts",
+    "zeroheight/index.ts",
+    "invision-dsm/index.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,5 +1,19 @@
 import type { DesignTokens } from './types';
 
+type TokenNode = Record<string, unknown>;
+
+/** Documentation entry for a single semantic token */
+export interface TokenDoc {
+  name: string;
+  primitiveToken: string;
+  primitiveValue: string | number;
+  resolved: boolean;
+  chain: string[];
+  description?: string;
+  conditions?: unknown;
+  fallback?: unknown;
+}
+
 /**
  * Semantic token layer configuration
  * Maps semantic tokens to primitive tokens
@@ -145,21 +159,24 @@ export class SemanticTokenManager {
    */
   private getPrimitiveValue(path: string): string | number | undefined {
     const parts = path.split('.');
-    let current: any = this.primitiveTokens;
+    let current: unknown = this.primitiveTokens;
 
     for (const part of parts) {
       if (current && typeof current === 'object') {
-        current = current[part];
+        current = (current as TokenNode)[part];
       } else {
         return undefined;
       }
     }
 
-    if (current && typeof current === 'object' && 'value' in current) {
-      return current.value;
+    if (current && typeof current === 'object' && 'value' in (current as TokenNode)) {
+      const val = (current as TokenNode).value;
+      if (typeof val === 'string' || typeof val === 'number') return val;
+      return undefined;
     }
 
-    return current;
+    if (typeof current === 'string' || typeof current === 'number') return current;
+    return undefined;
   }
 
   /**
@@ -172,9 +189,8 @@ export class SemanticTokenManager {
   ): SemanticTokenResolution {
     const cacheKey = `${layerName}:${semanticName}:${JSON.stringify(context || {})}`;
 
-    if (this.resolutionCache.has(cacheKey)) {
-      return this.resolutionCache.get(cacheKey)!;
-    }
+    const cached = this.resolutionCache.get(cacheKey);
+    if (cached) return cached;
 
     const chain: string[] = [];
     const mergedTokens = this.mergeInheritedTokens(layerName);
@@ -310,7 +326,8 @@ export class SemanticTokenManager {
       : Array.from(this.layers.keys());
 
     for (const name of layersToValidate) {
-      const layer = this.layers.get(name)!;
+      const layer = this.layers.get(name);
+      if (!layer) continue;
 
       // Validate layer structure
       if (!layer.tokens || typeof layer.tokens !== 'object') {
@@ -318,21 +335,16 @@ export class SemanticTokenManager {
         continue;
       }
 
-      // Check for circular inheritance
+      // Check for circular inheritance (S2310: renamed inner param to avoid shadowing)
       if (layer.inherit) {
         const visited = new Set<string>();
-        const checkCircular = (layerName: string): boolean => {
-          if (visited.has(layerName)) {
-            return true; // Circular detected
-          }
-          visited.add(layerName);
-
-          const currentLayer = this.layers.get(layerName);
+        const checkCircular = (currentName: string): boolean => {
+          if (visited.has(currentName)) return true;
+          visited.add(currentName);
+          const currentLayer = this.layers.get(currentName);
           if (currentLayer?.inherit) {
             for (const parent of currentLayer.inherit) {
-              if (checkCircular(parent)) {
-                return true;
-              }
+              if (checkCircular(parent)) return true;
             }
           }
           return false;
@@ -392,22 +404,17 @@ export class SemanticTokenManager {
   /**
    * Get semantic token documentation
    */
-  getDocumentation(layerName: string): Record<string, any> {
+  getDocumentation(layerName: string): Record<string, TokenDoc> {
     const layer = this.layers.get(layerName);
-    if (!layer) {
-      return {};
-    }
+    if (!layer) return {};
 
     const mergedTokens = this.mergeInheritedTokens(layerName);
-    const docs: Record<string, any> = {};
+    const docs: Record<string, TokenDoc> = {};
 
     for (const [semanticName, mapping] of Object.entries(mergedTokens)) {
       const resolution = this.resolveSemantic(semanticName, layerName);
-
-      const mappingObj =
-        typeof mapping !== 'string'
-          ? (mapping as unknown as Record<string, unknown>)
-          : null;
+      const mappingObj: Record<string, unknown> | null =
+        typeof mapping !== 'string' ? (mapping as unknown as Record<string, unknown>) : null;
 
       docs[semanticName] = {
         name: semanticName,
@@ -415,16 +422,9 @@ export class SemanticTokenManager {
         primitiveValue: resolution.primitiveValue,
         resolved: resolution.resolved,
         chain: resolution.chain,
-        description:
-          mappingObj && '$description' in mappingObj
-            ? String(mappingObj.$description)
-            : undefined,
-        conditions:
-          mappingObj && '$condition' in mappingObj
-            ? mappingObj.$condition
-            : undefined,
-        fallback:
-          mappingObj && '$fallback' in mappingObj ? mappingObj.$fallback : undefined,
+        description: mappingObj && '$description' in mappingObj ? String(mappingObj.$description) : undefined,
+        conditions: mappingObj && '$condition' in mappingObj ? mappingObj.$condition : undefined,
+        fallback: mappingObj && '$fallback' in mappingObj ? mappingObj.$fallback : undefined,
       };
     }
 
@@ -436,9 +436,9 @@ export class SemanticTokenManager {
    */
   export(layerName: string, format: 'json' | 'css' = 'json'): string {
     const mergedTokens = this.mergeInheritedTokens(layerName);
-    const exported: Record<string, any> = {};
+    const exported: Record<string, { value: string | number; resolved: string }> = {};
 
-    for (const [semanticName, _mapping] of Object.entries(mergedTokens)) {
+    for (const semanticName of Object.keys(mergedTokens)) {
       const resolution = this.resolveSemantic(semanticName, layerName);
       exported[semanticName] = {
         value: resolution.primitiveValue,
@@ -456,7 +456,10 @@ export class SemanticTokenManager {
   /**
    * Export semantic tokens as CSS variables
    */
-  private exportAsCSS(layerName: string, tokens: Record<string, any>): string {
+  private exportAsCSS(
+    layerName: string,
+    tokens: Record<string, { value: string | number; resolved: string }>
+  ): string {
     const lines = [`:root[data-semantic="${layerName}"] {`];
 
     for (const [semanticName, data] of Object.entries(tokens)) {

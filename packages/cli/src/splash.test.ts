@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
-import { readFileSync } from 'fs';
-import { join } from 'path';
-import { showSplash, showCompactSplash } from './splash';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { showSplash, showCompactSplash } from './splash.js';
 
 function getPackageVersion(): string {
   try {

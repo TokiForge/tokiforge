@@ -1,9 +1,7 @@
-import type {
-  DesignTokens,
-  TokenExportOptions,
-  TokenValue,
-} from './types';
+import type { DesignTokens, TokenExportOptions, TokenValue } from './types';
 import { ExportError } from './types';
+
+type TokenNode = Record<string, unknown>;
 
 export class TokenExporter {
   static export(tokens: DesignTokens, options: TokenExportOptions): string {
@@ -19,58 +17,45 @@ export class TokenExporter {
       case 'json':
         return this.exportJSON(tokens);
       default:
-        throw new ExportError(`Unsupported format: ${options.format}`);
+        throw new ExportError(`Unsupported format: ${(options as TokenExportOptions).format}`);
     }
   }
 
-  static exportCSS(tokens: DesignTokens, options: {
-    selector?: string;
-    prefix?: string;
-  } = {}): string {
-    const selector = options.selector || ':root';
-    const prefix = options.prefix || 'hf';
+  static exportCSS(
+    tokens: DesignTokens,
+    options: { selector?: string; prefix?: string } = {}
+  ): string {
+    const selector = options.selector ?? ':root';
+    const prefix = options.prefix ?? 'hf';
     const flatTokens = this.flattenTokens(tokens, prefix);
 
     const cssVars = Object.entries(flatTokens)
-      .map(([key, value]) => {
-        const cssVar = `--${key}`;
-        return `  ${cssVar}: ${value};`;
-      })
+      .map(([key, value]) => `  --${key}: ${value};`)
       .join('\n');
 
     return `${selector} {\n${cssVars}\n}`;
   }
 
-  static exportSCSS(tokens: DesignTokens, options: {
-    prefix?: string;
-  } = {}): string {
-    const prefix = options.prefix || 'hf';
+  static exportSCSS(tokens: DesignTokens, options: { prefix?: string } = {}): string {
+    const prefix = options.prefix ?? 'hf';
     const flatTokens = this.flattenTokens(tokens, prefix);
 
-    const scssVars = Object.entries(flatTokens)
-      .map(([key, value]) => {
-        const scssVar = `$${key.replace(/-/g, '-')}`;
-        return `${scssVar}: ${value};`;
-      })
+    return Object.entries(flatTokens)
+      .map(([key, value]) => `$${key}: ${value};`)
       .join('\n');
-
-    return scssVars;
   }
 
-  static exportJS(tokens: DesignTokens, options: {
-    variables?: boolean;
-    prefix?: string;
-  } = {}): string {
-    const prefix = options.prefix || 'hf';
+  static exportJS(
+    tokens: DesignTokens,
+    options: { variables?: boolean; prefix?: string } = {}
+  ): string {
+    const prefix = options.prefix ?? 'hf';
     const useVariables = options.variables ?? false;
 
     if (useVariables) {
       const flatTokens = this.flattenTokens(tokens, prefix);
       const jsVars = Object.entries(flatTokens)
-        .map(([key]) => {
-          const jsKey = key.replace(/-/g, '_');
-          return `  ${jsKey}: 'var(--${key})'`;
-        })
+        .map(([key]) => `  ${key.replace(/-/g, '_')}: 'var(--${key})'`)
         .join(',\n');
       return `export const tokens = {\n${jsVars}\n};`;
     }
@@ -93,43 +78,32 @@ export class TokenExporter {
   ): Record<string, string> {
     const flat: Record<string, string> = {};
 
-    const processValue = (key: string, value: any): void => {
+    const processValue = (key: string, value: unknown): void => {
       const fullKey = parentKey ? `${parentKey}-${key}` : key;
       const tokenKey = `${prefix}-${fullKey}`.toLowerCase().replace(/\./g, '-');
 
-      if (value && typeof value === 'object' && 'value' in value) {
+      if (value && typeof value === 'object' && 'value' in (value as TokenNode)) {
         const token = value as TokenValue;
         if (typeof token.value === 'string' || typeof token.value === 'number') {
           flat[tokenKey] = String(token.value);
-        } else {
-          // Handle TokenState or TokenResponsive
-          if (token.value && typeof token.value === 'object') {
-            if ('default' in token.value) {
-              flat[tokenKey] = String(token.value.default);
-            }
-          }
+        } else if (token.value && typeof token.value === 'object' && 'default' in (token.value as TokenNode)) {
+          flat[tokenKey] = String((token.value as TokenNode).default);
         }
       } else if (value && typeof value === 'object' && !Array.isArray(value)) {
-        // Recursively process nested objects
-        for (const nestedKey in value) {
-          if (Object.prototype.hasOwnProperty.call(value, nestedKey)) {
-            processValue(nestedKey, value[nestedKey]);
-          }
+        for (const nestedKey of Object.keys(value as TokenNode)) {
+          processValue(nestedKey, (value as TokenNode)[nestedKey]);
         }
       } else if (Array.isArray(value)) {
-        value.forEach((item, index) => {
-          processValue(`${key}-${index}`, item);
-        });
+        for (let i = 0; i < value.length; i++) {
+          processValue(`${key}-${i}`, value[i]);
+        }
       }
     };
 
-    for (const key in tokens) {
-      if (Object.prototype.hasOwnProperty.call(tokens, key)) {
-        processValue(key, tokens[key]);
-      }
+    for (const key of Object.keys(tokens)) {
+      processValue(key, (tokens as TokenNode)[key]);
     }
 
     return flat;
   }
 }
-

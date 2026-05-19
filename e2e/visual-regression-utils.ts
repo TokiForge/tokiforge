@@ -5,7 +5,7 @@
  * managing baselines, and generating reports
  */
 
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -375,7 +375,7 @@ function inferTokenType(
 
 function calculateChangeImpact(
   path: string,
-  before: string,
+  _before: string,
   after: string
 ): 'low' | 'medium' | 'high' {
   // Removed tokens are high impact
@@ -411,7 +411,7 @@ export function createTokenVisualTests(
   for (const [category, categoryChanges] of Object.entries(grouped)) {
     test.describe(`${category} changes`, () => {
       categoryChanges.forEach(change => {
-        test(`should show ${change.name} change`, async ({ page }) => {
+        test(`should show ${change.name} change`, async () => {
           // This would be implemented based on your specific test setup
           expect(change).toBeDefined();
         });

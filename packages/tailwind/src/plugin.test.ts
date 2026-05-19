@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import {
   createTailwindPlugin,
   generateTailwindPreset,
@@ -319,25 +319,27 @@ describe('Tailwind Plugin v4', () => {
       expect(plugin).toBeDefined();
     });
 
-    it('should handle token file updates', (done) => {
-      const plugin = createTailwindPlugin({
+    it('should handle token file updates', async () => {
+      createTailwindPlugin({
         tokensPath: tokensTestFile,
         watch: true,
       });
 
       // Simulate file update after delay
-      setTimeout(() => {
-        const updatedTokens = {
-          ...mockTokens,
-          colors: {
-            ...mockTokens.colors,
-            success: { value: '#34C759', type: 'color' },
-          },
-        };
+      await new Promise<void>((resolve) => {
+        setTimeout(() => {
+          const updatedTokens = {
+            ...mockTokens,
+            colors: {
+              ...mockTokens.colors,
+              success: { value: '#34C759', type: 'color' },
+            },
+          };
 
-        fs.writeFileSync(tokensTestFile, JSON.stringify(updatedTokens, null, 2));
-        done();
-      }, 100);
+          fs.writeFileSync(tokensTestFile, JSON.stringify(updatedTokens, null, 2));
+          resolve();
+        }, 100);
+      });
     });
   });
 });

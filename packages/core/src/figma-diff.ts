@@ -1,15 +1,17 @@
 import type { DesignTokens, DiffResult, DiffOptions } from './types';
-import fs from 'fs';
+import fs from 'node:fs';
+
+type TokenNode = Record<string, unknown>;
 
 export class FigmaDiff {
   static compare(figmaTokens: DesignTokens, codeTokens: DesignTokens, options: DiffOptions = {}): DiffResult {
     const tolerance = options.tolerance ?? 0;
     const ignorePaths = options.ignorePaths ?? [];
 
-    const getAllPaths = (tokens: DesignTokens, prefix: string = ''): Set<string> => {
+    const getAllPaths = (tokens: DesignTokens, prefix = ''): Set<string> => {
       const paths = new Set<string>();
       
-      const traverse = (obj: any, path: string): void => {
+      const traverse = (obj: unknown, path: string): void => {
         if (ignorePaths.some(ignored => path.startsWith(ignored))) {
           return;
         }
@@ -19,20 +21,19 @@ export class FigmaDiff {
         }
 
         if (Array.isArray(obj)) {
-          obj.forEach((item, index) => {
-            traverse(item, `${path}[${index}]`);
-          });
+          for (let i = 0; i < obj.length; i++) {
+            traverse(obj[i], `${path}[${i}]`);
+          }
           return;
         }
 
-        if ('value' in obj) {
+        const node = obj as TokenNode;
+        if ('value' in node) {
           paths.add(path);
         } else {
-          for (const key in obj) {
-            if (Object.prototype.hasOwnProperty.call(obj, key)) {
-              const newPath = path ? `${path}.${key}` : key;
-              traverse(obj[key], newPath);
-            }
+          for (const key of Object.keys(node)) {
+            const newPath = path ? `${path}.${key}` : key;
+            traverse(node[key], newPath);
           }
         }
       };
@@ -41,19 +42,20 @@ export class FigmaDiff {
       return paths;
     };
 
-    const getValue = (tokens: DesignTokens, path: string): any => {
+    const getValue = (tokens: DesignTokens, path: string): unknown => {
       const parts = path.split('.');
-      let current: any = tokens;
+      let current: unknown = tokens;
       
       for (const part of parts) {
-        if (current && typeof current === 'object' && part in current) {
-          current = current[part];
+        if (current && typeof current === 'object' && part in (current as TokenNode)) {
+          current = (current as TokenNode)[part];
         } else {
           return undefined;
         }
       }
       
-      return current?.value ?? current;
+      const node = current as TokenNode | null;
+      return node?.value ?? current;
     };
 
     const figmaPaths = getAllPaths(figmaTokens);
@@ -61,25 +63,25 @@ export class FigmaDiff {
 
     const added: string[] = [];
     const removed: string[] = [];
-    const changed: Array<{ path: string; oldValue: any; newValue: any }> = [];
+    const changed: Array<{ path: string; oldValue: unknown; newValue: unknown }> = [];
     const matches: string[] = [];
 
     // Find added paths
-    figmaPaths.forEach((path) => {
+    for (const path of figmaPaths) {
       if (!codePaths.has(path)) {
         added.push(path);
       }
-    });
+    }
 
     // Find removed paths
-    codePaths.forEach((path) => {
+    for (const path of codePaths) {
       if (!figmaPaths.has(path)) {
         removed.push(path);
       }
-    });
+    }
 
     // Find changed and matching paths
-    figmaPaths.forEach((path) => {
+    for (const path of figmaPaths) {
       if (codePaths.has(path)) {
         const figmaValue = getValue(figmaTokens, path);
         const codeValue = getValue(codeTokens, path);
@@ -94,7 +96,7 @@ export class FigmaDiff {
           });
         }
       }
-    });
+    }
 
     return {
       added,
@@ -107,40 +109,46 @@ export class FigmaDiff {
   static generateReport(diff: DiffResult): string {
     const lines: string[] = [];
     
-    lines.push('Figma Token Diff Report');
-    lines.push('='.repeat(50));
-    lines.push('');
+    lines.push(
+      'Figma Token Diff Report',
+      '='.repeat(50),
+      ''
+    );
 
     if (diff.added.length > 0) {
       lines.push(`Added (${diff.added.length}):`);
-      diff.added.forEach((path) => {
+      for (const path of diff.added) {
         lines.push(`  + ${path}`);
-      });
+      }
       lines.push('');
     }
 
     if (diff.removed.length > 0) {
       lines.push(`Removed (${diff.removed.length}):`);
-      diff.removed.forEach((path) => {
+      for (const path of diff.removed) {
         lines.push(`  - ${path}`);
-      });
+      }
       lines.push('');
     }
 
     if (diff.changed.length > 0) {
       lines.push(`Changed (${diff.changed.length}):`);
-      diff.changed.forEach((change) => {
-        lines.push(`  ~ ${change.path}`);
-        lines.push(`    Old: ${JSON.stringify(change.oldValue)}`);
-        lines.push(`    New: ${JSON.stringify(change.newValue)}`);
-      });
+      for (const change of diff.changed) {
+        lines.push(
+          `  ~ ${change.path}`,
+          `    Old: ${JSON.stringify(change.oldValue)}`,
+          `    New: ${JSON.stringify(change.newValue)}`
+        );
+      }
       lines.push('');
     }
 
     if (diff.matches.length > 0) {
-      lines.push(`Matches (${diff.matches.length}):`);
-      lines.push(`  All matching tokens are in sync.`);
-      lines.push('');
+      lines.push(
+        `Matches (${diff.matches.length}):`,
+        '  All matching tokens are in sync.',
+        ''
+      );
     }
 
     return lines.join('\n');
@@ -150,7 +158,7 @@ export class FigmaDiff {
     return diff.added.length > 0 || diff.removed.length > 0 || diff.changed.length > 0;
   }
 
-  static valuesMatch(value1: any, value2: any, tolerance: number = 0): boolean {
+  static valuesMatch(value1: unknown, value2: unknown, tolerance = 0): boolean {
     if (value1 === value2) {
       return true;
     }
@@ -161,9 +169,9 @@ export class FigmaDiff {
 
     if (typeof value1 === 'string' && typeof value2 === 'string') {
       // Try to extract numbers from strings (e.g., "10px" -> 10)
-      const num1 = parseFloat(value1);
-      const num2 = parseFloat(value2);
-      if (!isNaN(num1) && !isNaN(num2)) {
+      const num1 = Number.parseFloat(value1);
+      const num2 = Number.parseFloat(value2);
+      if (!Number.isNaN(num1) && !Number.isNaN(num2)) {
         return Math.abs(num1 - num2) <= tolerance;
       }
       return value1 === value2;
@@ -176,4 +184,3 @@ export class FigmaDiff {
     fs.writeFileSync(outputPath, JSON.stringify(diff, null, 2));
   }
 }
-

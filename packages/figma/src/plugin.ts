@@ -92,9 +92,9 @@ async function applyColorsToFigma(colors: Record<string, string>): Promise<void>
       const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
       if (!result) continue;
 
-      const r = parseInt(result[1], 16) / 255;
-      const g = parseInt(result[2], 16) / 255;
-      const b = parseInt(result[3], 16) / 255;
+      const r = Number.parseInt(result[1], 16) / 255;
+      const g = Number.parseInt(result[2], 16) / 255;
+      const b = Number.parseInt(result[3], 16) / 255;
 
       // Find or create style
       const existingStyle = figma

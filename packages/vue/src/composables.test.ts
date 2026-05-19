@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { createApp, h, defineComponent, nextTick, onMounted, computed } from 'vue';
-import { provideTheme, useTheme, type ExtractTokenType } from './composables';
+import { createApp, h, defineComponent, nextTick, computed } from 'vue';
+import { provideTheme, useTheme, type ExtractTokenType, type ThemeContext } from './composables';
 import type { DesignTokens, TokenValue, ThemeConfig } from '@tokiforge/core';
 
 interface TestDesignTokens extends DesignTokens {
@@ -42,14 +42,14 @@ const darkTokens: TestDesignTokens = {
 describe('Type-Safe Token Access', () => {
   beforeEach(() => {
     try {
-      if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.removeItem === 'function') {
-        window.localStorage.removeItem('tokiforge-theme');
+      if (typeof globalThis.window !== 'undefined' && globalThis.window.localStorage && typeof globalThis.window.localStorage.removeItem === 'function') {
+        globalThis.window.localStorage.removeItem('tokiforge-theme');
       }
     } catch (e) {
-      // Ignore
+      console.warn('Failed to clear localStorage:', e);
     }
     
-    Object.defineProperty(window, 'matchMedia', {
+    Object.defineProperty(globalThis, 'matchMedia', {
       writable: true,
       configurable: true,
       value: vi.fn().mockImplementation((query: string) => ({
@@ -150,7 +150,7 @@ describe('Type-Safe Token Access', () => {
       
       expect(container.textContent).toContain('#7C3AED');
       app.unmount();
-      document.body.removeChild(container);
+      container.remove();
     });
 
     it('should allow type-safe token access in component', async () => {
@@ -162,10 +162,10 @@ describe('Type-Safe Token Access', () => {
         defaultTheme: 'light',
       };
 
-      let themeContext: ReturnType<typeof provideTheme> | null = null;
+      const themeContextRef = { current: null as ThemeContext<TestDesignTokens> | null };
       const ParentComponent = defineComponent({
         setup() {
-          themeContext = provideTheme(config);
+          themeContextRef.current = provideTheme(config);
           return () => h(ChildComponent);
         },
       });
@@ -184,7 +184,7 @@ describe('Type-Safe Token Access', () => {
           const displayColor = computed(() => tokens.value.color.primary.value);
 
           // Render function that reactively tracks tokens via computed
-          return () => h('div', `Color: ${displayColor.value}`);
+          return () => h('div', {}, `Color: ${displayColor.value}`);
         },
       });
 
@@ -197,9 +197,9 @@ describe('Type-Safe Token Access', () => {
       await nextTick();
       
       // Call setTheme from the context and wait for it to complete
-      if (themeContext) {
-        await themeContext.setTheme('dark');
-        expect(themeContext.tokens.value.color.primary.value).toBe('#A78BFA');
+      if (themeContextRef.current) {
+        await themeContextRef.current.setTheme('dark');
+        expect(themeContextRef.current.tokens.value.color.primary.value).toBe('#A78BFA');
       }
       
       // Wait for Vue to re-render after tokens change
@@ -209,7 +209,7 @@ describe('Type-Safe Token Access', () => {
       
       expect(container.textContent).toContain('#A78BFA');
       app.unmount();
-      document.body.removeChild(container);
+      container.remove();
     });
   });
 
@@ -236,7 +236,7 @@ describe('Type-Safe Token Access', () => {
           expect(primary).toBe('#7C3AED');
           expect(radius).toBe('12px');
 
-          return () => h('div', primary);
+          return () => h('div', {}, primary);
         },
       });
 
@@ -251,7 +251,7 @@ describe('Type-Safe Token Access', () => {
       app.mount(container);
       expect(container.textContent).toContain('#7C3AED');
       app.unmount();
-      document.body.removeChild(container);
+      container.remove();
     });
 
     it('should allow accessing tokens with proper types', () => {
@@ -287,7 +287,7 @@ describe('Type-Safe Token Access', () => {
       });
       app.mount(container);
       app.unmount();
-      document.body.removeChild(container);
+      container.remove();
     });
   });
 
@@ -327,7 +327,7 @@ describe('Type-Safe Token Access', () => {
       });
       app.mount(container);
       app.unmount();
-      document.body.removeChild(container);
+      container.remove();
     });
 
     it('should accept generic ThemeConfig', () => {
@@ -354,6 +354,8 @@ describe('Type-Safe Token Access', () => {
       };
 
       type Extracted = ExtractTokenType<TestThemeConfig & ThemeConfig>;
+      const check: Extracted = lightTokens;
+      expect(check.color.primary.value).toBe('#7C3AED');
       
       const config: TestThemeConfig = {
         themes: [
@@ -416,7 +418,7 @@ describe('Type-Safe Token Access', () => {
       expect(button).toBeTruthy();
       expect(button?.textContent).toBe('Switch Theme');
       app.unmount();
-      document.body.removeChild(container);
+      container.remove();
     });
 
     it('should provide autocomplete-friendly token access', () => {
@@ -454,7 +456,7 @@ describe('Type-Safe Token Access', () => {
       });
       app.mount(container);
       app.unmount();
-      document.body.removeChild(container);
+      container.remove();
     });
   });
 
@@ -468,7 +470,7 @@ describe('Type-Safe Token Access', () => {
         defaultTheme: 'light',
       };
 
-      let themeContext2: ReturnType<typeof provideTheme> | null = null;
+      const themeContext2Ref = { current: null as ThemeContext<TestDesignTokens> | null };
       const TestComponent = defineComponent({
         setup() {
           const { tokens } = useTheme<TestDesignTokens>();
@@ -479,7 +481,7 @@ describe('Type-Safe Token Access', () => {
           const displayColor = computed(() => tokens.value.color.primary.value);
 
           // Render function that reactively tracks tokens via computed
-          return () => h('div', displayColor.value);
+          return () => h('div', {}, displayColor.value);
         },
       });
 
@@ -487,7 +489,7 @@ describe('Type-Safe Token Access', () => {
       document.body.appendChild(container);
       const app = createApp({
         setup() {
-          themeContext2 = provideTheme(config);
+          themeContext2Ref.current = provideTheme(config);
           return () => h(TestComponent);
         },
       });
@@ -497,9 +499,9 @@ describe('Type-Safe Token Access', () => {
       await nextTick();
       
       // Call setTheme from the context and wait for it to complete
-      if (themeContext2) {
-        await themeContext2.setTheme('dark');
-        expect(themeContext2.tokens.value.color.primary.value).toBe('#A78BFA');
+      if (themeContext2Ref.current) {
+        await themeContext2Ref.current.setTheme('dark');
+        expect(themeContext2Ref.current.tokens.value.color.primary.value).toBe('#A78BFA');
       }
       
       // Wait for Vue to re-render after tokens change
@@ -509,7 +511,7 @@ describe('Type-Safe Token Access', () => {
       
       expect(container.textContent).toContain('#A78BFA');
       app.unmount();
-      document.body.removeChild(container);
+      container.remove();
     });
   });
 
@@ -518,7 +520,7 @@ describe('Type-Safe Token Access', () => {
       const TestComponent = defineComponent({
         setup() {
           useTheme();
-          return () => h('div', 'test');
+          return () => h('div', {}, 'test');
         },
       });
 
@@ -526,28 +528,28 @@ describe('Type-Safe Token Access', () => {
       document.body.appendChild(container);
       const app = createApp(TestComponent);
       
-      let caughtError: Error | null = null;
+      const caughtErrorRef = { current: null as Error | null };
       app.config.errorHandler = (err) => {
-        caughtError = err as Error;
+        caughtErrorRef.current = err as Error;
       };
       
       app.mount(container);
       
       // Vue catches errors in setup and calls errorHandler
-      expect(caughtError).toBeTruthy();
-      if (caughtError) {
-        expect(caughtError.message).toContain('useTheme must be used within a component that provides theme context');
+      expect(caughtErrorRef.current).toBeTruthy();
+      if (caughtErrorRef.current) {
+        expect(caughtErrorRef.current.message).toContain('useTheme must be used within a component that provides theme context');
       }
       
       app.unmount();
-      document.body.removeChild(container);
+      container.remove();
     });
 
     it('should throw error when useTheme is called with type but outside provider', () => {
       const TestComponent = defineComponent({
         setup() {
           useTheme<TestDesignTokens>();
-          return () => h('div', 'test');
+          return () => h('div', {}, 'test');
         },
       });
 
@@ -555,21 +557,21 @@ describe('Type-Safe Token Access', () => {
       document.body.appendChild(container);
       const app = createApp(TestComponent);
       
-      let caughtError: Error | null = null;
+      const caughtErrorRef = { current: null as Error | null };
       app.config.errorHandler = (err) => {
-        caughtError = err as Error;
+        caughtErrorRef.current = err as Error;
       };
       
       app.mount(container);
       
       // Vue catches errors in setup and calls errorHandler
-      expect(caughtError).toBeTruthy();
-      if (caughtError) {
-        expect(caughtError.message).toContain('useTheme must be used within a component that provides theme context');
+      expect(caughtErrorRef.current).toBeTruthy();
+      if (caughtErrorRef.current) {
+        expect(caughtErrorRef.current.message).toContain('useTheme must be used within a component that provides theme context');
       }
       
       app.unmount();
-      document.body.removeChild(container);
+      container.remove();
     });
   });
 });
