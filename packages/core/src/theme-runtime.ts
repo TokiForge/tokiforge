@@ -3,9 +3,9 @@ import { ThemeError } from './types';
 import { TokenExporter } from './token-exporter';
 
 export class ThemeRuntime {
-  private themes: Map<string, DesignTokens>;
+  private readonly themes: Map<string, DesignTokens>;
   private currentTheme: string | null = null;
-  private defaultTheme: string;
+  private readonly defaultTheme: string;
   private systemThemeWatcher: (() => void) | null = null;
 
   constructor(config: ThemeConfig) {
@@ -14,14 +14,14 @@ export class ThemeRuntime {
     }
 
     this.themes = new Map();
-    config.themes.forEach((theme) => {
+    for (const theme of config.themes) {
       if (!theme.name || !theme.tokens) {
         throw new ThemeError('Theme must have a name and tokens');
       }
       this.themes.set(theme.name, theme.tokens);
-    });
+    }
 
-    this.defaultTheme = config.defaultTheme || config.themes[0].name;
+    this.defaultTheme = config.defaultTheme ?? config.themes[0].name;
     if (!this.themes.has(this.defaultTheme)) {
       throw new ThemeError(`Default theme "${this.defaultTheme}" not found`);
     }
@@ -39,10 +39,9 @@ export class ThemeRuntime {
 
     this.currentTheme = themeName;
     this.injectCSS(theme, selector, prefix);
-    
-    // Dispatch custom event for theme change
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(
+
+    if (globalThis.window !== undefined) {
+      globalThis.window.dispatchEvent(
         new CustomEvent('tokiforge:theme-change', {
           detail: { theme: themeName, tokens: theme },
         })
@@ -67,97 +66,80 @@ export class ThemeRuntime {
   }
 
   nextTheme(): string {
-    const themes = this.getAvailableThemes();
-    if (themes.length === 0) {
+    const themeList = this.getAvailableThemes();
+    if (themeList.length === 0) {
       throw new ThemeError('No themes available');
     }
-    
-    const currentIndex = this.currentTheme 
-      ? themes.indexOf(this.currentTheme) 
-      : -1;
-    const nextIndex = (currentIndex + 1) % themes.length;
-    const nextTheme = themes[nextIndex];
-    
-    return nextTheme;
+
+    const currentIndex = this.currentTheme ? themeList.indexOf(this.currentTheme) : -1;
+    const nextIndex = (currentIndex + 1) % themeList.length;
+    return themeList[nextIndex];
   }
 
   destroy(): void {
-    // Clean up system theme watcher if active
     if (this.systemThemeWatcher) {
       this.systemThemeWatcher();
       this.systemThemeWatcher = null;
     }
 
-    // Remove style element if in browser environment
     if (typeof document !== 'undefined') {
-      const styleElement = document.getElementById('tokiforge-theme');
-      if (styleElement) {
-        styleElement.remove();
-      }
+      document.getElementById('tokiforge-theme')?.remove();
     }
   }
 
   watchSystemTheme(callback: (systemTheme: string) => void): () => void {
-    if (typeof window === 'undefined' || typeof window.matchMedia === 'undefined') {
-      // Return no-op function in non-browser environments
-      return () => {};
+    if (globalThis.window?.matchMedia === undefined) {
+      return () => { /* no-op in non-browser environments */ };
     }
 
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
-      const systemTheme = e.matches ? 'dark' : 'light';
-      callback(systemTheme);
+    const mediaQuery = globalThis.window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent | MediaQueryList): void => {
+      callback(e.matches ? 'dark' : 'light');
     };
 
-    // Modern browsers
-    if (mediaQuery.addEventListener) {
+    if (typeof mediaQuery.addEventListener === 'function') {
       mediaQuery.addEventListener('change', handleChange);
       this.systemThemeWatcher = () => {
         mediaQuery.removeEventListener('change', handleChange);
       };
-    } else {
-      // Legacy browsers
-      mediaQuery.addListener(handleChange);
+    } else if (typeof (mediaQuery as any).addListener === 'function') {
+      (mediaQuery as any).addListener(handleChange);
       this.systemThemeWatcher = () => {
-        mediaQuery.removeListener(handleChange);
+        (mediaQuery as any).removeListener(handleChange);
       };
     }
 
-    // Initial call
+    // Fire immediately with current value
     handleChange(mediaQuery);
 
-    return this.systemThemeWatcher;
+    return this.systemThemeWatcher || (() => {});
   }
 
   static detectSystemTheme(): string {
-    if (typeof window === 'undefined' || typeof window.matchMedia === 'undefined') {
+    if (globalThis.window?.matchMedia === undefined) {
       return 'light';
     }
 
     try {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      return prefersDark ? 'dark' : 'light';
+      return globalThis.window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     } catch {
       return 'light';
     }
   }
 
   private injectCSS(tokens: DesignTokens, selector: string, prefix: string): void {
-    // Only inject CSS in browser environments
-    if (typeof document === 'undefined') {
-      return;
-    }
+    if (typeof document === 'undefined') return;
 
     const css = this.generateCSS(tokens, selector, prefix);
     const styleId = 'tokiforge-theme';
-    
-    let styleElement = document.getElementById(styleId) as HTMLStyleElement;
+
+    let styleElement = document.getElementById(styleId) as HTMLStyleElement | null;
     if (!styleElement) {
       styleElement = document.createElement('style');
       styleElement.id = styleId;
       document.head.appendChild(styleElement);
     }
-    
+
     styleElement.textContent = css;
   }
 
@@ -165,4 +147,3 @@ export class ThemeRuntime {
     return TokenExporter.exportCSS(tokens, { selector, prefix });
   }
 }
-

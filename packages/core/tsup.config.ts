@@ -8,6 +8,7 @@ export default defineConfig({
     compilerOptions: {
       noUnusedLocals: false,
       noUnusedParameters: false,
+      ignoreDeprecations: '6.0',
     },
   },
   splitting: false,

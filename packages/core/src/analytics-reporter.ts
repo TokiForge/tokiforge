@@ -1,6 +1,8 @@
 import type { DesignTokens } from './types';
 import { TokenAnalytics } from './token-analytics';
 
+type TokenNode = Record<string, unknown>;
+
 export interface AnalyticsReport {
   timestamp: string;
   coverage: number;
@@ -141,7 +143,51 @@ export class AnalyticsReporter {
    */
   private generateHTMLReport(report: AnalyticsReport): string {
     const date = new Date(report.timestamp).toLocaleString();
-    const coverageColor = report.coverage >= 80 ? '#10B981' : report.coverage >= 50 ? '#F59E0B' : '#EF4444';
+    let coverageColor = '#EF4444';
+    if (report.coverage >= 80) {
+      coverageColor = '#10B981';
+    } else if (report.coverage >= 50) {
+      coverageColor = '#F59E0B';
+    }
+
+    let unusedSection = '';
+    if (report.unused.length > 0) {
+      const unusedItems = report.unused.map(token => `<div class="token-item">${token}</div>`).join('\n        ');
+      unusedSection = `
+    <div class="section">
+      <h2>⚠️ Unused Tokens (${report.unused.length})</h2>
+      <div class="token-list">
+        ${unusedItems}
+      </div>
+    </div>
+      `;
+    }
+
+    let usedSection = '';
+    if (report.used.length > 0) {
+      const extraCountMsg = report.used.length > 50 ? `<div class="token-item" style="opacity: 0.6;">... and ${report.used.length - 50} more</div>` : '';
+      const usedItems = report.used.slice(0, 50).map(token => `<div class="token-item">${token}</div>`).join('\n        ');
+      usedSection = `
+    <div class="section">
+      <h2>✅ Used Tokens (${report.used.length})</h2>
+      <div class="token-list">
+        ${usedItems}
+        ${extraCountMsg}
+      </div>
+    </div>
+      `;
+    }
+
+    const estimatedBytes = this.formatBytes(report.bundleSize.estimated);
+    const totalTokens = report.total;
+    const usedCount = report.used.length;
+    const unusedCount = report.unused.length;
+    const coveragePercent = report.coverage.toFixed(1);
+    
+    const colorBarHeight = (report.byType.color / report.total) * 100;
+    const spacingBarHeight = (report.byType.spacing / report.total) * 100;
+    const typographyBarHeight = (report.byType.typography / report.total) * 100;
+    const otherBarHeight = (report.byType.other / report.total) * 100;
 
     return `<!DOCTYPE html>
 <html lang="en">
@@ -314,25 +360,25 @@ export class AnalyticsReporter {
 
     <div class="coverage-bar">
       <div class="coverage-fill" style="width: ${report.coverage}%">
-        ${report.coverage.toFixed(1)}%
+        ${coveragePercent}%
       </div>
     </div>
 
     <div class="metrics">
       <div class="metric-card">
-        <div class="metric-value">${report.total}</div>
+        <div class="metric-value">${totalTokens}</div>
         <div class="metric-label">Total Tokens</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value">${report.used.length}</div>
+        <div class="metric-value">${usedCount}</div>
         <div class="metric-label">Used Tokens</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value">${report.unused.length}</div>
+        <div class="metric-value">${unusedCount}</div>
         <div class="metric-label">Unused Tokens</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value">${report.coverage.toFixed(1)}%</div>
+        <div class="metric-value">${coveragePercent}%</div>
         <div class="metric-label">Coverage</div>
       </div>
     </div>
@@ -342,7 +388,7 @@ export class AnalyticsReporter {
       <div class="bundle-size">
         <div class="bundle-size-icon">📦</div>
         <div class="bundle-size-text">
-          <div class="bundle-size-value">${this.formatBytes(report.bundleSize.estimated)}</div>
+          <div class="bundle-size-value">${estimatedBytes}</div>
           <div class="bundle-size-label">Estimated CSS bundle size</div>
         </div>
       </div>
@@ -353,28 +399,28 @@ export class AnalyticsReporter {
       <div class="chart">
         <div class="chart-item">
           <div class="chart-bar">
-            <div class="chart-bar-fill" style="height: ${(report.byType.color / report.total) * 100}%"></div>
+            <div class="chart-bar-fill" style="height: ${colorBarHeight}%"></div>
           </div>
           <div class="chart-label">Colors</div>
           <div class="chart-value">${report.byType.color} tokens</div>
         </div>
         <div class="chart-item">
           <div class="chart-bar">
-            <div class="chart-bar-fill" style="height: ${(report.byType.spacing / report.total) * 100}%"></div>
+            <div class="chart-bar-fill" style="height: ${spacingBarHeight}%"></div>
           </div>
           <div class="chart-label">Spacing</div>
           <div class="chart-value">${report.byType.spacing} tokens</div>
         </div>
         <div class="chart-item">
           <div class="chart-bar">
-            <div class="chart-bar-fill" style="height: ${(report.byType.typography / report.total) * 100}%"></div>
+            <div class="chart-bar-fill" style="height: ${typographyBarHeight}%"></div>
           </div>
           <div class="chart-label">Typography</div>
           <div class="chart-value">${report.byType.typography} tokens</div>
         </div>
         <div class="chart-item">
           <div class="chart-bar">
-            <div class="chart-bar-fill" style="height: ${(report.byType.other / report.total) * 100}%"></div>
+            <div class="chart-bar-fill" style="height: ${otherBarHeight}%"></div>
           </div>
           <div class="chart-label">Other</div>
           <div class="chart-value">${report.byType.other} tokens</div>
@@ -382,24 +428,9 @@ export class AnalyticsReporter {
       </div>
     </div>
 
-    ${report.unused.length > 0 ? `
-    <div class="section">
-      <h2>⚠️ Unused Tokens (${report.unused.length})</h2>
-      <div class="token-list">
-        ${report.unused.map(token => `<div class="token-item">${token}</div>`).join('\n        ')}
-      </div>
-    </div>
-    ` : ''}
+    ${unusedSection}
 
-    ${report.used.length > 0 ? `
-    <div class="section">
-      <h2>✅ Used Tokens (${report.used.length})</h2>
-      <div class="token-list">
-        ${report.used.slice(0, 50).map(token => `<div class="token-item">${token}</div>`).join('\n        ')}
-        ${report.used.length > 50 ? `<div class="token-item" style="opacity: 0.6;">... and ${report.used.length - 50} more</div>` : ''}
-      </div>
-    </div>
-    ` : ''}
+    ${usedSection}
   </div>
 </body>
 </html>`;
@@ -412,41 +443,43 @@ export class AnalyticsReporter {
     const lines: string[] = [];
     
     // Summary section
-    lines.push('# Token Analytics Summary');
-    lines.push(`Timestamp,${report.timestamp}`);
-    lines.push(`Total Tokens,${report.total}`);
-    lines.push(`Used Tokens,${report.used.length}`);
-    lines.push(`Unused Tokens,${report.unused.length}`);
-    lines.push(`Coverage,${report.coverage.toFixed(2)}%`);
-    lines.push(`Bundle Size,${report.bundleSize.estimated}`);
-    lines.push('');
+    lines.push(
+      '# Token Analytics Summary',
+      `Timestamp,${report.timestamp}`,
+      `Total Tokens,${report.total}`,
+      `Used Tokens,${report.used.length}`,
+      `Unused Tokens,${report.unused.length}`,
+      `Coverage,${report.coverage.toFixed(2)}%`,
+      `Bundle Size,${report.bundleSize.estimated}`,
+      ''
+    );
 
     // Tokens by type
-    lines.push('# Tokens by Type');
-    lines.push('Type,Count,Percentage');
-    lines.push(`Color,${report.byType.color},${((report.byType.color / report.total) * 100).toFixed(2)}%`);
-    lines.push(`Spacing,${report.byType.spacing},${((report.byType.spacing / report.total) * 100).toFixed(2)}%`);
-    lines.push(`Typography,${report.byType.typography},${((report.byType.typography / report.total) * 100).toFixed(2)}%`);
-    lines.push(`Other,${report.byType.other},${((report.byType.other / report.total) * 100).toFixed(2)}%`);
-    lines.push('');
+    lines.push(
+      '# Tokens by Type',
+      'Type,Count,Percentage',
+      `Color,${report.byType.color},${((report.byType.color / report.total) * 100).toFixed(2)}%`,
+      `Spacing,${report.byType.spacing},${((report.byType.spacing / report.total) * 100).toFixed(2)}%`,
+      `Typography,${report.byType.typography},${((report.byType.typography / report.total) * 100).toFixed(2)}%`,
+      `Other,${report.byType.other},${((report.byType.other / report.total) * 100).toFixed(2)}%`,
+      ''
+    );
 
     // Unused tokens
     if (report.unused.length > 0) {
-      lines.push('# Unused Tokens');
-      lines.push('Token Path');
-      report.unused.forEach(token => {
+      lines.push('# Unused Tokens', 'Token Path');
+      for (const token of report.unused) {
         lines.push(`"${token}"`);
-      });
+      }
       lines.push('');
     }
 
     // Used tokens
     if (report.used.length > 0) {
-      lines.push('# Used Tokens');
-      lines.push('Token Path');
-      report.used.forEach(token => {
+      lines.push('# Used Tokens', 'Token Path');
+      for (const token of report.used) {
         lines.push(`"${token}"`);
-      });
+      }
     }
 
     return lines.join('\n');
@@ -459,66 +492,74 @@ export class AnalyticsReporter {
     const date = new Date(report.timestamp).toLocaleString();
     const lines: string[] = [];
 
-    lines.push('# 📊 Token Analytics Report');
-    lines.push('');
-    lines.push(`**Generated:** ${date}`);
-    lines.push('');
-    lines.push('---');
-    lines.push('');
+    lines.push(
+      '# 📊 Token Analytics Report',
+      '',
+      `**Generated:** ${date}`,
+      '',
+      '---',
+      ''
+    );
 
     // Summary section
-    lines.push('## Summary');
-    lines.push('');
-    lines.push('| Metric | Value |');
-    lines.push('|--------|-------|');
-    lines.push(`| Total Tokens | ${report.total} |`);
-    lines.push(`| Used Tokens | ${report.used.length} |`);
-    lines.push(`| Unused Tokens | ${report.unused.length} |`);
-    lines.push(`| Coverage | ${report.coverage.toFixed(2)}% |`);
-    lines.push(`| Estimated Bundle Size | ${this.formatBytes(report.bundleSize.estimated)} |`);
-    lines.push('');
+    lines.push(
+      '## Summary',
+      '',
+      '| Metric | Value |',
+      '|--------|-------|',
+      `| Total Tokens | ${report.total} |`,
+      `| Used Tokens | ${report.used.length} |`,
+      `| Unused Tokens | ${report.unused.length} |`,
+      `| Coverage | ${report.coverage.toFixed(2)}% |`,
+      `| Estimated Bundle Size | ${this.formatBytes(report.bundleSize.estimated)} |`,
+      ''
+    );
 
     // Coverage indicator
-    const coverageEmoji = report.coverage >= 80 ? '🟢' : report.coverage >= 50 ? '🟡' : '🔴';
+    let coverageEmoji = '🔴';
+    if (report.coverage >= 80) {
+      coverageEmoji = '🟢';
+    } else if (report.coverage >= 50) {
+      coverageEmoji = '🟡';
+    }
     lines.push(`**Coverage Status:** ${coverageEmoji} ${report.coverage.toFixed(1)}%`);
     lines.push('');
     lines.push('---');
     lines.push('');
 
     // Tokens by type
-    lines.push('## 🎨 Tokens by Type');
-    lines.push('');
-    lines.push('| Type | Count | Percentage |');
-    lines.push('|------|-------|------------|');
-    lines.push(`| Colors | ${report.byType.color} | ${((report.byType.color / report.total) * 100).toFixed(1)}% |`);
-    lines.push(`| Spacing | ${report.byType.spacing} | ${((report.byType.spacing / report.total) * 100).toFixed(1)}% |`);
-    lines.push(`| Typography | ${report.byType.typography} | ${((report.byType.typography / report.total) * 100).toFixed(1)}% |`);
-    lines.push(`| Other | ${report.byType.other} | ${((report.byType.other / report.total) * 100).toFixed(1)}% |`);
-    lines.push('');
-    lines.push('---');
-    lines.push('');
+    lines.push(
+      '## 🎨 Tokens by Type',
+      '',
+      '| Type | Count | Percentage |',
+      '|------|-------|------------|',
+      `| Colors | ${report.byType.color} | ${((report.byType.color / report.total) * 100).toFixed(1)}% |`,
+      `| Spacing | ${report.byType.spacing} | ${((report.byType.spacing / report.total) * 100).toFixed(1)}% |`,
+      `| Typography | ${report.byType.typography} | ${((report.byType.typography / report.total) * 100).toFixed(1)}% |`,
+      `| Other | ${report.byType.other} | ${((report.byType.other / report.total) * 100).toFixed(1)}% |`,
+      '',
+      '---',
+      ''
+    );
 
     // Bundle size breakdown
-    lines.push('## 📦 Bundle Size Breakdown');
-    lines.push('');
-    lines.push('| Category | Size |');
-    lines.push('|----------|------|');
-    Object.entries(report.bundleSize.byType).forEach(([type, size]) => {
+    lines.push(
+      '## 📦 Bundle Size Breakdown',
+      '',
+      '| Category | Size |',
+      '|----------|------|'
+    );
+    for (const [type, size] of Object.entries(report.bundleSize.byType)) {
       lines.push(`| ${type} | ${this.formatBytes(size)} |`);
-    });
-    lines.push('');
-    lines.push('---');
-    lines.push('');
+    }
+    lines.push('', '---', '');
 
     // Unused tokens
     if (report.unused.length > 0) {
-      lines.push(`## ⚠️ Unused Tokens (${report.unused.length})`);
-      lines.push('');
-      lines.push('The following tokens are defined but not currently used:');
-      lines.push('');
-      report.unused.slice(0, 20).forEach(token => {
+      lines.push(`## ⚠️ Unused Tokens (${report.unused.length})`, '', 'The following tokens are defined but not currently used:', '');
+      for (const token of report.unused.slice(0, 20)) {
         lines.push(`- \`${token}\``);
-      });
+      }
       if (report.unused.length > 20) {
         lines.push(`- *... and ${report.unused.length - 20} more*`);
       }
@@ -552,11 +593,12 @@ export class AnalyticsReporter {
     let typography = 0;
     let other = 0;
 
-    const analyze = (obj: any, path: string = ''): void => {
+    const analyze = (obj: unknown, path: string = ''): void => {
       if (!obj || typeof obj !== 'object') return;
 
-      if ('value' in obj || '$value' in obj) {
-        const type = obj.type || '';
+      const node = obj as TokenNode;
+      if ('value' in node || '$value' in node) {
+        const type = typeof node.type === 'string' ? node.type : '';
         const pathLower = path.toLowerCase();
 
         if (type === 'color' || pathLower.includes('color')) {
@@ -569,16 +611,13 @@ export class AnalyticsReporter {
           other++;
         }
       } else {
-        for (const key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            analyze(obj[key], path ? `${path}.${key}` : key);
-          }
+        for (const key of Object.keys(node)) {
+          analyze(node[key], path ? `${path}.${key}` : key);
         }
       }
     };
 
     analyze(tokens);
-
     return { color, spacing, typography, other };
   }
 
@@ -598,24 +637,20 @@ export class AnalyticsReporter {
     estimated: number;
     byType: Record<string, number>;
   } {
-    const byType: Record<string, number> = {
-      color: 0,
-      spacing: 0,
-      typography: 0,
-      other: 0,
-    };
+    const byType: Record<string, number> = { color: 0, spacing: 0, typography: 0, other: 0 };
 
-    const estimateSize = (obj: any, path: string = ''): void => {
+    const estimateSize = (obj: unknown, path: string = ''): void => {
       if (!obj || typeof obj !== 'object') return;
 
-      if ('value' in obj || '$value' in obj) {
-        const value = obj.value || obj.$value;
-        const type = obj.type || '';
+      const node = obj as TokenNode;
+      if ('value' in node || '$value' in node) {
+        const value = node.value ?? node.$value;
+        const type = typeof node.type === 'string' ? node.type : '';
         const pathLower = path.toLowerCase();
 
-        // Estimate CSS variable size: --token-name: value;
-        const nameSize = path.length + 8; // '--' prefix + ': ' + ';'
-        const valueSize = String(value).length;
+        const nameSize = path.length + 8;
+        const valueStr = typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' ? String(value) : '';
+        const valueSize = valueStr.length;
         const totalSize = nameSize + valueSize;
 
         if (type === 'color' || pathLower.includes('color')) {
@@ -628,18 +663,14 @@ export class AnalyticsReporter {
           byType.other += totalSize;
         }
       } else {
-        for (const key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            estimateSize(obj[key], path ? `${path}.${key}` : key);
-          }
+        for (const key of Object.keys(node)) {
+          estimateSize(node[key], path ? `${path}.${key}` : key);
         }
       }
     };
 
     estimateSize(tokens);
-
     const estimated = Object.values(byType).reduce((sum, size) => sum + size, 0);
-
     return { estimated, byType };
   }
 
@@ -651,6 +682,6 @@ export class AnalyticsReporter {
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+    return `${Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
   }
 }

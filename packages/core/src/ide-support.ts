@@ -1,5 +1,7 @@
 import type { DesignTokens, HoverInfo, Completion, Definition, TokenValue } from './types';
 
+type TokenNode = Record<string, unknown>;
+
 export class IDESupport {
   private tokens: DesignTokens = {};
 
@@ -22,7 +24,7 @@ export class IDESupport {
     };
   }
 
-  getCompletions(prefix: string = ''): Completion[] {
+  getCompletions(prefix = ''): Completion[] {
     const paths = this.getAllTokenPaths();
     const matching = paths.filter((path) => path.startsWith(prefix));
 
@@ -64,18 +66,18 @@ export class IDESupport {
 
   private getToken(path: string): TokenValue | null {
     const parts = path.split('.');
-    let current: any = this.tokens;
+    let current: unknown = this.tokens;
 
     for (const part of parts) {
-      if (current && typeof current === 'object' && part in current) {
-        current = current[part];
+      if (current && typeof current === 'object' && part in (current as TokenNode)) {
+        current = (current as TokenNode)[part];
       } else {
         return null;
       }
     }
 
-    if (current && typeof current === 'object' && 'value' in current) {
-      return current as TokenValue;
+    if (current && typeof current === 'object' && 'value' in (current as TokenNode)) {
+      return current as unknown as TokenValue;
     }
 
     return null;
@@ -84,26 +86,25 @@ export class IDESupport {
   private getAllTokenPaths(): string[] {
     const paths: string[] = [];
 
-    const traverse = (obj: any, path: string = ''): void => {
+    const traverse = (obj: unknown, path = ''): void => {
       if (typeof obj !== 'object' || obj === null) {
         return;
       }
 
       if (Array.isArray(obj)) {
-        obj.forEach((item, index) => {
-          traverse(item, `${path}[${index}]`);
-        });
+        for (let i = 0; i < obj.length; i++) {
+          traverse(obj[i], `${path}[${i}]`);
+        }
         return;
       }
 
-      if ('value' in obj) {
+      const node = obj as TokenNode;
+      if ('value' in node) {
         paths.push(path || 'root');
       } else {
-        for (const key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            const newPath = path ? `${path}.${key}` : key;
-            traverse(obj[key], newPath);
-          }
+        for (const key of Object.keys(node)) {
+          const newPath = path ? `${path}.${key}` : key;
+          traverse(node[key], newPath);
         }
       }
     };
@@ -112,4 +113,3 @@ export class IDESupport {
     return paths;
   }
 }
-

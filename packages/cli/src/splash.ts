@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { readFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 

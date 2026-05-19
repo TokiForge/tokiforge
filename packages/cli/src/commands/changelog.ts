@@ -3,7 +3,7 @@
  * Generate token changelogs with version comparison and breaking changes detection
  */
 
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import * as path from 'path';
 import { compareTokens, detectBreakingChanges, type DiffResult } from './diff-utils.js';
 

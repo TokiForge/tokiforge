@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { initCommand } from './commands/init';
-import { buildCommand } from './commands/build';
-import { devCommand } from './commands/dev';
-import { lintCommand } from './commands/lint';
-import { tailwindCommand } from './commands/tailwind';
-import { validateCommand } from './commands/validate';
-import { figmaDiffCommand } from './commands/figma-diff';
-import { figmaPullCommand } from './commands/figma-pull';
-import { figmaPushCommand } from './commands/figma-push';
-import { analyticsCommand } from './commands/analytics';
-import { generateTypesCommand } from './commands/generate-types';
-import { watchCommand } from './commands/watch';
-import { migrateCommand } from './commands/migrate';
-import { diffCommand as diffCommandEnhanced } from './commands/diff';
-import { generateChangelogCommand } from './commands/changelog';
-import { showSplash, showCompactSplash, getVersion } from './splash';
+import { initCommand } from './commands/init.js';
+import { buildCommand } from './commands/build.js';
+import { devCommand } from './commands/dev.js';
+import { lintCommand } from './commands/lint.js';
+import { tailwindCommand } from './commands/tailwind.js';
+import { validateCommand } from './commands/validate.js';
+import { figmaDiffCommand } from './commands/figma-diff.js';
+import { figmaPullCommand } from './commands/figma-pull.js';
+import { figmaPushCommand } from './commands/figma-push.js';
+import { analyticsCommand } from './commands/analytics.js';
+import { generateTypesCommand } from './commands/generate-types.js';
+import { watchCommand } from './commands/watch.js';
+import { migrateCommand } from './commands/migrate.js';
+import { diffCommand as diffCommandEnhanced } from './commands/diff.js';
+import { generateChangelogCommand } from './commands/changelog.js';
+import { showSplash, showCompactSplash, getVersion } from './splash.js';
 
 const program = new Command();
 
@@ -116,7 +116,7 @@ program
   .description('Generate token usage analytics and bundle impact report')
   .option('--format <format>', 'Export format: json, html, csv, markdown', 'json')
   .option('--output <file>', 'Output file path')
-  .action((options) => analyticsCommand(process.cwd(), { format: options.format as any, output: options.output }));
+  .action((options) => analyticsCommand(process.cwd(), { format: options.format, output: options.output }));
 
 program
   .command('generate:types')
@@ -131,7 +131,7 @@ program
   .argument('[input]', 'Input tokens file to watch', 'tokens.json')
   .argument('[output]', 'Output directory for generated files', 'tokens.generated')
   .option('--debounce <ms>', 'Debounce time in milliseconds', '300')
-  .action((input, output, options) => watchCommand(input, output, parseInt(options.debounce)));
+  .action((input, output, options) => watchCommand(input, output, Number.parseInt(options.debounce, 10)));
 
 program
   .command('migrate')

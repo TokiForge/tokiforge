@@ -1,12 +1,12 @@
-import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { ThemeRuntime } from '@tokiforge/core';
 import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
 
 interface ThemeContextValue {
   theme: string;
   tokens: DesignTokens;
-  setTheme: (themeName: string) => void;
-  nextTheme: () => void;
+  setTheme: (themeName: string) => Promise<void>;
+  nextTheme: () => Promise<void>;
   availableThemes: string[];
 
   runtime: ThemeRuntime;
@@ -26,9 +26,7 @@ interface ThemeProviderProps {
   persist?: boolean;
   /** Callback when theme changes (e.g. analytics) */
   onThemeChange?: (themeName: string) => void;
-  /** Pass-through to root/body when applying theme class to avoid hydration warnings */
-  suppressHydrationWarning?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const DEFAULT_STORAGE_KEY = 'tokiforge-theme';
@@ -42,15 +40,18 @@ export function ThemeProvider({
   persist = true,
   onThemeChange,
   children,
-}: ThemeProviderProps) {
-  const [runtime] = useState(() => new ThemeRuntime(config));
+}: Readonly<ThemeProviderProps>) {
+  const runtimeRef = useRef<ThemeRuntime | null>(null);
+  runtimeRef.current ??= new ThemeRuntime(config);
+  const runtime = runtimeRef.current;
+
   const initialTheme =
     defaultTheme || config.defaultTheme || config.themes[0]?.name || 'default';
-  const [theme, setThemeState] = useState(() => {
-    if (typeof window === 'undefined' || persist === false) return initialTheme;
+  const [activeTheme, setActiveTheme] = useState(() => {
+    if (globalThis.window === undefined || persist === false) return initialTheme;
     try {
       const key = storageKey ?? DEFAULT_STORAGE_KEY;
-      const saved = window.localStorage.getItem(key);
+      const saved = globalThis.localStorage?.getItem(key);
       if (saved && runtime.getAvailableThemes().includes(saved)) return saved;
     } catch {
       // ignore
@@ -60,14 +61,14 @@ export function ThemeProvider({
   const [tokens, setTokens] = useState<DesignTokens>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const themeRef = useRef(theme);
-  themeRef.current = theme;
+  const themeRef = useRef(activeTheme);
+  themeRef.current = activeTheme;
   useEffect(() => {
     setIsLoading(true);
     try {
       const initial = themeRef.current || defaultTheme || config.defaultTheme || config.themes[0]?.name || 'default';
       runtime.applyTheme(initial, selector, prefix);
-      setThemeState(runtime.getCurrentTheme() || initial);
+      setActiveTheme(runtime.getCurrentTheme() || initial);
     } catch (e) {
       console.error(e);
     } finally {
@@ -81,13 +82,13 @@ export function ThemeProvider({
   useEffect(() => {
     const handleThemeChange = (e: Event) => {
       const customEvent = e as CustomEvent;
-      setThemeState(customEvent.detail.theme);
+      setActiveTheme(customEvent.detail.theme);
       setTokens(customEvent.detail.tokens);
     };
 
-    window.addEventListener('tokiforge:theme-change', handleThemeChange);
+    globalThis.addEventListener('tokiforge:theme-change', handleThemeChange);
     return () => {
-      window.removeEventListener('tokiforge:theme-change', handleThemeChange);
+      globalThis.removeEventListener('tokiforge:theme-change', handleThemeChange);
     };
   }, []);
 
@@ -96,10 +97,10 @@ export function ThemeProvider({
       setIsLoading(true);
       try {
         runtime.applyTheme(themeName, selector, prefix);
-        setThemeState(themeName);
-        if (persist && typeof window !== 'undefined' && window.localStorage) {
+        setActiveTheme(themeName);
+        if (persist && globalThis.window !== undefined && globalThis.localStorage) {
           try {
-            window.localStorage.setItem(storageKey ?? DEFAULT_STORAGE_KEY, themeName);
+            globalThis.localStorage.setItem(storageKey ?? DEFAULT_STORAGE_KEY, themeName);
           } catch {
             // ignore
           }
@@ -119,15 +120,18 @@ export function ThemeProvider({
     await setTheme(newTheme);
   }, [runtime, setTheme]);
 
-  const value: ThemeContextValue = {
-    theme,
-    tokens,
-    setTheme,
-    nextTheme,
-    availableThemes: runtime.getAvailableThemes(),
-    runtime,
-    isLoading,
-  };
+  const value = useMemo<ThemeContextValue>(
+    () => ({
+      theme: activeTheme,
+      tokens,
+      setTheme,
+      nextTheme,
+      availableThemes: runtime.getAvailableThemes(),
+      runtime,
+      isLoading,
+    }),
+    [activeTheme, tokens, setTheme, nextTheme, runtime, isLoading]
+  );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

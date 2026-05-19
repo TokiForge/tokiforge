@@ -26,7 +26,6 @@
     "types": [
       "node"
     ],
-    "baseUrl": ".",
     "paths": {
       "@tokiforge/core": [
         "./packages/core/src/index.ts"
@@ -37,7 +36,6 @@
       "@tokiforge/tailwind": [
         "./packages/tailwind/src/index.ts"
       ]
-    },
-    "ignoreDeprecations": "6.0"
+    }
   }
 }

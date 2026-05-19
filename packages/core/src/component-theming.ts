@@ -1,8 +1,10 @@
 import type { ComponentTheme, DesignTokens } from './types';
 import { TokenExporter } from './token-exporter';
 
+type TokenNode = Record<string, unknown>;
+
 export class ComponentTheming {
-  private themes: Map<string, ComponentTheme> = new Map();
+  private readonly themes: Map<string, ComponentTheme> = new Map();
 
   registerComponentTheme(theme: ComponentTheme): void {
     this.themes.set(theme.name, theme);
@@ -18,19 +20,20 @@ export class ComponentTheming {
     const scoped: DesignTokens = { ...globalTokens };
     
     const scopePath = theme.scope.split('.');
-    let current: any = scoped;
+    let current = scoped as TokenNode;
     for (let i = 0; i < scopePath.length - 1; i++) {
-      if (!current[scopePath[i]]) {
-        current[scopePath[i]] = {};
+      const part = scopePath[i];
+      if (!current[part] || typeof current[part] !== 'object') {
+        current[part] = {};
       }
-      current = current[scopePath[i]];
+      current = current[part] as TokenNode;
     }
     current[scopePath[scopePath.length - 1]] = theme.tokens;
 
     return scoped;
   }
 
-  applyComponentTheme(componentName: string, selector: string, prefix: string = 'hf'): string {
+  applyComponentTheme(componentName: string, selector: string, prefix = 'hf'): string {
     const theme = this.themes.get(componentName);
     if (!theme) {
       return '';
@@ -39,4 +42,3 @@ export class ComponentTheming {
     return TokenExporter.exportCSS(theme.tokens, { selector, prefix });
   }
 }
-

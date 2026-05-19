@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import type { DesignTokens, TokenValue } from '@tokiforge/core';
 import type { Config } from 'tailwindcss';
 import plugin from 'tailwindcss/plugin';
@@ -98,6 +98,73 @@ function flattenTokensForUtilities(tokens: DesignTokens, prefix = ''): Record<st
   return result;
 }
 
+interface PathMappingConfig {
+  colorPaths: string[];
+  spacingPaths: string[];
+  radiusPaths: string[];
+  fontSizePaths: string[];
+  fontFamilyPaths: string[];
+  boxShadowPaths: string[];
+}
+
+function processSingleToken(
+  tokenPath: string,
+  value: unknown,
+  utilities: TokenUtilityMapping,
+  paths: PathMappingConfig
+): void {
+  const pathLower = tokenPath.toLowerCase();
+  const getKey = () => tokenPath.split('.').slice(1).join('-').toLowerCase();
+
+  // Color mapping
+  if (paths.colorPaths.some((p) => pathLower.includes(p.toLowerCase()))) {
+    if (typeof value === 'string' && (value.startsWith('#') || value.startsWith('rgb'))) {
+      utilities.colors[getKey()] = value;
+    }
+  }
+
+  // Spacing mapping
+  if (paths.spacingPaths.some((p) => pathLower.includes(p.toLowerCase()))) {
+    if (typeof value === 'number') {
+      utilities.spacing[getKey()] = `${value}px`;
+    } else if (typeof value === 'string' && (value.includes('px') || value.includes('rem'))) {
+      utilities.spacing[getKey()] = value;
+    }
+  }
+
+  // Border radius mapping
+  if (paths.radiusPaths.some((p) => pathLower.includes(p.toLowerCase()))) {
+    if (typeof value === 'number') {
+      utilities.borderRadius[getKey()] = `${value}px`;
+    } else if (typeof value === 'string' && (value.includes('px') || value.includes('rem'))) {
+      utilities.borderRadius[getKey()] = value;
+    }
+  }
+
+  // Font size mapping
+  if (paths.fontSizePaths.some((p) => pathLower.includes(p.toLowerCase()))) {
+    if (typeof value === 'number') {
+      utilities.fontSize[getKey()] = `${value}px`;
+    } else if (typeof value === 'string' && (value.includes('px') || value.includes('rem'))) {
+      utilities.fontSize[getKey()] = value;
+    }
+  }
+
+  // Font family mapping
+  if (paths.fontFamilyPaths.some((p) => pathLower.includes(p.toLowerCase()))) {
+    if (typeof value === 'string') {
+      utilities.fontFamily[getKey()] = value;
+    }
+  }
+
+  // Box shadow mapping
+  if (paths.boxShadowPaths.some((p) => pathLower.includes(p.toLowerCase()))) {
+    if (typeof value === 'string' && (value.includes('px') || value.includes('shadow') || value.includes('rgba') || value.includes('rgb'))) {
+      utilities.boxShadow[getKey()] = value;
+    }
+  }
+}
+
 /**
  * Map tokens to Tailwind utilities
  */
@@ -106,12 +173,14 @@ export function mapTokensToUtilities(
   themeMappings?: TailwindPluginOptions['themeMappings'],
   excludePaths?: string[]
 ): TokenUtilityMapping {
-  const colorPaths = themeMappings?.colors || ['colors'];
-  const spacingPaths = themeMappings?.spacing || ['spacing'];
-  const radiusPaths = themeMappings?.borderRadius || ['borderRadius', 'radius'];
-  const fontSizePaths = themeMappings?.fontSize || ['typography', 'fontSize'];
-  const fontFamilyPaths = themeMappings?.fontFamily || ['fontFamily'];
-  const boxShadowPaths = themeMappings?.boxShadow || ['shadow', 'boxShadow'];
+  const paths: PathMappingConfig = {
+    colorPaths: themeMappings?.colors || ['colors'],
+    spacingPaths: themeMappings?.spacing || ['spacing'],
+    radiusPaths: themeMappings?.borderRadius || ['borderRadius', 'radius'],
+    fontSizePaths: themeMappings?.fontSize || ['typography', 'fontSize'],
+    fontFamilyPaths: themeMappings?.fontFamily || ['fontFamily'],
+    boxShadowPaths: themeMappings?.boxShadow || ['shadow', 'boxShadow'],
+  };
 
   const flattened = flattenTokensForUtilities(tokens);
 
@@ -124,66 +193,9 @@ export function mapTokensToUtilities(
     boxShadow: {},
   };
 
-  for (const [path, value] of Object.entries(flattened)) {
-    if (excludePaths?.some((p) => path.startsWith(p))) continue;
-    const pathLower = path.toLowerCase();
-
-    // Color mapping
-    if (colorPaths.some((p) => pathLower.includes(p.toLowerCase()))) {
-      if (typeof value === 'string' && (value.startsWith('#') || value.startsWith('rgb'))) {
-        const key = path.split('.').slice(1).join('-').toLowerCase();
-        utilities.colors[key] = value as string;
-      }
-    }
-
-    // Spacing mapping
-    if (spacingPaths.some((p) => pathLower.includes(p.toLowerCase()))) {
-      if (typeof value === 'number') {
-        const key = path.split('.').slice(1).join('-').toLowerCase();
-        utilities.spacing[key] = `${value}px`;
-      } else if (typeof value === 'string' && (value.includes('px') || value.includes('rem'))) {
-        const key = path.split('.').slice(1).join('-').toLowerCase();
-        utilities.spacing[key] = value;
-      }
-    }
-
-    // Border radius mapping
-    if (radiusPaths.some((p) => pathLower.includes(p.toLowerCase()))) {
-      if (typeof value === 'number') {
-        const key = path.split('.').slice(1).join('-').toLowerCase();
-        utilities.borderRadius[key] = `${value}px`;
-      } else if (typeof value === 'string' && (value.includes('px') || value.includes('rem'))) {
-        const key = path.split('.').slice(1).join('-').toLowerCase();
-        utilities.borderRadius[key] = value;
-      }
-    }
-
-    // Font size mapping
-    if (fontSizePaths.some((p) => pathLower.includes(p.toLowerCase()))) {
-      if (typeof value === 'number') {
-        const key = path.split('.').slice(1).join('-').toLowerCase();
-        utilities.fontSize[key] = `${value}px`;
-      } else if (typeof value === 'string' && (value.includes('px') || value.includes('rem'))) {
-        const key = path.split('.').slice(1).join('-').toLowerCase();
-        utilities.fontSize[key] = value;
-      }
-    }
-
-    // Font family mapping
-    if (fontFamilyPaths.some((p) => pathLower.includes(p.toLowerCase()))) {
-      if (typeof value === 'string') {
-        const key = path.split('.').slice(1).join('-').toLowerCase();
-        utilities.fontFamily[key] = value;
-      }
-    }
-
-    // Box shadow mapping
-    if (boxShadowPaths.some((p) => pathLower.includes(p.toLowerCase()))) {
-      if (typeof value === 'string' && (value.includes('px') || value.includes('shadow') || value.includes('rgba') || value.includes('rgb'))) {
-        const key = path.split('.').slice(1).join('-').toLowerCase();
-        utilities.boxShadow[key] = value;
-      }
-    }
+  for (const [tokenPath, value] of Object.entries(flattened)) {
+    if (excludePaths?.some((p) => tokenPath.startsWith(p))) continue;
+    processSingleToken(tokenPath, value, utilities, paths);
   }
 
   return utilities;
@@ -293,10 +305,12 @@ export function createTailwindPlugin(options: TailwindPluginOptions): any {
       if (includeUtilities) {
         const spacingUtilities: Record<string, Record<string, string>> = {};
         for (const [key, value] of Object.entries(utilities.spacing)) {
-          spacingUtilities[`.${escapeClassName(`${utilityPrefix}-spacing-${key}`)}`] = {
+          const spacingClass = '.' + escapeClassName(utilityPrefix + '-spacing-' + key);
+          spacingUtilities[spacingClass] = {
             padding: value,
           };
-          spacingUtilities[`.${escapeClassName(`${utilityPrefix}-gap-${key}`)}`] = {
+          const gapClass = '.' + escapeClassName(utilityPrefix + '-gap-' + key);
+          spacingUtilities[gapClass] = {
             gap: value,
           };
         }
@@ -343,16 +357,14 @@ export function generateTailwindPreset(
       : { ...tokensPathOrOptions };
   const { themeMappings, excludePaths } = opts;
 
-  const tokens = opts.tokens
-    ? opts.tokens
-    : (() => {
-        const path = opts.tokensPath;
-        if (!path || !fs.existsSync(path)) {
-          throw new Error(`Tokens file not found: ${path ?? 'tokensPath'}`);
-        }
-        const content = fs.readFileSync(path, 'utf-8');
-        return JSON.parse(content) as DesignTokens;
-      })();
+  const tokens = opts.tokens ?? (() => {
+    const path = opts.tokensPath;
+    if (!path || !fs.existsSync(path)) {
+      throw new Error(`Tokens file not found: ${path ?? 'tokensPath'}`);
+    }
+    const content = fs.readFileSync(path, 'utf-8');
+    return JSON.parse(content) as DesignTokens;
+  })();
 
   const utilities = mapTokensToUtilities(tokens, themeMappings, excludePaths);
 
@@ -376,10 +388,10 @@ export function generateTailwindPreset(
   if (opts.v4) {
     const cssVariables: Record<string, string> = {};
     for (const [key, value] of Object.entries(utilities.colors)) {
-      cssVariables[`--color-${key}`] = value as string;
+      cssVariables[`--color-${key}`] = value;
     }
     for (const [key, value] of Object.entries(utilities.spacing)) {
-      cssVariables[`--spacing-${key}`] = value as string;
+      cssVariables[`--spacing-${key}`] = value;
     }
 
     config.plugins = config.plugins ?? [];
@@ -391,20 +403,21 @@ export function generateTailwindPreset(
 /**
  * Export utilities for Tailwind v4 @theme syntax
  */
-export function generateTailwindThemeVariables(tokens: DesignTokens): Record<string, string> {
+export function generateTailwindThemeVariables(tokens: DesignTokens, prefix?: string): Record<string, string> {
   const utilities = mapTokensToUtilities(tokens);
   const variables: Record<string, string> = {};
+  const varPrefix = prefix ? `--${prefix}-` : '--';
 
   for (const [key, value] of Object.entries(utilities.colors)) {
-    variables[`--color-${key}`] = value;
+    variables[`${varPrefix}color-${key}`] = value;
   }
 
   for (const [key, value] of Object.entries(utilities.spacing)) {
-    variables[`--spacing-${key}`] = value;
+    variables[`${varPrefix}spacing-${key}`] = value;
   }
 
   for (const [key, value] of Object.entries(utilities.borderRadius)) {
-    variables[`--radius-${key}`] = value;
+    variables[`${varPrefix}radius-${key}`] = value;
   }
 
   return variables;

@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
-import { buildCommand } from './build';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import * as os from 'node:os';
+import { buildCommand } from './build.js';
 
 describe('buildCommand', () => {
   let tempDir: string;
@@ -11,7 +11,7 @@ describe('buildCommand', () => {
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tokiforge-build-test-'));
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
-    vi.spyOn(process, 'exit').mockImplementation((code?: number) => {
+    vi.spyOn(process, 'exit').mockImplementation((code?: any) => {
       throw new Error(`Process exit: ${code}`);
     });
   });

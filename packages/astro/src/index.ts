@@ -1,5 +1,6 @@
 import type { AstroIntegration } from 'astro';
-import { TokenExporter, type ThemeConfig } from '@tokiforge/core';
+import { TokenExporter } from '@tokiforge/core';
+import type { ThemeConfig, DesignTokens } from '@tokiforge/core';
 
 export interface TokiForgeOptions {
     config: ThemeConfig;
@@ -33,7 +34,7 @@ export default function tokiforge(options: TokiForgeOptions): AstroIntegration {
             'astro:config:done': () => {
                 if (options.generateStaticCSS) {
                     // Generate static CSS for each theme
-                    options.config.themes.forEach((theme) => {
+                    options.config.themes.forEach((theme: { name: string; tokens: DesignTokens }) => {
                         TokenExporter.exportCSS(theme.tokens, {
                             selector: `[data-theme="${theme.name}"]`,
                             prefix: 'hf',

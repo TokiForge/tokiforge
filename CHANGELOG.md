@@ -5,7 +5,17 @@ All notable changes to TokiForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.2.3] - 2026-05-02
+## [2.2.3] - 2026-05-19 (Maintenance Update)
+
+### Fixed
+
+- **React ThemeContext**: Marked component props as read-only, eliminated the unused `suppressHydrationWarning` prop definition to comply with SonarLint standard `S6767`, and resolved duplicate React/TypeScript type conflicts on the `children` prop.
+- **Analytics HTML Reporter**: Fixed syntax errors caused by direct JavaScript loops and nested operations inside template literals by refactoring `generateHTMLReport` to pre-compute markup strings safely.
+
+### Refactored
+
+- **Cognitive Complexity**: Reduced high cognitive complexity across validator, exporter, responsive token, and semantic token resolver systems (`cicd-validator.ts`, `ios-exporter.ts`, `react-native-exporter.ts`, `responsive-tokens.ts`, `semantic-tokens.ts`) by decomposing monolithic functions into highly cohesive sub-methods.
+- **Performance & Optimization**: Refactored the internal state logic in React `ThemeProvider` to use React `useRef` for static `ThemeRuntime` initialization, implemented clean nullish coalescing assignments (`??=`), and memoized the context value to eliminate duplicate consumer component re-renders.
 
 ### Changed
 

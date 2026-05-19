@@ -1,5 +1,7 @@
 import type { DesignTokens, RegistryEntry, RegistryConfig, TokenValue } from './types';
 
+type TokenNode = Record<string, unknown>;
+
 export class TokenRegistry {
   private entries: RegistryEntry[] = [];
   private config: RegistryConfig;
@@ -9,32 +11,31 @@ export class TokenRegistry {
   }
 
   importFromTokens(tokens: DesignTokens, team?: string, version?: string): void {
-    const processTokens = (obj: any, path: string = ''): void => {
+    const processTokens = (obj: unknown, path = ''): void => {
       if (typeof obj !== 'object' || obj === null) {
         return;
       }
 
       if (Array.isArray(obj)) {
-        obj.forEach((item, index) => {
-          processTokens(item, `${path}[${index}]`);
-        });
+        for (let i = 0; i < obj.length; i++) {
+          processTokens(obj[i], `${path}[${i}]`);
+        }
         return;
       }
 
-      if ('value' in obj) {
+      const node = obj as TokenNode;
+      if ('value' in node) {
         const entry: RegistryEntry = {
           path: path || 'root',
-          value: obj as TokenValue,
+          value: node as unknown as TokenValue,
           team: team || this.config.teams?.[0],
           version: version || this.config.defaultVersion || '1.0.0',
         };
         this.entries.push(entry);
       } else {
-        for (const key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            const newPath = path ? `${path}.${key}` : key;
-            processTokens(obj[key], newPath);
-          }
+        for (const key of Object.keys(node)) {
+          const newPath = path ? `${path}.${key}` : key;
+          processTokens(node[key], newPath);
         }
       }
     };
@@ -49,9 +50,9 @@ export class TokenRegistry {
 
     const tokens: DesignTokens = {};
     
-    filtered.forEach((entry) => {
+    for (const entry of filtered) {
       this.setNestedValue(tokens, entry.path, entry.value);
-    });
+    }
 
     return tokens;
   }
@@ -69,26 +70,25 @@ export class TokenRegistry {
 
     const tokens: DesignTokens = {};
     
-    filtered.forEach((entry) => {
+    for (const entry of filtered) {
       this.setNestedValue(tokens, entry.path, entry.value);
-    });
+    }
 
     return tokens;
   }
 
-  private setNestedValue(obj: any, path: string, value: any): void {
+  private setNestedValue(obj: DesignTokens, path: string, value: TokenValue): void {
     const parts = path.split('.');
-    let current: any = obj;
+    let current = obj as TokenNode;
 
     for (let i = 0; i < parts.length - 1; i++) {
       const part = parts[i];
       if (!current[part] || typeof current[part] !== 'object') {
         current[part] = {};
       }
-      current = current[part];
+      current = current[part] as TokenNode;
     }
 
     current[parts[parts.length - 1]] = value;
   }
 }
-

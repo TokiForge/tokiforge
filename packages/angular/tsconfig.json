@@ -11,8 +11,6 @@
     "skipLibCheck": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "baseUrl": ".",
-    "paths": {}
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

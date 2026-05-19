@@ -59,7 +59,7 @@ describe('ThemeService', () => {
     };
 
     // Mock browser environment
-    Object.defineProperty(global, 'window', {
+    Object.defineProperty(globalThis, 'window', {
       value: {
         localStorage: {
           getItem: vi.fn(() => null),
@@ -82,7 +82,7 @@ describe('ThemeService', () => {
       configurable: true,
     });
 
-    Object.defineProperty(global, 'document', {
+    Object.defineProperty(globalThis, 'document', {
       value: {
         createElement: vi.fn(() => ({
           id: '',
@@ -110,7 +110,7 @@ describe('ThemeService', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    if (service && service.initialized()) {
+    if (service?.initialized()) {
       service.destroy();
     }
   });
@@ -141,7 +141,7 @@ describe('ThemeService', () => {
     });
 
     it('should load theme from localStorage if persist is enabled', () => {
-      const getItemSpy = vi.spyOn(global.window.localStorage, 'getItem');
+      const getItemSpy = vi.spyOn(globalThis.window.localStorage, 'getItem');
       getItemSpy.mockReturnValue('dark');
 
       service.init(config, { persist: true });
@@ -151,7 +151,7 @@ describe('ThemeService', () => {
     });
 
     it('should detect system theme if watchSystemTheme is enabled', () => {
-      const matchMediaSpy = vi.spyOn(global.window, 'matchMedia');
+      const matchMediaSpy = vi.spyOn(globalThis.window, 'matchMedia');
       matchMediaSpy.mockReturnValue({
         matches: true, // dark mode
         media: '',
@@ -247,7 +247,7 @@ describe('ThemeService', () => {
 
   describe('Persistence', () => {
     it('should save theme to localStorage', () => {
-      const setItemSpy = vi.spyOn(global.window.localStorage, 'setItem');
+      const setItemSpy = vi.spyOn(globalThis.window.localStorage, 'setItem');
       service.init(config, { persist: true });
       service.setTheme('dark');
 
@@ -255,7 +255,7 @@ describe('ThemeService', () => {
     });
 
     it('should not save to localStorage if persist is disabled', () => {
-      const setItemSpy = vi.spyOn(global.window.localStorage, 'setItem');
+      const setItemSpy = vi.spyOn(globalThis.window.localStorage, 'setItem');
       service.init(config, { persist: false });
       service.setTheme('dark');
 
@@ -272,13 +272,13 @@ describe('ThemeService', () => {
     });
 
     it('should add body class for theme', () => {
-      const addSpy = vi.spyOn(global.document.body.classList, 'add');
+      const addSpy = vi.spyOn(globalThis.document.body.classList, 'add');
       service.setTheme('dark');
       expect(addSpy).toHaveBeenCalledWith('theme-dark');
     });
 
     it('should remove previous theme class', () => {
-      const removeSpy = vi.spyOn(global.document.body.classList, 'remove');
+      const removeSpy = vi.spyOn(globalThis.document.body.classList, 'remove');
       service.setTheme('dark');
       expect(removeSpy).toHaveBeenCalledWith('theme-light');
     });
@@ -296,7 +296,7 @@ describe('ThemeService', () => {
         dispatchEvent: vi.fn(),
       };
 
-      vi.spyOn(global.window, 'matchMedia').mockReturnValue(mediaQuery as any);
+      vi.spyOn(globalThis.window, 'matchMedia').mockReturnValue(mediaQuery as any);
 
       service.init(config, {
         watchSystemTheme: true,
@@ -320,7 +320,7 @@ describe('ThemeService', () => {
         dispatchEvent: vi.fn(),
       };
 
-      vi.spyOn(global.window, 'matchMedia').mockReturnValue(mediaQuery as any);
+      vi.spyOn(globalThis.window, 'matchMedia').mockReturnValue(mediaQuery as any);
 
       service.init(config, {
         watchSystemTheme: true,
@@ -344,7 +344,7 @@ describe('ThemeService', () => {
         id: 'tokiforge-theme',
         remove: vi.fn(),
       };
-      vi.spyOn(global.document, 'getElementById').mockReturnValue(styleElement as any);
+      vi.spyOn(globalThis.document, 'getElementById').mockReturnValue(styleElement as any);
 
       service.init(config);
       service.destroy();
@@ -392,7 +392,6 @@ describe('ThemeService', () => {
 
   describe('SSR Safety', () => {
     it('should handle SSR environment safely', () => {
-      // @ts-ignore
       const ssrService = new ThemeService();
       (ssrService as any).platformId = 'server';
       (ssrService as any).isBrowser = false;

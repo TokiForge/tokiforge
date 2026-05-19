@@ -3,16 +3,16 @@ import type { ColorRGB, ColorHSL } from './types';
 export class ColorUtils {
   static hexToRGB(hex: string): ColorRGB {
     const cleanHex = hex.replace('#', '');
-    const r = parseInt(cleanHex.substring(0, 2), 16);
-    const g = parseInt(cleanHex.substring(2, 4), 16);
-    const b = parseInt(cleanHex.substring(4, 6), 16);
+    const r = Number.parseInt(cleanHex.substring(0, 2), 16);
+    const g = Number.parseInt(cleanHex.substring(2, 4), 16);
+    const b = Number.parseInt(cleanHex.substring(4, 6), 16);
     return { r, g, b };
   }
 
   static rgbToHex(rgb: ColorRGB): string {
-    const toHex = (n: number) => {
+    const toHex = (n: number): string => {
       const hex = Math.round(n).toString(16);
-      return hex.length === 1 ? '0' + hex : hex;
+      return hex.length === 1 ? `0${hex}` : hex;
     };
     return `#${toHex(rgb.r)}${toHex(rgb.g)}${toHex(rgb.b)}`;
   }
@@ -42,6 +42,8 @@ export class ColorUtils {
         case b:
           h = ((r - g) / d + 4) / 6;
           break;
+        default:
+          break;
       }
     }
 
@@ -62,9 +64,13 @@ export class ColorUtils {
     let b: number;
 
     if (s === 0) {
-      r = g = b = l;
+      r = l;
+      g = l;
+      b = l;
     } else {
-      const hue2rgb = (p: number, q: number, t: number) => {
+      // S1226: extract param to local variable to avoid parameter mutation
+      const hue2rgb = (p: number, q: number, tIn: number): number => {
+        let t = tIn;
         if (t < 0) t += 1;
         if (t > 1) t -= 1;
         if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -107,9 +113,9 @@ export class ColorUtils {
   static getContrastRatio(color1: string, color2: string): number {
     const getLuminance = (hex: string): number => {
       const rgb = this.hexToRGB(hex);
-      const [r, g, b] = [rgb.r / 255, rgb.g / 255, rgb.b / 255].map((val) => {
-        return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
-      });
+      const [r, g, b] = [rgb.r / 255, rgb.g / 255, rgb.b / 255].map((val) =>
+        val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4)
+      );
       return 0.2126 * r + 0.7152 * g + 0.0722 * b;
     };
 
@@ -122,4 +128,3 @@ export class ColorUtils {
     return Math.round(ratio * 100) / 100;
   }
 }
-

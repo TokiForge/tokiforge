@@ -1,6 +1,8 @@
 import type { TokenValue, DesignTokens, Breakpoint } from './types';
 import { TokenExporter } from './token-exporter';
 
+type TokenNode = Record<string, unknown>;
+
 export class ResponsiveTokens {
   static getResponsiveValue(token: TokenValue, breakpoint: string): string | number | undefined {
     if (!token.responsive) {
@@ -23,7 +25,7 @@ export class ResponsiveTokens {
   static generateResponsiveCSS(
     tokens: DesignTokens,
     breakpoints: Breakpoint[] = [],
-    prefix: string = 'hf'
+    prefix = 'hf'
   ): string {
     const defaultBreakpoints: Breakpoint[] = [
       { name: 'sm', min: 640 },
@@ -39,33 +41,34 @@ export class ResponsiveTokens {
     cssParts.push(TokenExporter.exportCSS(tokens, { selector: ':root', prefix }));
 
     // Generate responsive CSS
-    breakpointsToUse.forEach((bp) => {
+    for (const bp of breakpointsToUse) {
       const mediaQuery = `@media (min-width: ${bp.min}px)`;
       const responsiveTokens: DesignTokens = {};
 
       // Filter tokens with responsive values for this breakpoint
-      const processTokens = (obj: any, target: any): void => {
-        for (const key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            if (obj[key] && typeof obj[key] === 'object' && 'value' in obj[key]) {
-              const token = obj[key] as TokenValue;
-              if (token.responsive && token.responsive[bp.name]) {
+      const processTokens = (obj: TokenNode, target: TokenNode): void => {
+        for (const key of Object.keys(obj)) {
+          const val = obj[key];
+          if (val && typeof val === 'object') {
+            if ('value' in val) {
+              const token = val as unknown as TokenValue;
+              if (token.responsive && token.responsive[bp.name] !== undefined) {
                 if (!target[key]) {
                   target[key] = { ...token };
                 }
-                target[key].value = token.responsive[bp.name];
+                (target[key] as TokenNode).value = token.responsive[bp.name];
               }
-            } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+            } else {
               if (!target[key]) {
                 target[key] = {};
               }
-              processTokens(obj[key], target[key]);
+              processTokens(val as TokenNode, target[key] as TokenNode);
             }
           }
         }
       };
 
-      processTokens(tokens, responsiveTokens);
+      processTokens(tokens as unknown as TokenNode, responsiveTokens as unknown as TokenNode);
 
       if (Object.keys(responsiveTokens).length > 0) {
         const responsiveCSS = TokenExporter.exportCSS(responsiveTokens, {
@@ -74,40 +77,40 @@ export class ResponsiveTokens {
         });
         cssParts.push(`${mediaQuery} {\n${responsiveCSS}\n}`);
       }
-    });
+    }
 
     return cssParts.join('\n\n');
   }
 
-  static generateStateCSS(tokens: DesignTokens, prefix: string = 'hf'): string {
+  static generateStateCSS(tokens: DesignTokens, prefix = 'hf'): string {
     const cssParts: string[] = [];
     
-    const processTokens = (obj: any, basePath: string = ''): void => {
-      for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-          const path = basePath ? `${basePath}-${key}` : key;
-          
-          if (obj[key] && typeof obj[key] === 'object' && 'value' in obj[key]) {
-            const token = obj[key] as TokenValue;
+    const processTokens = (obj: TokenNode, basePath = ''): void => {
+      for (const key of Object.keys(obj)) {
+        const path = basePath ? `${basePath}-${key}` : key;
+        const val = obj[key];
+        
+        if (val && typeof val === 'object') {
+          if ('value' in val) {
+            const token = val as unknown as TokenValue;
             if (token.states) {
               const states = token.states;
               const cssVar = `--${prefix}-${path}`.toLowerCase().replace(/\./g, '-');
               
-              Object.entries(states).forEach(([state, value]) => {
+              for (const [state, value] of Object.entries(states)) {
                 if (state !== 'default' && value !== undefined) {
                   cssParts.push(`.${state} { ${cssVar}: ${value}; }`);
                 }
-              });
+              }
             }
-          } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-            processTokens(obj[key], path);
+          } else {
+            processTokens(val as TokenNode, path);
           }
         }
       }
     };
 
-    processTokens(tokens);
+    processTokens(tokens as unknown as TokenNode);
     return cssParts.join('\n');
   }
 }
-

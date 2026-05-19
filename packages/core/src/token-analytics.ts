@@ -1,5 +1,8 @@
 import type { DesignTokens } from './types';
 
+/** Typed traversal node for token trees */
+type TokenNode = Record<string, unknown>;
+
 export class TokenAnalytics {
   private usage: Map<string, Set<string>> = new Map();
 
@@ -8,7 +11,7 @@ export class TokenAnalytics {
       this.usage.set(path, new Set());
     }
     if (format) {
-      this.usage.get(path)!.add(format);
+      this.usage.get(path)?.add(format);
     }
   }
 
@@ -20,34 +23,31 @@ export class TokenAnalytics {
   } {
     const allPaths: string[] = [];
 
-    const getAllPaths = (obj: any, path: string = ''): void => {
-      if (typeof obj !== 'object' || obj === null) {
-        return;
-      }
+    const getAllPaths = (obj: TokenNode | unknown, path: string = ''): void => {
+      if (typeof obj !== 'object' || obj === null) return;
 
       if (Array.isArray(obj)) {
-        obj.forEach((item, index) => {
-          getAllPaths(item, `${path}[${index}]`);
-        });
+        for (let i = 0; i < obj.length; i++) {
+          getAllPaths(obj[i] as TokenNode, `${path}[${i}]`);
+        }
         return;
       }
 
-      if ('value' in obj) {
+      const node = obj as TokenNode;
+      if ('value' in node) {
         allPaths.push(path || 'root');
       } else {
-        for (const key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            const newPath = path ? `${path}.${key}` : key;
-            getAllPaths(obj[key], newPath);
-          }
+        for (const key of Object.keys(node)) {
+          const newPath = path ? `${path}.${key}` : key;
+          getAllPaths(node[key], newPath);
         }
       }
     };
 
-    getAllPaths(tokens);
+    getAllPaths(tokens as TokenNode);
 
-    const used = allPaths.filter((path) => this.usage.has(path));
-    const unused = allPaths.filter((path) => !this.usage.has(path));
+    const used = allPaths.filter((p) => this.usage.has(p));
+    const unused = allPaths.filter((p) => !this.usage.has(p));
     const total = allPaths.length;
     const coverage = total > 0 ? (used.length / total) * 100 : 0;
 
@@ -66,7 +66,7 @@ export class TokenAnalytics {
   generateReport(tokens: DesignTokens): string {
     const report = this.getUsageReport(tokens);
     const lines: string[] = [];
-    
+
     lines.push('Token Analytics Report');
     lines.push('='.repeat(50));
     lines.push('');
@@ -75,16 +75,15 @@ export class TokenAnalytics {
     lines.push(`Unused Tokens: ${report.unused.length}`);
     lines.push(`Coverage: ${report.coverage.toFixed(2)}%`);
     lines.push('');
-    
+
     if (report.unused.length > 0) {
       lines.push(`Unused Tokens (${report.unused.length}):`);
-      report.unused.forEach((path) => {
-        lines.push(`  - ${path}`);
-      });
+      for (const p of report.unused) {
+        lines.push(`  - ${p}`);
+      }
       lines.push('');
     }
-    
+
     return lines.join('\n');
   }
 }
-

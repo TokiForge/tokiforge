@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 export interface MigrateOptions {
   from: string; // 'style-dictionary' | 'figma-tokens' | 'theo'

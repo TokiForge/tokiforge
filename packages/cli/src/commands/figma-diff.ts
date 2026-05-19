@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import * as path from 'path';
 import { FigmaDiff } from '@tokiforge/core';
 import { pullFromFigma } from '@tokiforge/figma';

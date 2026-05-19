@@ -4,7 +4,6 @@
     "outDir": "./dist",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "baseUrl": ".",
     "paths": {
       "@tokiforge/core": ["../../packages/core/src/index.ts"],
       "@tokiforge/figma": ["../../packages/figma/src/index.ts"],

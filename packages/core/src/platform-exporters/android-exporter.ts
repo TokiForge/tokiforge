@@ -7,6 +7,8 @@ export interface AndroidExportOptions {
   colorFormat?: 'hex' | 'int' | 'argb';
 }
 
+type TokenNode = Record<string, unknown>;
+
 export class AndroidExporter {
   /**
    * Export tokens to Android format
@@ -135,7 +137,7 @@ export class AndroidExporter {
     const typographyTokens = this.extractTokensByType(tokens, 'typography');
     if (Object.keys(typographyTokens).length > 0) {
       lines.push('  <!-- Typography Styles -->');
-      for (const [key, _] of Object.entries(typographyTokens)) {
+      for (const [key] of Object.entries(typographyTokens)) {
         const xmlKey = this.xmlResourceName(key);
         lines.push(`  <!-- Style: ${xmlKey} defined in styles.xml -->`);
       }
@@ -151,7 +153,7 @@ export class AndroidExporter {
   ): Record<string, TokenValue> {
     const result: Record<string, TokenValue> = {};
 
-    const traverse = (obj: any, prefix: string = '') => {
+    const traverse = (obj: TokenNode, prefix = '') => {
       for (const [key, value] of Object.entries(obj)) {
         const fullKey = prefix ? `${prefix}.${key}` : key;
 
@@ -160,7 +162,7 @@ export class AndroidExporter {
         }
 
         if (typeof value === 'object' && !('value' in value)) {
-          traverse(value, fullKey);
+          traverse(value as TokenNode, fullKey);
         } else if (typeof value === 'object' && 'type' in value && value.type === type) {
           result[fullKey] = value as TokenValue;
         } else if (
@@ -173,7 +175,7 @@ export class AndroidExporter {
       }
     };
 
-    traverse(tokens);
+    traverse(tokens as unknown as TokenNode);
     return result;
   }
 
@@ -196,9 +198,9 @@ export class AndroidExporter {
     }
 
     if (format === 'int') {
-      const r = parseInt(hexValue.slice(0, 2), 16);
-      const g = parseInt(hexValue.slice(2, 4), 16);
-      const b = parseInt(hexValue.slice(4, 6), 16);
+      const r = Number.parseInt(hexValue.slice(0, 2), 16);
+      const g = Number.parseInt(hexValue.slice(2, 4), 16);
+      const b = Number.parseInt(hexValue.slice(4, 6), 16);
       return ((r << 16) | (g << 8) | b).toString();
     }
 
@@ -210,8 +212,8 @@ export class AndroidExporter {
   }
 
   private static formatTypographyValue(value: TokenValue): string {
-    if (typeof value === 'object' && 'value' in value && typeof value.value === 'object') {
-      const typog = value.value as any;
+    if (typeof value === 'object' && 'value' in value && typeof value.value === 'object' && value.value !== null) {
+      const typog = value.value as Record<string, unknown>;
       const fontSize = typog.fontSize || 12;
 
       return `TextStyle(fontSize = ${fontSize}.sp)`;
