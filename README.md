@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 
 # TokiForge
 
@@ -452,6 +452,5 @@ Inspired by the intersection of **design and code**.
 
 [![Star History Chart](https://api.star-history.com/svg?repos=TokiForge/tokiforge&type=Date)](https://star-history.com/#TokiForge/tokiforge&Date)
 
-Project site: [sachindilshan.com](https://www.sachindilshan.com/) · Upstream: [TokiForge](https://github.com/TokiForge/tokiforge)
-
 </div>
+
