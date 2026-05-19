@@ -1,6 +1,6 @@
 {
   "name": "tokiforge",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "type": "module",
   "description": "Framework-agnostic design token and theming engine for React, Vue, Svelte, Angular, Next.js, Remix, and more. Runtime theme switching, CSS variables, TypeScript support, dark mode, accessibility features, and <3KB gzipped. Perfect for design systems and multi-framework projects.",
   "private": true,
@@ -101,7 +101,7 @@
     "@types/node": "^20.10.0",
     "@typescript-eslint/eslint-plugin": "^8.59.1",
     "@typescript-eslint/parser": "^8.59.1",
-    "eslint": "^10.3.0",
+    "eslint": "^9.39.2",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^5.2.0",
     "globals": "^17.1.0",

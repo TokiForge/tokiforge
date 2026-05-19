@@ -1,6 +1,6 @@
-﻿{
+{
   "name": "@tokiforge/react",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "React adapter for TokiForge theming",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -29,7 +29,7 @@
   ],
   "sideEffects": false,
   "peerDependencies": {
-    "@tokiforge/core": "workspace:^2.2.3",
+    "@tokiforge/core": "workspace:^2.2.4",
     "react": ">=16.8.0"
   },
   "devDependencies": {
@@ -42,7 +42,7 @@
     "vitest": "^4.1.5"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.2.3"
+    "@tokiforge/core": "workspace:^2.2.4"
   },
   "keywords": [
     "react",

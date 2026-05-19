@@ -1,19 +1,39 @@
-import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { ThemeRuntime } from '@tokiforge/core';
 import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
 import './App.css';
 
+// Helper to retry dynamic imports when Vite HMR or build hashes mismatch
+function lazyWithRetry<T extends React.ComponentType<any>>(
+  factory: () => Promise<{ default: T }>
+): React.LazyExoticComponent<T> {
+  return lazy(async () => {
+    try {
+      return await factory();
+    } catch (error) {
+      console.error('Dynamic import failed:', error);
+      const hasReloaded = sessionStorage.getItem('tf-import-reload-attempted');
+      if (!hasReloaded) {
+        sessionStorage.setItem('tf-import-reload-attempted', 'true');
+        window.location.reload();
+        return new Promise(() => {}); // hold rendering during reload
+      }
+      throw error;
+    }
+  });
+}
+
 // ── Lazy panel imports ──────────────────────────────────────────
-const AIGenerator      = lazy(() => import('./panels/AIGenerator'));
-const VisualEditor     = lazy(() => import('./panels/VisualEditor'));
-const TokenManager     = lazy(() => import('./panels/TokenManager'));
-const ExportPanel      = lazy(() => import('./panels/ExportPanel'));
-const AccessibilityPanel = lazy(() => import('./panels/AccessibilityPanel'));
-const AnalyticsPanel   = lazy(() => import('./panels/AnalyticsPanel'));
-const CollabPanel      = lazy(() => import('./panels/CollabPanel'));
-const ComponentsPanel  = lazy(() => import('./panels/ComponentsPanel'));
-const FigmaPanel       = lazy(() => import('./panels/FigmaPanel'));
-const SettingsPanel    = lazy(() => import('./panels/SettingsPanel'));
+const AIGenerator      = lazyWithRetry(() => import('./panels/AIGenerator'));
+const VisualEditor     = lazyWithRetry(() => import('./panels/VisualEditor'));
+const TokenManager     = lazyWithRetry(() => import('./panels/TokenManager'));
+const ExportPanel      = lazyWithRetry(() => import('./panels/ExportPanel'));
+const AccessibilityPanel = lazyWithRetry(() => import('./panels/AccessibilityPanel'));
+const AnalyticsPanel   = lazyWithRetry(() => import('./panels/AnalyticsPanel'));
+const CollabPanel      = lazyWithRetry(() => import('./panels/CollabPanel'));
+const ComponentsPanel  = lazyWithRetry(() => import('./panels/ComponentsPanel'));
+const FigmaPanel       = lazyWithRetry(() => import('./panels/FigmaPanel'));
+const SettingsPanel    = lazyWithRetry(() => import('./panels/SettingsPanel'));
 
 // ── Default token set ───────────────────────────────────────────
 export const defaultTokens: DesignTokens = {
@@ -340,6 +360,11 @@ export default function App() {
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  // Clear HMR reload safety flag on successful mount
+  useEffect(() => {
+    sessionStorage.removeItem('tf-import-reload-attempted');
   }, []);
 
   const toast = useCallback((msg: string, type: 'success'|'error'|'info' = 'info') => {

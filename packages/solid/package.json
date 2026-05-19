@@ -1,6 +1,6 @@
-﻿{
+{
     "name": "@tokiforge/solid",
-    "version": "2.2.3",
+    "version": "2.2.4",
     "description": "Solid.js adapter for TokiForge theming",
     "type": "module",
     "main": "./dist/index.cjs",
@@ -25,7 +25,7 @@
     ],
     "sideEffects": false,
     "peerDependencies": {
-        "@tokiforge/core": "workspace:^2.2.3",
+        "@tokiforge/core": "workspace:^2.2.4",
         "solid-js": ">=1.8.0"
     },
     "devDependencies": {
@@ -34,7 +34,7 @@
         "typescript": "^6.0.3"
     },
     "dependencies": {
-        "@tokiforge/core": "workspace:^2.2.3"
+        "@tokiforge/core": "workspace:^2.2.4"
     },
     "keywords": [
         "solid",

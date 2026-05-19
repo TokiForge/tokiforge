@@ -1,6 +1,6 @@
-﻿{
+{
   "name": "@tokiforge/core",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "Core design token and theming engine for TokiForge. Framework-agnostic runtime theme switching, CSS variables, token parsing, validation, and export. Supports React, Vue, Angular, Svelte, and more.",
   "type": "module",
   "main": "./dist/index.cjs",

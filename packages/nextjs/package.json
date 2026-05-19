@@ -1,6 +1,6 @@
-﻿{
+{
     "name": "@tokiforge/nextjs",
-    "version": "2.2.3",
+    "version": "2.2.4",
     "description": "Next.js App Router adapter for TokiForge theming",
     "type": "module",
     "main": "./dist/index.cjs",
@@ -30,7 +30,7 @@
     ],
     "sideEffects": false,
     "peerDependencies": {
-        "@tokiforge/core": "workspace:^2.2.3",
+        "@tokiforge/core": "workspace:^2.2.4",
         "next": ">=14.0.0",
         "react": ">=18.0.0"
     },
@@ -42,7 +42,7 @@
         "typescript": "^6.0.3"
     },
     "dependencies": {
-        "@tokiforge/core": "workspace:^2.2.3"
+        "@tokiforge/core": "workspace:^2.2.4"
     },
     "keywords": [
         "nextjs",
