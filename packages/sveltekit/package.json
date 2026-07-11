@@ -1,6 +1,6 @@
 {
     "name": "@tokiforge/sveltekit",
-    "version": "2.3.0",
+    "version": "3.0.0",
     "description": "SvelteKit integration for TokiForge theming",
     "type": "module",
     "main": "./dist/index.cjs",
@@ -28,7 +28,7 @@
     "sideEffects": false,
     "peerDependencies": {
         "@sveltejs/kit": ">=2.0.0",
-        "@tokiforge/core": "workspace:^2.3.0",
+        "@tokiforge/core": "workspace:^2.4.0",
         "svelte": ">=5.0.0"
     },
     "devDependencies": {
@@ -41,7 +41,7 @@
         "vitest": "^4.1.5"
     },
     "dependencies": {
-        "@tokiforge/core": "workspace:^2.3.0"
+        "@tokiforge/core": "workspace:^2.4.0"
     },
     "keywords": [
         "sveltekit",

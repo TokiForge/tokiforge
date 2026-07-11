@@ -1,6 +1,6 @@
-# tokiforge-cli
+# @tokiforge/solid
 
-## 2.4.0
+## 3.0.0
 
 ### Minor Changes
 
@@ -10,43 +10,3 @@
 
 - Updated dependencies [[`6e6e343`](https://github.com/TokiForge/tokiforge/commit/6e6e3439efbe93d3996f773e5f7a98405fed374b)]:
   - @tokiforge/core@2.4.0
-  - @tokiforge/tailwind@2.3.1
-
-## 2.2.3
-
-### Patch Changes
-
-- Version bump; workspace deps ^2.2.3.
-
-## 2.0.2
-
-### Patch Changes
-
-- Version bump; workspace deps ^2.0.2.
-
-## 2.0.1
-
-### Patch Changes
-
-- Version bump; workspace deps ^2.0.1.
-
-## 2.0.0
-
-### Major Changes
-
-- Major version release: Updated to 2.0.0 with updated dependencies
-
-### Updated dependencies
-
-- @tokiforge/core@2.0.0
-- @tokiforge/tailwind@2.0.0
-
-## 1.2.1
-
-### Patch Changes
-
-- Automate releases with Changesets and CI. Adds release workflows and configuration; no runtime changes.
-
-- Updated dependencies []:
-  - @tokiforge/core@1.2.1
-  - @tokiforge/tailwind@1.2.1
