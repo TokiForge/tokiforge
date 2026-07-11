@@ -1,0 +1,68 @@
+{
+  "name": "@tokiforge/design-tools",
+  "version": "2.3.0",
+  "description": "Design tool integrations for TokiForge (Sketch, Adobe XD)",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./sketch": {
+      "types": "./dist/sketch/index.d.ts",
+      "import": "./dist/sketch/index.js",
+      "require": "./dist/sketch/index.cjs"
+    },
+    "./adobe-xd": {
+      "types": "./dist/adobe-xd/index.d.ts",
+      "import": "./dist/adobe-xd/index.js",
+      "require": "./dist/adobe-xd/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "build:all": "npm run build",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "test": "vitest"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "sketch",
+    "adobe-xd",
+    "design-tools",
+    "design-tokens",
+    "tokiforge"
+  ],
+  "author": "TokiForge Community",
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TokiForge/tokiforge.git"
+  },
+  "homepage": "https://github.com/TokiForge/tokiforge#readme",
+  "bugs": {
+    "url": "https://github.com/TokiForge/tokiforge/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "jsdom": "^29.1.1",
+    "tsup": "^8.0.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  },
+  "dependencies": {
+    "@tokiforge/core": "workspace:^2.3.0"
+  }
+}

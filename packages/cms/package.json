@@ -1,0 +1,59 @@
+{
+  "name": "@tokiforge/cms",
+  "version": "2.3.0",
+  "description": "Headless CMS integration for TokiForge design tokens (Contentful, Strapi, Sanity)",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "build:all": "npm run build",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "test": "vitest"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "cms",
+    "contentful",
+    "strapi",
+    "sanity",
+    "design-tokens",
+    "tokiforge"
+  ],
+  "author": "TokiForge Community",
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TokiForge/tokiforge.git"
+  },
+  "homepage": "https://github.com/TokiForge/tokiforge#readme",
+  "bugs": {
+    "url": "https://github.com/TokiForge/tokiforge/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "jsdom": "^29.1.1",
+    "tsup": "^8.0.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  },
+  "dependencies": {
+    "@tokiforge/core": "workspace:^2.3.0"
+  }
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { ThemeRuntime } from '@tokiforge/core';
 import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
+import { readTokensFromUrl } from './share-url';
 import './App.css';
 
 // Helper to retry dynamic imports when Vite HMR or build hashes mismatch
@@ -339,7 +340,8 @@ function countTokens(tokens: DesignTokens): number {
 
 // ── Main App ─────────────────────────────────────────────────────
 export default function App() {
-  const [tokens, setTokens] = useState<DesignTokens>(defaultTokens);
+  // Hydrate from a share link (?tokens=...) when present
+  const [tokens, setTokens] = useState<DesignTokens>(() => readTokensFromUrl() ?? defaultTokens);
   const [activePanel, setActivePanel] = useState<PanelId>('home');
   const [palette, setPalette] = useState(false);
   const [theme, setTheme] = useState<'dark'|'light'>('dark');

@@ -17,7 +17,7 @@ The core package is required for all TokiForge functionality:
 npm install @tokiforge/core@^1.2.0
 ```
 
-> **Note:** TokiForge v2.2.4 includes browser-compatible builds. For browser environments, Node.js-specific features (like `TokenParser.parse()` for file reading) are automatically handled with stubs. See [Troubleshooting](/guide/troubleshooting#browser-build-errors) for build configuration details.
+> **Note:** TokiForge v2.3.0 includes browser-compatible builds. For browser environments, Node.js-specific features (like `TokenParser.parse()` for file reading) are automatically handled with stubs. See [Troubleshooting](/guide/troubleshooting#browser-build-errors) for build configuration details.
 
 ### Framework Adapters
 
@@ -60,13 +60,13 @@ Requires Angular 17.0+.
 Install globally for easy access:
 
 ```bash
-npm install -g tokiforge-cli@^2.2.4
+npm install -g tokiforge-cli@^2.3.0
 ```
 
 Or use with npx:
 
 ```bash
-npx tokiforge-cli@^2.2.4 init
+npx tokiforge-cli@^2.3.0 init
 ```
 
 ## TypeScript Support
@@ -79,7 +79,7 @@ For vanilla JavaScript projects, you can use the core package via CDN:
 
 ```html
 <script type="module">
-  import { ThemeRuntime } from "https://cdn.jsdelivr.net/npm/@tokiforge/core@2.2.4/dist/index.js";
+  import { ThemeRuntime } from "https://cdn.jsdelivr.net/npm/@tokiforge/core@2.3.0/dist/index.js";
 
   const runtime = new ThemeRuntime({
     themes: [{ name: "default", tokens: myTokens }],
@@ -155,7 +155,7 @@ If you get module not found errors:
 
 If you get `Failed to resolve entry for package "@tokiforge/vue"`:
 
-1. Ensure you're using v2.2.4 or later: `npm install @tokiforge/vue@^2.2.4`
+1. Ensure you're using v2.3.0 or later: `npm install @tokiforge/vue@^2.3.0`
 2. Clear node_modules and reinstall: `rm -rf node_modules package-lock.json && npm install`
 3. See [Troubleshooting Guide](/guide/troubleshooting#vue-package-resolution-error) for details
 

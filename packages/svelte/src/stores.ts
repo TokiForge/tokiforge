@@ -1,5 +1,5 @@
 import { writable, derived } from 'svelte/store';
-import { ThemeRuntime, type DesignTokens } from '@tokiforge/core';
+import { ThemeController, type DesignTokens } from '@tokiforge/core';
 import type { ThemeConfig } from '@tokiforge/core';
 
 export function createThemeStore(
@@ -8,61 +8,44 @@ export function createThemeStore(
   prefix: string = 'hf',
   defaultTheme?: string
 ) {
-  const runtime = new ThemeRuntime(config);
-  const themeName = defaultTheme || config.defaultTheme || config.themes[0]?.name || 'default';
+  const controller = new ThemeController(config, {
+    selector,
+    prefix,
+    defaultTheme,
+    // The Svelte store never persisted the selection historically;
+    // keep that behavior to avoid surprising existing apps.
+    persist: false,
+  });
 
-  const theme = writable<string>(themeName);
-  const tokens = writable<DesignTokens>({});
+  const initial = controller.getSnapshot();
+  const theme = writable<string>(initial.theme);
+  const tokens = writable<DesignTokens>(initial.tokens);
 
-  const updateTokens = (name: string) => {
-    try {
-      const t = runtime.getThemeTokens(name);
-      tokens.set(t);
-    } catch {
-      // Tokens will be loaded when runtime initializes
-    }
-  };
-
-  updateTokens(themeName);
+  controller.subscribe((snapshot) => {
+    theme.set(snapshot.theme);
+    tokens.set(snapshot.tokens);
+  });
 
   if (typeof window !== 'undefined') {
     try {
-      runtime.init(selector, prefix);
-      updateTokens(runtime.getCurrentTheme() || themeName);
+      controller.init();
     } catch (err) {
       console.error('Failed to initialize theme runtime:', err);
     }
-
-    const handleThemeChange = (e: Event) => {
-      const customEvent = e as CustomEvent;
-      const tName = customEvent.detail.theme;
-      theme.set(tName);
-      if (customEvent.detail.tokens) {
-        tokens.set(customEvent.detail.tokens);
-      } else {
-        updateTokens(tName);
-      }
-    };
-
-    window.addEventListener('tokiforge:theme-change', handleThemeChange);
   }
 
   return {
     theme,
     tokens,
     setTheme: async (name: string) => {
-      runtime.applyTheme(name, selector, prefix);
-      theme.set(name);
+      controller.setTheme(name);
     },
     nextTheme: async () => {
-      const newTheme = runtime.nextTheme();
-      runtime.applyTheme(newTheme, selector, prefix);
-      theme.set(newTheme);
+      controller.nextTheme();
     },
-    availableThemes: derived(theme, () => runtime.getAvailableThemes()),
-    runtime,
+    availableThemes: derived(theme, () => controller.getAvailableThemes()),
+    runtime: controller.runtime,
   };
 }
 
 export type ThemeStore = ReturnType<typeof createThemeStore>;
-

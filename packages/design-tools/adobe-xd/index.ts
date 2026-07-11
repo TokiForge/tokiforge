@@ -59,8 +59,39 @@ export class AdobeXDAdapter {
     return tokens;
   }
 
-  private async createXDColorSwatch(_name: string, _color: string): Promise<void> {
-    throw new Error('Adobe XD plugin API integration required');
+  private async createXDColorSwatch(name: string, color: string): Promise<void> {
+    const ctx = this.config.pluginContext;
+    if (!ctx || !ctx.document) {
+      throw new Error('Adobe XD plugin context with document is required');
+    }
+
+    const swatches = ctx.document.swatches;
+    if (!swatches) {
+      throw new Error('Adobe XD document does not have swatches collection');
+    }
+
+    const existing = swatches.find((s: any) => s.name === name);
+    if (existing) {
+      existing.color = { r: 0, g: 0, b: 0, a: 1 };
+      const hex = color.replace('#', '');
+      const r = parseInt(hex.substring(0, 2), 16) / 255;
+      const g = parseInt(hex.substring(2, 4), 16) / 255;
+      const b = parseInt(hex.substring(4, 6), 16) / 255;
+      existing.color = { r, g, b, a: 1 };
+      return;
+    }
+
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.substring(0, 2), 16) / 255;
+    const g = parseInt(hex.substring(2, 4), 16) / 255;
+    const b = parseInt(hex.substring(4, 6), 16) / 255;
+
+    const swatch = {
+      name,
+      color: { r, g, b, a: 1 },
+    };
+
+    swatches.push(swatch);
   }
 
   /**

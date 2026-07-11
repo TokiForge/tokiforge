@@ -1,6 +1,6 @@
 {
     "name": "@tokiforge/nextjs",
-    "version": "2.2.4",
+    "version": "2.3.0",
     "description": "Next.js App Router adapter for TokiForge theming",
     "type": "module",
     "main": "./dist/index.cjs",
@@ -19,10 +19,13 @@
         }
     },
     "scripts": {
-        "build": "tsup",
+        "build": "tsup && tsup --config tsup.config.server.ts",
         "build:all": "npm run build",
         "dev": "tsup --watch",
-        "clean": "rm -rf dist"
+        "clean": "rm -rf dist",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:ui": "vitest --ui"
     },
     "files": [
         "dist",
@@ -30,19 +33,23 @@
     ],
     "sideEffects": false,
     "peerDependencies": {
-        "@tokiforge/core": "workspace:^2.2.4",
+        "@tokiforge/core": "workspace:^2.3.0",
         "next": ">=14.0.0",
         "react": ">=18.0.0"
     },
     "devDependencies": {
+        "@testing-library/react": "^16.3.0",
         "@types/react": "^19.2.14",
+        "@vitest/ui": "^4.1.5",
+        "jsdom": "^26.1.0",
         "next": "^16.2.4",
         "react": "^19.2.5",
         "tsup": "^8.0.0",
-        "typescript": "^6.0.3"
+        "typescript": "^6.0.3",
+        "vitest": "^4.1.5"
     },
     "dependencies": {
-        "@tokiforge/core": "workspace:^2.2.4"
+        "@tokiforge/core": "workspace:^2.3.0"
     },
     "keywords": [
         "nextjs",

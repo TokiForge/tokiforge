@@ -3,8 +3,22 @@ export interface DesignTokens {
 }
 
 export interface TokenValue {
-  value: string | number | TokenState | TokenResponsive;
-  type?: 'color' | 'dimension' | 'fontFamily' | 'fontWeight' | 'duration' | 'custom';
+  value: string | number | TokenState | TokenResponsive | Record<string, unknown> | unknown[];
+  type?:
+    | 'color'
+    | 'dimension'
+    | 'fontFamily'
+    | 'fontWeight'
+    | 'duration'
+    | 'number'
+    | 'shadow'
+    | 'cubicBezier'
+    | 'typography'
+    | 'border'
+    | 'transition'
+    | 'gradient'
+    | 'strokeStyle'
+    | 'custom';
   description?: string;
   version?: TokenVersion;
   deprecated?: boolean;
@@ -74,6 +88,15 @@ export interface ColorHSL {
   l: number;
 }
 
+export interface ColorOKLCH {
+  /** Perceptual lightness, 0–1 */
+  l: number;
+  /** Chroma, 0–~0.4 */
+  c: number;
+  /** Hue angle in degrees, 0–360 */
+  h: number;
+}
+
 export interface ComponentTheme {
   name: string;
   scope: string;
@@ -133,6 +156,8 @@ export interface MigrationResult {
   success: boolean;
   migrated: number;
   errors: string[];
+  /** The migrated token tree (present when a migration was performed) */
+  tokens?: DesignTokens;
 }
 
 export interface VersionValidationResult {

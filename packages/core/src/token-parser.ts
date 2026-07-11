@@ -26,6 +26,8 @@ export class TokenParser {
         tokens = JSON.parse(content) as DesignTokens;
       }
 
+      tokens = this.normalizeDTCG(tokens);
+
       if (validate) {
         this.validate(tokens);
       }
@@ -44,6 +46,75 @@ export class TokenParser {
         filePath
       );
     }
+  }
+
+  /**
+   * Normalize W3C DTCG-format tokens ($value/$type/$description) to the
+   * internal value/type/description shape. Non-DTCG trees pass through
+   * untouched, and both formats may be mixed in one file.
+   */
+  static normalizeDTCG(tokens: DesignTokens): DesignTokens {
+    const normalize = (obj: unknown): unknown => {
+      if (typeof obj !== 'object' || obj === null) return obj;
+      if (Array.isArray(obj)) return obj.map(normalize);
+
+      const node = obj as TokenNode;
+      const result: TokenNode = {};
+      for (const key of Object.keys(node)) {
+        if (key === '$value') {
+          result.value = normalize(node[key]);
+        } else if (key === '$type') {
+          result.type = node[key];
+        } else if (key === '$description') {
+          result.description = node[key];
+        } else if (key.startsWith('$')) {
+          // Preserve other DTCG metadata ($extensions, $deprecated, ...)
+          result[key] = normalize(node[key]);
+        } else {
+          result[key] = normalize(node[key]);
+        }
+      }
+      return result;
+    };
+
+    return normalize(tokens) as DesignTokens;
+  }
+
+  /**
+   * Convert internal-format tokens to the W3C DTCG format
+   * ($value/$type/$description) for interop with Figma Variables,
+   * Tokens Studio, and Style Dictionary v4.
+   */
+  static toDTCG(tokens: DesignTokens): DesignTokens {
+    const convert = (obj: unknown): unknown => {
+      if (typeof obj !== 'object' || obj === null) return obj;
+      if (Array.isArray(obj)) return obj.map(convert);
+
+      const node = obj as TokenNode;
+      if ('value' in node) {
+        const result: TokenNode = {};
+        for (const key of Object.keys(node)) {
+          if (key === 'value') {
+            result.$value = node[key];
+          } else if (key === 'type') {
+            result.$type = node[key];
+          } else if (key === 'description') {
+            result.$description = node[key];
+          } else {
+            result[key] = node[key];
+          }
+        }
+        return result;
+      }
+
+      const result: TokenNode = {};
+      for (const key of Object.keys(node)) {
+        result[key] = convert(node[key]);
+      }
+      return result;
+    };
+
+    return convert(tokens) as DesignTokens;
   }
 
   static validate(tokens: DesignTokens): void {
@@ -98,17 +169,22 @@ export class TokenParser {
       return node && typeof node === 'object' && 'value' in node ? node.value : current;
     };
 
-    const expandValue = (value: unknown): unknown => {
+    const expandValue = (value: unknown, seen: Set<string> = new Set()): unknown => {
       if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
         const refPath = value.slice(1, -1);
-        const refValue = getValue(expanded, refPath);
-        if (refValue !== undefined) return refValue;
+        if (!seen.has(refPath)) {
+          const refValue = getValue(expanded, refPath);
+          if (refValue !== undefined) {
+            // Resolve chained references (a reference whose target is itself a reference)
+            return expandValue(refValue, new Set(seen).add(refPath));
+          }
+        }
       }
       if (typeof value === 'object' && value !== null) {
-        if (Array.isArray(value)) return value.map(expandValue);
+        if (Array.isArray(value)) return value.map((item) => expandValue(item, seen));
         const result: TokenNode = {};
         for (const key of Object.keys(value as TokenNode)) {
-          result[key] = expandValue((value as TokenNode)[key]);
+          result[key] = expandValue((value as TokenNode)[key], seen);
         }
         return result;
       }

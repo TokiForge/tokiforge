@@ -16,6 +16,7 @@ import { watchCommand } from './commands/watch.js';
 import { migrateCommand } from './commands/migrate.js';
 import { diffCommand as diffCommandEnhanced } from './commands/diff.js';
 import { generateChangelogCommand } from './commands/changelog.js';
+import { docsCommand } from './commands/docs.js';
 import { showSplash, showCompactSplash, getVersion } from './splash.js';
 
 const program = new Command();
@@ -155,6 +156,19 @@ program
   .action((input, options) => generateChangelogCommand(input, {
     format: options.format,
     output: options.output
+  }));
+
+program
+  .command('docs')
+  .description('Generate a static HTML styleguide (swatches, variables, values) from tokens')
+  .argument('[input]', 'Input tokens file', 'tokens.json')
+  .option('--output <file>', 'Output HTML file', 'token-docs.html')
+  .option('--title <title>', 'Page title', 'Design Tokens')
+  .option('--prefix <prefix>', 'CSS variable prefix', 'hf')
+  .action((input, options) => docsCommand(input, {
+    output: options.output,
+    title: options.title,
+    prefix: options.prefix,
   }));
 
 program.parse();

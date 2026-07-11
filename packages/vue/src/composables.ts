@@ -150,14 +150,9 @@ export function provideTheme<T extends DesignTokens = DesignTokens>(
     } else {
       try {
         updateTokens(initialTheme);
-      } catch (e) {
-        try {
-          runtime.init(selector, prefix);
-          updateTokens(runtime.getCurrentTheme() || initialTheme);
-          runtime.applyTheme(initialTheme, selector, prefix);
-        } catch (err) {
-          console.error('Failed to initialize theme runtime:', err);
-        }
+        runtime.applyTheme(initialTheme, selector, prefix);
+      } catch (err) {
+        console.error('Failed to initialize theme runtime:', err);
       }
     }
 

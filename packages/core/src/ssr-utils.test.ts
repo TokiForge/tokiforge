@@ -44,7 +44,7 @@ describe('SSRUtils', () => {
       });
 
       expect(css).toContain(':root');
-      expect(css).toContain('--hf-primary');
+      expect(css).toContain('--hf-color-primary');
       expect(css).toContain('#7C3AED');
     });
 
@@ -64,8 +64,8 @@ describe('SSRUtils', () => {
         prefix: 'app',
       });
 
-      expect(css).toContain('--app-primary');
-      expect(css).not.toContain('--hf-primary');
+      expect(css).toContain('--app-color-primary');
+      expect(css).not.toContain('--hf-color-primary');
     });
 
     it('should minify CSS when requested', () => {
@@ -276,7 +276,7 @@ describe('SSRUtils', () => {
       });
 
       expect(result.style).toContain(':root');
-      expect(result.style).toContain('--hf-primary');
+      expect(result.style).toContain('--hf-color-primary');
       expect(result.script).toBeDefined();
       expect(result.script).toContain('tokiforge-theme');
     });

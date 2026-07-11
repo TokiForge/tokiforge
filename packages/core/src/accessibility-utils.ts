@@ -41,6 +41,47 @@ export class AccessibilityUtils {
     };
   }
 
+  /**
+   * APCA (Accessible Perceptual Contrast Algorithm) lightness contrast,
+   * the candidate algorithm for WCAG 3. Returns Lc in roughly -108..106;
+   * |Lc| >= 60 is the common threshold for body text, >= 75 preferred,
+   * >= 45 for large/bold text.
+   *
+   * @param textColor  Foreground (text) color
+   * @param bgColor    Background color
+   */
+  static calculateAPCA(textColor: string, bgColor: string): number {
+    const screenLuminance = (color: string): number => {
+      const rgb = ColorUtils.parseColor(color) ?? ColorUtils.hexToRGB(color);
+      const linearize = (v: number): number => Math.pow(v / 255, 2.4);
+      return (
+        0.2126729 * linearize(rgb.r) +
+        0.7151522 * linearize(rgb.g) +
+        0.072175 * linearize(rgb.b)
+      );
+    };
+
+    // Soft-clamp very dark colors (flare compensation)
+    const softClamp = (y: number): number =>
+      y >= 0.022 ? y : y + Math.pow(0.022 - y, 1.414);
+
+    const yTxt = softClamp(screenLuminance(textColor));
+    const yBg = softClamp(screenLuminance(bgColor));
+
+    // Below this delta, contrast is treated as zero
+    if (Math.abs(yBg - yTxt) < 0.0005) return 0;
+
+    let sapc: number;
+    if (yBg > yTxt) {
+      // Dark text on light background
+      sapc = (Math.pow(yBg, 0.56) - Math.pow(yTxt, 0.57)) * 1.14;
+      return sapc < 0.1 ? 0 : Math.round((sapc - 0.027) * 1000) / 10;
+    }
+    // Light text on dark background
+    sapc = (Math.pow(yBg, 0.65) - Math.pow(yTxt, 0.62)) * 1.14;
+    return sapc > -0.1 ? 0 : Math.round((sapc + 0.027) * 1000) / 10;
+  }
+
   static checkAccessibility(tokens: DesignTokens): AccessibilityMetrics[] {
     const metrics: AccessibilityMetrics[] = [];
 

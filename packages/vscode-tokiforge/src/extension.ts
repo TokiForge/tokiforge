@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { parse } from 'jsonc-parser';
+import { registerCssVarProviders } from './css-vars';
 
 const docSelector: vscode.DocumentSelector = [
   { scheme: 'file', language: 'json' },
@@ -193,6 +194,9 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(hover, completion, quickFix);
+
+  // Workspace-wide --hf-* variable completion & hover in stylesheets and JS/TS
+  registerCssVarProviders(context);
 }
 
 function hoverFromLeaf(path: string, leaf: LeafToken): vscode.Hover {
