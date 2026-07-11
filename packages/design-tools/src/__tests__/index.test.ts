@@ -34,7 +34,7 @@ describe('SketchAdapter', () => {
   it('should import tokens from Sketch shared styles', async () => {
     const mockSharedStyles = [
       {
-        name: 'Primary',
+        name: 'color.primary',
         style: {
           fills: [
             {
@@ -86,7 +86,7 @@ describe('AdobeXDAdapter', () => {
   it('should import tokens from XD swatches', async () => {
     const mockSwatches = [
       {
-        name: 'Primary',
+        name: 'color.primary',
         color: { r: 0.486, g: 0.227, b: 0.929, a: 1 },
       },
     ];
@@ -103,3 +103,4 @@ describe('AdobeXDAdapter', () => {
     expect(tokens.color).toBeDefined();
     expect(tokens.color).toHaveProperty('primary');
   });
+});
