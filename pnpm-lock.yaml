@@ -60,10 +60,10 @@ importers:
   documentation:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../packages/core
       '@tokiforge/vue':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../packages/vue
       '@vueuse/core':
         specifier: ^14.3.0
@@ -171,7 +171,7 @@ importers:
   examples/plugin-examples:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../../packages/core
 
   examples/react-example:
@@ -301,7 +301,7 @@ importers:
   packages/angular:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
     devDependencies:
       '@angular/common':
@@ -332,7 +332,7 @@ importers:
   packages/astro:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
     devDependencies:
       '@vitest/ui':
@@ -354,13 +354,13 @@ importers:
   packages/cli:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
       '@tokiforge/figma':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../figma
       '@tokiforge/tailwind':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../tailwind
       chalk:
         specifier: ^5.3.0
@@ -394,7 +394,7 @@ importers:
   packages/cms:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
     devDependencies:
       '@types/node':
@@ -411,13 +411,13 @@ importers:
         version: 6.0.3
       vitest:
         specifier: ^4.1.5
-        version: 4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3))
+        version: 4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3))
 
   packages/core:
     dependencies:
       vite:
         specifier: 8.0.10
-        version: 8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2)
+        version: 8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2)
       vitepress:
         specifier: ^1.6.4
         version: 1.6.4(@algolia/client-search@5.52.0)(@types/node@20.19.30)(@types/react@19.2.14)(axios@1.15.2)(less@4.6.4)(lightningcss@1.32.0)(postcss@8.5.13)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(sass@1.99.0)(search-insights@2.17.3)(terser@5.46.2)(typescript@6.0.3)
@@ -442,7 +442,7 @@ importers:
         version: 6.0.3
       vitest:
         specifier: ^4.1.5
-        version: 4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2))
+        version: 4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2))
 
   packages/design-systems:
     dependencies:
@@ -463,7 +463,7 @@ importers:
   packages/design-tools:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
     devDependencies:
       '@types/node':
@@ -480,12 +480,12 @@ importers:
         version: 6.0.3
       vitest:
         specifier: ^4.1.5
-        version: 4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3))
+        version: 4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3))
 
   packages/emotion:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
     devDependencies:
       '@emotion/styled':
@@ -511,12 +511,12 @@ importers:
         version: 6.0.3
       vitest:
         specifier: ^4.1.5
-        version: 4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3))
+        version: 4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3))
 
   packages/figma:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
       axios:
         specifier: ^1.6.0
@@ -541,7 +541,7 @@ importers:
   packages/nextjs:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
     devDependencies:
       '@testing-library/react':
@@ -578,7 +578,7 @@ importers:
         specifier: ^3.13.2
         version: 3.13.19(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
       react:
         specifier: ^19.2.5
@@ -615,7 +615,7 @@ importers:
   packages/react:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
       react:
         specifier: '>=16.8.0'
@@ -646,7 +646,7 @@ importers:
   packages/remix:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
     devDependencies:
       '@remix-run/node':
@@ -683,7 +683,7 @@ importers:
   packages/solid:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
     devDependencies:
       '@vitest/ui':
@@ -717,7 +717,7 @@ importers:
         specifier: ^7.0.0 || ^8.0.0
         version: 8.6.14(storybook@8.6.15(prettier@3.8.1))
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
       react:
         specifier: ^18.0.0
@@ -751,7 +751,7 @@ importers:
   packages/styled-components:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
     devDependencies:
       '@testing-library/react':
@@ -780,12 +780,12 @@ importers:
         version: 6.0.3
       vitest:
         specifier: ^4.1.5
-        version: 4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3))
+        version: 4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3))
 
   packages/svelte:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
     devDependencies:
       '@types/node':
@@ -810,7 +810,7 @@ importers:
   packages/sveltekit:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
     devDependencies:
       '@sveltejs/kit':
@@ -838,7 +838,7 @@ importers:
   packages/tailwind:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
       vite:
         specifier: 8.0.10
@@ -882,7 +882,7 @@ importers:
   packages/vue:
     dependencies:
       '@tokiforge/core':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.3.0
         version: link:../core
     devDependencies:
       '@types/node':
@@ -4252,7 +4252,7 @@ packages:
     peerDependencies:
       '@angular/common': '>=17.0.0 <22.0.0'
       '@angular/core': '>=17.0.0 <22.0.0'
-      '@tokiforge/core': workspace:^2.2.4
+      '@tokiforge/core': workspace:^2.3.0
 
   '@tokiforge/core@file:packages/core':
     resolution: {directory: packages/core, type: directory}
@@ -4260,19 +4260,19 @@ packages:
   '@tokiforge/react@file:packages/react':
     resolution: {directory: packages/react, type: directory}
     peerDependencies:
-      '@tokiforge/core': workspace:^2.2.4
+      '@tokiforge/core': workspace:^2.3.0
       react: '>=16.8.0'
 
   '@tokiforge/svelte@file:packages/svelte':
     resolution: {directory: packages/svelte, type: directory}
     peerDependencies:
-      '@tokiforge/core': workspace:^2.2.4
+      '@tokiforge/core': workspace:^2.3.0
       svelte: '>=3.0.0'
 
   '@tokiforge/vue@file:packages/vue':
     resolution: {directory: packages/vue, type: directory}
     peerDependencies:
-      '@tokiforge/core': workspace:^2.2.4
+      '@tokiforge/core': workspace:^2.3.0
       vue: '>=3.0.0'
 
   '@tufjs/canonical-json@2.0.0':
@@ -13950,14 +13950,6 @@ snapshots:
     optionalDependencies:
       vite: 7.3.2(@types/node@20.19.30)(jiti@2.6.1)(less@4.6.4)(lightningcss@1.32.0)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3)
 
-  '@vitest/mocker@4.1.5(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2))':
-    dependencies:
-      '@vitest/spy': 4.1.5
-      estree-walker: 3.0.3
-      magic-string: 0.30.21
-    optionalDependencies:
-      vite: 8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2)
-
   '@vitest/mocker@4.1.5(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3))':
     dependencies:
       '@vitest/spy': 4.1.5
@@ -13966,13 +13958,13 @@ snapshots:
     optionalDependencies:
       vite: 8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3)
 
-  '@vitest/mocker@4.1.5(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3))':
+  '@vitest/mocker@4.1.5(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2))':
     dependencies:
       '@vitest/spy': 4.1.5
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3)
+      vite: 8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2)
 
   '@vitest/mocker@4.1.5(vite@8.0.10(@types/node@20.19.30)(esbuild@0.28.0)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3))':
     dependencies:
@@ -20314,23 +20306,6 @@ snapshots:
       terser: 5.46.2
       yaml: 2.8.3
 
-  vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2):
-    dependencies:
-      lightningcss: 1.32.0
-      picomatch: 4.0.4
-      postcss: 8.5.13
-      rolldown: 1.0.0-rc.17
-      tinyglobby: 0.2.16
-    optionalDependencies:
-      '@types/node': 20.19.30
-      esbuild: 0.27.2
-      fsevents: 2.3.3
-      jiti: 2.6.1
-      less: 4.6.4
-      sass: 1.99.0
-      terser: 5.46.2
-      yaml: 2.8.2
-
   vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3):
     dependencies:
       lightningcss: 1.32.0
@@ -20348,7 +20323,7 @@ snapshots:
       terser: 5.46.2
       yaml: 2.8.3
 
-  vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3):
+  vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
@@ -20363,7 +20338,7 @@ snapshots:
       less: 4.6.4
       sass: 1.99.0
       terser: 5.46.2
-      yaml: 2.8.3
+      yaml: 2.8.2
 
   vite@8.0.10(@types/node@20.19.30)(esbuild@0.28.0)(jiti@2.6.1)(less@4.2.0)(sass@1.71.1)(terser@5.29.1)(yaml@2.8.3):
     dependencies:
@@ -20599,36 +20574,6 @@ snapshots:
     transitivePeerDependencies:
       - msw
 
-  vitest@4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2)):
-    dependencies:
-      '@vitest/expect': 4.1.5
-      '@vitest/mocker': 4.1.5(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2))
-      '@vitest/pretty-format': 4.1.5
-      '@vitest/runner': 4.1.5
-      '@vitest/snapshot': 4.1.5
-      '@vitest/spy': 4.1.5
-      '@vitest/utils': 4.1.5
-      es-module-lexer: 2.1.0
-      expect-type: 1.3.0
-      magic-string: 0.30.21
-      obug: 2.1.1
-      pathe: 2.0.3
-      picomatch: 4.0.4
-      std-env: 4.1.0
-      tinybench: 2.9.0
-      tinyexec: 1.1.2
-      tinyglobby: 0.2.16
-      tinyrainbow: 3.1.0
-      vite: 8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2)
-      why-is-node-running: 2.3.0
-    optionalDependencies:
-      '@types/node': 20.19.30
-      '@vitest/ui': 4.1.5(vitest@4.1.5)
-      happy-dom: 20.9.0
-      jsdom: 29.1.1
-    transitivePeerDependencies:
-      - msw
-
   vitest@4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.2)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3)):
     dependencies:
       '@vitest/expect': 4.1.5
@@ -20659,10 +20604,10 @@ snapshots:
     transitivePeerDependencies:
       - msw
 
-  vitest@4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3)):
+  vitest@4.1.5(@types/node@20.19.30)(@vitest/ui@4.1.5)(happy-dom@20.9.0)(jsdom@29.1.1)(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2)):
     dependencies:
       '@vitest/expect': 4.1.5
-      '@vitest/mocker': 4.1.5(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3))
+      '@vitest/mocker': 4.1.5(vite@8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2))
       '@vitest/pretty-format': 4.1.5
       '@vitest/runner': 4.1.5
       '@vitest/snapshot': 4.1.5
@@ -20679,7 +20624,7 @@ snapshots:
       tinyexec: 1.1.2
       tinyglobby: 0.2.16
       tinyrainbow: 3.1.0
-      vite: 8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.3)
+      vite: 8.0.10(@types/node@20.19.30)(esbuild@0.27.7)(jiti@2.6.1)(less@4.6.4)(sass@1.99.0)(terser@5.46.2)(yaml@2.8.2)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.19.30
