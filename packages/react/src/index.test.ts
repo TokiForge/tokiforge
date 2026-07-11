@@ -85,6 +85,13 @@ describe('React Integration', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // ThemeProvider persists the selected theme to localStorage by default;
+    // clear it so a theme applied in one test doesn't leak into the next.
+    try {
+      window.localStorage?.removeItem('tokiforge-theme');
+    } catch {
+      // Storage may be unavailable in some environments
+    }
   });
 
   describe('ThemeProvider', () => {
