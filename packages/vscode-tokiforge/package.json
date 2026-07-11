@@ -1,7 +1,7 @@
 {
   "name": "tokiforge-vscode",
   "displayName": "TokiForge Design Tokens",
-  "description": "Hover, completions, validation, and quick fixes for TokiForge token JSON files.",
+  "description": "Hover, completions, validation, and quick fixes for TokiForge token JSON files — plus --hf-* CSS variable autocomplete in stylesheets, sourced from your token files.",
   "version": "0.1.0",
   "publisher": "tokiforge",
   "license": "AGPL-3.0",
@@ -12,7 +12,19 @@
   "keywords": ["design tokens", "tokiforge", "theming", "css variables"],
   "activationEvents": [
     "onLanguage:json",
-    "onLanguage:jsonc"
+    "onLanguage:jsonc",
+    "onLanguage:css",
+    "onLanguage:scss",
+    "onLanguage:less",
+    "onLanguage:postcss",
+    "onLanguage:html",
+    "onLanguage:vue",
+    "onLanguage:svelte",
+    "onLanguage:astro",
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -28,6 +40,11 @@
           "type": "string",
           "default": "**/{tokens,tokens.*,theme,toki,tokiforge}.json",
           "description": "Glob (relative to workspace folder) for token JSON files to index."
+        },
+        "tokiforge.cssVarPrefix": {
+          "type": "string",
+          "default": "hf",
+          "description": "CSS variable prefix used when suggesting --<prefix>-* completions in stylesheets. Must match the prefix passed to TokiForge at runtime."
         }
       }
     }

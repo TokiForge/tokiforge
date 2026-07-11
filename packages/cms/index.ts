@@ -1,5 +1,4 @@
 import type { DesignTokens } from '@tokiforge/core';
-import { TokenParser } from '@tokiforge/core';
 
 /**
  * CMS integration interface
@@ -65,6 +64,7 @@ export abstract class BaseCMSAdapter implements CMSAdapter {
 export interface ContentfulConfig {
   spaceId: string;
   accessToken: string;
+  cmaToken?: string;
   environment?: string;
   contentTypeId?: string; // Default: 'designTokens'
 }
@@ -106,8 +106,61 @@ export class ContentfulAdapter extends BaseCMSAdapter {
     return tokens;
   }
 
-  async pushTokens(_tokens: DesignTokens): Promise<void> {
-    throw new Error('Contentful push requires entry ID. Use Contentful Management API for full implementation.');
+  async pushTokens(tokens: DesignTokens): Promise<void> {
+    const cmaToken = this.config.cmaToken;
+    if (!cmaToken) {
+      throw new Error('Contentful push requires cmaToken in config for Contentful Management API access.');
+    }
+
+    const baseUrl = `https://api.contentful.com/spaces/${this.config.spaceId}/environments/${this.config.environment}`;
+    const headers: HeadersInit = {
+      'Content-Type': 'application/vnd.contentful.management.v1+json',
+      'Authorization': `Bearer ${cmaToken}`,
+    };
+
+    const queryUrl = `${baseUrl}/entries?content_type=${this.config.contentTypeId}&access_token=${this.config.accessToken}`;
+    const queryResponse = await fetch(queryUrl, { headers });
+
+    if (!queryResponse.ok) {
+      throw new Error(`Failed to query Contentful entries: ${queryResponse.statusText}`);
+    }
+
+    const queryData = await queryResponse.json();
+    const body = JSON.stringify({
+      fields: {
+        name: { 'en-US': 'Design Tokens' },
+        tokens: { 'en-US': JSON.stringify(tokens) },
+      },
+    });
+
+    if (queryData.items && queryData.items.length > 0) {
+      const entryId = queryData.items[0].sys.id;
+      const response = await fetch(`${baseUrl}/entries/${entryId}`, {
+        method: 'PUT',
+        headers: {
+          ...headers,
+          'X-Contentful-Version': queryData.items[0].sys.version,
+        },
+        body,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to update Contentful entry: ${response.statusText}`);
+      }
+    } else {
+      const response = await fetch(`${baseUrl}/entries`, {
+        method: 'POST',
+        headers: {
+          ...headers,
+          'X-Contentful-Content-Type': this.config.contentTypeId!,
+        },
+        body,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to create Contentful entry: ${response.statusText}`);
+      }
+    }
   }
 }
 
@@ -249,8 +302,56 @@ export class SanityAdapter extends BaseCMSAdapter {
     return tokens;
   }
 
-  async pushTokens(_tokens: DesignTokens): Promise<void> {
-    throw new Error('Sanity push requires @sanity/client. Use Sanity client SDK for full implementation.');
+  async pushTokens(tokens: DesignTokens): Promise<void> {
+    const url = `https://${this.config.projectId}.api.sanity.io/v${this.config.apiVersion}/data/mutate/${this.config.dataset}`;
+
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+    };
+
+    if (this.config.token) {
+      headers['Authorization'] = `Bearer ${this.config.token}`;
+    }
+
+    const query = `*[_type == "designToken"]{_id}`;
+    const queryUrl = `https://${this.config.projectId}.api.sanity.io/v${this.config.apiVersion}/data/query/${this.config.dataset}?query=${encodeURIComponent(query)}`;
+    const queryResponse = await fetch(queryUrl, { headers });
+
+    if (!queryResponse.ok) {
+      throw new Error(`Failed to query Sanity documents: ${queryResponse.statusText}`);
+    }
+
+    const queryData = await queryResponse.json();
+    const mutations: any[] = [];
+
+    if (queryData.result && queryData.result.length > 0) {
+      for (const doc of queryData.result) {
+        mutations.push({
+          createOrReplace: {
+            _id: doc._id,
+            _type: 'designToken',
+            tokens: JSON.stringify(tokens),
+          },
+        });
+      }
+    } else {
+      mutations.push({
+        create: {
+          _type: 'designToken',
+          tokens: JSON.stringify(tokens),
+        },
+      });
+    }
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ mutations }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to push tokens to Sanity: ${response.statusText}`);
+    }
   }
 }
 

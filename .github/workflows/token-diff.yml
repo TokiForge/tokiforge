@@ -1,0 +1,68 @@
+name: Token Diff
+
+# Comments a design-token change summary on pull requests that touch token
+# files. Adjust the paths filter to match where your token files live.
+on:
+  pull_request:
+    paths:
+      - '**/tokens.json'
+      - '**/tokens.yaml'
+      - '**/tokens.yml'
+      - 'examples/**/tokens*.json'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  token-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install and build CLI
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --filter @tokiforge/core run build
+          pnpm --filter tokiforge-cli run build
+
+      - name: Diff changed token files
+        id: diff
+        run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          REPORT="token-diff-report.md"
+          echo "## Design token changes" > "$REPORT"
+          CHANGED=$(git diff --name-only "$BASE_SHA"...HEAD -- '**/tokens.json' '**/tokens.yaml' '**/tokens.yml')
+          if [ -z "$CHANGED" ]; then
+            echo "No token files changed." >> "$REPORT"
+          fi
+          for file in $CHANGED; do
+            echo "" >> "$REPORT"
+            echo "### \`$file\`" >> "$REPORT"
+            if git cat-file -e "$BASE_SHA:$file" 2>/dev/null; then
+              git show "$BASE_SHA:$file" > /tmp/base-tokens.json
+              node packages/cli/dist/cli.js diff /tmp/base-tokens.json "$file" --format compact >> "$REPORT" || true
+            else
+              echo "New token file." >> "$REPORT"
+            fi
+          done
+          cat "$REPORT"
+
+      - name: Comment on PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: token-diff
+          path: token-diff-report.md

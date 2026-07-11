@@ -141,6 +141,7 @@ export class TokenVersioning {
         success: errors.length === 0,
         migrated,
         errors,
+        tokens: cloned,
       };
     } catch (error) {
       errors.push(error instanceof Error ? error.message : String(error));

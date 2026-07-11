@@ -1,11 +1,16 @@
 import { writable, derived } from 'svelte/store';
-import { ThemeRuntime, type DesignTokens, type ThemeConfig } from '@tokiforge/core';
+import { ThemeController, type DesignTokens, type ThemeConfig } from '@tokiforge/core';
 
 export interface SvelteKitThemeOptions {
     selector?: string;
     prefix?: string;
     defaultTheme?: string;
+    /** Theme resolved on the server (e.g. from a cookie); wins over defaultTheme */
     ssrTheme?: string;
+    /** Read/write the selection from localStorage (default: true) */
+    persist?: boolean;
+    /** LocalStorage key (default: 'tokiforge-theme') */
+    storageKey?: string;
 }
 
 export function createThemeStore(
@@ -16,81 +21,46 @@ export function createThemeStore(
         selector = ':root',
         prefix = 'hf',
         defaultTheme,
-        ssrTheme
+        ssrTheme,
+        persist = true,
+        storageKey,
     } = options;
 
-    const runtime = new ThemeRuntime(config);
-    const initialTheme = ssrTheme || defaultTheme || config.defaultTheme || config.themes[0]?.name || 'default';
+    const controller = new ThemeController(config, {
+        selector,
+        prefix,
+        defaultTheme: ssrTheme || defaultTheme,
+        persist,
+        storageKey,
+    });
 
-    const theme = writable<string>(initialTheme);
-    const tokens = writable<DesignTokens>({});
+    const initial = controller.getSnapshot();
+    const theme = writable<string>(initial.theme);
+    const tokens = writable<DesignTokens>(initial.tokens);
 
-    const updateTokens = (name: string) => {
-        try {
-            const t = runtime.getThemeTokens(name);
-            tokens.set(t);
-        } catch {
-            // Ignore
-        }
-    };
-
-    updateTokens(initialTheme);
+    controller.subscribe((snapshot) => {
+        theme.set(snapshot.theme);
+        tokens.set(snapshot.tokens);
+    });
 
     if (typeof window !== 'undefined') {
-        runtime.init(selector, prefix);
-        updateTokens(runtime.getCurrentTheme() || initialTheme);
-
-        const handleThemeChange = (e: Event) => {
-            const customEvent = e as CustomEvent;
-            const tName = customEvent.detail.theme;
-            theme.set(tName);
-            if (customEvent.detail.tokens) {
-                tokens.set(customEvent.detail.tokens);
-            } else {
-                updateTokens(tName);
-            }
-        };
-
-        window.addEventListener('tokiforge:theme-change', handleThemeChange);
+        try {
+            controller.init();
+        } catch (err) {
+            console.error('Failed to initialize theme runtime:', err);
+        }
     }
 
     return {
         theme,
         tokens,
         setTheme: async (name: string) => {
-            await runtime.applyTheme(name, selector, prefix);
-            theme.set(name);
-
-            if (typeof window !== 'undefined' && window.localStorage) {
-                try {
-                    window.localStorage.setItem('tokiforge-theme', name);
-                } catch (e) {
-                    // Ignore
-                }
-            }
+            controller.setTheme(name);
         },
         nextTheme: async () => {
-            const newTheme = runtime.nextTheme();
-            await runtime.applyTheme(newTheme, selector, prefix);
-            theme.set(newTheme);
+            controller.nextTheme();
         },
-        availableThemes: derived(theme, () => runtime.getAvailableThemes()),
-        runtime,
+        availableThemes: derived(theme, () => controller.getAvailableThemes()),
+        runtime: controller.runtime,
     };
 }
-
-// Server-side helpers
-export function getThemeFromCookie(cookieHeader: string | null, cookieName: string = 'tokiforge-theme'): string | null {
-    if (!cookieHeader) return null;
-
-    const cookies = cookieHeader.split(';').map(c => c.trim());
-    const themeCookie = cookies.find(c => c.startsWith(`${cookieName}=`));
-
-    return themeCookie ? themeCookie.split('=')[1] : null;
-}
-
-export function setThemeCookie(theme: string, cookieName: string = 'tokiforge-theme'): string {
-    return `${cookieName}=${theme}; Path=/; Max-Age=31536000; SameSite=Lax`;
-}
-
-export type ThemeStore = ReturnType<typeof createThemeStore>;

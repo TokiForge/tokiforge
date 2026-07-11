@@ -158,18 +158,46 @@ function ThemeSwitcher() {
 | CSS custom properties          | Yes       | JS-heavy runtime           |
 | Zero JS overhead (static mode) | Yes       | Always requires JS         |
 
+### How it compares
+
+| Capability                          | TokiForge | next-themes | Style Dictionary | Theme UI |
+| ----------------------------------- | :-------: | :---------: | :--------------: | :------: |
+| Runtime theme switching             | ✅        | ✅          | ❌ (build-time)  | ✅       |
+| Design token files (JSON/YAML/DTCG) | ✅        | ❌          | ✅               | ❌       |
+| Framework adapters beyond React     | ✅        | ❌          | n/a              | ❌       |
+| Token references / aliases          | ✅        | ❌          | ✅               | ❌       |
+| Multi-format export (CSS/SCSS/TS…)  | ✅        | ❌          | ✅               | ❌       |
+| Figma sync                          | ✅        | ❌          | via plugins      | ❌       |
+| Accessibility checks (WCAG + APCA)  | ✅        | ❌          | ❌               | ❌       |
+| `light-dark()` CSS output           | ✅        | ❌          | ❌               | ❌       |
+| System-theme watching               | ✅        | ✅          | ❌               | ❌       |
+
+Use **next-themes** if you only need a light/dark toggle in Next.js. Use **Style Dictionary** if you only need build-time token transforms. TokiForge covers both halves — a token pipeline *and* a runtime — with one consistent API.
+
 ---
 
 ## Packages
 
-| Package              | Description                            | npm                                                                                                         |
-| -------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `@tokiforge/core`    | Core engine (works with any framework) | [![npm](https://img.shields.io/npm/v/@tokiforge/core)](https://www.npmjs.com/package/@tokiforge/core)       |
-| `@tokiforge/react`   | React adapter with hooks               | [![npm](https://img.shields.io/npm/v/@tokiforge/react)](https://www.npmjs.com/package/@tokiforge/react)     |
-| `@tokiforge/vue`     | Vue 3 composables                      | [![npm](https://img.shields.io/npm/v/@tokiforge/vue)](https://www.npmjs.com/package/@tokiforge/vue)         |
-| `@tokiforge/angular` | Angular service with Signals           | [![npm](https://img.shields.io/npm/v/@tokiforge/angular)](https://www.npmjs.com/package/@tokiforge/angular) |
-| `@tokiforge/svelte`  | Svelte stores                          | [![npm](https://img.shields.io/npm/v/@tokiforge/svelte)](https://www.npmjs.com/package/@tokiforge/svelte)   |
-| `tokiforge-cli`      | CLI tool for token management          | [![npm](https://img.shields.io/npm/v/tokiforge-cli)](https://www.npmjs.com/package/tokiforge-cli)           |
+| Package                        | Description                            | npm                                                                                                                       |
+| ------------------------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `@tokiforge/core`              | Core engine (works with any framework) | [![npm](https://img.shields.io/npm/v/@tokiforge/core)](https://www.npmjs.com/package/@tokiforge/core)                   |
+| `@tokiforge/react`             | React adapter with hooks               | [![npm](https://img.shields.io/npm/v/@tokiforge/react)](https://www.npmjs.com/package/@tokiforge/react)                 |
+| `@tokiforge/vue`               | Vue 3 composables                      | [![npm](https://img.shields.io/npm/v/@tokiforge/vue)](https://www.npmjs.com/package/@tokiforge/vue)                     |
+| `@tokiforge/angular`           | Angular service with Signals           | [![npm](https://img.shields.io/npm/v/@tokiforge/angular)](https://www.npmjs.com/package/@tokiforge/angular)             |
+| `@tokiforge/svelte`            | Svelte stores                          | [![npm](https://img.shields.io/npm/v/@tokiforge/svelte)](https://www.npmjs.com/package/@tokiforge/svelte)               |
+| `@tokiforge/nextjs`            | Next.js App Router adapter             | [![npm](https://img.shields.io/npm/v/@tokiforge/nextjs)](https://www.npmjs.com/package/@tokiforge/nextjs)               |
+| `@tokiforge/remix`             | Remix adapter with SSR                 | [![npm](https://img.shields.io/npm/v/@tokiforge/remix)](https://www.npmjs.com/package/@tokiforge/remix)                 |
+| `@tokiforge/astro`             | Astro integration                      | [![npm](https://img.shields.io/npm/v/@tokiforge/astro)](https://www.npmjs.com/package/@tokiforge/astro)                 |
+| `@tokiforge/solid`             | Solid.js adapter                       | [![npm](https://img.shields.io/npm/v/@tokiforge/solid)](https://www.npmjs.com/package/@tokiforge/solid)                 |
+| `@tokiforge/sveltekit`         | SvelteKit integration with SSR         | [![npm](https://img.shields.io/npm/v/@tokiforge/sveltekit)](https://www.npmjs.com/package/@tokiforge/sveltekit)         |
+| `@tokiforge/storybook`         | Storybook addon                        | [![npm](https://img.shields.io/npm/v/@tokiforge/storybook)](https://www.npmjs.com/package/@tokiforge/storybook)         |
+| `@tokiforge/tailwind`          | Tailwind CSS integration               | [![npm](https://img.shields.io/npm/v/@tokiforge/tailwind)](https://www.npmjs.com/package/@tokiforge/tailwind)           |
+| `@tokiforge/figma`             | Figma sync & diff                      | [![npm](https://img.shields.io/npm/v/@tokiforge/figma)](https://www.npmjs.com/package/@tokiforge/figma)                 |
+| `@tokiforge/emotion`           | Emotion CSS-in-JS adapter              | [![npm](https://img.shields.io/npm/v/@tokiforge/emotion)](https://www.npmjs.com/package/@tokiforge/emotion)             |
+| `@tokiforge/styled-components` | styled-components adapter              | [![npm](https://img.shields.io/npm/v/@tokiforge/styled-components)](https://www.npmjs.com/package/@tokiforge/styled-components) |
+| `@tokiforge/cms`               | Headless CMS integrations              | [![npm](https://img.shields.io/npm/v/@tokiforge/cms)](https://www.npmjs.com/package/@tokiforge/cms)                     |
+| `@tokiforge/design-tools`      | Sketch & Adobe XD integrations         | [![npm](https://img.shields.io/npm/v/@tokiforge/design-tools)](https://www.npmjs.com/package/@tokiforge/design-tools)   |
+| `tokiforge-cli`                | CLI tool for token management          | [![npm](https://img.shields.io/npm/v/tokiforge-cli)](https://www.npmjs.com/package/tokiforge-cli)                       |
 
 ---
 
@@ -190,7 +218,7 @@ function ThemeSwitcher() {
               │
 ┌─────────────▼───────────────┐
 │   Framework Adapters        │
-│ (React/Vue/Angular/Svelte)  │
+│   (React/Vue/Angular/Svelte/Next/Remix/Solid/SvelteKit/Astro/Storybook/Emotion/styled-components)  │
 └─────────────┬───────────────┘
               │
 ┌─────────────▼───────────────┐
@@ -412,8 +440,13 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 - [x] Integrations (Storybook, Figma, design tools)
 - [x] Next.js 14+, Remix, Astro, Solid, SvelteKit support
 - [x] SSR utilities with FOUC prevention
+- [x] Storybook addon with theme switcher & token viewer
+- [x] Headless CMS integrations (Contentful, Strapi, Sanity)
+- [x] Sketch & Adobe XD design tool adapters
+- [x] Emotion & styled-components CSS-in-JS adapters
+- [x] Test suites for all framework adapters
 
-### In Progress (v2.1.x)
+### In Progress
 
 - [ ] VS Code extension package and marketplace publishing
 - [ ] Community plugin examples (Framer, Sketch, Adobe XD)

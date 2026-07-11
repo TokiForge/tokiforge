@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { TokenExporter } from '@tokiforge/core';
 import type { DesignTokens } from '@tokiforge/core';
+import { buildShareUrl } from '../share-url';
 import './ExportShare.css';
 
 interface ExportShareProps {
@@ -69,10 +70,7 @@ export function ExportShare({ tokens, themeName }: ExportShareProps) {
   };
 
   const handleGenerateShareLink = () => {
-    // Compress and encode tokens for URL
-    const compressed = btoa(JSON.stringify(tokens));
-    const url = `${window.location.origin}${window.location.pathname}?tokens=${encodeURIComponent(compressed)}`;
-    setShareUrl(url);
+    setShareUrl(buildShareUrl(tokens));
   };
 
   const handleCopyShareLink = async () => {

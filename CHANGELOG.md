@@ -5,6 +5,59 @@ All notable changes to TokiForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2026-07-11 (Shared Controller, DTCG, CSS-in-JS Adapters & Modern CSS)
+
+### Added
+
+- **`ThemeController` (core)**: Headless controller owning the full theming lifecycle — initial-theme resolution (persisted → option → config default), CSS injection, localStorage persistence, system-theme watching, and change subscriptions. React, Next.js, Remix, Solid, Svelte, and SvelteKit adapters are now thin wrappers over it.
+- **W3C DTCG format support**: `$value`/`$type`/`$description` token files parse transparently; `TokenParser.toDTCG()` exports for Figma Variables, Tokens Studio, and Style Dictionary v4 interop. Formats can be mixed in one file.
+- **Composite tokens**: typography objects flatten to per-part variables, shadow tokens compose to `box-shadow` strings (multi-shadow and `inset` supported), font stacks join into fallback lists, `cubicBezier` becomes `cubic-bezier()`.
+- **`TokenExporter.exportLightDarkCSS()`**: single stylesheet using the CSS `light-dark()` function + `color-scheme` for zero-JS light/dark switching.
+- **View Transitions**: `controller.setThemeWithTransition()` cross-fades theme switches via `document.startViewTransition()` with graceful fallback.
+- **Color engine**: `ColorUtils.parseColor()` (hex/rgb()/hsl()), OKLCH conversions, `generateScale()` for Tailwind-style 50–900 palettes, perceptual `mix()` in OKLCH space.
+- **APCA contrast**: `AccessibilityUtils.calculateAPCA()` implements the WCAG 3 candidate algorithm alongside WCAG 2 ratios.
+- **`tokiforge docs`**: generates a self-contained static HTML styleguide (swatches, CSS variables, values, descriptions) from a token file.
+- **Token Diff GitHub Action**: comments a design-token change summary on PRs touching token files.
+- **Bundle-size CI guard**: `scripts/check-bundle-size.mjs` fails CI when gzipped bundles exceed budget.
+- **CSS naming contract test**: locks the `--hf-color-primary` full-path convention across packages.
+- **`@tokiforge/emotion`**: New package — Emotion CSS-in-JS adapter with `ThemeProvider`, `useTheme`, and `styled` re-export. 12 tests.
+- **`@tokiforge/styled-components`**: New package — styled-components v5+ adapter with `ThemeProvider`, `useTheme`, and `styled` re-export. 12 tests.
+- **`@tokiforge/cms`**: New package — headless CMS integrations for Contentful (with `pushTokens` CMA create/update), Strapi (fetch/push), and Sanity (mutation API). 18 tests.
+- **`@tokiforge/design-tools`**: New package — Sketch (`createSketchColorStyle`) and Adobe XD (`createXDColorSwatch`) plugin API adapters.
+- **Test suites added**: `@tokiforge/nextjs` (6 tests), `@tokiforge/remix` (6 tests), `@tokiforge/astro` (8 tests), `@tokiforge/solid` (8 tests), `@tokiforge/sveltekit` (9 tests), `@tokiforge/storybook` (12 tests).
+- **Vitest configuration**: Added `vitest.config.ts` and `tsconfig.json` for all adapter packages.
+- **SvelteKit**: new `persist`/`storageKey` options.
+- **React**: test suite re-enabled (previously skipped).
+
+### Fixed
+
+- **Core (critical)**: `TokenExporter.flattenTokens` dropped ancestor keys — `color.primary` emitted `--hf-primary` instead of the documented `--hf-color-primary`, colliding same-named leaves across groups. Now emits full paths as all docs, the CLI dev server, and adapters expect.
+- **Core**: chained token references (`{a}` → `{b}` → value) now resolve fully, with circular-reference protection.
+- **Core**: `ColorUtils.hexToRGB` no longer returns `NaN` for 3/4-digit shorthand hex; contrast, darken, and lighten accept `rgb()`/`hsl()` strings.
+- **Core**: `TokenVersioning.migrateToken` now returns the migrated tree (`result.tokens`) instead of discarding it.
+- **React**: initial `tokens` were empty until the first manual theme switch (event dispatched before the listener mounted).
+- **Vue**: no CSS was injected on initial load in dynamic mode (`applyTheme` lived in an unreachable `catch` branch).
+- **Svelte/Solid/SvelteKit**: initial theme application ignored the resolved `defaultTheme`/persisted/`ssrTheme` value and applied the config default.
+- **Next.js/Remix**: providers never read the persisted theme on mount and ignored `initialTheme`; both fixed.
+- **Next.js**: `'use client'` directive was stripped from the built bundle, breaking App Router usage; DTS build fixed under TypeScript 6.
+- **CLI (critical)**: the published binary crashed instantly (`require is not defined in ES module scope`) — CJS output inside a `"type": "module"` package. Now builds ESM.
+- **Test mocks**: All `ThemeController` mocks converted from arrow functions to real classes (`MockThemeController`) to fix "is not a constructor" errors in remix, solid, and sveltekit tests.
+- **Next.js test mock**: Added cached `getSnapshot()` for React 19 `useSyncExternalStore` compatibility.
+- **Svelte `test:ui` script**: Changed to `vitest --ui`.
+- **Storybook mock**: `ThemeRuntime` class mock with `getSnapshot()` for useSyncExternalStore.
+
+### Fixed
+
+- **Test mocks**: All `ThemeController` mocks converted from arrow functions to real classes (`MockThemeController`) to fix "is not a constructor" errors in remix, solid, and sveltekit tests.
+- **Next.js test mock**: Added cached `getSnapshot()` for React 19 `useSyncExternalStore` compatibility.
+- **Svelte `test:ui` script**: Changed to `vitest --ui`.
+- **Storybook mock**: `ThemeRuntime` class mock with `getSnapshot()` for useSyncExternalStore.
+
+### Changed
+
+- **Documentation**: Updated all new package READMEs with installation and usage guides.
+- **Version bump**: All packages updated to 2.3.0.
+
 ## [2.2.4] - 2026-05-19 (Monorepo Alignment & Recovery)
 
 ### Fixed
@@ -457,6 +510,13 @@ npm install @tokiforge/core@2.0.0 @tokiforge/vue@2.0.0
 - Framework-agnostic theming system
 - Complete documentation and examples
 
+[2.3.0]: https://github.com/tokiforge/tokiforge/compare/v2.2.4...v2.3.0
+[2.2.4]: https://github.com/tokiforge/tokiforge/compare/v2.2.3...v2.2.4
+[2.2.3]: https://github.com/tokiforge/tokiforge/compare/v2.0.2...v2.2.3
+[2.0.2]: https://github.com/tokiforge/tokiforge/compare/v2.0.1...v2.0.2
+[2.0.1]: https://github.com/tokiforge/tokiforge/compare/v2.0.0...v2.0.1
+[2.0.0]: https://github.com/tokiforge/tokiforge/compare/v1.2.0...v2.0.0
+[1.2.0]: https://github.com/tokiforge/tokiforge/compare/v1.1.2...v1.2.0
 [1.1.2]: https://github.com/tokiforge/tokiforge/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/tokiforge/tokiforge/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/tokiforge/tokiforge/compare/v1.0.0...v1.1.0

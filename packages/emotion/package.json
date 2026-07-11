@@ -1,0 +1,66 @@
+{
+  "name": "@tokiforge/emotion",
+  "version": "2.3.0",
+  "description": "Emotion adapter for TokiForge theming",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "build:all": "npm run build",
+    "dev": "tsup --watch",
+    "lint": "eslint src --ext .ts,.tsx",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "peerDependencies": {
+    "@tokiforge/core": "workspace:^2.3.0",
+    "react": ">=16.8.0",
+    "@emotion/styled": ">=11.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.2.14",
+    "@emotion/styled": "^11.14.0",
+    "jsdom": "^29.1.1",
+    "react": "^19.2.0",
+    "tsup": "^8.0.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  },
+  "dependencies": {
+    "@tokiforge/core": "workspace:^2.3.0"
+  },
+  "keywords": [
+    "emotion",
+    "theming",
+    "design-tokens"
+  ],
+  "author": "TokiForge Community",
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TokiForge/tokiforge.git"
+  },
+  "homepage": "https://github.com/TokiForge/tokiforge#readme",
+  "bugs": {
+    "url": "https://github.com/TokiForge/tokiforge/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

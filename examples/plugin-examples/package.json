@@ -9,6 +9,6 @@
     "new-plugin": "node scripts/new-plugin-stub.mjs"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.2.4"
+    "@tokiforge/core": "workspace:^2.3.0"
   }
 }

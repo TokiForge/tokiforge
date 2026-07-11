@@ -11,6 +11,7 @@ export type {
   TokenParserOptions,
   ColorRGB,
   ColorHSL,
+  ColorOKLCH,
   ComponentTheme,
   Plugin,
   PluginOptions,
@@ -49,6 +50,10 @@ export {
 export { TokenParser } from './token-parser';
 export { TokenExporter } from './token-exporter';
 export { ThemeRuntime } from './theme-runtime';
+export { ThemeController } from './theme-controller';
+export type { ThemeControllerOptions, ThemeSnapshot } from './theme-controller';
+export { BrandManager } from './brand-manager';
+export type { BrandDefinition, BrandMatrixOptions } from './brand-manager';
 export { ColorUtils } from './color-utils';
 export { AccessibilityUtils } from './accessibility-utils';
 export { ComponentTheming } from './component-theming';

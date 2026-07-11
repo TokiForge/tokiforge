@@ -1,5 +1,5 @@
 import { createSignal, onCleanup, type Accessor } from 'solid-js';
-import { ThemeRuntime, type DesignTokens, type ThemeConfig } from '@tokiforge/core';
+import { ThemeController, type ThemeRuntime, type DesignTokens, type ThemeConfig } from '@tokiforge/core';
 
 export interface ThemeOptions {
     selector?: string;
@@ -7,6 +7,8 @@ export interface ThemeOptions {
     defaultTheme?: string;
     persist?: boolean;
     watchSystemTheme?: boolean;
+    /** LocalStorage key (default: 'tokiforge-theme') */
+    storageKey?: string;
 }
 
 export interface ThemeContext<T extends DesignTokens = DesignTokens> {
@@ -22,114 +24,42 @@ export function createTheme<T extends DesignTokens = DesignTokens>(
     config: ThemeConfig,
     options: ThemeOptions = {}
 ): ThemeContext<T> {
-    const {
-        selector = ':root',
-        prefix = 'hf',
-        defaultTheme,
-        persist = true,
-        watchSystemTheme = false,
-    } = options;
+    const controller = new ThemeController(config, {
+        selector: options.selector,
+        prefix: options.prefix,
+        defaultTheme: options.defaultTheme,
+        persist: options.persist,
+        storageKey: options.storageKey,
+        watchSystemTheme: options.watchSystemTheme,
+    });
 
-    const runtime = new ThemeRuntime(config);
-    const availableThemesList = runtime.getAvailableThemes();
+    const initial = controller.getSnapshot();
+    const [theme, setThemeSignal] = createSignal(initial.theme);
+    const [tokens, setTokens] = createSignal<T>(initial.tokens as T);
 
-    let initialTheme = defaultTheme || config.defaultTheme || availableThemesList[0] || 'default';
-
-    if (typeof window !== 'undefined') {
-        if (persist && window.localStorage) {
-            try {
-                const saved = window.localStorage.getItem('tokiforge-theme');
-                if (saved && availableThemesList.includes(saved)) {
-                    initialTheme = saved;
-                }
-            } catch (e) {
-                // Ignore
-            }
-        }
-
-        if (watchSystemTheme && !persist) {
-            const systemTheme = ThemeRuntime.detectSystemTheme();
-            if (availableThemesList.includes(systemTheme)) {
-                initialTheme = systemTheme;
-            }
-        }
-    }
-
-    const [theme, setThemeSignal] = createSignal(initialTheme);
-    const [tokens, setTokens] = createSignal<T>({} as T);
-
-    const updateTokens = (themeName: string) => {
-        try {
-            const t = runtime.getThemeTokens(themeName);
-            setTokens(() => t as T);
-        } catch (e) {
-            // Ignore
-        }
-    };
-
-    const setTheme = async (name: string) => {
-        if (!availableThemesList.includes(name)) {
-            throw new Error(`Theme "${name}" not found`);
-        }
-
-        await runtime.applyTheme(name, selector, prefix);
-        setThemeSignal(name);
-
-        if (typeof window !== 'undefined' && persist && window.localStorage) {
-            try {
-                window.localStorage.setItem('tokiforge-theme', name);
-            } catch (e) {
-                // Ignore
-            }
-        }
-    };
-
-    const nextTheme = async () => {
-        const currentIndex = availableThemesList.indexOf(theme());
-        const nextIndex = (currentIndex + 1) % availableThemesList.length;
-        await setTheme(availableThemesList[nextIndex]);
-    };
+    const unsubscribe = controller.subscribe((snapshot) => {
+        setThemeSignal(snapshot.theme);
+        setTokens(() => snapshot.tokens as T);
+    });
 
     if (typeof window !== 'undefined') {
-        runtime.init(selector, prefix);
-        updateTokens(runtime.getCurrentTheme() || initialTheme);
-
-        const handleThemeChange = (e: Event) => {
-            const customEvent = e as CustomEvent;
-            setThemeSignal(customEvent.detail.theme);
-            if (customEvent.detail.tokens) {
-                setTokens(() => customEvent.detail.tokens as T);
-            } else {
-                updateTokens(customEvent.detail.theme);
-            }
-        };
-
-        window.addEventListener('tokiforge:theme-change', handleThemeChange);
-
-        if (watchSystemTheme) {
-            const unwatch = runtime.watchSystemTheme((systemTheme: string) => {
-                if (availableThemesList.includes(systemTheme)) {
-                    setTheme(systemTheme);
-                }
-            });
-
-            onCleanup(() => {
-                window.removeEventListener('tokiforge:theme-change', handleThemeChange);
-                unwatch();
-            });
-        } else {
-            onCleanup(() => {
-                window.removeEventListener('tokiforge:theme-change', handleThemeChange);
-            });
-        }
+        controller.init();
+        onCleanup(() => {
+            unsubscribe();
+            controller.destroy();
+        });
     }
 
     return {
         theme,
         tokens,
-        setTheme,
-        nextTheme,
-        availableThemes: () => availableThemesList,
-        runtime,
+        setTheme: async (name: string) => {
+            controller.setTheme(name);
+        },
+        nextTheme: async () => {
+            controller.nextTheme();
+        },
+        availableThemes: () => controller.getAvailableThemes(),
+        runtime: controller.runtime,
     };
 }

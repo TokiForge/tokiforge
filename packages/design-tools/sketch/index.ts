@@ -46,7 +46,6 @@ export class SketchAdapter {
     };
 
     const sharedStyles = this.config.pluginContext.document.sharedLayerStyles;
-    const sharedTextStyles = this.config.pluginContext.document.sharedTextStyles;
 
     for (const style of sharedStyles) {
       if (style.style && style.style.fills && style.style.fills.length > 0) {
@@ -65,8 +64,48 @@ export class SketchAdapter {
     return tokens;
   }
 
-  private async createSketchColorStyle(_name: string, _color: string): Promise<void> {
-    throw new Error('Sketch plugin API integration required');
+  private async createSketchColorStyle(name: string, color: string): Promise<void> {
+    const ctx = this.config.pluginContext;
+    if (!ctx || !ctx.document) {
+      throw new Error('Sketch plugin context with document is required');
+    }
+
+    const sharedStyles = ctx.document.sharedLayerStyles;
+    if (!sharedStyles) {
+      throw new Error('Sketch document does not have sharedLayerStyles');
+    }
+
+    const existing = sharedStyles.find((s: any) => s.name === name);
+    if (existing) {
+      if (existing.style) {
+        existing.style.fills = [
+          {
+            fillType: 0,
+            color: this.hexToSketchColor(color),
+          },
+        ];
+      }
+      return;
+    }
+
+    const newStyle: any = { fills: [] };
+    newStyle.fills = [
+      {
+        fillType: 0,
+        color: this.hexToSketchColor(color),
+      },
+    ];
+
+    const sharedStyle: any = { name, style: newStyle };
+    sharedStyles.push(sharedStyle);
+  }
+
+  private hexToSketchColor(hex: string): { red: number; green: number; blue: number; alpha: number } {
+    const hexValue = hex.replace('#', '');
+    const r = parseInt(hexValue.substring(0, 2), 16) / 255;
+    const g = parseInt(hexValue.substring(2, 4), 16) / 255;
+    const b = parseInt(hexValue.substring(4, 6), 16) / 255;
+    return { red: r, green: g, blue: b, alpha: 1 };
   }
 
   /**
