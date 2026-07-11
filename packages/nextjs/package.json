@@ -19,7 +19,7 @@
         }
     },
     "scripts": {
-        "build": "tsup",
+        "build": "tsup && tsup --config tsup.config.server.ts",
         "build:all": "npm run build",
         "dev": "tsup --watch",
         "clean": "rm -rf dist",
