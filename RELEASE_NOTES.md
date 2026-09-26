@@ -6,9 +6,11 @@ TokiForge **2.4.0** splits browser vs Node APIs, ships modern CSS export (`color
 
 ### Highlights
 
-#### 1. Core entry points
-- `@tokiforge/core/runtime` for apps (theme runtime, exporters used in-browser).
-- `@tokiforge/core/node` for CLI and file-based parsing.
+#### 1. Core entry points & bundle budgets
+- `@tokiforge/core/runtime` for apps: `ThemeRuntime`, `ThemeController`, `TokenExporter`, `ColorUtils`, `AccessibilityUtils`. Theme switching is **2.7 KB gzipped**.
+- `@tokiforge/core/tools` for browser-safe build/analysis helpers: `SSRUtils`, analytics, semantic layers, versioning, registry, iOS/Android/RN exporters.
+- `@tokiforge/core/node` for CLI and file-based parsing (`TokenParser`, `FigmaDiff`, `CICDValidator`).
+- `size-limit` enforces tree-shaken budgets in CI (`pnpm size`): `/runtime` ≤ 3 KB, adapters ≤ 4 KB.
 - Obsolete browser `fs`/`path` stubs removed.
 
 #### 2. Modern CSS & tokens
@@ -22,6 +24,7 @@ TokiForge **2.4.0** splits browser vs Node APIs, ships modern CSS export (`color
 - Storybook `register` export; Astro `generateStaticCSS` writes files.
 - Tailwind peer: `^3 || ^4`.
 - Tests for FigmaDiff, CICDValidator, IDESupport; Angular tests enabled.
+- Docs site: prebuilt `@tokiforge/core/runtime` resolution, lazy-loaded playground and seasonal overlay, config split into `head.ts`/`nav.ts`, unused `vite`/`vitest` deps removed.
 
 #### 4. Fixes
 - Emotion / styled-components `switchTheme` applies the correct theme name.

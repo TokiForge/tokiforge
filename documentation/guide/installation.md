@@ -17,7 +17,7 @@ The core package is required for all TokiForge functionality:
 npm install @tokiforge/core@^1.2.0
 ```
 
-> **Note:** TokiForge v2.4.0 splits browser and Node APIs. Use `@tokiforge/core/runtime` in apps and `@tokiforge/core/node` for CLI/file parsing (`TokenParser.parse()`). See [Troubleshooting](/guide/troubleshooting#browser-build-errors) for build configuration details.
+> **Note:** TokiForge v2.4.0 splits browser and Node APIs. Use `@tokiforge/core/runtime` in apps, `@tokiforge/core/tools` for browser-safe build/analysis helpers (`SSRUtils`, analytics, platform exporters), and `@tokiforge/core/node` for CLI/file parsing (`TokenParser.parse()`). See [Troubleshooting](/guide/troubleshooting#browser-build-errors) for build configuration details.
 
 ### Framework Adapters
 

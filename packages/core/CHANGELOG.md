@@ -4,7 +4,8 @@
 
 ### Minor Changes
 
-- Split package exports into `@tokiforge/core/runtime` (browser) and `@tokiforge/core/node` (CLI/file I/O).
+- Split package exports into `@tokiforge/core/runtime` (browser theme switching, 2.7 KB gzipped), `@tokiforge/core/tools` (browser-safe build/analysis helpers), and `@tokiforge/core/node` (CLI/file I/O).
+- Bundle budgets enforced with `size-limit` on tree-shaken imports.
 - Modern CSS export: `color-mix()`, `@layer`, `@container`.
 - Deeper DTCG parsing and prefers/container responsive breakpoints.
 - Removed obsolete browser Node stubs.

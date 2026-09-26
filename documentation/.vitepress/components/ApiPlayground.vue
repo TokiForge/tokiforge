@@ -163,8 +163,7 @@ const updateOutput = async () => {
       throw new Error('Tokens must be an object');
     }
     
-    // Dynamically import @tokiforge/core
-    const { TokenExporter } = await import('@tokiforge/core');
+    const { TokenExporter } = await import('@tokiforge/core/runtime');
     
     switch (selectedFormat.value) {
       case 'css':

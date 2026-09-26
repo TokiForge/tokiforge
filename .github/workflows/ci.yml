@@ -60,5 +60,5 @@ jobs:
           --filter tokiforge-cli
           run build
 
-      - name: Check bundle size
-        run: node scripts/check-bundle-size.mjs
+      - name: Check bundle size (size-limit)
+        run: pnpm size

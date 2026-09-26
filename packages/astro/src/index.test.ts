@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import tokiforge, { getThemeFromCookies, setThemeCookie } from './index';
-import type { ThemeConfig } from '@tokiforge/core';
+import type { ThemeConfig } from '@tokiforge/core/runtime';
 
 describe('Astro Integration', () => {
   const testConfig: ThemeConfig = {

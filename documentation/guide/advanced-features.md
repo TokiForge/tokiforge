@@ -5,7 +5,7 @@ description: Advanced features for enterprise-grade design systems. Learn about 
 
 # Advanced Features
 
-TokiForge v2.4.0 includes powerful advanced features for enterprise-grade design systems, plus `@tokiforge/core/runtime` / `@tokiforge/core/node` entry points and modern CSS export (`color-mix`, `@layer`, `@container`).
+TokiForge v2.4.0 includes powerful advanced features for enterprise-grade design systems, plus `@tokiforge/core/runtime` / `@tokiforge/core/tools` / `@tokiforge/core/node` entry points and modern CSS export (`color-mix`, `@layer`, `@container`).
 
 > **Included in v2.4.0**: Check out [Advanced Token Features](/guide/advanced-token-features), [Performance Optimization](/guide/performance-optimization), [Accessibility](/guide/accessibility), and [Integrations](/guide/integrations) for the latest features.
 

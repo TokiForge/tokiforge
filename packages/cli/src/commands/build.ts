@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'path';
-import { TokenParser, TokenExporter, ResponsiveTokens } from '@tokiforge/core';
-import type { TokenExportOptions, Breakpoint } from '@tokiforge/core';
+import { TokenParser, TokenExporter, ResponsiveTokens } from '@tokiforge/core/node';
+import type { TokenExportOptions, Breakpoint } from '@tokiforge/core/node';
 
 interface Config {
   input: string;

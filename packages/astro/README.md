@@ -26,8 +26,9 @@ export default defineConfig({
         ],
         defaultTheme: 'light',
       },
-      // v2.4.0: writes static CSS files to disk when enabled
+      // v2.4.0: ThemeController + writes static CSS files when enabled
       generateStaticCSS: true,
+      watchSystemTheme: false,
     }),
   ],
 });

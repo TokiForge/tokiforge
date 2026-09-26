@@ -24,7 +24,7 @@ export default {
 You can also import the register helper:
 
 ```js
-import { register } from "@tokiforge/storybook";
+import { register } from "@tokiforge/storybook/register";
 ```
 
 ### 2. Configure in `.storybook/preview.js`

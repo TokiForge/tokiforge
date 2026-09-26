@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { AstroIntegration } from 'astro';
-import { TokenExporter } from '@tokiforge/core';
-import type { ThemeConfig, DesignTokens } from '@tokiforge/core';
+import { TokenExporter } from '@tokiforge/core/runtime';
+import type { ThemeConfig, DesignTokens } from '@tokiforge/core/runtime';
 
 export interface TokiForgeOptions {
   config: ThemeConfig;
@@ -15,6 +15,8 @@ export interface TokiForgeOptions {
   prefix?: string;
   /** localStorage / cookie key for the selected theme */
   storageKey?: string;
+  /** Follow OS color scheme when no persisted theme exists */
+  watchSystemTheme?: boolean;
 }
 
 function resolveProjectRoot(root: URL | string): string {
@@ -26,6 +28,7 @@ export default function tokiforge(options: TokiForgeOptions): AstroIntegration {
   const prefix = options.prefix ?? 'hf';
   const storageKey = options.storageKey ?? 'tokiforge-theme';
   const cssOutputDir = options.cssOutputDir ?? 'public/tokiforge';
+  const watchSystemTheme = options.watchSystemTheme ?? false;
 
   return {
     name: '@tokiforge/astro',
@@ -34,20 +37,29 @@ export default function tokiforge(options: TokiForgeOptions): AstroIntegration {
         injectScript(
           'page',
           `
-          import { ThemeRuntime } from '@tokiforge/core';
+          import { ThemeController, ThemeRuntime } from '@tokiforge/core/runtime';
 
           const config = ${JSON.stringify(options.config)};
-          const runtime = new ThemeRuntime(config);
+          const controller = new ThemeController(config, {
+            selector: ':root',
+            prefix: ${JSON.stringify(prefix)},
+            storageKey: ${JSON.stringify(storageKey)},
+            persist: true,
+            watchSystemTheme: ${JSON.stringify(watchSystemTheme)},
+            runtime: new ThemeRuntime(config),
+          });
 
-          const savedTheme = localStorage.getItem(${JSON.stringify(storageKey)});
-          const initialTheme = savedTheme || config.defaultTheme || config.themes[0]?.name;
+          controller.init();
 
-          runtime.init(':root', ${JSON.stringify(prefix)});
-          if (initialTheme) {
-            runtime.applyTheme(initialTheme, ':root', ${JSON.stringify(prefix)});
-          }
+          // Compat surface for existing docs that call applyTheme(name, selector, prefix)
+          const api = Object.assign(controller, {
+            applyTheme(themeName) {
+              controller.setTheme(themeName);
+              return Promise.resolve();
+            },
+          });
 
-          window.__tokiforge = runtime;
+          window.__tokiforge = api;
         `
         );
       },

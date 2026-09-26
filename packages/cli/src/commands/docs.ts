@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'path';
-import { TokenParser, TokenExporter } from '@tokiforge/core';
-import type { DesignTokens } from '@tokiforge/core';
+import { TokenParser, TokenExporter } from '@tokiforge/core/node';
+import type { DesignTokens } from '@tokiforge/core/node';
 
 interface DocsOptions {
   output?: string;

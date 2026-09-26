@@ -9,13 +9,22 @@ Optimize TokiForge for maximum performance.
 
 ## Bundle Size
 
-TokiForge is optimized for minimal bundle size:
+Budgets are enforced in CI with [`size-limit`](https://github.com/ai/size-limit) on real, tree-shaken imports (minified + gzipped, all dependencies included):
 
-- **Core**: <3KB gzipped
-- **React adapter**: <2KB gzipped
-- **Vue adapter**: <2KB gzipped
-- **Angular adapter**: <2KB gzipped
-- **Svelte adapter**: <2KB gzipped
+| Import | Measured | Budget |
+| --- | --- | --- |
+| `@tokiforge/core/runtime` — `{ ThemeRuntime, ThemeController }` | ~2.7 KB | 3 KB |
+| `@tokiforge/core/runtime` — full entry (adds `ColorUtils`, `AccessibilityUtils`) | ~5.6 KB | 6 KB |
+| `@tokiforge/core/tools` — full entry | ~11.7 KB | 14 KB |
+| `@tokiforge/react` — `{ ThemeProvider, useTheme }` | ~3.1 KB | 4 KB |
+| `@tokiforge/vue` — `{ provideTheme, useTheme }` | ~3.3 KB | 4 KB |
+| `@tokiforge/svelte` — `{ createThemeStore }` | ~3.0 KB | 4 KB |
+
+Adapter numbers include the core runtime they wrap; frameworks themselves (`react`, `vue`, `svelte`) are excluded.
+
+Keep app bundles lean by importing from `@tokiforge/core/runtime`. Build-time helpers (`SSRUtils`, `TokenAnalytics`, platform exporters, semantic layers) live in `@tokiforge/core/tools` so they never ship to the browser by accident — this also matters for CJS consumers, which can't tree-shake.
+
+Run `pnpm size` locally, or `pnpm size:why` to inspect what contributes to each bundle.
 
 **Note:** With static mode, you can achieve zero JavaScript overhead by generating CSS at build time!
 

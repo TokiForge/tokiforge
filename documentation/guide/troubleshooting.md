@@ -119,9 +119,20 @@ import { ThemeRuntime, TokenExporter } from '@tokiforge/core/runtime';
 // or use a framework package:
 import { ThemeProvider } from '@tokiforge/react';
 
+// Browser-safe build/analysis helpers (no fs/yaml)
+import { SSRUtils, TokenAnalytics, IOSExporter } from '@tokiforge/core/tools';
+
 // CLI / build scripts only
 import { TokenParser, CICDValidator } from '@tokiforge/core/node';
 ```
+
+**Error:** `Module '"@tokiforge/core/runtime"' has no exported member 'SSRUtils'` (or `TokenAnalytics`, `SemanticTokenManager`, platform exporters, …)
+
+**Solution:** As of v2.4.0 those helpers moved to `@tokiforge/core/tools` so `/runtime` stays under 3 KB. Update the import path; the default `@tokiforge/core` entry still exports everything.
+
+### Docs Site: `Failed to resolve import "@tokiforge/core/runtime"`
+
+Run `pnpm --filter @tokiforge/core build` first (the docs `predev`/`prebuild` scripts do this automatically). The VitePress config aliases `/runtime` to the built `dist` and falls back to source when it is missing. Do not add a plain string alias for `@tokiforge/core` in Vite — it rewrites the `/runtime` subpath as a prefix and breaks resolution.
 
 ### TypeScript Build Errors
 

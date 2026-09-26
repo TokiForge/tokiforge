@@ -1,100 +1,94 @@
-import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
-import { ThemeRuntime } from '@tokiforge/core';
+import type { DesignTokens, ThemeConfig } from '@tokiforge/core/runtime';
+import { ThemeController, ThemeRuntime } from '@tokiforge/core/runtime';
 
 export interface TokiForgeStorybookConfig {
-  /**
-   * Theme configuration
-   */
+  /** Theme configuration */
   config: ThemeConfig;
-  /**
-   * CSS selector for theme injection (default: ':root')
-   */
+  /** CSS selector for theme injection (default: ':root') */
   selector?: string;
-  /**
-   * CSS variable prefix (default: 'hf')
-   */
+  /** CSS variable prefix (default: 'hf') */
   prefix?: string;
-  /**
-   * Enable theme switcher in toolbar
-   */
+  /** Persist theme choice in localStorage (default: false in Storybook) */
+  persist?: boolean;
+  /** LocalStorage key when persist is enabled */
+  storageKey?: string;
+  /** Follow OS color scheme when no persisted choice exists */
+  watchSystemTheme?: boolean;
+  /** Enable theme switcher in toolbar */
   enableThemeSwitcher?: boolean;
-  /**
-   * Enable token viewer in addon panel
-   */
+  /** Enable token viewer in addon panel */
   enableTokenViewer?: boolean;
 }
 
 /**
- * Storybook addon for TokiForge themes
+ * Storybook addon for TokiForge themes — wraps shared ThemeController.
  */
 export class TokiForgeStorybookAddon {
-  private runtime: ThemeRuntime;
-  private config: TokiForgeStorybookConfig;
-  private currentTheme: string;
+  private controller: ThemeController;
+  private config: Required<
+    Pick<
+      TokiForgeStorybookConfig,
+      'selector' | 'prefix' | 'persist' | 'storageKey' | 'watchSystemTheme' | 'enableThemeSwitcher' | 'enableTokenViewer'
+    >
+  > &
+    Pick<TokiForgeStorybookConfig, 'config'>;
 
   constructor(config: TokiForgeStorybookConfig) {
     this.config = {
-      selector: ':root',
-      prefix: 'hf',
-      enableThemeSwitcher: true,
-      enableTokenViewer: true,
-      ...config,
+      selector: config.selector ?? ':root',
+      prefix: config.prefix ?? 'hf',
+      persist: config.persist ?? false,
+      storageKey: config.storageKey ?? 'tokiforge-storybook-theme',
+      watchSystemTheme: config.watchSystemTheme ?? false,
+      enableThemeSwitcher: config.enableThemeSwitcher ?? true,
+      enableTokenViewer: config.enableTokenViewer ?? true,
+      config: config.config,
     };
 
-    this.runtime = new ThemeRuntime(this.config.config);
-    this.currentTheme = this.config.config.defaultTheme || this.config.config.themes[0]?.name || 'default';
+    this.controller = new ThemeController(this.config.config, {
+      selector: this.config.selector,
+      prefix: this.config.prefix,
+      persist: this.config.persist,
+      storageKey: this.config.storageKey,
+      watchSystemTheme: this.config.watchSystemTheme,
+      defaultTheme: this.config.config.defaultTheme,
+      runtime: new ThemeRuntime(this.config.config),
+    });
   }
 
-  /**
-   * Initialize the addon
-   */
+  /** Initialize the addon (browser only). */
   async init(): Promise<void> {
     if (typeof window === 'undefined') {
       return;
     }
-
-    await this.runtime.init(this.config.selector, this.config.prefix);
-    await this.runtime.applyTheme(this.currentTheme, this.config.selector, this.config.prefix);
+    this.controller.init();
   }
 
-  /**
-   * Get current theme
-   */
   getCurrentTheme(): string {
-    return this.currentTheme;
+    return this.controller.getTheme();
   }
 
-  /**
-   * Get available themes
-   */
   getAvailableThemes(): string[] {
-    return this.runtime.getAvailableThemes();
+    return this.controller.getAvailableThemes();
   }
 
-  /**
-   * Switch theme
-   */
   async switchTheme(themeName: string): Promise<void> {
-    if (!this.runtime.getAvailableThemes().includes(themeName)) {
+    if (!this.controller.getAvailableThemes().includes(themeName)) {
       throw new Error(`Theme "${themeName}" not found`);
     }
-
-    this.currentTheme = themeName;
-    await this.runtime.applyTheme(themeName, this.config.selector, this.config.prefix);
+    this.controller.setTheme(themeName);
   }
 
-  /**
-   * Get tokens for current theme
-   */
   getTokens(): DesignTokens {
-    return this.runtime.getThemeTokens(this.currentTheme);
+    return this.controller.getTokens();
   }
 
-  /**
-   * Get tokens for a specific theme
-   */
   getThemeTokens(themeName: string): DesignTokens {
-    return this.runtime.getThemeTokens(themeName);
+    return this.controller.runtime.getThemeTokens(themeName);
+  }
+
+  destroy(): void {
+    this.controller.destroy();
   }
 }
 
@@ -120,8 +114,8 @@ export function tokiforgeParameters(config: TokiForgeStorybookConfig) {
     tokiforge: {
       themes: config.config.themes.map((t) => t.name),
       defaultTheme: config.config.defaultTheme || config.config.themes[0]?.name,
-      enableThemeSwitcher: config.enableThemeSwitcher,
-      enableTokenViewer: config.enableTokenViewer,
+      enableThemeSwitcher: config.enableThemeSwitcher ?? true,
+      enableTokenViewer: config.enableTokenViewer ?? true,
     },
   };
 }
@@ -138,4 +132,3 @@ export function createTokensAddon(
 }
 
 export type { ThemeConfig, DesignTokens };
-

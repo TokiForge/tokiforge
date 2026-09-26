@@ -49,6 +49,16 @@ await pushToFigma("./tokens.json", {
 });
 ```
 
+## Figma plugin (local)
+
+Build the in-repo plugin assets:
+
+```bash
+pnpm --filter @tokiforge/figma build
+```
+
+Then in Figma Desktop → Plugins → Development → Import plugin from manifest → select `packages/figma/dist/manifest.json`. The UI supports pull/push of local paint styles and settings persistence.
+
 ## CLI Usage
 
 ```bash

@@ -24,7 +24,7 @@
 
 - **Framework-agnostic** - Works with React, Vue, Angular, Svelte, Next.js, Remix, Solid, Qwik, or vanilla JS
 - **Runtime theme switching** - Change themes instantly without page reload
-- **Lightweight** - Less than 3KB gzipped
+- **Lightweight** - Theme switching (`ThemeRuntime` + `ThemeController`) is 2.7 KB gzipped, enforced in CI with `size-limit`
 - **Full TypeScript support** - Type-safe tokens with autocomplete
 - **Powerful CLI** - Initialize, build, validate, and analyze tokens
 - **CSS custom properties** - Native browser support with smart fallbacks
@@ -143,6 +143,21 @@ function ThemeSwitcher() {
 }
 ```
 
+**4. Pick the right core entry point:**
+
+```ts
+// Browser bundles — theme switching only, 2.7 KB gzipped
+import { ThemeRuntime, ThemeController, TokenExporter } from "@tokiforge/core/runtime";
+
+// Browser-safe build/analysis helpers (no fs/yaml)
+import { SSRUtils, TokenAnalytics, IOSExporter } from "@tokiforge/core/tools";
+
+// Node / CLI — file parsing and CI validation
+import { TokenParser, CICDValidator } from "@tokiforge/core/node";
+```
+
+`@tokiforge/core` (default) still exports everything. Budgets for each entry are enforced in CI with `size-limit` (`pnpm size`).
+
 **[View full documentation →](https://www.sachindilshan.com/)**
 
 ---
@@ -154,7 +169,7 @@ function ThemeSwitcher() {
 | Runtime theme switching        | Yes       | Often requires rebuild     |
 | Framework-agnostic             | Yes       | Usually framework-specific |
 | TypeScript support             | Yes       | Partial or manual          |
-| Bundle size                    | <3KB      | Often larger               |
+| Bundle size                    | 2.7KB     | Often larger               |
 | CSS custom properties          | Yes       | JS-heavy runtime           |
 | Zero JS overhead (static mode) | Yes       | Always requires JS         |
 
@@ -381,7 +396,7 @@ TokiForge is a framework-agnostic design token and theming engine that enables r
 <details>
 <summary><b>How does TokiForge compare to Style Dictionary?</b></summary>
 
-TokiForge provides runtime theme switching capabilities that Style Dictionary doesn't offer. While Style Dictionary focuses on build-time token transformation, TokiForge adds a lightweight runtime engine (<3KB) for dynamic theme management.
+TokiForge provides runtime theme switching capabilities that Style Dictionary doesn't offer. While Style Dictionary focuses on build-time token transformation, TokiForge adds a lightweight runtime engine (2.7KB gzipped, from `@tokiforge/core/runtime`) for dynamic theme management.
 
 </details>
 
@@ -395,7 +410,7 @@ Yes! TokiForge has built-in support for light/dark themes and can automatically 
 <details>
 <summary><b>Is TokiForge production-ready?</b></summary>
 
-Yes, TokiForge is production-ready with support for React, Vue, Svelte, and Angular. It's optimized for performance with a <3KB gzipped runtime footprint.
+Yes, TokiForge is production-ready with support for React, Vue, Svelte, and Angular. It's optimized for performance with a 2.7KB gzipped runtime footprint, enforced in CI with `size-limit`.
 
 </details>
 
@@ -445,7 +460,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 - [x] Sketch & Adobe XD design tool adapters
 - [x] Emotion & styled-components CSS-in-JS adapters
 - [x] Test suites for all framework adapters
-- [x] `@tokiforge/core/runtime` + `@tokiforge/core/node` entry points
+- [x] `@tokiforge/core/runtime` + `@tokiforge/core/tools` + `@tokiforge/core/node` entry points
 - [x] Modern CSS export (`color-mix`, `@layer`, `@container`)
 - [x] ThemeController on Vue, Angular, Emotion, and styled-components
 - [x] CLI responsive/state CSS emission
@@ -453,18 +468,13 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 
 ### In Progress
 
-- [ ] VS Code extension package and marketplace publishing
-- [ ] Community plugin examples (Framer, Sketch, Adobe XD)
-- [ ] Expanded visual regression presets and CI templates
-- [ ] Additional hosted playground collaboration features
+- [ ] Publish VS Code extension to the marketplace (`packages/vscode-tokiforge` is packageable via `pnpm --filter tokiforge-vscode package`)
+- [ ] Advanced token governance / enterprise registry (see [enterprise guide](./documentation/guide/enterprise-and-registry.md))
 
 ### Planned
 
-- [ ] VS Code extension
-- [ ] Visual playground enhancements
-- [ ] CI/Visual regression integration
-- [ ] Enhanced usage analytics
-- [ ] Community plugin examples
+- [ ] Cloud-hosted token registry & team SSO
+- [ ] Deeper Tokens Studio plugin UI polish
 
 **[View Full Roadmap →](./ROADMAP.md)**
 

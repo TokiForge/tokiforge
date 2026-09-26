@@ -19,5 +19,6 @@ export default defineConfig({
     '@storybook/components',
     '@storybook/api',
     '@tokiforge/core',
+    '@tokiforge/core/runtime',
   ],
 });

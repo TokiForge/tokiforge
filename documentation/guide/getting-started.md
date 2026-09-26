@@ -20,7 +20,7 @@ TokiForge is a modern design token and theming engine that lets you:
 
 > **Version:** TokiForge v2.4.0
 
-> **What's new in v2.4.0:** `@tokiforge/core/runtime` and `@tokiforge/core/node` entry points; modern CSS export (`color-mix()`, `@layer`, `@container`); Vue/Angular/Emotion/styled-components on shared `ThemeController`; React/Next/Remix `watchSystemTheme` + `storageKey`; Next/Remix re-export `SSRUtils`; CLI emits responsive/state CSS; Storybook `register`; Tailwind peer `^3 || ^4`. See the [project CHANGELOG](https://github.com/TokiForge/tokiforge/blob/main/CHANGELOG.md) for full details.
+> **What's new in v2.4.0:** `@tokiforge/core/runtime` (2.7 KB gzipped theme switching), `@tokiforge/core/tools`, and `@tokiforge/core/node` entry points with `size-limit` budgets enforced in CI; modern CSS export (`color-mix()`, `@layer`, `@container`); Vue/Angular/Emotion/styled-components on shared `ThemeController`; React/Next/Remix `watchSystemTheme` + `storageKey`; Next/Remix re-export `SSRUtils`; CLI emits responsive/state CSS; Storybook `register`; Tailwind peer `^3 || ^4`. See the [project CHANGELOG](https://github.com/TokiForge/tokiforge/blob/main/CHANGELOG.md) for full details.
 
 ### Core Package
 

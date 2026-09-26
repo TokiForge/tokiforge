@@ -53,6 +53,7 @@
     "compile": "tsc -p .",
     "watch": "tsc -watch -p .",
     "vscode:prepublish": "pnpm run compile",
+    "package": "pnpm run compile && npx --yes @vscode/vsce package --no-dependencies",
     "lint": "echo skip"
   },
   "devDependencies": {

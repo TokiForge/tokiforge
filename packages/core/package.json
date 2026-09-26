@@ -17,6 +17,11 @@
       "import": "./dist/runtime.js",
       "require": "./dist/runtime.cjs"
     },
+    "./tools": {
+      "types": "./dist/tools.d.ts",
+      "import": "./dist/tools.js",
+      "require": "./dist/tools.cjs"
+    },
     "./node": {
       "types": "./dist/node.d.ts",
       "import": "./dist/node.js",

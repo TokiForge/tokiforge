@@ -46,9 +46,10 @@ npm test
 
 1. Make sure your code builds: `npm run build`
 2. Run linting: `npm run lint`
-3. Commit your changes: `git commit -m "feat: description of changes"`
-4. Push to your fork: `git push origin feat/your-feature-name`
-5. Open a Pull Request
+3. Check bundle budgets: `pnpm size` (`pnpm size:why` explains what grew). `@tokiforge/core/runtime` must stay ≤ 3 KB gzipped for `{ ThemeRuntime, ThemeController }`; put build-time helpers in `src/tools.ts`, not `src/runtime.ts`.
+4. Commit your changes: `git commit -m "feat: description of changes"`
+5. Push to your fork: `git push origin feat/your-feature-name`
+6. Open a Pull Request
 
 ## Pull Request Guidelines
 

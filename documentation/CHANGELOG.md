@@ -2,7 +2,8 @@
 
 ## v2.4.0 - Runtime/Node Split, Modern CSS & Adapter Unification (2026-09-26)
 
-- **Core entries**: Documented `@tokiforge/core/runtime` and `@tokiforge/core/node`; browser apps no longer rely on Node stubs.
+- **Core entries**: Documented `@tokiforge/core/runtime`, `@tokiforge/core/tools`, and `@tokiforge/core/node`; browser apps no longer rely on Node stubs. Performance guide now lists measured, CI-enforced `size-limit` budgets (theme switching 2.7 KB gzipped).
+- **Site build**: Vite resolves `@tokiforge/core/runtime` from the prebuilt `dist` (source fallback) via an exact alias; `predev`/`prebuild` build core + vue. `ApiPlayground` and the seasonal snow overlay are lazy-loaded; config split into `config.ts`, `head.ts`, `nav.ts`. Removed unused `vite`/`vitest` deps, Node stub shims, and `SEOHead.vue`.
 - **Modern CSS**: Docs cover `color-mix()`, `@layer`, and `@container` export options.
 - **Adapters**: Vue, Angular, Emotion, and styled-components aligned on `ThemeController`; React/Next/Remix option parity (`watchSystemTheme`, `storageKey`, `SSRUtils`).
 - **Tooling**: Storybook `register`, Astro static CSS file output, CLI responsive/state CSS, Tailwind peer `^3 || ^4`.

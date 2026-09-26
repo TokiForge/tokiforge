@@ -85,7 +85,7 @@ TokiForge can export to:
 
 ## Runtime Performance
 
-- **<3KB gzipped** - Minimal bundle size
+- **<3KB gzipped** - `ThemeRuntime` + `ThemeController` from `@tokiforge/core/runtime` measure 2.7 KB (see [Performance](/guide/performance))
 - **Zero JS overhead** - Uses CSS variables
 - **Instant switching** - No re-renders needed
 - **SSR safe** - Works with server-side rendering

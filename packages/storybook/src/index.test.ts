@@ -1,36 +1,70 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TokiForgeStorybookAddon, withTokiForge, tokiforgeParameters } from './index';
-import type { ThemeConfig } from '@tokiforge/core';
+import type { ThemeConfig } from '@tokiforge/core/runtime';
 
-vi.mock('@tokiforge/core', async () => {
-  const actual = await vi.importActual('@tokiforge/core');
+vi.mock('@tokiforge/core/runtime', async () => {
+  const actual = await vi.importActual<typeof import('@tokiforge/core/runtime')>('@tokiforge/core/runtime');
+
+  class MockThemeRuntime {
+    themes: ThemeConfig['themes'];
+    config: ThemeConfig;
+    constructor(config: ThemeConfig) {
+      this.themes = config.themes || [];
+      this.config = config;
+    }
+    init = vi.fn().mockResolvedValue(undefined);
+    applyTheme = vi.fn().mockResolvedValue(undefined);
+    destroy = vi.fn();
+    getAvailableThemes() {
+      return this.themes.map((t) => t.name);
+    }
+    getThemeTokens(name: string) {
+      return this.themes.find((t) => t.name === name)?.tokens || {};
+    }
+    nextTheme() {
+      return this.themes[0]?.name || 'default';
+    }
+    watchSystemTheme() {
+      return () => {};
+    }
+  }
+
+  class MockThemeController {
+    runtime: MockThemeRuntime;
+    private theme: string;
+    private tokens: Record<string, unknown>;
+    constructor(config: ThemeConfig, options: { runtime?: MockThemeRuntime; defaultTheme?: string } = {}) {
+      this.runtime = options.runtime ?? new MockThemeRuntime(config);
+      this.theme = options.defaultTheme || config.defaultTheme || config.themes[0]?.name || 'default';
+      this.tokens = (this.runtime.getThemeTokens(this.theme) as Record<string, unknown>) || {};
+    }
+    init = vi.fn();
+    destroy = vi.fn();
+    getTheme() {
+      return this.theme;
+    }
+    getTokens() {
+      return this.tokens;
+    }
+    getAvailableThemes() {
+      return this.runtime.getAvailableThemes();
+    }
+    setTheme(name: string) {
+      this.theme = name;
+      this.tokens = this.runtime.getThemeTokens(name) as Record<string, unknown>;
+    }
+    getSnapshot() {
+      return { theme: this.theme, tokens: this.tokens };
+    }
+    subscribe() {
+      return () => {};
+    }
+  }
+
   return {
     ...actual,
-    ThemeRuntime: class MockThemeRuntime {
-      constructor(config: ThemeConfig) {
-        this.themes = config.themes || [];
-        this.config = config;
-        this.currentTheme = config.defaultTheme || this.themes[0]?.name || 'default';
-      }
-
-      init = vi.fn().mockResolvedValue(undefined);
-      applyTheme = vi.fn().mockResolvedValue(undefined);
-      getCurrentTheme = vi.fn();
-      destroy = vi.fn();
-
-      getAvailableThemes() {
-        return this.themes.map((t: any) => t.name);
-      }
-
-      getThemeTokens(name: string) {
-        const theme = this.themes.find((t: any) => t.name === name);
-        return theme?.tokens || {};
-      }
-
-      private themes: any[];
-      private config: any;
-      private currentTheme: string;
-    } as any,
+    ThemeRuntime: MockThemeRuntime,
+    ThemeController: MockThemeController,
   };
 });
 
@@ -60,7 +94,6 @@ describe('Storybook Integration', () => {
   describe('TokiForgeStorybookAddon', () => {
     it('should construct with config', () => {
       const addon = new TokiForgeStorybookAddon({ config: testConfig });
-
       expect(addon).toBeDefined();
     });
 

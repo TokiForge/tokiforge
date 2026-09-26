@@ -54,12 +54,21 @@ runtime.applyTheme("dark");
 
 ## Features (v2.4.0)
 
-- **Split entries** - `@tokiforge/core/runtime` for browsers, `@tokiforge/core/node` for CLI/file I/O
+- **Split entries** - `@tokiforge/core/runtime` for browsers (theme switching: 2.7 KB gzipped), `@tokiforge/core/tools` for browser-safe build/analysis helpers, `@tokiforge/core/node` for CLI/file I/O
 - **Modern CSS export** - `color-mix()`, `@layer`, `@container`, plus CSS variables and `light-dark()`
 - **ThemeController** - Shared headless lifecycle used by framework adapters
 - **DTCG & composites** - W3C design tokens, typography/shadow composites, prefers/container breakpoints
 - **Accessibility** - WCAG contrast, APCA, high contrast, reduced motion, color blind support
-- **Performance** - Multi-tier caching, lazy loading, compression; <3KB runtime footprint
+- **Performance** - Multi-tier caching, lazy loading, compression; `size-limit` enforces `/runtime` ≤ 3 KB gzipped in CI
+
+## Entry points
+
+| Import | Contents | Use from |
+| --- | --- | --- |
+| `@tokiforge/core/runtime` | `ThemeRuntime`, `ThemeController`, `TokenExporter`, `ColorUtils`, `AccessibilityUtils`, types | Browser app bundles, framework adapters |
+| `@tokiforge/core/tools` | `SSRUtils`, `TokenAnalytics`, `AnalyticsReporter`, `SemanticTokenManager`, `TokenVersioning`, `ResponsiveTokens`, `BrandManager`, `ComponentTheming`, `TokenRegistry`, `IDESupport`, `pluginManager`, iOS/Android/RN exporters | Build scripts, Storybook, docs sites, design tooling (browser-safe, no `fs`) |
+| `@tokiforge/core/node` | Everything above + `TokenParser`, `FigmaDiff`, `CICDValidator` | CLI, Node build tools, VS Code |
+| `@tokiforge/core` | Same as `/node` | Backwards-compatible default |
 
 ## Previous Features (v1.1.2)
 

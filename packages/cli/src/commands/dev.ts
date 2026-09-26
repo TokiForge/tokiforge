@@ -1,8 +1,8 @@
 import * as fs from 'node:fs';
 import * as path from 'path';
 import { createServer } from 'http';
-import { TokenParser } from '@tokiforge/core';
-import type { DesignTokens } from '@tokiforge/core';
+import { TokenParser } from '@tokiforge/core/node';
+import type { DesignTokens } from '@tokiforge/core/node';
 import chokidar from 'chokidar';
 
 const PORT = 3000;

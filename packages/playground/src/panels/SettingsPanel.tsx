@@ -20,7 +20,7 @@ export default function SettingsPanel({ theme, setTheme, toast }: Props) {
     <div style={{ padding:'2rem', maxWidth:800, margin:'0 auto' }}>
       <div className="tf-page-header" style={{ padding:'0 0 1.5rem', border:'none', marginBottom:'1.5rem' }}>
         <div>
-          <h1 className="tf-page-title">⚙️ Settings</h1>
+          <h1 className="tf-page-title">Settings</h1>
           <p className="tf-page-subtitle">Configure TokiForge to match your workflow</p>
         </div>
         <button className="tf-btn tf-btn-primary" onClick={() => toast('Settings saved!','success')}>Save Changes</button>
@@ -28,7 +28,7 @@ export default function SettingsPanel({ theme, setTheme, toast }: Props) {
 
       {/* Appearance */}
       <div className="tf-card" style={{ marginBottom:'1rem' }}>
-        <div style={{ fontSize:'0.875rem', fontWeight:700, color:'var(--tf-text-primary)', marginBottom:'1.25rem' }}>🎨 Appearance</div>
+        <div style={{ fontSize:'0.875rem', fontWeight:700, color:'var(--tf-text-primary)', marginBottom:'1.25rem' }}>Appearance</div>
         <div style={{ display:'flex', flexDirection:'column', gap:'1rem' }}>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
             <div>
@@ -38,7 +38,7 @@ export default function SettingsPanel({ theme, setTheme, toast }: Props) {
             <div style={{ display:'flex', gap:'0.375rem' }}>
               {(['dark','light'] as const).map(t => (
                 <button key={t} className={`tf-btn tf-btn-sm${theme===t?' tf-btn-primary':' tf-btn-ghost'}`} onClick={() => { setTheme(t); toast(`Switched to ${t} mode`,'info'); }}>
-                  {t==='dark'?'🌙':'☀️'} {t}
+                  {t}
                 </button>
               ))}
             </div>
@@ -51,7 +51,7 @@ export default function SettingsPanel({ theme, setTheme, toast }: Props) {
             </div>
             <label style={{ position:'relative', display:'inline-block', width:44, height:24 }}>
               <input type="checkbox" defaultChecked style={{ opacity:0, width:0, height:0 }} />
-              <span style={{ position:'absolute', cursor:'pointer', inset:0, background:'var(--tf-brand)', borderRadius:99, transition:'0.3s' }}><span style={{ position:'absolute', left:2, bottom:2, width:20, height:20, background:'#fff', borderRadius:'50%', transition:'0.3s', transform:'translateX(20px)' }} /></span>
+              <span style={{ position:'absolute', cursor:'pointer', inset:0, background:'var(--tf-heat)', borderRadius:99, transition:'0.3s' }}><span style={{ position:'absolute', left:2, bottom:2, width:20, height:20, background:'#fff', borderRadius:'50%', transition:'0.3s', transform:'translateX(20px)' }} /></span>
             </label>
           </div>
           <hr className="tf-divider" />

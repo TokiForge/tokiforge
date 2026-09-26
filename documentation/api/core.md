@@ -12,6 +12,17 @@ description: Complete API reference for TokiForge core classes. ThemeRuntime, To
 
 Complete API reference for `@tokiforge/core` package.
 
+## Entry points
+
+| Import | Contents | Use from |
+| --- | --- | --- |
+| `@tokiforge/core/runtime` | `ThemeRuntime`, `ThemeController`, `TokenExporter`, `ColorUtils`, `AccessibilityUtils`, error classes, all types | Browser bundles and framework adapters. Theme switching is 2.7 KB gzipped. |
+| `@tokiforge/core/tools` | `SSRUtils`, `TokenAnalytics`, `AnalyticsReporter`, `SemanticTokenManager`, `TokenVersioning`, `ResponsiveTokens`, `BrandManager`, `ComponentTheming`, `TokenRegistry`, `IDESupport`, `pluginManager`, `IOSExporter`, `AndroidExporter`, `ReactNativeExporter`, `PlatformExporter` | Build scripts, Storybook, docs sites, design tooling. Browser-safe (no `fs`/`yaml`). |
+| `@tokiforge/core/node` | Everything above plus `TokenParser`, `FigmaDiff`, `CICDValidator` | CLI, Node build tools, VS Code extension. |
+| `@tokiforge/core` | Same as `/node` | Backwards-compatible default. |
+
+Bundle budgets for each entry are enforced with `size-limit`; see the [Performance guide](/guide/performance#bundle-size).
+
 ---
 
 ## ThemeRuntime
