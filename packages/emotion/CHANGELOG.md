@@ -1,6 +1,6 @@
-# @tokiforge/figma
+# @tokiforge/emotion
 
-## 2.5.0
+## 3.0.0
 
 ### Minor Changes
 
@@ -10,47 +10,3 @@
 
 - Updated dependencies [[`6e6e343`](https://github.com/TokiForge/tokiforge/commit/6e6e3439efbe93d3996f773e5f7a98405fed374b), [`f11ae0e`](https://github.com/TokiForge/tokiforge/commit/f11ae0eac810d8d2ba9b8c96a2476df6104eaefa)]:
   - @tokiforge/core@2.5.0
-
-## 2.4.0
-
-### Minor Changes
-
-- Version bump to 2.4.0; depends on `@tokiforge/core@^2.4.0`.
-- Diff/sync APIs covered by additional tests.
-
-## 2.2.3
-
-### Patch Changes
-
-- Version bump; @tokiforge/core@^2.4.0.
-
-## 2.0.2
-
-### Patch Changes
-
-- Version bump; @tokiforge/core@^2.0.2.
-
-## 2.0.1
-
-### Patch Changes
-
-- Version bump; @tokiforge/core@^2.0.1.
-
-## 2.0.0
-
-### Major Changes
-
-- Major version release: Updated to 2.0.0 with updated dependencies
-
-### Updated dependencies
-
-- @tokiforge/core@2.0.0
-
-## 1.2.1
-
-### Patch Changes
-
-- Automate releases with Changesets and CI. Adds release workflows and configuration; no runtime changes.
-
-- Updated dependencies []:
-  - @tokiforge/core@1.2.1

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.4.1
+
+### Patch Changes
+
+- Updated dependencies [[`6e6e343`](https://github.com/TokiForge/tokiforge/commit/6e6e3439efbe93d3996f773e5f7a98405fed374b), [`f11ae0e`](https://github.com/TokiForge/tokiforge/commit/f11ae0eac810d8d2ba9b8c96a2476df6104eaefa)]:
+  - @tokiforge/core@2.5.0
+  - @tokiforge/vue@3.0.0
+
 ## v2.4.0 - Runtime/Node Split, Modern CSS & Adapter Unification (2026-09-26)
 
 - **Core entries**: Documented `@tokiforge/core/runtime`, `@tokiforge/core/tools`, and `@tokiforge/core/node`; browser apps no longer rely on Node stubs. Performance guide now lists measured, CI-enforced `size-limit` budgets (theme switching 2.7 KB gzipped).
@@ -179,13 +187,11 @@ Thank you to all contributors, testers, and early adopters who helped shape Toki
 ### Performance Features
 
 - ✅ **Caching Integration**: Built-in caching support in ThemeRuntime
-
   - Memory, localStorage, IndexedDB, and Service Worker strategies
   - Multi-tier caching with CacheManager
   - Automatic cache management
 
 - ✅ **Lazy Loading**: Progressive token chunk loading
-
   - `loadChunk()` method for on-demand loading
   - CDN support for token distribution
   - Preloading capabilities
@@ -198,19 +204,16 @@ Thank you to all contributors, testers, and early adopters who helped shape Toki
 ### Accessibility Features
 
 - ✅ **High Contrast Mode**: Automatic detection and support
-
   - System preference detection
   - Color enhancement for WCAG AAA compliance
   - Theme variant support
 
 - ✅ **Reduced Motion**: Respect user motion preferences
-
   - Automatic CSS injection
   - Disables animations and transitions
   - System preference detection
 
 - ✅ **Color Blind Mode**: Support for color vision deficiencies
-
   - Protanopia, deuteranopia, tritanopia support
   - Automatic color transformations
   - Manual mode control
@@ -223,38 +226,32 @@ Thank you to all contributors, testers, and early adopters who helped shape Toki
 ### Advanced Token Features
 
 - ✅ **Token Functions**: Computed token values
-
   - Color functions: `darken()`, `lighten()`, `mix()`, `alpha()`
   - Math functions: `add()`, `subtract()`, `multiply()`, `divide()`
   - Unit functions: `px()`, `rem()`, `em()`
   - Custom function registration
 
 - ✅ **Token Expressions**: Mathematical expressions
-
   - Basic operations: `+`, `-`, `*`, `/`
   - CSS `calc()` support
   - Token reference integration
 
 - ✅ **References with Fallbacks**: Safe token references
-
   - Syntax: `{token.path || fallback}`
   - Multiple fallback levels
   - Type-safe fallbacks
 
 - ✅ **Token Scoping**: Component-scoped tokens
-
   - Create scoped token sets
   - Extract component tokens
   - Apply scope metadata
 
 - ✅ **Theming API**: Programmatic theme creation
-
   - Fluent builder pattern
   - Theme extension and overriding
   - Variant creation
 
 - ✅ **Validation Plugins**: Custom validation rules
-
   - Plugin registration system
   - Token-level validation
   - Global validation support
@@ -267,25 +264,21 @@ Thank you to all contributors, testers, and early adopters who helped shape Toki
 ### Integrations
 
 - ✅ **Storybook Addon**: Theme management in Storybook
-
   - Theme switcher in toolbar
   - Token viewer panel
   - Automatic initialization
 
 - ✅ **Enhanced Figma Sync**: Improved Figma integration
-
   - Conflict resolution strategies
   - Sync status detection
   - Better error handling
 
 - ✅ **Design Tool Adapters**: Sketch and Adobe XD support
-
   - Export/import tokens
   - Color style conversion
   - Plugin-ready architecture
 
 - ✅ **CMS Integration**: Headless CMS support
-
   - Contentful adapter
   - Strapi adapter
   - Sanity adapter
