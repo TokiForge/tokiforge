@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/cms",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Headless CMS integration for TokiForge design tokens (Contentful, Strapi, Sanity)",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -54,6 +54,6 @@
     "vitest": "^4.1.5"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.3.0"
+    "@tokiforge/core": "workspace:^2.4.0"
   }
 }

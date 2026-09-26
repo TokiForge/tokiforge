@@ -6,7 +6,7 @@ description: TokiForge is a lightweight, framework-agnostic design token and the
 hero:
   name: TokiForge
   text: Design Token & Theme Engine
-  tagline: Forge your colors. Shape your UI. (v2.3.0)
+  tagline: Forge your colors. Shape your UI. (v2.4.0)
   image:
     src: /logo.svg
     alt: TokiForge Logo - Design Token and Theme Engine
@@ -24,7 +24,7 @@ features:
   - title: Works With Any Framework
     details: React, Vue, Svelte, Angular, Next.js, Remix, Solid, Qwik, and more. Framework-agnostic by design.
   - title: <3KB Runtime
-    details: Ultra-lightweight core engine. With static mode, achieve zero JS overhead by generating CSS at build time.
+    details: Theme switching is 2.7 KB gzipped from @tokiforge/core/runtime, enforced in CI with size-limit. With static mode, achieve zero JS overhead by generating CSS at build time.
   - title: Performance Optimized
     details: Built-in caching, lazy loading, and compression for optimal performance and reduced bundle size.
   - title: Powerful CLI

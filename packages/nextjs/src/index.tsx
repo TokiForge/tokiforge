@@ -21,6 +21,8 @@ export interface ThemeProviderProps {
     storageKey?: string;
     /** Whether to read/write theme from storage (default: true) */
     persist?: boolean;
+    /** Follow OS color scheme when no persisted choice exists */
+    watchSystemTheme?: boolean;
     /** Callback when theme changes (e.g. analytics) */
     onThemeChange?: (themeName: string) => void;
     children: ReactNode;
@@ -46,6 +48,7 @@ export function ThemeProvider({
     prefix = 'hf',
     storageKey = DEFAULT_STORAGE_KEY,
     persist = true,
+    watchSystemTheme = false,
     onThemeChange,
     children,
 }: ThemeProviderProps) {
@@ -59,6 +62,7 @@ export function ThemeProvider({
         defaultTheme: initialTheme,
         storageKey,
         persist,
+        watchSystemTheme,
         onThemeChange: (themeName) => onThemeChangeRef.current?.(themeName),
     });
     const controller = controllerRef.current;
@@ -109,3 +113,7 @@ export function useTheme<T extends DesignTokens = DesignTokens>(): ThemeContextT
     }
     return context as ThemeContextType<T>;
 }
+
+export { SSRUtils } from '@tokiforge/core';
+export type { SSRThemeOptions, CriticalCSSOptions } from '@tokiforge/core';
+

@@ -49,31 +49,66 @@ export class TokenParser {
   }
 
   /**
+   * Parse token JSON/YAML content already loaded into memory (no filesystem).
+   */
+  static parseContent(
+    content: string,
+    options: TokenParserOptions & { format?: 'json' | 'yaml' | 'yml' } = {}
+  ): DesignTokens {
+    const { validate = true, expandReferences = true, format = 'json' } = options;
+    try {
+      let tokens: DesignTokens =
+        format === 'yaml' || format === 'yml'
+          ? (parseYAML(content) as DesignTokens)
+          : (JSON.parse(content) as DesignTokens);
+
+      tokens = this.normalizeDTCG(tokens);
+      if (validate) this.validate(tokens);
+      if (expandReferences) tokens = this.expandReferences(tokens);
+      return tokens;
+    } catch (error) {
+      if (error instanceof ParseError || error instanceof ValidationError) throw error;
+      throw new ParseError(
+        `Failed to parse token content: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+  }
+
+  /**
    * Normalize W3C DTCG-format tokens ($value/$type/$description) to the
-   * internal value/type/description shape. Non-DTCG trees pass through
+   * internal value/type/description shape. Group-level `$type` is inherited
+   * by descendants that omit their own type. Non-DTCG trees pass through
    * untouched, and both formats may be mixed in one file.
    */
   static normalizeDTCG(tokens: DesignTokens): DesignTokens {
-    const normalize = (obj: unknown): unknown => {
+    const normalize = (obj: unknown, inheritedType?: string): unknown => {
       if (typeof obj !== 'object' || obj === null) return obj;
-      if (Array.isArray(obj)) return obj.map(normalize);
+      if (Array.isArray(obj)) return obj.map((item) => normalize(item, inheritedType));
 
       const node = obj as TokenNode;
+      const groupType = typeof node.$type === 'string' ? (node.$type as string) : inheritedType;
       const result: TokenNode = {};
+
       for (const key of Object.keys(node)) {
         if (key === '$value') {
-          result.value = normalize(node[key]);
+          result.value = normalize(node[key], groupType);
         } else if (key === '$type') {
           result.type = node[key];
         } else if (key === '$description') {
           result.description = node[key];
+        } else if (key === '$deprecated') {
+          result.deprecated = node[key];
         } else if (key.startsWith('$')) {
-          // Preserve other DTCG metadata ($extensions, $deprecated, ...)
-          result[key] = normalize(node[key]);
+          result[key] = normalize(node[key], groupType);
         } else {
-          result[key] = normalize(node[key]);
+          result[key] = normalize(node[key], groupType);
         }
       }
+
+      if ('value' in result && result.type == null && groupType) {
+        result.type = groupType;
+      }
+
       return result;
     };
 
@@ -100,6 +135,8 @@ export class TokenParser {
             result.$type = node[key];
           } else if (key === 'description') {
             result.$description = node[key];
+          } else if (key === 'deprecated' && typeof node[key] === 'boolean') {
+            result.$deprecated = node[key];
           } else {
             result[key] = node[key];
           }
@@ -153,7 +190,7 @@ export class TokenParser {
   }
 
   static expandReferences(tokens: DesignTokens): DesignTokens {
-    const expanded: TokenNode = JSON.parse(JSON.stringify(tokens)) as TokenNode;
+    const expanded = cloneTokenTree(tokens);
 
     const getValue = (obj: TokenNode, refPath: string): unknown => {
       const parts = refPath.split('.');
@@ -170,15 +207,24 @@ export class TokenParser {
     };
 
     const expandValue = (value: unknown, seen: Set<string> = new Set()): unknown => {
-      if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-        const refPath = value.slice(1, -1);
-        if (!seen.has(refPath)) {
-          const refValue = getValue(expanded, refPath);
+      if (typeof value === 'string' && value.includes('{')) {
+        const single = singleReference(value);
+        if (single) {
+          if (seen.has(single)) return value;
+          const refValue = getValue(expanded, single);
           if (refValue !== undefined) {
-            // Resolve chained references (a reference whose target is itself a reference)
-            return expandValue(refValue, new Set(seen).add(refPath));
+            return expandValue(refValue, new Set(seen).add(single));
           }
+          return value;
         }
+
+        return value.replace(/\{([^{}]+)\}/g, (match, refPath: string) => {
+          if (seen.has(refPath)) return match;
+          const refValue = getValue(expanded, refPath);
+          if (typeof refValue !== 'string' && typeof refValue !== 'number') return match;
+          const resolved = expandValue(String(refValue), new Set(seen).add(refPath));
+          return typeof resolved === 'string' || typeof resolved === 'number' ? String(resolved) : match;
+        });
       }
       if (typeof value === 'object' && value !== null) {
         if (Array.isArray(value)) return value.map((item) => expandValue(item, seen));
@@ -264,4 +310,23 @@ export class TokenParser {
 
     return { valid: errors.length === 0, errors };
   }
+}
+
+function cloneTokenTree(tokens: DesignTokens): TokenNode {
+  if (typeof structuredClone === 'function') {
+    try {
+      return structuredClone(tokens) as TokenNode;
+    } catch {
+      // Exotic values fall back to a JSON clone.
+    }
+  }
+  return JSON.parse(JSON.stringify(tokens)) as TokenNode;
+}
+
+/** A value that is exactly `{path}`, with no surrounding text or extra braces. */
+function singleReference(value: string): string | null {
+  if (value.length < 3 || value[0] !== '{' || value[value.length - 1] !== '}') return null;
+  const inner = value.slice(1, -1);
+  if (inner.includes('{') || inner.includes('}')) return null;
+  return inner;
 }

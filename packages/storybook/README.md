@@ -1,11 +1,11 @@
 # @tokiforge/storybook
 
-Storybook addon for TokiForge design tokens. View and switch themes directly in Storybook.
+Storybook addon for TokiForge design tokens (v2.4.0). View and switch themes directly in Storybook.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/storybook @tokiforge/core
+npm install @tokiforge/storybook@^2.4.0 @tokiforge/core@^2.4.0
 ```
 
 ## Usage
@@ -19,6 +19,12 @@ export default {
     // ... other addons
   ],
 };
+```
+
+You can also import the register helper:
+
+```js
+import { register } from "@tokiforge/storybook/register";
 ```
 
 ### 2. Configure in `.storybook/preview.js`
@@ -48,6 +54,7 @@ export const parameters = {
 
 - Theme switcher in toolbar
 - Token viewer in addon panel
+- Official `register` export (v2.4.0)
 - Automatic theme initialization
 - Theme change events
 - TypeScript support

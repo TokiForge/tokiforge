@@ -12,6 +12,17 @@ description: Complete API reference for TokiForge core classes. ThemeRuntime, To
 
 Complete API reference for `@tokiforge/core` package.
 
+## Entry points
+
+| Import | Contents | Use from |
+| --- | --- | --- |
+| `@tokiforge/core/runtime` | `ThemeRuntime`, `ThemeController`, `TokenExporter`, `ColorUtils`, `AccessibilityUtils`, error classes, all types | Browser bundles and framework adapters. Theme switching is 2.7 KB gzipped. |
+| `@tokiforge/core/tools` | `SSRUtils`, `TokenAnalytics`, `AnalyticsReporter`, `SemanticTokenManager`, `TokenVersioning`, `ResponsiveTokens`, `BrandManager`, `ComponentTheming`, `TokenRegistry`, `IDESupport`, `pluginManager`, `IOSExporter`, `AndroidExporter`, `ReactNativeExporter`, `PlatformExporter` | Build scripts, Storybook, docs sites, design tooling. Browser-safe (no `fs`/`yaml`). |
+| `@tokiforge/core/node` | Everything above plus `TokenParser`, `FigmaDiff`, `CICDValidator` | CLI, Node build tools, VS Code extension. |
+| `@tokiforge/core` | Same as `/node` | Backwards-compatible default. |
+
+Bundle budgets for each entry are enforced with `size-limit`; see the [Performance guide](/guide/performance#bundle-size).
+
 ---
 
 ## ThemeRuntime
@@ -688,7 +699,11 @@ const tokens = {
   }
 };
 
-const responsive = ResponsiveTokens.process(tokens);
+const responsive = ResponsiveTokens.generateResponsiveCSS(tokens);
+const hoverPadding = ResponsiveTokens.getResponsiveValue(
+  tokens.spacing.padding as import('@tokiforge/core').TokenValue,
+  'lg'
+);
 ```
 
 ---
@@ -700,8 +715,11 @@ Compare and sync tokens with Figma.
 ```typescript
 import { FigmaDiff } from '@tokiforge/core';
 
-const diff = FigmaDiff.compare(localTokens, figmaTokens);
-const sync = FigmaDiff.sync(localTokens, figmaTokens, { strategy: 'merge' });
+const diff = FigmaDiff.compare(figmaTokens, codeTokens);
+const synced = FigmaDiff.sync(codeTokens, figmaTokens, { strategy: 'merge' });
+if (FigmaDiff.hasMismatches(diff)) {
+  console.log(FigmaDiff.generateReport(diff));
+}
 ```
 
 ---
@@ -713,11 +731,14 @@ Automated validation for CI/CD pipelines.
 ```typescript
 import { CICDValidator } from '@tokiforge/core';
 
-const validator = new CICDValidator();
-const result = await validator.validate(tokens);
+const result = CICDValidator.validate(tokens, {
+  strict: true,
+  checkAccessibility: true,
+  checkDeprecated: true,
+});
 if (!result.valid) {
-  console.error(result.errors);
-  process.exit(1);
+  console.error(CICDValidator.generateReport(result));
+  process.exit(CICDValidator.exitCode(result));
 }
 ```
 

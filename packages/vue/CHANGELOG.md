@@ -1,5 +1,12 @@
 # @tokiforge/vue
 
+## 2.4.0
+
+### Minor Changes
+
+- Provider wraps shared `ThemeController` for consistent lifecycle with other adapters.
+- Version bump to 2.4.0; depends on `@tokiforge/core@^2.4.0`.
+
 ## 2.2.3
 
 ### Patch Changes

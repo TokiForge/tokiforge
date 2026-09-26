@@ -1,4 +1,4 @@
-import type { DesignTokens } from '@tokiforge/core';
+import type { DesignTokens } from '@tokiforge/core/runtime';
 
 interface Props { tokens: DesignTokens; }
 
@@ -10,24 +10,24 @@ export default function ComponentsPanel({ tokens }: Props) {
   interface RadiusTokens { md?: ColorValue; }
 
   const c = (tokens.color ?? {}) as ColorTokens;
-  const primary   = c.primary?.value   ?? '#7c3aed';
-  const secondary = c.secondary?.value ?? '#06b6d4';
-  const success   = c.success?.value   ?? '#10b981';
-  const warning   = c.warning?.value   ?? '#f59e0b';
-  const danger    = c.danger?.value    ?? '#ef4444';
-  const text      = c.text?.primary?.value    ?? '#f1f5f9';
-  const textSec   = c.text?.secondary?.value  ?? '#94a3b8';
-  const bgCard    = c.background?.card?.value ?? '#111827';
-  const radius    = (tokens.radius as RadiusTokens)?.md?.value ?? '0.5rem';
+  const primary   = c.primary?.value   ?? '#fb7185';
+  const secondary = c.secondary?.value ?? '#38bdf8';
+  const success   = c.success?.value   ?? '#4ade80';
+  const warning   = c.warning?.value   ?? '#fbbf24';
+  const danger    = c.danger?.value    ?? '#f87171';
+  const text      = c.text?.primary?.value    ?? '#fafafa';
+  const textSec   = c.text?.secondary?.value  ?? '#a1a1aa';
+  const bgCard    = c.background?.card?.value ?? '#18181b';
+  const radius    = (tokens.radius as RadiusTokens)?.md?.value ?? '8px';
 
   return (
     <div style={{ padding:'2rem', maxWidth:1000, margin:'0 auto' }}>
       <div className="tf-page-header" style={{ padding:'0 0 1.5rem', border:'none', marginBottom:'1.5rem' }}>
         <div>
-          <h1 className="tf-page-title">🧱 Component System</h1>
+          <h1 className="tf-page-title">Component System</h1>
           <p className="tf-page-subtitle">Live component preview powered by your active design tokens</p>
         </div>
-        <span className="tf-badge tf-badge-brand">Token-driven</span>
+        <span className="tf-badge tf-badge-heat">Token-driven</span>
       </div>
 
       {/* Buttons */}

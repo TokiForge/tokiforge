@@ -1,7 +1,6 @@
-import { Injectable, signal, computed, effect, PLATFORM_ID, inject } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { ThemeRuntime, TokenExporter } from '@tokiforge/core';
-import type { ThemeConfig, DesignTokens } from '@tokiforge/core';
+import { Injectable, signal, computed } from '@angular/core';
+import { ThemeController, TokenExporter } from '@tokiforge/core/runtime';
+import type { ThemeConfig, DesignTokens } from '@tokiforge/core/runtime';
 
 export interface ThemeInitOptions {
   selector?: string;
@@ -9,65 +8,44 @@ export interface ThemeInitOptions {
   defaultTheme?: string;
   mode?: 'dynamic' | 'static';
   persist?: boolean;
+  storageKey?: string;
   watchSystemTheme?: boolean;
   bodyClassPrefix?: string;
+  onThemeChange?: (themeName: string) => void;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThemeService {
-  private platformId = inject(PLATFORM_ID);
-  private runtime: ThemeRuntime | null = null;
-  private isBrowser = isPlatformBrowser(this.platformId);
-  
+  private isBrowser =
+    typeof globalThis !== 'undefined' &&
+    typeof (globalThis as { window?: unknown }).window !== 'undefined' &&
+    typeof document !== 'undefined';
+  private controller: ThemeController | null = null;
+  private unsubscribe: (() => void) | null = null;
+
   private _theme = signal<string>('default');
   private _initialized = signal<boolean>(false);
-  
+
   theme = this._theme.asReadonly();
   initialized = this._initialized.asReadonly();
-  
+
   tokens = computed<DesignTokens>(() => {
-    if (!this.runtime || !this._initialized()) {
-      return {};
-    }
+    if (!this.controller || !this._initialized()) return {};
     try {
-      return this.runtime.getThemeTokens(this._theme());
+      return this.controller.getTokens();
     } catch {
       return {};
     }
   });
-  
+
   availableThemes = computed<string[]>(() => {
-    if (!this.runtime || !this._initialized()) {
-      return [];
-    }
-    return this.runtime.getAvailableThemes();
+    if (!this.controller || !this._initialized()) return [];
+    return this.controller.getAvailableThemes();
   });
 
   private options: ThemeInitOptions = {};
-  private unwatchSystemTheme: (() => void) | null = null;
-
-  constructor() {
-    // Effect to handle theme changes
-    effect(() => {
-      if (this._initialized() && this.isBrowser) {
-        const currentTheme = this._theme();
-        if (this.options.mode === 'static') {
-          this.updateBodyClass(currentTheme);
-        }
-        
-        // Persist to localStorage if enabled
-        if (this.options.persist && this.isBrowser && typeof window !== 'undefined' && window.localStorage) {
-          try {
-            window.localStorage.setItem('tokiforge-theme', currentTheme);
-          } catch (e) {
-            // Ignore localStorage errors
-          }
-        }
-      }
-    });
-  }
 
   init(config: ThemeConfig, options: ThemeInitOptions = {}): void {
     if (this._initialized()) {
@@ -80,117 +58,94 @@ export class ThemeService {
       prefix: 'hf',
       mode: 'dynamic',
       persist: true,
+      storageKey: 'tokiforge-theme',
       watchSystemTheme: false,
       bodyClassPrefix: 'theme',
       ...options,
     };
 
-    this.runtime = new ThemeRuntime(config);
-    const availableThemes = this.runtime.getAvailableThemes();
-    
-    let initialTheme = this.options.defaultTheme || config.defaultTheme || availableThemes[0] || 'default';
+    this.controller = new ThemeController(config, {
+      selector: this.options.selector,
+      prefix: this.options.prefix,
+      defaultTheme: this.options.defaultTheme,
+      persist: this.options.persist,
+      storageKey: this.options.storageKey,
+      watchSystemTheme: this.options.watchSystemTheme,
+      onThemeChange: this.options.onThemeChange,
+    });
 
-    // Load from localStorage if persist is enabled
-    if (this.options.persist && this.isBrowser && typeof window !== 'undefined' && window.localStorage) {
-      try {
-        const saved = window.localStorage.getItem('tokiforge-theme');
-        if (saved && availableThemes.includes(saved)) {
-          initialTheme = saved;
-        }
-      } catch (e) {
-        // Ignore localStorage errors
-      }
-    }
-
-    // Detect system theme if enabled
-    if (this.options.watchSystemTheme && !this.options.persist && this.isBrowser) {
-      const systemTheme = ThemeRuntime.detectSystemTheme();
-      if (availableThemes.includes(systemTheme)) {
-        initialTheme = systemTheme;
-      }
-    }
-
-    this._theme.set(initialTheme);
+    const snapshot = this.controller.getSnapshot();
+    this._theme.set(snapshot.theme);
     this._initialized.set(true);
 
-    // Initialize runtime
+    this.unsubscribe = this.controller.subscribe((next) => {
+      this._theme.set(next.theme);
+      if (this.options.mode === 'static' && this.isBrowser) {
+        this.updateBodyClass(next.theme);
+      }
+    });
+
     if (this.isBrowser) {
       if (this.options.mode === 'static') {
-        this.updateBodyClass(initialTheme);
+        this.updateBodyClass(snapshot.theme);
       } else {
-        this.runtime.init(this.options.selector!, this.options.prefix!);
-        this.runtime.applyTheme(initialTheme, this.options.selector!, this.options.prefix!);
-      }
-
-      // Watch system theme if enabled
-      if (this.options.watchSystemTheme) {
-        this.unwatchSystemTheme = this.runtime.watchSystemTheme((systemTheme: string) => {
-          if (availableThemes.includes(systemTheme)) {
-            this.setTheme(systemTheme);
-          }
-        });
-
-        // Cleanup on beforeunload
-        if (typeof window !== 'undefined') {
-          window.addEventListener('beforeunload', () => {
-            if (this.unwatchSystemTheme) {
-              this.unwatchSystemTheme();
-            }
-          });
-        }
-      }
-
-      // Listen for theme change events
-      if (this.options.mode === 'dynamic' && typeof window !== 'undefined') {
-        window.addEventListener('tokiforge:theme-change', (e: Event) => {
-          const customEvent = e as CustomEvent;
-          if (customEvent.detail?.theme) {
-            this._theme.set(customEvent.detail.theme);
-          }
-        });
+        this.controller.init();
       }
     }
   }
 
   setTheme(themeName: string): void {
-    if (!this.runtime || !this._initialized()) {
+    if (!this.controller || !this._initialized()) {
       throw new Error('ThemeService not initialized. Call init() first.');
     }
 
-    const availableThemes = this.runtime.getAvailableThemes();
+    const availableThemes = this.controller.getAvailableThemes();
     if (!availableThemes.includes(themeName)) {
       throw new Error(`Theme "${themeName}" not found. Available themes: ${availableThemes.join(', ')}`);
     }
 
-    if (this.options.mode === 'static' && this.isBrowser) {
-      this.updateBodyClass(themeName);
-    } else if (this.runtime && this.isBrowser) {
-      this.runtime.applyTheme(themeName, this.options.selector!, this.options.prefix!);
+    if (this.options.mode === 'static') {
+      this._theme.set(themeName);
+      if (this.isBrowser) this.updateBodyClass(themeName);
+      if (this.options.persist && this.isBrowser) {
+        try {
+          window.localStorage?.setItem(this.options.storageKey ?? 'tokiforge-theme', themeName);
+        } catch {
+          // ignore
+        }
+      }
+      this.options.onThemeChange?.(themeName);
+      return;
     }
 
-    this._theme.set(themeName);
+    this.controller.setTheme(themeName);
   }
 
   nextTheme(): void {
-    if (!this.runtime || !this._initialized()) {
+    if (!this.controller || !this._initialized()) {
       throw new Error('ThemeService not initialized. Call init() first.');
     }
-
-    const nextThemeName = this.runtime.nextTheme();
-    this.setTheme(nextThemeName);
+    if (this.options.mode === 'static') {
+      const themes = this.controller.getAvailableThemes();
+      const currentIndex = themes.indexOf(this._theme());
+      this.setTheme(themes[(currentIndex + 1) % themes.length]);
+      return;
+    }
+    this.controller.nextTheme();
   }
 
   generateCSS(themeName?: string): string {
-    if (!this.runtime || !this._initialized()) {
+    if (!this.controller || !this._initialized()) {
       throw new Error('ThemeService not initialized. Call init() first.');
     }
 
     const targetTheme = themeName || this._theme();
-    const themeTokens = this.runtime.getThemeTokens(targetTheme);
-    const bodySelector = this.options.mode === 'static' 
-      ? `body.${this.options.bodyClassPrefix}-${targetTheme}`
-      : this.options.selector;
-    
+    const themeTokens = this.controller.runtime.getThemeTokens(targetTheme);
+    const bodySelector =
+      this.options.mode === 'static'
+        ? `body.${this.options.bodyClassPrefix}-${targetTheme}`
+        : this.options.selector;
+
     return TokenExporter.exportCSS(themeTokens, {
       selector: bodySelector || ':root',
       prefix: this.options.prefix || 'hf',
@@ -198,29 +153,19 @@ export class ThemeService {
   }
 
   private updateBodyClass(themeName: string): void {
-    if (!this.isBrowser || typeof document === 'undefined') {
-      return;
-    }
-
-    const availableThemes = this.runtime?.getAvailableThemes() || [];
-    availableThemes.forEach((t: string) => {
+    if (!this.isBrowser || typeof document === 'undefined') return;
+    const availableThemes = this.controller?.getAvailableThemes() || [];
+    for (const t of availableThemes) {
       document.body.classList.remove(`${this.options.bodyClassPrefix}-${t}`);
-    });
+    }
     document.body.classList.add(`${this.options.bodyClassPrefix}-${themeName}`);
   }
 
   destroy(): void {
-    if (this.unwatchSystemTheme) {
-      this.unwatchSystemTheme();
-      this.unwatchSystemTheme = null;
-    }
-
-    if (this.runtime) {
-      this.runtime.destroy();
-      this.runtime = null;
-    }
-
+    this.unsubscribe?.();
+    this.unsubscribe = null;
+    this.controller?.destroy();
+    this.controller = null;
     this._initialized.set(false);
   }
 }
-

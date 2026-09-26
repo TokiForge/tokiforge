@@ -10,42 +10,101 @@ export class ColorUtils {
 
     if (input.startsWith('#')) {
       const hex = input.slice(1);
-      if (!/^[0-9a-fA-F]{3}$|^[0-9a-fA-F]{6}$|^[0-9a-fA-F]{8}$/.test(hex)) return null;
+      if (!/^(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(hex)) return null;
       return this.hexToRGB(input);
     }
 
-    const rgbMatch = /^rgba?\(\s*([\d.]+)\s*[, ]\s*([\d.]+)\s*[, ]\s*([\d.]+)/i.exec(input);
+    const rgbMatch =
+      /^rgba?\(\s*([+-]?[\d.]+%?)\s*[, ]\s*([+-]?[\d.]+%?)\s*[, ]\s*([+-]?[\d.]+%?)(?:\s*[,/]\s*([+-]?[\d.]+%?))?\s*\)?$/i.exec(
+        input
+      );
     if (rgbMatch) {
-      return {
-        r: Math.min(255, Number.parseFloat(rgbMatch[1])),
-        g: Math.min(255, Number.parseFloat(rgbMatch[2])),
-        b: Math.min(255, Number.parseFloat(rgbMatch[3])),
+      const channel = (raw: string): number => {
+        if (raw.endsWith('%')) {
+          return Math.min(255, Math.max(0, (Number.parseFloat(raw) / 100) * 255));
+        }
+        return Math.min(255, Math.max(0, Number.parseFloat(raw)));
       };
+      return this.withAlpha(
+        { r: channel(rgbMatch[1]), g: channel(rgbMatch[2]), b: channel(rgbMatch[3]) },
+        rgbMatch[4]
+      );
     }
 
-    const hslMatch = /^hsla?\(\s*([\d.]+)(?:deg)?\s*[, ]\s*([\d.]+)%\s*[, ]\s*([\d.]+)%/i.exec(input);
+    const hslMatch =
+      /^hsla?\(\s*([+-]?[\d.]+)(?:deg)?\s*[, ]\s*([\d.]+)%\s*[, ]\s*([\d.]+)%(?:\s*[,/]\s*([+-]?[\d.]+%?))?\s*\)?$/i.exec(
+        input
+      );
     if (hslMatch) {
-      return this.hslToRGB({
-        h: Number.parseFloat(hslMatch[1]),
-        s: Number.parseFloat(hslMatch[2]),
-        l: Number.parseFloat(hslMatch[3]),
-      });
+      return this.withAlpha(
+        this.hslToRGB({
+          h: Number.parseFloat(hslMatch[1]),
+          s: Number.parseFloat(hslMatch[2]),
+          l: Number.parseFloat(hslMatch[3]),
+        }),
+        hslMatch[4]
+      );
     }
 
     return null;
   }
+
   static hexToRGB(hex: string): ColorRGB {
-    let cleanHex = hex.replace('#', '');
+    let cleanHex = hex.replace('#', '').trim();
     if (cleanHex.length === 3 || cleanHex.length === 4) {
       cleanHex = cleanHex
         .split('')
         .map((c) => c + c)
         .join('');
     }
-    const r = Number.parseInt(cleanHex.substring(0, 2), 16);
-    const g = Number.parseInt(cleanHex.substring(2, 4), 16);
-    const b = Number.parseInt(cleanHex.substring(4, 6), 16);
-    return { r, g, b };
+    const rgb: ColorRGB = {
+      r: Number.parseInt(cleanHex.substring(0, 2), 16),
+      g: Number.parseInt(cleanHex.substring(2, 4), 16),
+      b: Number.parseInt(cleanHex.substring(4, 6), 16),
+    };
+    if (cleanHex.length >= 8) {
+      const alpha = Number.parseInt(cleanHex.substring(6, 8), 16) / 255;
+      if (alpha < 0.999) rgb.a = alpha;
+    }
+    return rgb;
+  }
+
+  /** sRGB relative luminance (WCAG 2). */
+  static relativeLuminance(rgb: ColorRGB): number {
+    const channel = (value: number): number => {
+      const v = value / 255;
+      return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+    };
+    return 0.2126 * channel(rgb.r) + 0.7152 * channel(rgb.g) + 0.0722 * channel(rgb.b);
+  }
+
+  /**
+   * Composite a possibly translucent foreground over a background.
+   * A translucent background is first composited over white.
+   */
+  static composite(foreground: ColorRGB, background: ColorRGB): ColorRGB {
+    const alpha = foreground.a ?? 1;
+    if (alpha >= 0.999) {
+      return { r: foreground.r, g: foreground.g, b: foreground.b };
+    }
+    const base = (background.a ?? 1) < 0.999
+      ? this.composite(background, { r: 255, g: 255, b: 255 })
+      : background;
+    return {
+      r: foreground.r * alpha + base.r * (1 - alpha),
+      g: foreground.g * alpha + base.g * (1 - alpha),
+      b: foreground.b * alpha + base.b * (1 - alpha),
+    };
+  }
+
+  private static withAlpha(rgb: ColorRGB, rawAlpha: string | undefined): ColorRGB {
+    if (rawAlpha == null || rawAlpha === '') return rgb;
+    const alpha = rawAlpha.endsWith('%')
+      ? Number.parseFloat(rawAlpha) / 100
+      : Number.parseFloat(rawAlpha);
+    const clamped = Math.min(1, Math.max(0, alpha));
+    if (clamped < 0.999) rgb.a = clamped;
+    return rgb;
   }
 
   static rgbToHex(rgb: ColorRGB): string {
@@ -262,21 +321,50 @@ export class ColorUtils {
     );
   }
 
-  static getContrastRatio(color1: string, color2: string): number {
-    const getLuminance = (hex: string): number => {
-      const rgb = this.parseColor(hex) ?? this.hexToRGB(hex);
-      const [r, g, b] = [rgb.r / 255, rgb.g / 255, rgb.b / 255].map((val) =>
-        val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4)
-      );
-      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    };
+  /**
+   * Emit a CSS `color-mix()` expression (resolved at paint time by the browser).
+   * Prefer this over `mix()` when exporting tokens that should track theme changes.
+   */
+  static colorMixCSS(
+    color1: string,
+    color2: string,
+    weight = 0.5,
+    space: 'oklch' | 'srgb' | 'hsl' | 'hwb' | 'lab' | 'lch' = 'oklch'
+  ): string {
+    const pct = Math.round(Math.min(1, Math.max(0, weight)) * 100);
+    return `color-mix(in ${space}, ${color1} ${100 - pct}%, ${color2})`;
+  }
 
-    const lum1 = getLuminance(color1);
-    const lum2 = getLuminance(color2);
+  /**
+   * Relative color syntax helper, e.g. `oklch(from var(--hf-color-primary) l c h)`.
+   */
+  static relativeColorCSS(
+    from: string,
+    channels: string,
+    space: 'oklch' | 'srgb' | 'hsl' | 'hwb' | 'lab' | 'lch' = 'oklch'
+  ): string {
+    return `${space}(from ${from} ${channels})`;
+  }
+
+  /**
+   * WCAG 2 contrast ratio. `color1` is treated as the foreground when either
+   * color is translucent, and is composited over `color2` before measuring.
+   * Returns 0 when a color cannot be parsed.
+   */
+  static getContrastRatio(color1: string, color2: string): number {
+    const foreground = this.parseColor(color1);
+    const background = this.parseColor(color2);
+    if (!foreground || !background) return 0;
+
+    const solidForeground = this.composite(foreground, background);
+    const solidBackground = (background.a ?? 1) < 0.999
+      ? this.composite(background, { r: 255, g: 255, b: 255 })
+      : background;
+
+    const lum1 = this.relativeLuminance(solidForeground);
+    const lum2 = this.relativeLuminance(solidBackground);
     const lighter = Math.max(lum1, lum2);
     const darker = Math.min(lum1, lum2);
-    const ratio = (lighter + 0.05) / (darker + 0.05);
-
-    return Math.round(ratio * 100) / 100;
+    return Math.round(((lighter + 0.05) / (darker + 0.05)) * 100) / 100;
   }
 }

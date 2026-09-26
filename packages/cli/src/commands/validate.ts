@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import * as path from 'path';
-import { CICDValidator } from '@tokiforge/core';
+import { CICDValidator } from '@tokiforge/core/node';
 import { pullFromFigma } from '@tokiforge/figma';
 
 export interface ValidateOptions {

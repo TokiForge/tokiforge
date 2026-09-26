@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { AccessibilityUtils } from '@tokiforge/core';
-import type { DesignTokens } from '@tokiforge/core';
+import { AccessibilityUtils } from '@tokiforge/core/runtime';
+import type { DesignTokens } from '@tokiforge/core/runtime';
 import './ContrastVisualizer.css';
 
 interface ContrastVisualizerProps {

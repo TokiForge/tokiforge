@@ -1,11 +1,11 @@
 # @tokiforge/emotion
 
-Emotion CSS-in-JS adapter for TokiForge theming system.
+Emotion CSS-in-JS adapter for TokiForge theming system (v2.4.0). Uses shared `ThemeController`.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/emotion @tokiforge/core @emotion/styled
+npm install @tokiforge/emotion@^2.4.0 @tokiforge/core@^2.4.0 @emotion/styled
 ```
 
 ## Usage

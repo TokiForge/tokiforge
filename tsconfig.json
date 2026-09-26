@@ -30,6 +30,15 @@
       "@tokiforge/core": [
         "./packages/core/src/index.ts"
       ],
+      "@tokiforge/core/runtime": [
+        "./packages/core/src/runtime.ts"
+      ],
+      "@tokiforge/core/tools": [
+        "./packages/core/src/tools.ts"
+      ],
+      "@tokiforge/core/node": [
+        "./packages/core/src/node.ts"
+      ],
       "@tokiforge/figma": [
         "./packages/figma/src/index.ts"
       ],

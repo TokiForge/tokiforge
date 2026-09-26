@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config';
+import path from 'path';
 
 export default defineConfig({
   test: {
@@ -17,5 +18,10 @@ export default defineConfig({
       ],
     },
   },
+  resolve: {
+    alias: {
+      '@tokiforge/core': path.resolve(__dirname, '../core/src'),
+      '@tokiforge/core/runtime': path.resolve(__dirname, '../core/src/runtime.ts'),
+    },
+  },
 });
-

@@ -107,65 +107,32 @@ if (typeof window !== "undefined") {
 ### Browser Build Errors
 
 **Error:** `createRequire is not available in browser environment`  
-**Error:** `Could not resolve "module"`  
-**Error:** `Could not resolve "zlib"`
+**Error:** `Could not resolve "module"` / `"fs"` / `"yaml"`
 
 **Solution:**
 
-TokiForge v2.3.0 includes browser-compatible stubs for Node.js modules. If you encounter these errors:
+Do not import `@tokiforge/core` (full barrel) in browser apps — it includes Node-only APIs like `TokenParser`.
 
-1. **For Vite projects (React, Vue, Svelte):**
+```typescript
+// Browser / framework apps
+import { ThemeRuntime, TokenExporter } from '@tokiforge/core/runtime';
+// or use a framework package:
+import { ThemeProvider } from '@tokiforge/react';
 
-   - Ensure `vite.config.ts` includes aliases for Node.js modules:
+// Browser-safe build/analysis helpers (no fs/yaml)
+import { SSRUtils, TokenAnalytics, IOSExporter } from '@tokiforge/core/tools';
 
-   ```typescript
-   resolve: {
-     alias: {
-       'module': resolve(__dirname, 'src/stubs/module.ts'),
-       'zlib': resolve(__dirname, 'src/stubs/zlib.ts'),
-       'util': resolve(__dirname, 'src/stubs/util.ts'),
-       'yaml': resolve(__dirname, 'src/stubs/yaml.ts'),
-       'fs': resolve(__dirname, 'src/stubs/fs.ts'),
-       'path': resolve(__dirname, 'src/stubs/path.ts'),
-     },
-   },
-   ```
+// CLI / build scripts only
+import { TokenParser, CICDValidator } from '@tokiforge/core/node';
+```
 
-   - Create stub files in `src/stubs/` (see example projects for reference)
+**Error:** `Module '"@tokiforge/core/runtime"' has no exported member 'SSRUtils'` (or `TokenAnalytics`, `SemanticTokenManager`, platform exporters, …)
 
-2. **For Angular projects:**
+**Solution:** As of v2.4.0 those helpers moved to `@tokiforge/core/tools` so `/runtime` stays under 3 KB. Update the import path; the default `@tokiforge/core` entry still exports everything.
 
-   - Add path mappings in `tsconfig.json` and `tsconfig.app.json`:
+### Docs Site: `Failed to resolve import "@tokiforge/core/runtime"`
 
-   ```json
-   "paths": {
-     "module": ["./src/stubs/module.ts"],
-     "zlib": ["./src/stubs/zlib.ts"],
-     "util": ["./src/stubs/util.ts"],
-     "yaml": ["./src/stubs/yaml.ts"],
-     "fs": ["./src/stubs/fs.ts"],
-     "path": ["./src/stubs/path.ts"]
-   }
-   ```
-
-   - Add to `allowedCommonJsDependencies` in `angular.json`:
-
-   ```json
-   "allowedCommonJsDependencies": [
-     "@tokiforge/core",
-     "@tokiforge/angular",
-     "util",
-     "inherits",
-     "is-arguments",
-     "is-generator-function",
-     "which-typed-array",
-     "is-typed-array"
-   ]
-   ```
-
-3. **Reference implementations:**
-   - See `examples/react-example/src/stubs/` for Vite stub examples
-   - See `examples/angular-example/src/stubs/` for Angular stub examples
+Run `pnpm --filter @tokiforge/core build` first (the docs `predev`/`prebuild` scripts do this automatically). The VitePress config aliases `/runtime` to the built `dist` and falls back to source when it is missing. Do not add a plain string alias for `@tokiforge/core` in Vite — it rewrites the `/runtime` subpath as a prefix and breaks resolution.
 
 ### TypeScript Build Errors
 

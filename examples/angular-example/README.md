@@ -43,12 +43,6 @@ npm install
 
 The example uses `file:` protocol to link to the local packages, so they must be built first.
 
-## Browser Compatibility
-
-This example includes browser-compatible stubs for Node.js modules (`module`, `zlib`, `util`, `yaml`, `fs`, `path`) to ensure successful builds in browser environments. The TypeScript configuration includes path mappings that resolve these modules to stubs located in `src/stubs/`.
-
-The Angular build configuration (`angular.json`) includes these modules in `allowedCommonJsDependencies` to prevent build warnings.
-
 ### Development
 
 ```bash

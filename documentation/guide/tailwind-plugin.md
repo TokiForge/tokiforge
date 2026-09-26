@@ -204,7 +204,7 @@ Maps design tokens to Tailwind utility values.
 
 ## Theme Mappings
 
-Customize which token categories map to which utilities. In v2.2.3, `boxShadow`, `lineHeight`, and `animation` are supported in addition to colors, spacing, typography, and radius:
+Customize which token categories map to which utilities. Since v2.2.3 (current: v2.4.0), `boxShadow`, `lineHeight`, and `animation` are supported in addition to colors, spacing, typography, and radius:
 
 ```javascript
 createTailwindPlugin({

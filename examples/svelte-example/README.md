@@ -1,8 +1,8 @@
-﻿# TokiForge Svelte Example
+# TokiForge Svelte Example
 
 This example demonstrates how to use TokiForge with Svelte.
 
-> **TokiForge v2.2.3** | **Svelte 4+**
+> **TokiForge v2.4.0** | **Svelte 4+**
 
 ## Getting Started
 
@@ -36,7 +36,7 @@ The example uses `file:` protocol to link to the local packages, so they must be
 
 ## Browser Compatibility
 
-This example includes browser-compatible stubs for Node.js modules (`module`, `zlib`, `util`, `yaml`, `fs`, `path`) to ensure successful builds in browser environments. The Vite configuration automatically resolves these modules to stubs located in `src/stubs/`.
+Import browser APIs from `@tokiforge/core/runtime` (or `@tokiforge/svelte`). Use `@tokiforge/core/node` only in CLI/build scripts that need `TokenParser` / file I/O.
 
 ### Development
 
@@ -65,14 +65,14 @@ npm run preview
 
 ```
 svelte-example/
-├── src/
-│   ├── App.svelte       # Main component
-│   ├── tokens.json      # Design tokens
-│   └── main.ts          # Entry point
-├── index.html
-├── package.json
-├── vite.config.ts
-└── tsconfig.json
++-- src/
+�   +-- App.svelte       # Main component
+�   +-- tokens.json      # Design tokens
+�   +-- main.ts          # Entry point
++-- index.html
++-- package.json
++-- vite.config.ts
++-- tsconfig.json
 ```
 
 ## Improvements

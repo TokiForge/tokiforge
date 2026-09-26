@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TokiForge Sync</title>
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --panel: #2c2c2c;
+      --line: #3c3c3c;
+      --text: #f5f5f5;
+      --muted: #a0a0a0;
+      --accent: #18a0fb;
+      --ok: #1bc47d;
+      --bad: #f24822;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 12px/1.45 Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 12px;
+    }
+    h1 { font-size: 14px; margin: 0 0 8px; }
+    p { margin: 0 0 12px; color: var(--muted); }
+    .row { display: flex; gap: 8px; margin-bottom: 8px; }
+    button {
+      flex: 1;
+      height: 32px;
+      border: 0;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button.secondary { background: var(--panel); border: 1px solid var(--line); }
+    button:disabled { opacity: 0.5; cursor: default; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    label { display: block; color: var(--muted); margin-bottom: 4px; }
+    input {
+      width: 100%;
+      height: 30px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--text);
+      padding: 0 8px;
+      margin-bottom: 8px;
+    }
+    #status { min-height: 18px; color: var(--muted); }
+    #status.ok { color: var(--ok); }
+    #status.err { color: var(--bad); }
+    pre {
+      margin: 0;
+      max-height: 220px;
+      overflow: auto;
+      background: var(--bg);
+      border-radius: 6px;
+      padding: 8px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <h1>TokiForge Sync</h1>
+  <p>Pull local paint/text styles or push color tokens into this file.</p>
+
+  <div class="card">
+    <label for="apiUrl">API URL</label>
+    <input id="apiUrl" placeholder="https://tokens.studio/api/v1" />
+    <label for="projectId">Project ID</label>
+    <input id="projectId" placeholder="project id" />
+    <label for="accessToken">Access token</label>
+    <input id="accessToken" type="password" placeholder="••••••••" />
+    <div class="row">
+      <button class="secondary" id="saveSettings" type="button">Save settings</button>
+      <button class="secondary" id="refreshStatus" type="button">Status</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <button id="pull" type="button">Pull from Figma</button>
+    <button id="push" type="button">Push colors</button>
+  </div>
+
+  <div id="status">Ready</div>
+  <div class="card"><pre id="output">No data yet.</pre></div>
+
+  <script>
+    const statusEl = document.getElementById('status');
+    const outputEl = document.getElementById('output');
+    let lastPull = null;
+
+    function setStatus(msg, kind) {
+      statusEl.textContent = msg;
+      statusEl.className = kind || '';
+    }
+
+    function configFromForm() {
+      return {
+        apiUrl: document.getElementById('apiUrl').value.trim(),
+        projectId: document.getElementById('projectId').value.trim(),
+        accessToken: document.getElementById('accessToken').value.trim(),
+      };
+    }
+
+    function fillSettings(config) {
+      if (!config) return;
+      document.getElementById('apiUrl').value = config.apiUrl || '';
+      document.getElementById('projectId').value = config.projectId || '';
+      document.getElementById('accessToken').value = config.accessToken || '';
+    }
+
+    document.getElementById('saveSettings').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'settings', config: configFromForm() } }, '*');
+    };
+
+    document.getElementById('refreshStatus').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'status' } }, '*');
+    };
+
+    document.getElementById('pull').onclick = () => {
+      setStatus('Pulling…');
+      parent.postMessage({ pluginMessage: { type: 'pull' } }, '*');
+    };
+
+    document.getElementById('push').onclick = () => {
+      if (!lastPull || !lastPull.colors) {
+        setStatus('Pull first, or nothing to push.', 'err');
+        return;
+      }
+      setStatus('Pushing…');
+      parent.postMessage({
+        pluginMessage: { type: 'push', tokens: { colors: lastPull.colors } },
+      }, '*');
+    };
+
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (!msg) return;
+
+      if (msg.type === 'pull-response') {
+        lastPull = msg.data;
+        outputEl.textContent = JSON.stringify(msg.data, null, 2);
+        setStatus('Pulled styles from Figma.', 'ok');
+      } else if (msg.type === 'push-response') {
+        setStatus(msg.success ? 'Pushed colors to Figma.' : 'Push failed.', msg.success ? 'ok' : 'err');
+      } else if (msg.type === 'settings-response') {
+        fillSettings(msg.config);
+        setStatus('Settings saved.', 'ok');
+      } else if (msg.type === 'status-response') {
+        outputEl.textContent = JSON.stringify(msg.data, null, 2);
+        fillSettings(msg.data && msg.data.config);
+        setStatus('Status updated.', 'ok');
+      } else if (msg.type === 'error') {
+        setStatus(msg.error || 'Unknown error', 'err');
+      }
+    };
+
+    parent.postMessage({ pluginMessage: { type: 'status' } }, '*');
+  </script>
+</body>
+</html>

@@ -1,8 +1,17 @@
-# TokiForge Roadmap v2.3.0+
+# TokiForge Roadmap v2.4.0+
 
 ## Current Status Analysis
 
-### Already Implemented (v2.3.0)
+### Already Implemented (v2.4.0)
+
+0. **Core runtime / tools / node split** - Fully implemented
+
+   - `@tokiforge/core/runtime` for browser theme APIs (theme switching 2.7 KB gzipped)
+   - `@tokiforge/core/tools` for browser-safe build/analysis helpers (analytics, SSR utils, platform exporters)
+   - `@tokiforge/core/node` for `TokenParser` and file I/O
+   - `size-limit` budgets enforced in CI on tree-shaken imports
+   - Modern CSS export: `color-mix()`, `@layer`, `@container`
+   - ThemeController on Vue, Angular, Emotion, and styled-components
 
 1. **Semantic Tokens & Aliasing** - Partially implemented
 
@@ -59,8 +68,11 @@
    - `pushToFigma()` function
    - `FigmaDiff` class for comparison
    - CLI `figma:diff` command
-   - Bidirectional sync stores token snapshots keyed by content hash so change detection no longer uses empty reconstructed state
-   - **Enhancement needed**: Tokens Studio integration, dedicated Figma plugin UI
+  - Bidirectional sync stores token snapshots keyed by content hash so change detection no longer uses empty reconstructed state
+  - ThemeController on Vue, Angular, Emotion, styled-components, Storybook, and Astro
+  - Packaged Figma plugin UI (`ui.html` + manifest) for Development installs
+  - CLI / Tailwind consume `@tokiforge/core/node` for file parsing
+  - **Enhancement needed**: Tokens Studio hosted workflow polish
 
 8. **Tailwind Integration** - Implemented
 
@@ -78,12 +90,10 @@
    - Token documentation generation
    - **Enhancement needed**: Type generation CLI, VSCode extension
 
-10. **CLI Tooling** - Partially implemented
-    - `validate` command
-    - `diff` command
-    - `analytics` command
-    - `figma:diff` command
-    - **Enhancement needed**: `migrate`, `watch`, `generate:types` commands
+10. **CLI Tooling** - Fully implemented
+    - `validate`, `diff`, `analytics`, `figma:diff` commands
+    - `migrate`, `watch`, `generate:types`, `docs` commands
+    - Build emits responsive/state CSS; Node entry `@tokiforge/core/node`
 
 ---
 
@@ -232,7 +242,7 @@
 - `ConflictResolver` class with intelligent conflict detection and resolution
 - 5 conflict types with severity calculation
 - 4 merge strategies: local-wins, remote-wins, merge, manual
-- Figma plugin stub (`plugin.ts`, `manifest.json`)
+- Figma plugin (`plugin.ts`, `ui.html`, `manifest.json`) buildable via `pnpm --filter @tokiforge/figma build`
 - Automatic format conversion between Tokens Studio and DesignTokens
 - Comprehensive conflict reporting and resolution tracking
 - 20+ test cases covering sync, API, and conflict scenarios
@@ -466,4 +476,4 @@ We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guideline
 ---
 
 _Last updated: July 2026_  
-_Version: 2.3.0_
+_Version: 2.4.0_

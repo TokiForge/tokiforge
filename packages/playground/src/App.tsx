@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { ThemeRuntime } from '@tokiforge/core';
-import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
+import React, { useState, useEffect, useCallback, useMemo, lazy, Suspense, type ReactNode } from 'react';
+import { ThemeRuntime } from '@tokiforge/core/runtime';
+import type { DesignTokens, ThemeConfig } from '@tokiforge/core/runtime';
 import { readTokensFromUrl } from './share-url';
 import './App.css';
 
-// Helper to retry dynamic imports when Vite HMR or build hashes mismatch
 function lazyWithRetry<T extends React.ComponentType<any>>(
   factory: () => Promise<{ default: T }>
 ): React.LazyExoticComponent<T> {
@@ -17,462 +16,662 @@ function lazyWithRetry<T extends React.ComponentType<any>>(
       if (!hasReloaded) {
         sessionStorage.setItem('tf-import-reload-attempted', 'true');
         window.location.reload();
-        return new Promise(() => {}); // hold rendering during reload
+        return new Promise(() => {});
       }
       throw error;
     }
   });
 }
 
-// ── Lazy panel imports ──────────────────────────────────────────
-const AIGenerator      = lazyWithRetry(() => import('./panels/AIGenerator'));
-const VisualEditor     = lazyWithRetry(() => import('./panels/VisualEditor'));
-const TokenManager     = lazyWithRetry(() => import('./panels/TokenManager'));
-const ExportPanel      = lazyWithRetry(() => import('./panels/ExportPanel'));
+const AIGenerator = lazyWithRetry(() => import('./panels/AIGenerator'));
+const VisualEditor = lazyWithRetry(() => import('./panels/VisualEditor'));
+const TokenManager = lazyWithRetry(() => import('./panels/TokenManager'));
+const ExportPanel = lazyWithRetry(() => import('./panels/ExportPanel'));
 const AccessibilityPanel = lazyWithRetry(() => import('./panels/AccessibilityPanel'));
-const AnalyticsPanel   = lazyWithRetry(() => import('./panels/AnalyticsPanel'));
-const CollabPanel      = lazyWithRetry(() => import('./panels/CollabPanel'));
-const ComponentsPanel  = lazyWithRetry(() => import('./panels/ComponentsPanel'));
-const FigmaPanel       = lazyWithRetry(() => import('./panels/FigmaPanel'));
-const SettingsPanel    = lazyWithRetry(() => import('./panels/SettingsPanel'));
+const AnalyticsPanel = lazyWithRetry(() => import('./panels/AnalyticsPanel'));
+const CollabPanel = lazyWithRetry(() => import('./panels/CollabPanel'));
+const ComponentsPanel = lazyWithRetry(() => import('./panels/ComponentsPanel'));
+const FigmaPanel = lazyWithRetry(() => import('./panels/FigmaPanel'));
+const SettingsPanel = lazyWithRetry(() => import('./panels/SettingsPanel'));
 
-// ── Default token set ───────────────────────────────────────────
 export const defaultTokens: DesignTokens = {
   color: {
-    primary:   { value: '#7c3aed', type: 'color' },
-    secondary: { value: '#06b6d4', type: 'color' },
-    success:   { value: '#10b981', type: 'color' },
-    warning:   { value: '#f59e0b', type: 'color' },
-    danger:    { value: '#ef4444', type: 'color' },
+    primary: { value: '#fb7185', type: 'color' },
+    secondary: { value: '#38bdf8', type: 'color' },
+    success: { value: '#4ade80', type: 'color' },
+    warning: { value: '#fbbf24', type: 'color' },
+    danger: { value: '#f87171', type: 'color' },
     text: {
-      primary:   { value: '#f1f5f9', type: 'color' },
-      secondary: { value: '#94a3b8', type: 'color' },
-      muted:     { value: '#475569', type: 'color' },
+      primary: { value: '#fafafa', type: 'color' },
+      secondary: { value: '#a1a1aa', type: 'color' },
+      muted: { value: '#71717a', type: 'color' },
     },
     background: {
-      base:    { value: '#080b12', type: 'color' },
-      raised:  { value: '#0d1117', type: 'color' },
-      card:    { value: '#111827', type: 'color' },
+      base: { value: '#09090b', type: 'color' },
+      raised: { value: '#111113', type: 'color' },
+      card: { value: '#18181b', type: 'color' },
     },
     border: {
-      default: { value: 'rgba(255,255,255,0.07)', type: 'color' },
-      brand:   { value: 'rgba(124,58,237,0.4)',   type: 'color' },
+      default: { value: '#27272a', type: 'color' },
+      brand: { value: 'rgba(251,113,133,0.4)', type: 'color' },
     },
   },
   typography: {
     fontFamily: {
-      sans: { value: "'Inter', -apple-system, sans-serif",     type: 'fontFamily' },
-      mono: { value: "'JetBrains Mono', 'Fira Code', monospace", type: 'fontFamily' },
+      sans: { value: "'Plus Jakarta Sans', system-ui, sans-serif", type: 'fontFamily' },
+      mono: { value: "'JetBrains Mono', ui-monospace, monospace", type: 'fontFamily' },
     },
     fontSize: {
-      xs:  { value: '0.75rem',  type: 'dimension' },
-      sm:  { value: '0.8125rem',type: 'dimension' },
-      md:  { value: '0.9375rem',type: 'dimension' },
-      lg:  { value: '1.0625rem',type: 'dimension' },
-      xl:  { value: '1.25rem',  type: 'dimension' },
-      '2xl':{ value: '1.5rem', type: 'dimension' },
-      '3xl':{ value: '2rem',   type: 'dimension' },
+      xs: { value: '0.75rem', type: 'dimension' },
+      sm: { value: '0.8125rem', type: 'dimension' },
+      md: { value: '0.875rem', type: 'dimension' },
+      lg: { value: '1.0625rem', type: 'dimension' },
+      xl: { value: '1.25rem', type: 'dimension' },
+      '2xl': { value: '1.5rem', type: 'dimension' },
+      '3xl': { value: '2rem', type: 'dimension' },
     },
     fontWeight: {
       regular: { value: '400', type: 'fontWeight' },
-      medium:  { value: '500', type: 'fontWeight' },
-      semibold:{ value: '600', type: 'fontWeight' },
-      bold:    { value: '700', type: 'fontWeight' },
-      black:   { value: '900', type: 'fontWeight' },
+      medium: { value: '500', type: 'fontWeight' },
+      semibold: { value: '600', type: 'fontWeight' },
+      bold: { value: '700', type: 'fontWeight' },
     },
     lineHeight: {
-      tight:  { value: '1.25', type: 'custom' },
-      normal: { value: '1.6',  type: 'custom' },
-      relaxed:{ value: '1.8',  type: 'custom' },
+      tight: { value: '1.2', type: 'custom' },
+      normal: { value: '1.5', type: 'custom' },
+      relaxed: { value: '1.7', type: 'custom' },
     },
   },
   spacing: {
     '1': { value: '0.25rem', type: 'dimension' },
-    '2': { value: '0.5rem',  type: 'dimension' },
+    '2': { value: '0.5rem', type: 'dimension' },
     '3': { value: '0.75rem', type: 'dimension' },
-    '4': { value: '1rem',    type: 'dimension' },
+    '4': { value: '1rem', type: 'dimension' },
     '5': { value: '1.25rem', type: 'dimension' },
-    '6': { value: '1.5rem',  type: 'dimension' },
-    '8': { value: '2rem',    type: 'dimension' },
-    '10':{ value: '2.5rem',  type: 'dimension' },
-    '12':{ value: '3rem',    type: 'dimension' },
-    '16':{ value: '4rem',    type: 'dimension' },
+    '6': { value: '1.5rem', type: 'dimension' },
+    '8': { value: '2rem', type: 'dimension' },
+    '10': { value: '2.5rem', type: 'dimension' },
+    '12': { value: '3rem', type: 'dimension' },
   },
   radius: {
-    sm:  { value: '0.375rem', type: 'dimension' },
-    md:  { value: '0.625rem', type: 'dimension' },
-    lg:  { value: '0.875rem', type: 'dimension' },
-    xl:  { value: '1.125rem', type: 'dimension' },
-    '2xl':{ value:'1.5rem',   type: 'dimension' },
-    full:{ value: '9999px',   type: 'dimension' },
+    sm: { value: '6px', type: 'dimension' },
+    md: { value: '8px', type: 'dimension' },
+    lg: { value: '10px', type: 'dimension' },
+    xl: { value: '12px', type: 'dimension' },
+    full: { value: '9999px', type: 'dimension' },
   },
   shadow: {
-    sm:   { value: '0 1px 3px rgba(0,0,0,0.5)',   type: 'custom' },
-    md:   { value: '0 4px 16px rgba(0,0,0,0.4)',  type: 'custom' },
-    lg:   { value: '0 8px 32px rgba(0,0,0,0.5)',  type: 'custom' },
-    brand:{ value: '0 0 32px rgba(124,58,237,0.25)', type: 'custom' },
-  },
-  animation: {
-    duration: {
-      fast:   { value: '150ms', type: 'duration' },
-      normal: { value: '250ms', type: 'duration' },
-      slow:   { value: '400ms', type: 'duration' },
-    },
-    easing: {
-      smooth: { value: 'cubic-bezier(0.4,0,0.2,1)', type: 'custom' },
-      spring: { value: 'cubic-bezier(0.34,1.56,0.64,1)', type: 'custom' },
-    },
+    sm: { value: '0 1px 2px rgba(0,0,0,0.35)', type: 'custom' },
+    md: { value: '0 8px 20px rgba(0,0,0,0.28)', type: 'custom' },
+    lg: { value: '0 16px 40px rgba(0,0,0,0.35)', type: 'custom' },
   },
 };
 
-// ── Navigation items ────────────────────────────────────────────
-type PanelId = 'home'|'ai'|'editor'|'tokens'|'export'|'a11y'|'analytics'|'collab'|'components'|'figma'|'settings';
+type PanelId =
+  | 'home'
+  | 'ai'
+  | 'editor'
+  | 'tokens'
+  | 'export'
+  | 'a11y'
+  | 'analytics'
+  | 'collab'
+  | 'components'
+  | 'figma'
+  | 'settings';
 
-const NAV_SECTIONS = [
-  {
-    label: 'Create',
-    items: [
-      { id: 'home'      as PanelId, icon: '⚡', label: 'Dashboard' },
-      { id: 'ai'        as PanelId, icon: '🤖', label: 'AI Generator', badge: 'New' },
-      { id: 'editor'    as PanelId, icon: '🎨', label: 'Visual Editor' },
-      { id: 'tokens'    as PanelId, icon: '🪙', label: 'Token Manager' },
-      { id: 'components'as PanelId, icon: '🧱', label: 'Components' },
-    ],
-  },
-  {
-    label: 'Analyze',
-    items: [
-      { id: 'a11y'      as PanelId, icon: '♿', label: 'Accessibility' },
-      { id: 'analytics' as PanelId, icon: '📊', label: 'Analytics' },
-    ],
-  },
-  {
-    label: 'Ship',
-    items: [
-      { id: 'export'    as PanelId, icon: '📦', label: 'Export' },
-      { id: 'figma'     as PanelId, icon: '🖼', label: 'Figma Sync' },
-      { id: 'collab'    as PanelId, icon: '👥', label: 'Collaboration' },
-    ],
-  },
-  {
-    label: 'System',
-    items: [
-      { id: 'settings'  as PanelId, icon: '⚙️', label: 'Settings' },
-    ],
-  },
+type IconName = 'search' | 'sun' | 'moon' | 'more';
+
+const TABS: Array<{ id: PanelId; label: string }> = [
+  { id: 'home', label: 'Playground' },
+  { id: 'editor', label: 'Editor' },
+  { id: 'ai', label: 'AI' },
+  { id: 'components', label: 'Components' },
+  { id: 'a11y', label: 'A11y' },
+  { id: 'export', label: 'Export' },
+  { id: 'analytics', label: 'Analytics' },
+];
+
+const MORE_TABS: Array<{ id: PanelId; label: string }> = [
+  { id: 'tokens', label: 'Token Manager' },
+  { id: 'figma', label: 'Figma Sync' },
+  { id: 'collab', label: 'Collaboration' },
+  { id: 'settings', label: 'Settings' },
 ];
 
 const PALETTE_COMMANDS = [
-  { icon:'🤖', label:'Open AI Generator', desc:'AI',    panel:'ai' as PanelId },
-  { icon:'🎨', label:'Open Visual Editor', desc:'Edit',  panel:'editor' as PanelId },
-  { icon:'📦', label:'Export Tokens',      desc:'Export',panel:'export' as PanelId },
-  { icon:'♿', label:'Run A11y Check',     desc:'A11y',  panel:'a11y' as PanelId },
-  { icon:'📊', label:'Analytics',          desc:'Data',  panel:'analytics' as PanelId },
-  { icon:'🖼', label:'Figma Sync',         desc:'Figma', panel:'figma' as PanelId },
-  { icon:'👥', label:'Collaboration',      desc:'Team',  panel:'collab' as PanelId },
-  { icon:'🧱', label:'Components',         desc:'UI',    panel:'components' as PanelId },
+  ...TABS.map((t) => ({ label: `Open ${t.label}`, desc: t.label, panel: t.id })),
+  ...MORE_TABS.map((t) => ({ label: `Open ${t.label}`, desc: t.label, panel: t.id })),
 ];
 
-function PanelLoader() {
+function Icon({ name }: { name: IconName }) {
+  const common = {
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.8,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    'aria-hidden': true,
+  };
+  if (name === 'search') {
+    return (
+      <svg {...common}>
+        <circle cx="11" cy="11" r="6.5" />
+        <path d="m16 16 4 4" />
+      </svg>
+    );
+  }
+  if (name === 'sun') {
+    return (
+      <svg {...common}>
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
+      </svg>
+    );
+  }
+  if (name === 'moon') {
+    return (
+      <svg {...common}>
+        <path d="M18 14.5A7.5 7.5 0 1 1 9.5 6 6 6 0 0 0 18 14.5z" />
+      </svg>
+    );
+  }
   return (
-    <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'60vh', flexDirection:'column', gap:'1rem' }}>
-      <div className="tf-spinner" style={{ width:32, height:32, borderWidth:3 }} />
-      <span style={{ color:'var(--tf-text-muted)', fontSize:'0.875rem' }}>Loading…</span>
-    </div>
-  );
-}
-
-function CommandPalette({ onClose, onNav }: { onClose:()=>void; onNav:(p:PanelId)=>void }) {
-  const [query, setQuery] = useState('');
-  const [focused, setFocused] = useState(0);
-  const filtered = PALETTE_COMMANDS.filter(c =>
-    c.label.toLowerCase().includes(query.toLowerCase())
-  );
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowDown') setFocused(f => Math.min(f+1, filtered.length-1));
-      if (e.key === 'ArrowUp')   setFocused(f => Math.max(f-1, 0));
-      if (e.key === 'Enter' && filtered[focused]) { onNav(filtered[focused].panel); onClose(); }
-    }
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [filtered, focused, onClose, onNav]);
-  return (
-    <div className="tf-palette-backdrop" onClick={onClose}>
-      <div className="tf-palette" onClick={e => e.stopPropagation()}>
-        <input className="tf-palette-input" autoFocus placeholder="Type a command or search…" value={query} onChange={e=>{setQuery(e.target.value);setFocused(0);}} />
-        <div className="tf-palette-results">
-          <div className="tf-palette-group-label">Navigation</div>
-          {filtered.map((cmd, i) => (
-            <div key={cmd.label} className={`tf-palette-item${i===focused?' focused':''}`}
-              onClick={() => { onNav(cmd.panel); onClose(); }}
-              onMouseEnter={() => setFocused(i)}>
-              <span className="tf-palette-item-icon">{cmd.icon}</span>
-              <span className="tf-palette-item-label">{cmd.label}</span>
-              <span className="tf-palette-item-desc">{cmd.desc}</span>
-            </div>
-          ))}
-          {filtered.length === 0 && <div style={{ padding:'1.5rem', textAlign:'center', color:'var(--tf-text-muted)', fontSize:'0.875rem' }}>No commands found</div>}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Dashboard({ tokens, onNav }: { tokens: DesignTokens; onNav: (p: PanelId) => void }) {
-  const features = [
-    { icon:'🤖', label:'AI Generator',  color:'rgba(124,58,237,0.2)', desc:'Generate complete design systems from natural language prompts', panel:'ai' as PanelId },
-    { icon:'🎨', label:'Visual Editor', color:'rgba(6,182,212,0.15)',  desc:'Drag & drop token editor with live preview', panel:'editor' as PanelId },
-    { icon:'🪙', label:'Token Manager', color:'rgba(16,185,129,0.15)', desc:'Semantic & component tokens with inheritance', panel:'tokens' as PanelId },
-    { icon:'📦', label:'Multi-Export',  color:'rgba(245,158,11,0.15)', desc:'CSS, Tailwind, React, Flutter, SwiftUI and more', panel:'export' as PanelId },
-    { icon:'♿', label:'A11y Engine',   color:'rgba(239,68,68,0.15)',   desc:'WCAG validation, contrast analysis, AI fixes', panel:'a11y' as PanelId },
-    { icon:'📊', label:'Analytics',     color:'rgba(124,58,237,0.15)', desc:'Unused tokens, bundle impact, performance scoring', panel:'analytics' as PanelId },
-    { icon:'👥', label:'Collaboration', color:'rgba(6,182,212,0.12)',  desc:'Team workspaces, version control, live sync', panel:'collab' as PanelId },
-    { icon:'🖼', label:'Figma Sync',    color:'rgba(245,158,11,0.12)', desc:'Import/export, live design variable sync', panel:'figma' as PanelId },
-  ];
-
-  const colorTokens = Object.entries((tokens.color ?? {}) as DesignTokens)
-    .flatMap(([group, vals]) => {
-      if (typeof vals !== 'object' || vals === null || Array.isArray(vals)) return [];
-      const node = vals as Record<string, unknown>;
-      if ('value' in node) {
-        return [{ name: group, value: String(node.value) }];
-      }
-      return Object.entries(vals as DesignTokens).flatMap(([k, v]) => {
-        const vNode = v as Record<string, unknown> | null;
-        if (vNode && typeof vNode === 'object' && 'value' in vNode) {
-          return [{ name: `${group}.${k}`, value: String(vNode.value) }];
-        }
-        return [];
-      });
-    })
-    .filter((t) => typeof t.value === 'string' && (t.value.startsWith('#') || t.value.startsWith('rgb')));
-
-  return (
-    <div>
-      {/* Hero */}
-      <div className="tf-hero">
-        <div className="tf-hero-bg" />
-        <div className="tf-badge tf-badge-new tf-hero-eyebrow">
-          ✨ AI-Powered Design Infrastructure
-        </div>
-        <h1 className="tf-hero-title">
-          The Future of<br /><span className="gradient-text">Design Systems</span>
-        </h1>
-        <p className="tf-hero-desc">
-          Generate, edit, and ship design tokens across every framework. Powered by AI, built for teams, loved by developers.
-        </p>
-        <div className="tf-hero-actions">
-          <button className="tf-btn tf-btn-primary tf-btn-lg" onClick={() => onNav('ai')}>
-            🤖 Generate with AI
-          </button>
-          <button className="tf-btn tf-btn-ghost tf-btn-lg" onClick={() => onNav('editor')}>
-            🎨 Open Editor
-          </button>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="tf-stats-row">
-        {[
-          { value: countTokens(tokens), label: 'Total Tokens', delta: '+12 today' },
-          { value: '8',  label: 'Export Targets', delta: 'All frameworks' },
-          { value: 'A',  label: 'A11y Grade',      delta: 'WCAG 2.2 AAA' },
-          { value: '100%',label: 'Coverage',        delta: 'All components' },
-        ].map(s => (
-          <div className="tf-stat-card" key={s.label}>
-            <div className="tf-stat-value">{s.value}</div>
-            <div className="tf-stat-label">{s.label}</div>
-            <div className="tf-stat-delta">{s.delta}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Color Palette Preview */}
-      {colorTokens.length > 0 && (
-        <div style={{ padding:'1.5rem 2rem', borderBottom:'1px solid var(--tf-border)' }}>
-          <div style={{ fontSize:'0.75rem', fontWeight:700, color:'var(--tf-text-muted)', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:'0.75rem' }}>
-            Active Color Palette
-          </div>
-          <div style={{ display:'flex', gap:'0.5rem', flexWrap:'wrap' }}>
-            {colorTokens.map(t => (
-              <div key={t.name} className="tf-tooltip" data-tip={`${t.name}: ${t.value}`}>
-                <div className="tf-color-dot" style={{ backgroundColor: t.value, width:32, height:32 }} />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Feature Grid */}
-      <div style={{ padding:'1.5rem 2rem' }}>
-        <div style={{ fontSize:'0.75rem', fontWeight:700, color:'var(--tf-text-muted)', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:'1rem' }}>
-          Platform Features
-        </div>
-        <div className="tf-grid tf-grid-2">
-          {features.map((f, i) => (
-            <div key={f.label} className="tf-feature-card" style={{ animationDelay:`${i*0.05}s` }} onClick={() => onNav(f.panel)}>
-              <div className="tf-feature-icon" style={{ background: f.color }}>
-                {f.icon}
-              </div>
-              <div className="tf-feature-title">{f.label}</div>
-              <div className="tf-feature-desc">{f.desc}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    <svg {...common}>
+      <circle cx="6" cy="12" r="1.4" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none" />
+      <circle cx="18" cy="12" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
   );
 }
 
 function countTokens(tokens: DesignTokens): number {
   let n = 0;
-  function walk(obj: DesignTokens | unknown): void {
+  function walk(obj: unknown): void {
     if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return;
     const node = obj as Record<string, unknown>;
-    if ('value' in node) { n++; return; }
+    if ('value' in node) {
+      n++;
+      return;
+    }
     for (const child of Object.values(node)) walk(child);
   }
   walk(tokens);
   return n;
 }
 
-// ── Main App ─────────────────────────────────────────────────────
+function tokenValue(tokens: DesignTokens, path: string, fallback: string): string {
+  const parts = path.split('.');
+  let cur: unknown = tokens;
+  for (const p of parts) {
+    if (!cur || typeof cur !== 'object') return fallback;
+    cur = (cur as Record<string, unknown>)[p];
+  }
+  if (cur && typeof cur === 'object' && 'value' in (cur as object)) {
+    return String((cur as { value: unknown }).value);
+  }
+  return fallback;
+}
+
+function setTokenValue(tokens: DesignTokens, path: string, value: string): DesignTokens {
+  const parts = path.split('.');
+  function setNested(obj: DesignTokens, keys: string[]): DesignTokens {
+    const [head, ...rest] = keys;
+    if (rest.length === 0) {
+      const prev = (obj[head] as Record<string, unknown> | undefined) ?? {};
+      return { ...obj, [head]: { ...prev, value } };
+    }
+    return { ...obj, [head]: setNested(((obj[head] as DesignTokens) ?? {}) as DesignTokens, rest) };
+  }
+  return setNested(tokens, parts);
+}
+
+type FlatToken = { path: string; value: string; isColor: boolean; group: string };
+
+function flattenTokens(obj: DesignTokens, prefix = ''): FlatToken[] {
+  const out: FlatToken[] = [];
+  for (const [key, val] of Object.entries(obj)) {
+    const path = prefix ? `${prefix}.${key}` : key;
+    if (!val || typeof val !== 'object' || Array.isArray(val)) continue;
+    const node = val as Record<string, unknown>;
+    if ('value' in node) {
+      const value = String(node.value);
+      out.push({
+        path,
+        value,
+        isColor: value.startsWith('#') || value.startsWith('rgb') || value.startsWith('hsl'),
+        group: path.split('.')[0],
+      });
+    } else {
+      out.push(...flattenTokens(val as DesignTokens, path));
+    }
+  }
+  return out;
+}
+
+function PanelLoader() {
+  return (
+    <div style={{ height: '100%', display: 'grid', placeItems: 'center', gap: 10 }}>
+      <div className="tf-spinner" />
+      <span style={{ color: 'var(--tf-text-3)', fontSize: 13 }}>Loading…</span>
+    </div>
+  );
+}
+
+function CommandPalette({ onClose, onNav }: { onClose: () => void; onNav: (p: PanelId) => void }) {
+  const [query, setQuery] = useState('');
+  const [focused, setFocused] = useState(0);
+  const filtered = PALETTE_COMMANDS.filter((c) => c.label.toLowerCase().includes(query.toLowerCase()));
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowDown') setFocused((f) => Math.min(f + 1, filtered.length - 1));
+      if (e.key === 'ArrowUp') setFocused((f) => Math.max(f - 1, 0));
+      if (e.key === 'Enter' && filtered[focused]) {
+        onNav(filtered[focused].panel);
+        onClose();
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [filtered, focused, onClose, onNav]);
+
+  return (
+    <div className="tf-palette-backdrop" onClick={onClose} role="presentation">
+      <div className="tf-palette" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Command palette">
+        <input
+          className="tf-palette-input"
+          autoFocus
+          placeholder="Go to…"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setFocused(0);
+          }}
+        />
+        <div className="tf-palette-results">
+          <div className="tf-palette-group-label">Pages</div>
+          {filtered.map((cmd, i) => (
+            <div
+              key={cmd.label}
+              className={`tf-palette-item${i === focused ? ' focused' : ''}`}
+              onClick={() => {
+                onNav(cmd.panel);
+                onClose();
+              }}
+              onMouseEnter={() => setFocused(i)}
+            >
+              <span className="tf-palette-item-label">{cmd.label}</span>
+              <span className="tf-palette-item-desc">{cmd.desc}</span>
+            </div>
+          ))}
+          {filtered.length === 0 && (
+            <div style={{ padding: 20, textAlign: 'center', color: 'var(--tf-text-3)', fontSize: 13 }}>No results</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Workbench({
+  tokens,
+  setTokens,
+  toast,
+}: {
+  tokens: DesignTokens;
+  setTokens: (t: DesignTokens) => void;
+  toast: (m: string, t?: 'success' | 'error' | 'info') => void;
+}) {
+  const flat = useMemo(() => flattenTokens(tokens), [tokens]);
+  const [query, setQuery] = useState('');
+  const [selected, setSelected] = useState<string>('color.primary');
+  const [draft, setDraft] = useState(() => tokenValue(tokens, 'color.primary', '#fb7185'));
+
+  const filtered = flat.filter(
+    (t) => t.path.toLowerCase().includes(query.toLowerCase()) || t.value.toLowerCase().includes(query.toLowerCase())
+  );
+  const groups = useMemo(() => {
+    const map = new Map<string, FlatToken[]>();
+    for (const t of filtered) {
+      const list = map.get(t.group) ?? [];
+      list.push(t);
+      map.set(t.group, list);
+    }
+    return [...map.entries()];
+  }, [filtered]);
+
+  useEffect(() => {
+    setDraft(tokenValue(tokens, selected, ''));
+  }, [selected, tokens]);
+
+  const primary = tokenValue(tokens, 'color.primary', '#fb7185');
+  const secondary = tokenValue(tokens, 'color.secondary', '#38bdf8');
+  const text = tokenValue(tokens, 'color.text.primary', '#fafafa');
+  const muted = tokenValue(tokens, 'color.text.secondary', '#a1a1aa');
+  const card = tokenValue(tokens, 'color.background.card', '#18181b');
+  const radius = tokenValue(tokens, 'radius.md', '8px');
+  const colors = flat.filter((t) => t.isColor).slice(0, 12);
+
+  function applyEdit() {
+    setTokens(setTokenValue(tokens, selected, draft));
+    toast('Token updated', 'success');
+  }
+
+  return (
+    <div className="tf-bench">
+      <aside className="tf-bench-side">
+        <div className="tf-bench-side-head">
+          <h2>Tokens</h2>
+          <span>{countTokens(tokens)}</span>
+        </div>
+        <div className="tf-bench-search">
+          <input
+            className="tf-input"
+            placeholder="Filter tokens"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
+        <div className="tf-bench-list">
+          {groups.map(([group, items]) => (
+            <div className="tf-group" key={group}>
+              <div className="tf-group-title">{group}</div>
+              {items.map((t) => (
+                <button
+                  key={t.path}
+                  type="button"
+                  className={`tf-token${selected === t.path ? ' selected' : ''}`}
+                  onClick={() => setSelected(t.path)}
+                >
+                  {t.isColor ? (
+                    <span className="tf-color-dot" style={{ background: t.value }} />
+                  ) : (
+                    <span className="tf-color-dot" style={{ background: 'var(--tf-line)' }} />
+                  )}
+                  <span className="tf-token-name">{t.path}</span>
+                  <span className="tf-token-val">{t.value}</span>
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
+      </aside>
+
+      <section className="tf-bench-canvas">
+        <div className="tf-bench-canvas-head">
+          <div>
+            <h2>Live preview</h2>
+            <p>Changes apply instantly to this canvas.</p>
+          </div>
+          <span className="tf-badge">runtime</span>
+        </div>
+
+        <div className="tf-bench-canvas-body">
+          <div className="tf-preview-block">
+            <h3>Buttons</h3>
+            <div className="tf-preview-row">
+              <button className="tf-preview-btn" style={{ background: primary, color: '#fff', borderRadius: radius }}>
+                Primary
+              </button>
+              <button
+                className="tf-preview-btn"
+                style={{ background: secondary, color: '#0a0a0a', borderRadius: radius }}
+              >
+                Secondary
+              </button>
+              <button
+                className="tf-preview-btn"
+                style={{
+                  background: 'transparent',
+                  color: primary,
+                  border: `1px solid ${primary}`,
+                  borderRadius: radius,
+                }}
+              >
+                Outline
+              </button>
+              <button
+                className="tf-preview-btn"
+                style={{
+                  background: 'transparent',
+                  color: muted,
+                  border: '1px solid var(--tf-line)',
+                  borderRadius: radius,
+                }}
+              >
+                Ghost
+              </button>
+            </div>
+          </div>
+
+          <div className="tf-preview-block">
+            <h3>Surfaces</h3>
+            <div className="tf-preview-row">
+              <div className="tf-preview-card" style={{ background: card, color: text, borderColor: 'var(--tf-line)' }}>
+                <h4>Card surface</h4>
+                <p style={{ color: muted }}>Typography and background tokens drive this block.</p>
+              </div>
+              <div className="tf-preview-card" style={{ background: card, color: text, borderColor: primary }}>
+                <h4 style={{ color: primary }}>Accent border</h4>
+                <p style={{ color: muted }}>Uses color.primary for emphasis.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="tf-preview-block">
+            <h3>Palette</h3>
+            <div className="tf-swatch-row">
+              {colors.map((c) => (
+                <button
+                  key={c.path}
+                  type="button"
+                  className="tf-swatch tf-tooltip"
+                  data-tip={`${c.path}: ${c.value}`}
+                  style={{ background: c.value }}
+                  onClick={() => setSelected(c.path)}
+                  aria-label={c.path}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="tf-edit-bar">
+          <label>
+            <span className="hint">{selected}</span>
+            <input
+              className="tf-input"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') applyEdit();
+              }}
+            />
+          </label>
+          <button className="tf-btn tf-btn-primary" type="button" onClick={applyEdit}>
+            Apply
+          </button>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 export default function App() {
-  // Hydrate from a share link (?tokens=...) when present
   const [tokens, setTokens] = useState<DesignTokens>(() => readTokensFromUrl() ?? defaultTokens);
   const [activePanel, setActivePanel] = useState<PanelId>('home');
   const [palette, setPalette] = useState(false);
-  const [theme, setTheme] = useState<'dark'|'light'>('dark');
-  const [toasts, setToasts] = useState<Array<{id:number;msg:string;type:'success'|'error'|'info'}>>([]);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [toasts, setToasts] = useState<Array<{ id: number; msg: string; type: 'success' | 'error' | 'info' }>>([]);
 
-  // Theme runtime — initialised once per token change; no state storage needed
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
   useEffect(() => {
     const cfg: ThemeConfig = { themes: [{ name: 'current', tokens }], defaultTheme: 'current' };
     const r = new ThemeRuntime(cfg);
     r.init();
-    return () => { r.destroy(); };
+    return () => {
+      r.destroy();
+    };
   }, [tokens]);
 
-  // Keyboard shortcut: ⌘K / Ctrl+K
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); setPalette(p => !p); }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setPalette((p) => !p);
+      }
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  // Clear HMR reload safety flag on successful mount
   useEffect(() => {
     sessionStorage.removeItem('tf-import-reload-attempted');
   }, []);
 
-  const toast = useCallback((msg: string, type: 'success'|'error'|'info' = 'info') => {
+  const toast = useCallback((msg: string, type: 'success' | 'error' | 'info' = 'info') => {
     const id = Date.now();
-    setToasts(t => [...t, { id, msg, type }]);
-    setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 3500);
+    setToasts((t) => [...t, { id, msg, type }]);
+    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 3000);
   }, []);
 
-  function renderPanel() {
-    if (activePanel === 'home') return <Dashboard tokens={tokens} onNav={setActivePanel} />;
+  function renderPanel(): ReactNode {
+    if (activePanel === 'home') {
+      return <Workbench tokens={tokens} setTokens={setTokens} toast={toast} />;
+    }
     return (
-      <Suspense fallback={<PanelLoader />}>
-        {activePanel === 'ai'         && <AIGenerator   tokens={tokens} setTokens={setTokens} toast={toast} />}
-        {activePanel === 'editor'     && <VisualEditor  tokens={tokens} setTokens={setTokens} toast={toast} />}
-        {activePanel === 'tokens'     && <TokenManager  tokens={tokens} setTokens={setTokens} toast={toast} />}
-        {activePanel === 'export'     && <ExportPanel   tokens={tokens} toast={toast} />}
-        {activePanel === 'a11y'       && <AccessibilityPanel tokens={tokens} toast={toast} />}
-        {activePanel === 'analytics'  && <AnalyticsPanel tokens={tokens} />}
-        {activePanel === 'collab'     && <CollabPanel   toast={toast} />}
-        {activePanel === 'components' && <ComponentsPanel tokens={tokens} />}
-        {activePanel === 'figma'      && <FigmaPanel    tokens={tokens} toast={toast} />}
-        {activePanel === 'settings'   && <SettingsPanel  theme={theme} setTheme={setTheme} toast={toast} />}
-      </Suspense>
+      <div className="tf-main-scroll">
+        <Suspense fallback={<PanelLoader />}>
+          {activePanel === 'ai' && <AIGenerator tokens={tokens} setTokens={setTokens} toast={toast} />}
+          {activePanel === 'editor' && <VisualEditor tokens={tokens} setTokens={setTokens} toast={toast} />}
+          {activePanel === 'tokens' && <TokenManager tokens={tokens} setTokens={setTokens} toast={toast} />}
+          {activePanel === 'export' && <ExportPanel tokens={tokens} toast={toast} />}
+          {activePanel === 'a11y' && <AccessibilityPanel tokens={tokens} toast={toast} />}
+          {activePanel === 'analytics' && <AnalyticsPanel tokens={tokens} />}
+          {activePanel === 'collab' && <CollabPanel toast={toast} />}
+          {activePanel === 'components' && <ComponentsPanel tokens={tokens} />}
+          {activePanel === 'figma' && <FigmaPanel tokens={tokens} toast={toast} />}
+          {activePanel === 'settings' && <SettingsPanel theme={theme} setTheme={setTheme} toast={toast} />}
+        </Suspense>
+      </div>
     );
   }
 
+  const activeInMore = MORE_TABS.some((t) => t.id === activePanel);
+
   return (
     <div className="tf-app">
-      {/* Topbar */}
-      <header className="tf-topbar">
-        <a className="tf-logo" href="#" onClick={e=>{e.preventDefault();setActivePanel('home');}}>
-          <div className="tf-logo-icon">⚡</div>
-          <span className="tf-logo-text">Toki<span>Forge</span></span>
+      <header className="tf-header">
+        <a
+          className="tf-brand"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            setActivePanel('home');
+          }}
+        >
+          <span className="tf-brand-mark">TF</span>
+          <span className="tf-brand-name">TokiForge</span>
         </a>
 
-        <nav className="tf-topbar-nav">
-          {[
-            { id:'home'  as PanelId, label:'Dashboard' },
-            { id:'ai'    as PanelId, label:'AI' },
-            { id:'editor'as PanelId, label:'Editor' },
-            { id:'tokens'as PanelId, label:'Tokens' },
-            { id:'export'as PanelId, label:'Export' },
-            { id:'a11y'  as PanelId, label:'A11y' },
-          ].map(n => (
-            <button key={n.id} className={`tf-nav-btn${activePanel===n.id?' active':''}`} onClick={()=>setActivePanel(n.id)}>
-              {n.label}
+        <nav className="tf-tabs" aria-label="Primary">
+          {TABS.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              className={`tf-tab${activePanel === tab.id ? ' active' : ''}`}
+              onClick={() => setActivePanel(tab.id)}
+            >
+              {tab.label}
             </button>
           ))}
+          <div style={{ position: 'relative' }}>
+            <button
+              type="button"
+              className={`tf-tab${activeInMore ? ' active' : ''}`}
+              onClick={() => setMoreOpen((o) => !o)}
+              aria-expanded={moreOpen}
+            >
+              More
+            </button>
+            {moreOpen && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 6px)',
+                  left: 0,
+                  minWidth: 180,
+                  background: 'var(--tf-bg-card)',
+                  border: '1px solid var(--tf-line)',
+                  borderRadius: 10,
+                  padding: 6,
+                  zIndex: 30,
+                  boxShadow: '0 12px 30px rgba(0,0,0,0.3)',
+                }}
+              >
+                {MORE_TABS.map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    className="tf-tab"
+                    style={{ width: '100%', justifyContent: 'flex-start', display: 'flex' }}
+                    onClick={() => {
+                      setActivePanel(tab.id);
+                      setMoreOpen(false);
+                    }}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </nav>
 
-        <div className="tf-topbar-actions">
-          <button className="tf-btn tf-btn-ghost tf-btn-sm" onClick={() => setPalette(true)} title="Ctrl+K">
-            ⌘K Search
+        <div className="tf-header-actions">
+          <button className="tf-icon-btn" type="button" onClick={() => setPalette(true)} aria-label="Search (Ctrl+K)" title="Ctrl+K">
+            <Icon name="search" />
           </button>
-          <button className="tf-btn tf-btn-ghost tf-btn-sm" onClick={() => { setTheme(t=>t==='dark'?'light':'dark'); toast('Theme toggled','info'); }}>
-            {theme === 'dark' ? '☀️' : '🌙'}
+          <button
+            className="tf-icon-btn"
+            type="button"
+            onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+            aria-label="Toggle theme"
+          >
+            <Icon name={theme === 'dark' ? 'sun' : 'moon'} />
           </button>
-          <button className="tf-btn tf-btn-primary tf-btn-sm" onClick={() => setActivePanel('export')}>
-            Export ↗
+          <button className="tf-btn tf-btn-primary tf-btn-sm" type="button" onClick={() => setActivePanel('export')}>
+            Export
           </button>
         </div>
       </header>
 
-      <div className="tf-main">
-        {/* Sidebar */}
-        <aside className="tf-sidebar">
-          {NAV_SECTIONS.map(section => (
-            <div className="tf-sidebar-section" key={section.label}>
-              <div className="tf-sidebar-label">{section.label}</div>
-              {section.items.map(item => (
-                <button key={item.id} className={`tf-sidebar-item${activePanel===item.id?' active':''}`} onClick={() => setActivePanel(item.id)}>
-                  <span className="tf-sidebar-item-icon">{item.icon}</span>
-                  <span>{item.label}</span>
-                  {item.badge && <span className="tf-sidebar-item-badge">{item.badge}</span>}
-                </button>
-              ))}
-            </div>
-          ))}
+      <main className="tf-main">{renderPanel()}</main>
 
-          <div style={{ marginTop:'auto', padding:'0.75rem 0.5rem', borderTop:'1px solid var(--tf-border)' }}>
-            <div style={{ fontSize:'0.6875rem', color:'var(--tf-text-muted)', textAlign:'center', lineHeight:1.5 }}>
-              TokiForge v2.2.3<br />
-              <span style={{ color:'var(--tf-brand-light)' }}>{countTokens(tokens)} tokens</span>
-            </div>
-          </div>
-        </aside>
+      {palette && (
+        <CommandPalette
+          onClose={() => setPalette(false)}
+          onNav={(p) => {
+            setActivePanel(p);
+            setPalette(false);
+          }}
+        />
+      )}
 
-        {/* Content */}
-        <main className="tf-content">
-          {renderPanel()}
-        </main>
-      </div>
-
-      {/* Command Palette */}
-      {palette && <CommandPalette onClose={() => setPalette(false)} onNav={p => { setActivePanel(p); setPalette(false); }} />}
-
-      {/* Toasts */}
       <div className="tf-toast-container">
-        {toasts.map(t => (
+        {toasts.map((t) => (
           <div key={t.id} className={`tf-toast tf-toast-${t.type}`}>
-            <span>{t.type==='success'?'✅':t.type==='error'?'❌':'ℹ️'}</span>
             <span className="tf-toast-msg">{t.msg}</span>
           </div>
         ))}
       </div>
-
     </div>
   );
 }

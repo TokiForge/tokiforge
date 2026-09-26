@@ -29,3 +29,8 @@ addons.register('tokiforge-toolbar', () => {
   });
 });
 
+/** Named export for docs / explicit imports — side effects above still run on load. */
+export function register(): void {
+  // Registration happens at module load via addons.register above.
+}
+

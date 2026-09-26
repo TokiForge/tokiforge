@@ -1,5 +1,13 @@
 # tokiforge-cli
 
+## 2.4.0
+
+### Minor Changes
+
+- `build` emits responsive and interactive-state CSS from tokens.
+- Uses `@tokiforge/core/node` for parsing and export.
+- Version bump to 2.4.0; workspace deps ^2.4.0.
+
 ## 2.2.3
 
 ### Patch Changes

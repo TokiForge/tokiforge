@@ -93,6 +93,8 @@ examples/*/.nuxt/
 examples/*/.svelte-kit/
 examples/*/build/
 examples/*/dist-ssr/
+examples/*/.angular/
+**/.angular/
 
 # VS Code Extension (if exists)
 packages/vscode-extension/out/

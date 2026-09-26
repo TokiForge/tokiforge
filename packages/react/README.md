@@ -1,13 +1,13 @@
-﻿# @tokiforge/react
+# @tokiforge/react
 
 **React adapter for TokiForge design token and theming engine. Provides React hooks and context providers for easy theme management in React applications.**
 
-React adapter for TokiForge theming (v2.2.3).
+React adapter for TokiForge theming (v2.4.0).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/react@^2.2.3 @tokiforge/core@^2.2.3
+npm install @tokiforge/react@^2.4.0 @tokiforge/core@^2.4.0
 ```
 
 ## Usage

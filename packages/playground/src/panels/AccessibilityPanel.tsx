@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { DesignTokens } from '@tokiforge/core';
+import type { DesignTokens } from '@tokiforge/core/runtime';
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const clean = hex.replace('#', '');

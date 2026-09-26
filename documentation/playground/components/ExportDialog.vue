@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { TokenExporter } from '@tokiforge/core';
+import { TokenExporter } from '@tokiforge/core/runtime';
 import { useClipboard } from '@vueuse/core';
 
 interface Props {

@@ -1,8 +1,8 @@
 import * as fs from 'node:fs';
 import * as path from 'path';
-import { FigmaDiff } from '@tokiforge/core';
+import { FigmaDiff } from '@tokiforge/core/node';
 import { pullFromFigma } from '@tokiforge/figma';
-import { TokenParser } from '@tokiforge/core';
+import { TokenParser } from '@tokiforge/core/node';
 
 export async function figmaDiffCommand(
   accessToken: string,

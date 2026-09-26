@@ -60,5 +60,7 @@ jobs:
           --filter tokiforge-cli
           run build
 
-      - name: Check bundle size
-        run: node scripts/check-bundle-size.mjs
+      # size-limit@14 needs Node >= 22 (fs.promises.glob); one run is enough.
+      - name: Check bundle size (size-limit)
+        if: matrix.os == 'ubuntu-latest' && matrix.node == 22
+        run: pnpm size

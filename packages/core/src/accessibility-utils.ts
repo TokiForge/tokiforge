@@ -3,42 +3,38 @@ import { ColorUtils } from './color-utils';
 
 type TokenNode = Record<string, unknown>;
 
+const FOREGROUND_SEGMENT = /(?:^|[.\-_])(?:text|foreground|fg|content|icon)(?:[.\-_]|$)/;
+const BACKGROUND_SEGMENT = /(?:^|[.\-_])(?:background|bg|surface|canvas)(?:[.\-_]|$)/;
+
+interface ColorEntry {
+  path: string;
+  value: string;
+  role: 'foreground' | 'background' | 'other';
+}
+
 export class AccessibilityUtils {
+  /**
+   * WCAG 2 contrast of a foreground (`color1`) on a background (`color2`).
+   * `wcagAA` / `wcagAAA` are the normal-text thresholds (4.5:1 and 7:1).
+   * Large-text thresholds are reported separately.
+   */
   static calculateContrast(color1: string, color2: string): AccessibilityMetrics {
-    const getLuminance = (hex: string): number => {
-      const rgb = ColorUtils.hexToRGB(hex);
-      const [r, g, b] = [rgb.r / 255, rgb.g / 255, rgb.b / 255].map((val) =>
-        val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4)
-      );
-      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    };
-
-    const lum1 = getLuminance(color1);
-    const lum2 = getLuminance(color2);
-    const lighter = Math.max(lum1, lum2);
-    const darker = Math.min(lum1, lum2);
-    const ratio = (lighter + 0.05) / (darker + 0.05);
-
-    const wcagAA = ratio >= 4.5;
-    const wcagAAA = ratio >= 7;
+    const ratio = ColorUtils.getContrastRatio(color1, color2);
     const wcagAALarge = ratio >= 3;
-    const wcagAAALarge = ratio >= 4.5;
+    const wcagAA = ratio >= 4.5;
+    const wcagAAALarge = wcagAA;
+    const wcagAAA = ratio >= 7;
 
     let level: 'pass' | 'fail' | 'large-text';
-    if (wcagAAA || wcagAA) {
+    if (wcagAA) {
       level = 'pass';
-    } else if (wcagAALarge || wcagAAALarge) {
+    } else if (wcagAALarge) {
       level = 'large-text';
     } else {
       level = 'fail';
     }
 
-    return {
-      ratio: Math.round(ratio * 100) / 100,
-      wcagAA: wcagAA || wcagAALarge,
-      wcagAAA: wcagAAA || wcagAAALarge,
-      level,
-    };
+    return { ratio, wcagAA, wcagAAA, wcagAALarge, wcagAAALarge, level };
   }
 
   /**
@@ -82,46 +78,72 @@ export class AccessibilityUtils {
     return sapc > -0.1 ? 0 : Math.round((sapc + 0.027) * 1000) / 10;
   }
 
+  /**
+   * Contrast-check foreground tokens against background tokens.
+   *
+   * Pairs are limited to colors whose paths identify a role (`text`, `fg`,
+   * `background`, `surface`, …) and that share a top-level group, so a brand
+   * palette is not reported as hundreds of unrelated failures.
+   */
   static checkAccessibility(tokens: DesignTokens): AccessibilityMetrics[] {
+    const colors = this.collectColors(tokens);
+    const foregrounds = colors.filter((color) => color.role === 'foreground');
+    const backgrounds = colors.filter((color) => color.role === 'background');
+    if (foregrounds.length === 0 || backgrounds.length === 0) return [];
+
     const metrics: AccessibilityMetrics[] = [];
+    for (const foreground of foregrounds) {
+      const group = foreground.path.split('.')[0];
+      const partners = backgrounds.filter((background) => background.path.split('.')[0] === group);
+      const pairs = partners.length > 0 ? partners : backgrounds;
+      for (const background of pairs) {
+        metrics.push({
+          ...this.calculateContrast(foreground.value, background.value),
+          foreground: foreground.path,
+          background: background.path,
+        });
+      }
+    }
 
-    const extractColors = (obj: unknown, path: string = ''): string[] => {
-      const colors: string[] = [];
+    return metrics;
+  }
 
-      if (typeof obj !== 'object' || obj === null) return colors;
+  private static collectColors(tokens: DesignTokens): ColorEntry[] {
+    const colors: ColorEntry[] = [];
+
+    const visit = (obj: unknown, path: string): void => {
+      if (typeof obj !== 'object' || obj === null) return;
 
       if (Array.isArray(obj)) {
         for (let i = 0; i < obj.length; i++) {
-          colors.push(...extractColors(obj[i] as TokenNode, `${path}[${i}]`));
+          visit(obj[i], `${path}[${i}]`);
         }
-        return colors;
+        return;
       }
 
       const node = obj as TokenNode;
       if ('value' in node) {
         const token = node as unknown as TokenValue;
         if (token.type === 'color' && typeof token.value === 'string') {
-          colors.push(token.value);
+          colors.push({ path, value: token.value, role: this.colorRole(path) });
         }
-      } else {
-        for (const key of Object.keys(node)) {
-          const newPath = path ? `${path}.${key}` : key;
-          colors.push(...extractColors(node[key], newPath));
-        }
+        return;
       }
 
-      return colors;
+      for (const key of Object.keys(node)) {
+        visit(node[key], path ? `${path}.${key}` : key);
+      }
     };
 
-    const colors = extractColors(tokens);
+    visit(tokens, '');
+    return colors;
+  }
 
-    for (let i = 0; i < colors.length; i++) {
-      for (let j = i + 1; j < colors.length; j++) {
-        metrics.push(this.calculateContrast(colors[i], colors[j]));
-      }
-    }
-
-    return metrics;
+  private static colorRole(path: string): ColorEntry['role'] {
+    const normalized = path.toLowerCase();
+    if (BACKGROUND_SEGMENT.test(normalized)) return 'background';
+    if (FOREGROUND_SEGMENT.test(normalized)) return 'foreground';
+    return 'other';
   }
 
   static generateAccessibilityReport(tokens: DesignTokens): {

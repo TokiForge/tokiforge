@@ -1,4 +1,4 @@
-﻿---
+---
 title: Server-Side Rendering (SSR) | Guide
 description: Complete guide to using TokiForge with Next.js, Remix, and other SSR frameworks. Learn theme switching, hydration, and performance optimization for server-rendered applications.
 ---
@@ -15,6 +15,9 @@ TokiForge provides a comprehensive `SSRUtils` class for server-side rendering th
 
 ```typescript
 import { SSRUtils } from "@tokiforge/core";
+// Or from framework packages (v2.4.0+):
+// import { SSRUtils } from "@tokiforge/nextjs";
+// import { SSRUtils } from "@tokiforge/remix";
 
 // Get theme from cookies
 const theme = SSRUtils.getThemeFromCookie(request.headers.get("Cookie"));
@@ -102,13 +105,13 @@ const script = SSRUtils.generateHydrationScript(
 
 #### generateSSRHead()
 
-All-in-one helper for SSR. Options (v2.2.3):
+All-in-one helper for SSR. Options (v2.4.0):
 
-- `theme` – Theme name to render
-- `cookieName` – Cookie name for theme persistence (default: `'tokiforge-theme'`)
-- `cookieMaxAge` – Max age in seconds for the theme cookie (optional)
-- `includeHydrationScript` – Include script to apply theme before hydration
-- `minify` – Minify output CSS/script
+- `theme` � Theme name to render
+- `cookieName` � Cookie name for theme persistence (default: `'tokiforge-theme'`)
+- `cookieMaxAge` � Max age in seconds for the theme cookie (optional)
+- `includeHydrationScript` � Include script to apply theme before hydration
+- `minify` � Minify output CSS/script
 
 ```typescript
 const { style, script } = SSRUtils.generateSSRHead(themeConfig, {
@@ -124,11 +127,11 @@ const { style, script } = SSRUtils.generateSSRHead(themeConfig, {
 
 TokiForge detects the server environment and:
 
-- ✅ Skips DOM operations during rendering
-- ✅ Safely initializes on client hydration
-- ✅ Preserves theme state during SSR
-- ✅ Handles dynamic imports safely
-- ✅ Supports streaming responses
+- ? Skips DOM operations during rendering
+- ? Safely initializes on client hydration
+- ? Preserves theme state during SSR
+- ? Handles dynamic imports safely
+- ? Supports streaming responses
 
 ## Next.js with TokiForge
 

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { ExportShare } from '../components/ExportShare';
-import type { DesignTokens } from '@tokiforge/core';
+import type { DesignTokens } from '@tokiforge/core/runtime';
 
 describe('ExportShare', () => {
   const mockTokens: DesignTokens = {

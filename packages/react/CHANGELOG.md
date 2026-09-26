@@ -1,5 +1,13 @@
 # @tokiforge/react
 
+## 2.4.0
+
+### Minor Changes
+
+- Expose `watchSystemTheme` and `storageKey` on the provider.
+- Import theme runtime from `@tokiforge/core/runtime`.
+- Version bump to 2.4.0; depends on `@tokiforge/core@^2.4.0`.
+
 ## 2.2.3
 
 ### Patch Changes

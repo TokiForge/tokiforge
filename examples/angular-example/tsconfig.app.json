@@ -3,14 +3,7 @@
   "compilerOptions": {
     "outDir": "./out-tsc/app",
     "types": [],
-    "skipLibCheck": true,
-    "paths": {
-      "fs": ["./src/stubs/fs.ts"],
-      "path": ["./src/stubs/path.ts"],
-      "module": ["./src/stubs/module.ts"],
-      "zlib": ["./src/stubs/zlib.ts"],
-      "util": ["./src/stubs/util.ts"]
-    }
+    "skipLibCheck": true
   },
   "files": [
     "src/main.ts"
@@ -26,4 +19,3 @@
     "**/dist/**"
   ]
 }
-

@@ -5,6 +5,42 @@ All notable changes to TokiForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-09-26 (Runtime/Node Split, Modern CSS Export & Adapter Unification)
+
+### Added
+
+- **`@tokiforge/core/runtime`, `@tokiforge/core/tools`, and `@tokiforge/core/node` entry points**: `/runtime` is the lean browser surface (`ThemeRuntime`, `ThemeController`, `TokenExporter`, `ColorUtils`, `AccessibilityUtils` — theme switching is **2.7 KB gzipped**); `/tools` holds browser-safe build/analysis helpers (analytics, platform exporters, SSR utils, semantic layers, versioning, registry); `/node` adds `TokenParser` and file I/O for CLI and build tools. Removes fragile browser stubs for `fs`/`path`.
+- **Enforced bundle budgets**: `size-limit` (`pnpm size`) replaces the ad-hoc gzip script and measures real tree-shaken imports — `/runtime` theme switching ≤ 3 KB, `/runtime` full ≤ 6 KB, `/tools` ≤ 14 KB, React/Vue/Svelte adapters ≤ 4 KB. Runs in CI.
+- **Modern CSS export**: `TokenExporter` supports `color-mix()`, `@layer`, and `@container` output alongside existing CSS variable generation.
+- **Deeper DTCG + responsive modes**: Prefer/container breakpoints and richer DTCG composite handling in the token parser and responsive token pipeline.
+- **Storybook `register` export**: Official registration entry for the Storybook addon; docs API aligned with the shipped surface. Addon now wraps `ThemeController`.
+- **Astro ThemeController**: Injected page script uses `ThemeController` from `/runtime` with `applyTheme` compatibility.
+- **Figma plugin UI**: Packaged `ui.html` + `manifest.json` copied into `dist` for local Figma Development installs.
+- **CLI responsive/state CSS**: `tokiforge build` emits responsive and interactive-state CSS from token definitions. CLI/Tailwind file I/O imports `@tokiforge/core/node`.
+- **Framework option parity**: React, Next.js, and Remix expose `watchSystemTheme` and `storageKey`; Next.js and Remix re-export `SSRUtils`.
+- **Tailwind v3 + v4 peer**: `@tokiforge/tailwind` peer dependency widened to `tailwindcss@^3 || ^4`.
+- **VS Code packaging**: `tokiforge-vscode` includes a `package` script for VSIX builds.
+- **Test coverage**: FigmaDiff, CICDValidator, and IDESupport suites; Angular tests enabled; Emotion/styled-components and React runtime tests updated for ThemeController / runtime imports.
+
+### Changed
+
+- **Vue, Angular, Emotion, and styled-components** now wrap shared `ThemeController` (same lifecycle as React/Next/Remix/Solid/Svelte).
+- **Astro `generateStaticCSS`**: Writes CSS files to disk as documented.
+- **Docs API alignment**: ResponsiveTokens, FigmaDiff, and CICD validator docs match the implemented public APIs.
+- **Version bump**: All publishable workspace packages aligned to **2.4.0**.
+
+### Fixed
+
+- **Emotion / styled-components**: `switchTheme` now applies the requested theme name instead of ignoring it.
+- **Publish hygiene**: Removed obsolete Node stub modules and Angular build cache artifacts from the tree.
+
+### Migration
+
+- Prefer `import { … } from '@tokiforge/core/runtime'` in browser bundles.
+- Import `SSRUtils`, `TokenAnalytics`, `SemanticTokenManager`, platform exporters, etc. from `@tokiforge/core/tools` (or the default entry) — they are no longer re-exported from `/runtime`.
+- Prefer `import { TokenParser, … } from '@tokiforge/core/node'` in Node/CLI scripts.
+- Default `@tokiforge/core` continues to export everything; split entries are recommended for bundler clarity.
+
 ## [2.3.0] - 2026-07-11 (Shared Controller, DTCG, CSS-in-JS Adapters & Modern CSS)
 
 ### Added
@@ -510,6 +546,7 @@ npm install @tokiforge/core@2.0.0 @tokiforge/vue@2.0.0
 - Framework-agnostic theming system
 - Complete documentation and examples
 
+[2.4.0]: https://github.com/tokiforge/tokiforge/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/tokiforge/tokiforge/compare/v2.2.4...v2.3.0
 [2.2.4]: https://github.com/tokiforge/tokiforge/compare/v2.2.3...v2.2.4
 [2.2.3]: https://github.com/tokiforge/tokiforge/compare/v2.0.2...v2.2.3

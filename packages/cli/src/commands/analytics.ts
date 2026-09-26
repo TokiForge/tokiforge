@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'path';
-import { TokenAnalytics, TokenParser, AnalyticsReporter } from '@tokiforge/core';
-import type { ExportFormat } from '@tokiforge/core';
+import { TokenAnalytics, TokenParser, AnalyticsReporter } from '@tokiforge/core/node';
+import type { ExportFormat } from '@tokiforge/core/node';
 
 export async function analyticsCommand(
   projectPath: string = process.cwd(),

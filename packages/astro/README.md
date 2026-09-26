@@ -1,11 +1,11 @@
 # @tokiforge/astro
 
-Astro integration for TokiForge theming.
+Astro integration for TokiForge theming (v2.4.0).
 
 ## Installation
 
 ```bash
-npm install @tokiforge/astro @tokiforge/core astro
+npm install @tokiforge/astro@^2.4.0 @tokiforge/core@^2.4.0 astro
 ```
 
 ## Usage
@@ -26,7 +26,9 @@ export default defineConfig({
         ],
         defaultTheme: 'light',
       },
-      generateStaticCSS: true, // Optional: generate static CSS files
+      // v2.4.0: ThemeController + writes static CSS files when enabled
+      generateStaticCSS: true,
+      watchSystemTheme: false,
     }),
   ],
 });
@@ -74,7 +76,7 @@ const theme = getThemeFromCookies(Astro.cookies) || 'light';
 - Astro 4.0+ support
 - Framework-agnostic
 - Cookie-based persistence
-- Static CSS generation option
+- Static CSS generation that writes files (v2.4.0)
 - TypeScript support
 
 ## License

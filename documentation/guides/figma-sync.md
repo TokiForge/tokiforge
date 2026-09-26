@@ -727,4 +727,4 @@ All existing code continues to work. Use new features for enhanced capabilities.
 ---
 
 _Last updated: January 2025_
-_Version: 2.3.0_
+_Version: 2.4.0_

@@ -1,3 +1,47 @@
+# Release v2.4.0 - Runtime/Node Split, Modern CSS & Adapter Unification (2026-09-26)
+
+## Overview
+
+TokiForge **2.4.0** splits browser vs Node APIs, ships modern CSS export (`color-mix`, `@layer`, `@container`), unifies remaining adapters on `ThemeController`, and aligns all publishable packages and docs to **2.4.0**.
+
+### Highlights
+
+#### 1. Core entry points & bundle budgets
+- `@tokiforge/core/runtime` for apps: `ThemeRuntime`, `ThemeController`, `TokenExporter`, `ColorUtils`, `AccessibilityUtils`. Theme switching is **2.7 KB gzipped**.
+- `@tokiforge/core/tools` for browser-safe build/analysis helpers: `SSRUtils`, analytics, semantic layers, versioning, registry, iOS/Android/RN exporters.
+- `@tokiforge/core/node` for CLI and file-based parsing (`TokenParser`, `FigmaDiff`, `CICDValidator`).
+- `size-limit` enforces tree-shaken budgets in CI (`pnpm size`): `/runtime` ≤ 3 KB, adapters ≤ 4 KB.
+- Obsolete browser `fs`/`path` stubs removed.
+
+#### 2. Modern CSS & tokens
+- Export helpers for `color-mix()`, `@layer`, and `@container`.
+- Deeper DTCG support plus prefers/container responsive breakpoints.
+- CLI `build` emits responsive and state-aware CSS.
+
+#### 3. Adapters & tooling
+- Vue, Angular, Emotion, and styled-components use `ThemeController`.
+- React / Next / Remix: `watchSystemTheme`, `storageKey`; Next / Remix re-export `SSRUtils`.
+- Storybook `register` export; Astro `generateStaticCSS` writes files.
+- Tailwind peer: `^3 || ^4`.
+- Tests for FigmaDiff, CICDValidator, IDESupport; Angular tests enabled.
+- Docs site: prebuilt `@tokiforge/core/runtime` resolution, lazy-loaded playground and seasonal overlay, config split into `head.ts`/`nav.ts`, unused `vite`/`vitest` deps removed.
+
+#### 4. Fixes
+- Emotion / styled-components `switchTheme` applies the correct theme name.
+- Docs APIs for ResponsiveTokens, FigmaDiff, and CICD match the code.
+
+See [CHANGELOG.md](CHANGELOG.md) for the full list.
+
+### Install
+
+```bash
+npm install @tokiforge/core@^2.4.0
+# or with your framework adapter, e.g.
+npm install @tokiforge/react@^2.4.0
+```
+
+---
+
 # Release v2.2.4 - Monorepo Version Alignment & Robust Recovery (2026-05-19)
 
 ## Overview

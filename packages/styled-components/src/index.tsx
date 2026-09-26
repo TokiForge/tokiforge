@@ -1,12 +1,28 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { ThemeRuntime } from '@tokiforge/core';
-import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+  useSyncExternalStore,
+} from 'react';
+import { ThemeRuntime, ThemeController } from '@tokiforge/core/runtime';
+import type { DesignTokens, ThemeConfig } from '@tokiforge/core/runtime';
 import styled from 'styled-components';
-export * from '@tokiforge/core';
+export type { DesignTokens, ThemeConfig } from '@tokiforge/core/runtime';
+export {
+  ThemeRuntime,
+  ThemeController,
+  TokenExporter,
+  ColorUtils,
+  AccessibilityUtils,
+} from '@tokiforge/core/runtime';
 
 interface ThemeContextValue {
   runtime: ThemeRuntime;
   currentTheme: string | null;
+  theme: string;
   tokens: DesignTokens;
   switchTheme: (themeName: string) => void;
   setTheme: (themeName: string) => Promise<void>;
@@ -20,61 +36,86 @@ interface ThemeProviderProps {
   config: ThemeConfig;
   children: React.ReactNode;
   prefix?: string;
+  selector?: string;
+  defaultTheme?: string;
+  storageKey?: string;
+  persist?: boolean;
+  watchSystemTheme?: boolean;
+  onThemeChange?: (themeName: string) => void;
 }
 
 export function ThemeProvider({
   config,
   children,
   prefix = 'hf',
+  selector = ':root',
+  defaultTheme,
+  storageKey = 'tokiforge-theme',
+  persist = true,
+  watchSystemTheme = false,
+  onThemeChange,
 }: Readonly<ThemeProviderProps>) {
-  const [runtime] = useState(() => new ThemeRuntime(config));
-  const [currentTheme, setCurrentTheme] = useState<string | null>(() => runtime.getCurrentTheme());
-  const [tokens, setTokens] = useState<DesignTokens>(() => runtime.getThemeTokens(currentTheme ?? runtime.getAvailableThemes()[0]));
+  const onThemeChangeRef = useRef(onThemeChange);
+  onThemeChangeRef.current = onThemeChange;
+
+  const controllerRef = useRef<ThemeController | null>(null);
+  controllerRef.current ??= new ThemeController(config, {
+    selector,
+    prefix,
+    defaultTheme,
+    storageKey,
+    persist,
+    watchSystemTheme,
+    onThemeChange: (name) => onThemeChangeRef.current?.(name),
+  });
+  const controller = controllerRef.current;
+
+  const snapshot = useSyncExternalStore(
+    useCallback((onStoreChange: () => void) => controller.subscribe(onStoreChange), [controller]),
+    () => controller.getSnapshot(),
+    () => controller.getSnapshot()
+  );
 
   useEffect(() => {
-    runtime.init(':root', prefix);
-    const handleThemeChange = () => {
-      const newTheme = runtime.getCurrentTheme();
-      const newTokens = runtime.getThemeTokens(newTheme ?? runtime.getAvailableThemes()[0]);
-      setCurrentTheme(newTheme);
-      setTokens(newTokens);
-    };
-    window.addEventListener('tokiforge:theme-change', handleThemeChange);
+    controller.init();
     return () => {
-      window.removeEventListener('tokiforge:theme-change', handleThemeChange);
+      controller.destroy();
     };
-  }, [runtime, prefix]);
-
-  const switchTheme = useCallback(
-    (_themeName: string) => {
-      runtime.nextTheme();
-    },
-    [runtime]
-  );
+  }, [controller]);
 
   const setTheme = useCallback(
     async (themeName: string) => {
-      runtime.applyTheme(themeName);
+      controller.setTheme(themeName);
     },
-    [runtime]
+    [controller]
+  );
+
+  const switchTheme = useCallback(
+    (themeName: string) => {
+      controller.setTheme(themeName);
+    },
+    [controller]
   );
 
   const nextTheme = useCallback(async () => {
-    const next = runtime.nextTheme();
-    runtime.applyTheme(next);
-  }, [runtime]);
+    controller.nextTheme();
+  }, [controller]);
 
-  const contextValue: ThemeContextValue = {
-    runtime,
-    currentTheme,
-    tokens,
-    switchTheme,
-    setTheme,
-    nextTheme,
-    availableThemes: runtime.getAvailableThemes(),
-  };
+  const value = useMemo<ThemeContextValue>(
+    () => ({
+      runtime: controller.runtime,
+      currentTheme: snapshot.theme,
+      theme: snapshot.theme,
+      tokens: snapshot.tokens,
+      switchTheme,
+      setTheme,
+      nextTheme,
+      availableThemes: controller.getAvailableThemes(),
+    }),
+    [snapshot, switchTheme, setTheme, nextTheme, controller]
+  );
 
-  return <ThemeContext.Provider value={contextValue}>{children}</ThemeContext.Provider>;
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme(): ThemeContextValue {

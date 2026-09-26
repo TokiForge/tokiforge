@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/figma",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Figma integration for TokiForge design tokens",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -13,17 +13,20 @@
       "require": "./dist/index.cjs"
     }
   },
+  "files": [
+    "dist",
+    "README.md",
+    "src/manifest.json",
+    "src/ui.html"
+  ],
   "scripts": {
     "build": "tsup",
     "build:all": "npm run build",
+    "build:plugin": "tsup",
     "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "test": "vitest"
   },
-  "files": [
-    "dist",
-    "README.md"
-  ],
   "sideEffects": false,
   "keywords": [
     "figma",
@@ -53,7 +56,7 @@
     "vitest": "^4.1.5"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.3.0",
+    "@tokiforge/core": "workspace:^2.4.0",
     "axios": "^1.6.0"
   }
 }

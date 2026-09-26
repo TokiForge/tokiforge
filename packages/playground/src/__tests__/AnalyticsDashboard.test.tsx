@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { AnalyticsDashboard } from '../components/AnalyticsDashboard';
-import type { DesignTokens } from '@tokiforge/core';
+import type { DesignTokens } from '@tokiforge/core/runtime';
 
 describe('AnalyticsDashboard', () => {
   const mockTokens: DesignTokens = {

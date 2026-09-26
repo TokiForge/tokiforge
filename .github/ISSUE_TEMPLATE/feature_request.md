@@ -17,7 +17,7 @@ A clear and concise description of what you want to happen.
 A clear and concise description of any alternative solutions or features you've considered.
 
 **Environment:**
- - TokiForge Version: [e.g. 1.0.0]
+ - TokiForge Version: [e.g. 2.4.0]
  - Package: [e.g. @tokiforge/core, @tokiforge/react]
  - Use Case: [e.g. Multi-platform export, Enhanced Figma sync]
 

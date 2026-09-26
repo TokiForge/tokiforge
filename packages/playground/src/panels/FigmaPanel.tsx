@@ -1,4 +1,4 @@
-import type { DesignTokens } from '@tokiforge/core';
+import type { DesignTokens } from '@tokiforge/core/runtime';
 
 interface Props { tokens: DesignTokens; toast: (m: string, t?: 'success'|'error'|'info') => void; }
 

@@ -1,11 +1,8 @@
 import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
-import { ThemeRuntime } from '@tokiforge/core';
-import ApiPlayground from '../components/ApiPlayground.vue';
-import { setupSnow } from './snow';
+import { defineAsyncComponent } from 'vue';
 import './custom.css';
 
-// Initialize TokiForge theme for the docs site
 const docsThemeConfig = {
   themes: [
     {
@@ -38,25 +35,35 @@ const docsThemeConfig = {
   defaultTheme: 'light',
 };
 
-const themeRuntime = new ThemeRuntime(docsThemeConfig);
+function initDocsTheme() {
+  void import('@tokiforge/core/runtime').then(({ ThemeRuntime }) => {
+    const runtime = new ThemeRuntime(docsThemeConfig);
+    runtime.init();
+  });
+}
+
+function maybeSetupSnow() {
+  // Seasonal only — skip Vue app + CSS work the rest of the year
+  if (new Date().getMonth() !== 11) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  void import('./snow').then(({ setupSnow }) => setupSnow());
+}
 
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
-    // Register playground component
-    app.component('ApiPlayground', ApiPlayground);
-    
-    // Initialize theme runtime
+    app.component(
+      'ApiPlayground',
+      defineAsyncComponent(() => import('../components/ApiPlayground.vue'))
+    );
+
     if (typeof window !== 'undefined') {
-      themeRuntime.init();
-      
-      // Setup snow overlay after DOM is ready
+      initDocsTheme();
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => setupSnow());
+        document.addEventListener('DOMContentLoaded', maybeSetupSnow, { once: true });
       } else {
-        setupSnow();
+        maybeSetupSnow();
       }
     }
   },
 } satisfies Theme;
-

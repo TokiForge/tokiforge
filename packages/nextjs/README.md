@@ -1,11 +1,11 @@
 # @tokiforge/nextjs
 
-Next.js App Router adapter for TokiForge theming system with full RSC support.
+Next.js App Router adapter for TokiForge theming system with full RSC support (v2.4.0). Re-exports `SSRUtils`; provider supports `watchSystemTheme` and `storageKey`.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/nextjs @tokiforge/core next react
+npm install @tokiforge/nextjs@^2.4.0 @tokiforge/core@^2.4.0 next react
 ```
 
 ## Usage

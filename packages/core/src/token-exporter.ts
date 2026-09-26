@@ -3,6 +3,22 @@ import { ExportError } from './types';
 
 type TokenNode = Record<string, unknown>;
 
+/** Keep generated CSS safe to inline inside a `<style>` tag. */
+export function escapeCSSValue(value: string): string {
+  return value.replace(/[\n\r]/g, ' ').replace(/</g, '\\3c ');
+}
+
+function cssIdent(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+}
+
+function assertSafeSelector(selector: string): string {
+  if (/[{}<>]|[\n\r]/.test(selector)) {
+    throw new ExportError(`Unsafe CSS selector: ${selector}`);
+  }
+  return selector;
+}
+
 export class TokenExporter {
   static export(tokens: DesignTokens, options: TokenExportOptions): string {
     switch (options.format) {
@@ -23,9 +39,9 @@ export class TokenExporter {
 
   static exportCSS(
     tokens: DesignTokens,
-    options: { selector?: string; prefix?: string } = {}
+    options: { selector?: string; prefix?: string; layer?: string } = {}
   ): string {
-    const selector = options.selector ?? ':root';
+    const selector = assertSafeSelector(options.selector ?? ':root');
     const prefix = options.prefix ?? 'hf';
     const flatTokens = this.flattenTokens(tokens, prefix);
 
@@ -33,7 +49,14 @@ export class TokenExporter {
       .map(([key, value]) => `  --${key}: ${value};`)
       .join('\n');
 
-    return `${selector} {\n${cssVars}\n}`;
+    const block = `${selector} {\n${cssVars}\n}`;
+    if (options.layer) {
+      if (!/^[a-zA-Z_][\w-]*$/.test(options.layer)) {
+        throw new ExportError(`Invalid CSS layer name: ${options.layer}`);
+      }
+      return `@layer ${options.layer} {\n${block}\n}`;
+    }
+    return block;
   }
 
   /**
@@ -48,7 +71,7 @@ export class TokenExporter {
     darkTokens: DesignTokens,
     options: { selector?: string; prefix?: string } = {}
   ): string {
-    const selector = options.selector ?? ':root';
+    const selector = assertSafeSelector(options.selector ?? ':root');
     const prefix = options.prefix ?? 'hf';
     const light = this.flattenTokens(lightTokens, prefix);
     const dark = this.flattenTokens(darkTokens, prefix);
@@ -148,24 +171,24 @@ export class TokenExporter {
 
     const processValue = (key: string, value: unknown, parent: string): void => {
       const fullKey = parent ? `${parent}-${key}` : key;
-      const tokenKey = `${prefix}-${fullKey}`.toLowerCase().replace(/\./g, '-');
+      const tokenKey = cssIdent(`${prefix}-${fullKey}`);
 
       if (value && typeof value === 'object' && 'value' in (value as TokenNode)) {
         const token = value as TokenValue;
         if (typeof token.value === 'string' || typeof token.value === 'number') {
-          flat[tokenKey] = String(token.value);
+          flat[tokenKey] = escapeCSSValue(String(token.value));
         } else if (token.value && typeof token.value === 'object' && 'default' in (token.value as TokenNode)) {
-          flat[tokenKey] = String((token.value as TokenNode).default);
+          flat[tokenKey] = escapeCSSValue(String((token.value as TokenNode).default));
         } else if (token.value && typeof token.value === 'object') {
           const composed = this.composeCompositeValue(token);
           if (composed !== undefined) {
-            flat[tokenKey] = composed;
+            flat[tokenKey] = escapeCSSValue(composed);
           } else if (!Array.isArray(token.value)) {
             // Composite token (typography, border, ...): emit one variable per part
             for (const part of Object.keys(token.value as TokenNode)) {
               const partValue = (token.value as TokenNode)[part];
               if (typeof partValue === 'string' || typeof partValue === 'number') {
-                flat[`${tokenKey}-${part.toLowerCase()}`] = String(partValue);
+                flat[`${tokenKey}-${cssIdent(part)}`] = escapeCSSValue(String(partValue));
               }
             }
           }

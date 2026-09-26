@@ -1,0 +1,45 @@
+[
+  {
+    "name": "@tokiforge/core/runtime — theme switching (ThemeRuntime + ThemeController)",
+    "path": "packages/core/dist/runtime.js",
+    "import": "{ ThemeRuntime, ThemeController }",
+    "limit": "3 KB",
+    "gzip": true
+  },
+  {
+    "name": "@tokiforge/core/runtime — full entry (incl. ColorUtils, AccessibilityUtils)",
+    "path": "packages/core/dist/runtime.js",
+    "limit": "6 KB",
+    "gzip": true
+  },
+  {
+    "name": "@tokiforge/core/tools — full entry",
+    "path": "packages/core/dist/tools.js",
+    "limit": "14 KB",
+    "gzip": true
+  },
+  {
+    "name": "@tokiforge/react — ThemeProvider + useTheme",
+    "path": "packages/react/dist/index.js",
+    "import": "{ ThemeProvider, useTheme }",
+    "ignore": ["react", "react-dom"],
+    "limit": "4 KB",
+    "gzip": true
+  },
+  {
+    "name": "@tokiforge/vue — provideTheme + useTheme",
+    "path": "packages/vue/dist/index.js",
+    "import": "{ provideTheme, useTheme }",
+    "ignore": ["vue"],
+    "limit": "4 KB",
+    "gzip": true
+  },
+  {
+    "name": "@tokiforge/svelte — createThemeStore",
+    "path": "packages/svelte/dist/index.js",
+    "import": "{ createThemeStore }",
+    "ignore": ["svelte", "svelte/store"],
+    "limit": "4 KB",
+    "gzip": true
+  }
+]

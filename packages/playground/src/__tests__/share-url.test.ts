@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { buildShareUrl, readTokensFromUrl } from '../share-url';
-import type { DesignTokens } from '@tokiforge/core';
+import type { DesignTokens } from '@tokiforge/core/runtime';
 
 const tokens: DesignTokens = {
   color: {

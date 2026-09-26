@@ -158,6 +158,42 @@ export class FigmaDiff {
     return diff.added.length > 0 || diff.removed.length > 0 || diff.changed.length > 0;
   }
 
+  /**
+   * Produce a new token tree by applying a Figma ↔ code sync strategy.
+   *
+   * - `merge` (default): code base + Figma additions/changes; code-only tokens kept
+   * - `figma-wins`: same as merge but Figma overwrites conflicts
+   * - `code-wins`: keep code values on conflicts; still add Figma-only tokens
+   * - `figma-only`: replace with Figma tree
+   */
+  static sync(
+    codeTokens: DesignTokens,
+    figmaTokens: DesignTokens,
+    options: DiffOptions & { strategy?: 'merge' | 'figma-wins' | 'code-wins' | 'figma-only' } = {}
+  ): DesignTokens {
+    const strategy = options.strategy ?? 'merge';
+    if (strategy === 'figma-only') {
+      return structuredCloneSafe(figmaTokens);
+    }
+
+    const result = structuredCloneSafe(codeTokens);
+    const diff = this.compare(figmaTokens, codeTokens, options);
+
+    for (const path of diff.added) {
+      const value = getTokenNode(figmaTokens, path);
+      if (value !== undefined) setTokenNode(result, path, value);
+    }
+
+    if (strategy !== 'code-wins') {
+      for (const change of diff.changed) {
+        const value = getTokenNode(figmaTokens, change.path);
+        if (value !== undefined) setTokenNode(result, change.path, value);
+      }
+    }
+
+    return result;
+  }
+
   static valuesMatch(value1: unknown, value2: unknown, tolerance = 0): boolean {
     if (value1 === value2) {
       return true;
@@ -183,4 +219,41 @@ export class FigmaDiff {
   static exportJSON(diff: DiffResult, outputPath: string): void {
     fs.writeFileSync(outputPath, JSON.stringify(diff, null, 2));
   }
+}
+
+function structuredCloneSafe<T>(value: T): T {
+  if (typeof structuredClone === 'function') {
+    try {
+      return structuredClone(value);
+    } catch {
+      // fall through
+    }
+  }
+  return JSON.parse(JSON.stringify(value)) as T;
+}
+
+function getTokenNode(tokens: DesignTokens, path: string): unknown {
+  const parts = path.split('.');
+  let current: unknown = tokens;
+  for (const part of parts) {
+    if (current && typeof current === 'object' && part in (current as TokenNode)) {
+      current = (current as TokenNode)[part];
+    } else {
+      return undefined;
+    }
+  }
+  return current;
+}
+
+function setTokenNode(tokens: DesignTokens, path: string, value: unknown): void {
+  const parts = path.split('.');
+  let current: TokenNode = tokens as TokenNode;
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i];
+    if (!(part in current) || typeof current[part] !== 'object' || current[part] === null) {
+      current[part] = {};
+    }
+    current = current[part] as TokenNode;
+  }
+  current[parts[parts.length - 1]] = value;
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { TokenExporter } from '@tokiforge/core';
-import type { DesignTokens } from '@tokiforge/core';
+import { TokenExporter } from '@tokiforge/core/runtime';
+import type { DesignTokens } from '@tokiforge/core/runtime';
 import { buildShareUrl } from '../share-url';
 import './ExportShare.css';
 
@@ -167,7 +167,7 @@ export function ExportShare({ tokens, themeName }: ExportShareProps) {
         
         <div className="snippet">
           <div className="snippet-header">React Usage</div>
-          <pre className="snippet-code"><code>{`import { ThemeRuntime } from '@tokiforge/core';
+          <pre className="snippet-code"><code>{`import { ThemeRuntime } from '@tokiforge/core/runtime';
 import tokens from './tokens.json';
 
 const runtime = new ThemeRuntime({

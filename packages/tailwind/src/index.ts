@@ -1,5 +1,5 @@
-import type { DesignTokens, TokenValue } from '@tokiforge/core';
-import { TokenParser } from '@tokiforge/core';
+import type { DesignTokens, TokenValue } from '@tokiforge/core/node';
+import { TokenParser } from '@tokiforge/core/node';
 import type { Config } from 'tailwindcss';
 
 export * from './plugin';

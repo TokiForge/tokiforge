@@ -1,5 +1,12 @@
 # @tokiforge/tailwind
 
+## 2.4.0
+
+### Minor Changes
+
+- Peer dependency widened to `tailwindcss@^3 || ^4`.
+- Version bump to 2.4.0; depends on `@tokiforge/core@^2.4.0`.
+
 ## 2.2.3
 
 ### Patch Changes

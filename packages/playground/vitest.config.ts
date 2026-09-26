@@ -13,6 +13,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@tokiforge/core': path.resolve(__dirname, '../core/src'),
+      '@tokiforge/core/runtime': path.resolve(__dirname, '../core/src/runtime.ts'),
     },
   },
 });
