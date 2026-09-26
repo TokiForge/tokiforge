@@ -7,6 +7,8 @@ export class ThemeRuntime {
   private currentTheme: string | null = null;
   private readonly defaultTheme: string;
   private systemThemeWatcher: (() => void) | null = null;
+  /** Tokens are fixed at construction, so generated CSS can be reused across switches. */
+  private readonly cssCache = new WeakMap<DesignTokens, Map<string, string>>();
 
   constructor(config: ThemeConfig) {
     if (!config.themes || config.themes.length === 0) {
@@ -88,6 +90,11 @@ export class ThemeRuntime {
   }
 
   watchSystemTheme(callback: (systemTheme: string) => void): () => void {
+    if (this.systemThemeWatcher) {
+      this.systemThemeWatcher();
+      this.systemThemeWatcher = null;
+    }
+
     if (globalThis.window?.matchMedia === undefined) {
       return () => { /* no-op in non-browser environments */ };
     }
@@ -140,10 +147,23 @@ export class ThemeRuntime {
       document.head.appendChild(styleElement);
     }
 
-    styleElement.textContent = css;
+    if (styleElement.textContent !== css) {
+      styleElement.textContent = css;
+    }
   }
 
   private generateCSS(tokens: DesignTokens, selector: string, prefix: string): string {
-    return TokenExporter.exportCSS(tokens, { selector, prefix });
+    const cacheKey = `${selector}\0${prefix}`;
+    let byKey = this.cssCache.get(tokens);
+    const cached = byKey?.get(cacheKey);
+    if (cached !== undefined) return cached;
+
+    const css = TokenExporter.exportCSS(tokens, { selector, prefix });
+    if (!byKey) {
+      byKey = new Map();
+      this.cssCache.set(tokens, byKey);
+    }
+    byKey.set(cacheKey, css);
+    return css;
   }
 }

@@ -1,5 +1,14 @@
 # @tokiforge/core
 
+## 2.4.0
+
+### Minor Changes
+
+- Split package exports into `@tokiforge/core/runtime` (browser) and `@tokiforge/core/node` (CLI/file I/O).
+- Modern CSS export: `color-mix()`, `@layer`, `@container`.
+- Deeper DTCG parsing and prefers/container responsive breakpoints.
+- Removed obsolete browser Node stubs.
+
 ## 2.2.3
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@tokiforge/design-tools",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Design tool integrations for TokiForge (Sketch, Adobe XD)",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -63,6 +63,6 @@
     "vitest": "^4.1.5"
   },
   "dependencies": {
-    "@tokiforge/core": "workspace:^2.3.0"
+    "@tokiforge/core": "workspace:^2.4.0"
   }
 }

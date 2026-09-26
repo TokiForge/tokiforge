@@ -1,20 +1,20 @@
-﻿# @tokiforge/figma
+# @tokiforge/figma
 
 **Figma integration for TokiForge design tokens. Sync tokens between Figma and code, compare designs, and manage design system consistency.**
 
-Figma integration for TokiForge design tokens (v2.2.3). Sync tokens between Figma and your codebase.
+Figma integration for TokiForge design tokens (v2.4.0). Sync tokens between Figma and your codebase.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/figma@^2.2.3 @tokiforge/core@^2.2.3
+npm install @tokiforge/figma@^2.4.0 @tokiforge/core@^2.4.0
 ```
 
 ## Setup
 
 1. Get your Figma Personal Access Token:
 
-   - Go to Figma Settings → Account → Personal Access Tokens
+   - Go to Figma Settings ? Account ? Personal Access Tokens
    - Create a new token
 
 2. Get your Figma File Key:

@@ -1,3 +1,44 @@
+# Release v2.4.0 - Runtime/Node Split, Modern CSS & Adapter Unification (2026-09-26)
+
+## Overview
+
+TokiForge **2.4.0** splits browser vs Node APIs, ships modern CSS export (`color-mix`, `@layer`, `@container`), unifies remaining adapters on `ThemeController`, and aligns all publishable packages and docs to **2.4.0**.
+
+### Highlights
+
+#### 1. Core entry points
+- `@tokiforge/core/runtime` for apps (theme runtime, exporters used in-browser).
+- `@tokiforge/core/node` for CLI and file-based parsing.
+- Obsolete browser `fs`/`path` stubs removed.
+
+#### 2. Modern CSS & tokens
+- Export helpers for `color-mix()`, `@layer`, and `@container`.
+- Deeper DTCG support plus prefers/container responsive breakpoints.
+- CLI `build` emits responsive and state-aware CSS.
+
+#### 3. Adapters & tooling
+- Vue, Angular, Emotion, and styled-components use `ThemeController`.
+- React / Next / Remix: `watchSystemTheme`, `storageKey`; Next / Remix re-export `SSRUtils`.
+- Storybook `register` export; Astro `generateStaticCSS` writes files.
+- Tailwind peer: `^3 || ^4`.
+- Tests for FigmaDiff, CICDValidator, IDESupport; Angular tests enabled.
+
+#### 4. Fixes
+- Emotion / styled-components `switchTheme` applies the correct theme name.
+- Docs APIs for ResponsiveTokens, FigmaDiff, and CICD match the code.
+
+See [CHANGELOG.md](CHANGELOG.md) for the full list.
+
+### Install
+
+```bash
+npm install @tokiforge/core@^2.4.0
+# or with your framework adapter, e.g.
+npm install @tokiforge/react@^2.4.0
+```
+
+---
+
 # Release v2.2.4 - Monorepo Version Alignment & Robust Recovery (2026-05-19)
 
 ## Overview

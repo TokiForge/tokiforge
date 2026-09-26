@@ -1,8 +1,15 @@
-# TokiForge Roadmap v2.3.0+
+# TokiForge Roadmap v2.4.0+
 
 ## Current Status Analysis
 
-### Already Implemented (v2.3.0)
+### Already Implemented (v2.4.0)
+
+0. **Core runtime / node split** - Fully implemented
+
+   - `@tokiforge/core/runtime` for browser theme APIs
+   - `@tokiforge/core/node` for `TokenParser` and file I/O
+   - Modern CSS export: `color-mix()`, `@layer`, `@container`
+   - ThemeController on Vue, Angular, Emotion, and styled-components
 
 1. **Semantic Tokens & Aliasing** - Partially implemented
 
@@ -466,4 +473,4 @@ We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guideline
 ---
 
 _Last updated: July 2026_  
-_Version: 2.3.0_
+_Version: 2.4.0_

@@ -7,8 +7,8 @@ import React, {
   useMemo,
   useSyncExternalStore,
 } from 'react';
-import { ThemeRuntime, ThemeController } from '@tokiforge/core';
-import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
+import { ThemeRuntime, ThemeController } from '@tokiforge/core/runtime';
+import type { DesignTokens, ThemeConfig } from '@tokiforge/core/runtime';
 
 interface ThemeContextValue {
   theme: string;
@@ -32,6 +32,8 @@ interface ThemeProviderProps {
   storageKey?: string;
   /** Whether to read/write theme from storage (default: true when storageKey is set) */
   persist?: boolean;
+  /** Follow OS color scheme when no persisted choice exists */
+  watchSystemTheme?: boolean;
   /** Callback when theme changes (e.g. analytics) */
   onThemeChange?: (themeName: string) => void;
   children?: React.ReactNode;
@@ -46,6 +48,7 @@ export function ThemeProvider({
   defaultTheme,
   storageKey = DEFAULT_STORAGE_KEY,
   persist = true,
+  watchSystemTheme = false,
   onThemeChange,
   children,
 }: Readonly<ThemeProviderProps>) {
@@ -59,6 +62,7 @@ export function ThemeProvider({
     defaultTheme,
     storageKey,
     persist,
+    watchSystemTheme,
     onThemeChange: (themeName) => onThemeChangeRef.current?.(themeName),
     runtime: new ThemeRuntime(config),
   });

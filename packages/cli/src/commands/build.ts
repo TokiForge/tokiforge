@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'path';
-import { TokenParser, TokenExporter } from '@tokiforge/core';
-import type { TokenExportOptions } from '@tokiforge/core';
+import { TokenParser, TokenExporter, ResponsiveTokens } from '@tokiforge/core';
+import type { TokenExportOptions, Breakpoint } from '@tokiforge/core';
 
 interface Config {
   input: string;
@@ -11,9 +11,15 @@ interface Config {
     ts?: string;
     scss?: string;
     json?: string;
+    /** Extra CSS with @media / @container / state rules */
+    responsiveCss?: string;
   };
   prefix?: string;
   selector?: string;
+  layer?: string;
+  breakpoints?: Breakpoint[];
+  /** Emit responsive + state CSS next to the main CSS file (default: true when css output is set) */
+  responsive?: boolean;
 }
 
 export async function buildCommand(projectPath: string = process.cwd()): Promise<void> {
@@ -48,13 +54,13 @@ export async function buildCommand(projectPath: string = process.cwd()): Promise
     { format: 'json', path: config.output.json },
   ];
 
-  for (const { format, path: outputPath } of formats) {
+  for (const { format, outputPath } of formats.map((f) => ({ format: f.format, outputPath: f.path }))) {
     if (!outputPath) continue;
 
     const fullPath = path.resolve(projectPath, outputPath);
-    const outputDir = path.dirname(fullPath);
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
+    const dir = path.dirname(fullPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
     }
 
     const options: TokenExportOptions = {
@@ -62,6 +68,7 @@ export async function buildCommand(projectPath: string = process.cwd()): Promise
       prefix: config.prefix || 'hf',
       selector: config.selector || ':root',
       variables: format === 'js' || format === 'ts',
+      layer: format === 'css' ? config.layer : undefined,
     };
 
     const content = TokenExporter.export(tokens, options);
@@ -69,6 +76,27 @@ export async function buildCommand(projectPath: string = process.cwd()): Promise
     console.log(`Generated ${format!.toUpperCase()}: ${outputPath}`);
   }
 
+  const shouldResponsive =
+    config.responsive !== false && Boolean(config.output.css || config.output.responsiveCss);
+  if (shouldResponsive) {
+    const prefix = config.prefix || 'hf';
+    const responsiveCss = [
+      ResponsiveTokens.generateResponsiveCSS(tokens, config.breakpoints ?? [], prefix),
+      ResponsiveTokens.generateStateCSS(tokens, prefix),
+    ]
+      .filter(Boolean)
+      .join('\n\n');
+
+    const responsivePath =
+      config.output.responsiveCss ||
+      (config.output.css
+        ? path.join(path.dirname(config.output.css), 'tokens.responsive.css')
+        : 'dist/tokens.responsive.css');
+    const fullResponsivePath = path.resolve(projectPath, responsivePath);
+    fs.mkdirSync(path.dirname(fullResponsivePath), { recursive: true });
+    fs.writeFileSync(fullResponsivePath, responsiveCss);
+    console.log(`Generated responsive CSS: ${responsivePath}`);
+  }
+
   console.log('\nBuild complete!');
 }
-

@@ -104,7 +104,7 @@ export class TokiForgeStorybookAddon {
 export function withTokiForge(config: TokiForgeStorybookConfig) {
   const addon = new TokiForgeStorybookAddon(config);
 
-  return (storyFn: any) => {
+  return (storyFn: (...args: unknown[]) => unknown) => {
     if (typeof window !== 'undefined') {
       addon.init().catch(console.error);
     }
@@ -118,11 +118,24 @@ export function withTokiForge(config: TokiForgeStorybookConfig) {
 export function tokiforgeParameters(config: TokiForgeStorybookConfig) {
   return {
     tokiforge: {
-      themes: config.config.themes.map(t => t.name),
+      themes: config.config.themes.map((t) => t.name),
       defaultTheme: config.config.defaultTheme || config.config.themes[0]?.name,
       enableThemeSwitcher: config.enableThemeSwitcher,
       enableTokenViewer: config.enableTokenViewer,
     },
   };
 }
+
+/**
+ * Addon entry for `.storybook/main.ts` `addons` array.
+ * Theme config is applied in preview via `withTokiForge` / `tokiforgeParameters`.
+ */
+export function createTokensAddon(
+  _config?: ThemeConfig | TokiForgeStorybookConfig,
+  _options?: Partial<TokiForgeStorybookConfig> & { version?: string; repository?: string }
+): string {
+  return '@tokiforge/storybook/register';
+}
+
+export type { ThemeConfig, DesignTokens };
 

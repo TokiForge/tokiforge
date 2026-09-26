@@ -1,7 +1,45 @@
 import type { TokenValue, DesignTokens, Breakpoint } from './types';
-import { TokenExporter } from './token-exporter';
+import { TokenExporter, escapeCSSValue } from './token-exporter';
 
 type TokenNode = Record<string, unknown>;
+
+const PSEUDO_STATES = new Set([
+  'hover',
+  'active',
+  'focus',
+  'focus-visible',
+  'focus-within',
+  'disabled',
+  'visited',
+  'checked',
+  'target',
+]);
+
+function mediaQueryFor(bp: Breakpoint): string | null {
+  const features: string[] = [];
+  if (typeof bp.min === 'number') features.push(`(min-width: ${bp.min}px)`);
+  if (typeof bp.max === 'number') features.push(`(max-width: ${bp.max}px)`);
+  if (bp.prefers) {
+    const prefers = bp.prefers.trim();
+    features.push(prefers.startsWith('(') ? prefers : `(${prefers})`);
+  }
+
+  if (bp.container) {
+    if (features.length === 0) return null;
+    const name = typeof bp.container === 'string' ? bp.container.trim() : '';
+    if (name && !/^[a-zA-Z_][\w-]*$/.test(name)) return null;
+    return name
+      ? `@container ${name} ${features.join(' and ')}`
+      : `@container ${features.join(' and ')}`;
+  }
+
+  return features.length > 0 ? `@media ${features.join(' and ')}` : null;
+}
+
+function stateSelector(state: string): string | null {
+  if (!/^[a-z][\w-]*$/i.test(state)) return null;
+  return PSEUDO_STATES.has(state) ? `:${state}` : `.${state}`;
+}
 
 export class ResponsiveTokens {
   static getResponsiveValue(token: TokenValue, breakpoint: string): string | number | undefined {
@@ -37,15 +75,15 @@ export class ResponsiveTokens {
     const breakpointsToUse = breakpoints.length > 0 ? breakpoints : defaultBreakpoints;
     const cssParts: string[] = [];
 
-    // Generate base CSS
     cssParts.push(TokenExporter.exportCSS(tokens, { selector: ':root', prefix }));
 
-    // Generate responsive CSS
     for (const bp of breakpointsToUse) {
-      const mediaQuery = `@media (min-width: ${bp.min}px)`;
-      const responsiveTokens: DesignTokens = {};
+      const mediaQuery = mediaQueryFor(bp);
+      if (!mediaQuery) continue;
 
-      // Filter tokens with responsive values for this breakpoint
+      const responsiveTokens: DesignTokens = {};
+      let found = false;
+
       const processTokens = (obj: TokenNode, target: TokenNode): void => {
         for (const key of Object.keys(obj)) {
           const val = obj[key];
@@ -53,16 +91,16 @@ export class ResponsiveTokens {
             if ('value' in val) {
               const token = val as unknown as TokenValue;
               if (token.responsive && token.responsive[bp.name] !== undefined) {
-                if (!target[key]) {
-                  target[key] = { ...token };
-                }
+                found = true;
+                target[key] ??= { ...token };
                 (target[key] as TokenNode).value = token.responsive[bp.name];
               }
-            } else {
-              if (!target[key]) {
-                target[key] = {};
+            } else if (!Array.isArray(val)) {
+              const child: TokenNode = {};
+              processTokens(val as TokenNode, child);
+              if (Object.keys(child).length > 0) {
+                target[key] = child;
               }
-              processTokens(val as TokenNode, target[key] as TokenNode);
             }
           }
         }
@@ -70,7 +108,7 @@ export class ResponsiveTokens {
 
       processTokens(tokens as unknown as TokenNode, responsiveTokens as unknown as TokenNode);
 
-      if (Object.keys(responsiveTokens).length > 0) {
+      if (found) {
         const responsiveCSS = TokenExporter.exportCSS(responsiveTokens, {
           selector: ':root',
           prefix,
@@ -95,11 +133,12 @@ export class ResponsiveTokens {
             const token = val as unknown as TokenValue;
             if (token.states) {
               const states = token.states;
-              const cssVar = `--${prefix}-${path}`.toLowerCase().replace(/\./g, '-');
-              
+              const cssVar = `--${prefix}-${path}`.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+
               for (const [state, value] of Object.entries(states)) {
-                if (state !== 'default' && value !== undefined) {
-                  cssParts.push(`.${state} { ${cssVar}: ${value}; }`);
+                const selector = state === 'default' ? null : stateSelector(state);
+                if (selector && value !== undefined) {
+                  cssParts.push(`${selector} { ${cssVar}: ${escapeCSSValue(String(value))}; }`);
                 }
               }
             }

@@ -24,7 +24,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Environment (please complete the following information):**
- - TokiForge Version: [e.g. 1.0.0]
+ - TokiForge Version: [e.g. 2.4.0]
  - Package: [e.g. @tokiforge/core, @tokiforge/react]
  - Node.js Version: [e.g. 18.0.0]
  - OS: [e.g. Windows 10, macOS 14, Linux]

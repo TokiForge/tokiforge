@@ -1,4 +1,4 @@
-﻿---
+---
 title: Getting Started with TokiForge
 description: Learn how to get started with TokiForge design token and theming engine. Install, configure, and use TokiForge with React, Vue, Angular, Svelte, or any framework.
 ---
@@ -18,14 +18,14 @@ TokiForge is a modern design token and theming engine that lets you:
 
 ## Installation
 
-> **Version:** TokiForge v2.2.3
+> **Version:** TokiForge v2.4.0
 
-> **What's new in v2.2.3:** Theme providers (React, Vue, Next, Remix) support `storageKey`, `persist`, and `onThemeChange`. Tailwind plugin adds `baseSelector`, `strict`, `includeUtilities`, `excludePaths`, `tokens`, `debug`, and extended `themeMappings` (boxShadow, lineHeight, animation). SSR options include `cookieName` and `cookieMaxAge`. See the [project CHANGELOG](https://github.com/TokiForge/tokiforge/blob/main/CHANGELOG.md) for full details.
+> **What's new in v2.4.0:** `@tokiforge/core/runtime` and `@tokiforge/core/node` entry points; modern CSS export (`color-mix()`, `@layer`, `@container`); Vue/Angular/Emotion/styled-components on shared `ThemeController`; React/Next/Remix `watchSystemTheme` + `storageKey`; Next/Remix re-export `SSRUtils`; CLI emits responsive/state CSS; Storybook `register`; Tailwind peer `^3 || ^4`. See the [project CHANGELOG](https://github.com/TokiForge/tokiforge/blob/main/CHANGELOG.md) for full details.
 
 ### Core Package
 
 ```bash
-npm install @tokiforge/core@^2.2.3
+npm install @tokiforge/core@^2.4.0
 ```
 
 ### Framework Adapters
@@ -34,24 +34,24 @@ Choose your framework:
 
 ```bash
 # React
-npm install @tokiforge/react@^2.2.3
+npm install @tokiforge/react@^2.4.0
 
 # Vue
-npm install @tokiforge/vue@^2.2.3
+npm install @tokiforge/vue@^2.4.0
 
 # Angular
-npm install @tokiforge/angular@^2.2.3
+npm install @tokiforge/angular@^2.4.0
 
 # Svelte
-npm install @tokiforge/svelte@^2.2.3
+npm install @tokiforge/svelte@^2.4.0
 ```
 
 ### CLI Tool
 
 ```bash
-npm install -g tokiforge-cli@^2.2.3
+npm install -g tokiforge-cli@^2.4.0
 # or
-npx tokiforge-cli@^2.2.3 init
+npx tokiforge-cli@^2.4.0 init
 ```
 
 ## Quick Example

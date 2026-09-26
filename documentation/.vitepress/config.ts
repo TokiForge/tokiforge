@@ -3,7 +3,7 @@ import { resolve } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const stubDir = resolve(__dirname, 'vitepress-stubs');
+const coreRuntime = resolve(__dirname, '../packages/core/src/runtime.ts');
 
 export default defineConfig({
   title: 'TokiForge',
@@ -11,79 +11,20 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        'fs': resolve(stubDir, 'fs.js'),
-        'path': resolve(stubDir, 'path.js'),
-        'fs/promises': resolve(stubDir, 'fs-promises.js'),
-        'module': resolve(stubDir, 'module.js'),
-        'yaml': resolve(stubDir, 'yaml.js'),
+        // Docs are browser-only — route the main barrel to the runtime entry
+        // so Node modules (fs/yaml) never enter the VitePress bundle.
+        '@tokiforge/core': coreRuntime,
+        '@tokiforge/core/runtime': coreRuntime,
       },
     },
     optimizeDeps: {
-      exclude: ['@tokiforge/core', '@tokiforge/vue', 'fs', 'path', 'module', 'yaml', 'fs/promises'],
+      exclude: ['@tokiforge/core', '@tokiforge/vue'],
     },
     ssr: {
       noExternal: ['@tokiforge/core', '@tokiforge/vue'],
     },
     build: {
-      rollupOptions: {
-        external: ['zlib', 'util', 'worker_threads'],
-        output: {
-          globals: {},
-        },
-        onwarn(warning, warn) {
-          // Suppress warning about mixed static/dynamic imports for @tokiforge/core
-          // This is expected: ThemeRuntime is statically imported (needed at init),
-          // while TokenExporter is dynamically imported (lazy-loaded in playground)
-          const message = warning.message || String(warning);
-          if (
-            warning.code === 'MODULE_LEVEL_DIRECTIVE' || 
-            (warning.code === 'UNRESOLVED_IMPORT' && 
-             (warning.source === 'module' || warning.source === 'fs' || warning.source === 'path')) ||
-            (message.includes('dynamically imported') && 
-             (message.includes('@tokiforge/core') || message.includes('packages/core')) &&
-             message.includes('statically imported')) ||
-            message.includes('fs') || message.includes('path') || 
-            message.includes('module') || message.includes('yaml') ||
-            message.includes('zlib') || message.includes('createRequire') ||
-            message.includes('worker_threads')
-          ) {
-            return;
-          }
-          warn(warning);
-        },
-      },
       chunkSizeWarningLimit: 1000,
-    },
-    logLevel: 'warn',
-    customLogger: {
-      info: (msg) => {
-        // Suppress info messages about dynamic imports for @tokiforge/core
-        if (typeof msg === 'string' && msg.includes('dynamically imported') && (msg.includes('@tokiforge/core') || msg.includes('packages/core'))) {
-          return;
-        }
-        // Suppress other info messages during build
-        return;
-      },
-      warn: (msg) => {
-        // Suppress the specific warning about dynamic imports for @tokiforge/core
-        const msgStr = typeof msg === 'string' ? msg : String(msg);
-        if (msgStr.includes('dynamically imported') && (msgStr.includes('@tokiforge/core') || msgStr.includes('packages/core')) && msgStr.includes('statically imported')) {
-          return;
-        }
-        console.warn(msg);
-      },
-      warnOnce: (msg) => {
-        // Suppress the specific warning about dynamic imports for @tokiforge/core
-        const msgStr = typeof msg === 'string' ? msg : String(msg);
-        if (msgStr.includes('dynamically imported') && (msgStr.includes('@tokiforge/core') || msgStr.includes('packages/core')) && msgStr.includes('statically imported')) {
-          return;
-        }
-        console.warn(msg);
-      },
-      error: (msg) => console.error(msg),
-      clearScreen: () => {},
-      hasErrorLogged: () => false,
-      hasWarned: false,
     },
   },
   description: 'TokiForge is a framework-agnostic design token and theming engine for React, Vue, Svelte, Angular, and more. Runtime theme switching, CSS variables, and smart color utilities. <3KB gzipped.',

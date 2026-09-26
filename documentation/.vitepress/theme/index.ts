@@ -1,6 +1,6 @@
 import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
-import { ThemeRuntime } from '@tokiforge/core';
+import { ThemeRuntime } from '@tokiforge/core/runtime';
 import ApiPlayground from '../components/ApiPlayground.vue';
 import { setupSnow } from './snow';
 import './custom.css';

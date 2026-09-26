@@ -1,5 +1,12 @@
 # @tokiforge/svelte
 
+## 2.4.0
+
+### Minor Changes
+
+- Version bump to 2.4.0; depends on `@tokiforge/core@^2.4.0`.
+- Aligns with core runtime entry for browser builds.
+
 ## 2.2.3
 
 ### Patch Changes

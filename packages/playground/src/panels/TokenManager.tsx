@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import type { DesignTokens, TokenValue } from '@tokiforge/core';
+import type { DesignTokens, TokenValue } from '@tokiforge/core/runtime';
 
 type TokenType = 'color' | 'dimension' | 'fontFamily' | 'fontWeight' | 'duration' | 'custom';
 interface FlatToken { path: string; value: unknown; type?: TokenType; }

@@ -4,7 +4,7 @@ import { provideTheme } from '@tokiforge/vue';
 import TokenEditor from './components/TokenEditor.vue';
 import PreviewPane from './components/PreviewPane.vue';
 import ExportDialog from './components/ExportDialog.vue';
-import { TokenExporter } from '@tokiforge/core';
+import { TokenExporter } from '@tokiforge/core/runtime';
 
 // Initial token configuration
 const initialTokens = {

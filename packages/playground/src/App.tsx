@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { ThemeRuntime } from '@tokiforge/core';
-import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
+import { ThemeRuntime } from '@tokiforge/core/runtime';
+import type { DesignTokens, ThemeConfig } from '@tokiforge/core/runtime';
 import { readTokensFromUrl } from './share-url';
 import './App.css';
 

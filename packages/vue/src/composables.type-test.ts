@@ -1,5 +1,5 @@
 import { provideTheme, useTheme, type ExtractTokenType } from './composables';
-import type { DesignTokens, TokenValue, ThemeConfig } from '@tokiforge/core';
+import type { DesignTokens, TokenValue, ThemeConfig } from '@tokiforge/core/runtime';
 interface TestDesignTokens extends DesignTokens {
   color: {
     primary: TokenValue;

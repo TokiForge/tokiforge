@@ -1,5 +1,5 @@
-import type { ThemeConfig } from '@tokiforge/core';
-import { TokenExporter } from '@tokiforge/core';
+import type { ThemeConfig } from '@tokiforge/core/runtime';
+import { TokenExporter } from '@tokiforge/core/runtime';
 
 export interface GenerateCSSOptions {
   outputDir?: string;

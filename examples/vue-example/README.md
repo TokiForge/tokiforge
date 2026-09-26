@@ -1,8 +1,8 @@
-﻿# TokiForge Vue Example
+# TokiForge Vue Example
 
 This is a complete example demonstrating how to use TokiForge with Vue 3.
 
-> **TokiForge v2.2.3** | **Vue 3+**
+> **TokiForge v2.4.0** | **Vue 3+**
 
 ## Setup
 
@@ -21,7 +21,7 @@ npm install
 
 ## Browser Compatibility
 
-This example includes browser-compatible stubs for Node.js modules (`module`, `zlib`, `util`, `yaml`, `fs`, `path`) to ensure successful builds in browser environments. The Vite configuration automatically resolves these modules to stubs located in `src/stubs/`.
+Import browser APIs from `@tokiforge/core/runtime` (or `@tokiforge/vue`). Use `@tokiforge/core/node` only in CLI/build scripts that need `TokenParser` / file I/O.
 
 ## Running
 

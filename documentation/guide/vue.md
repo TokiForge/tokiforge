@@ -1,18 +1,18 @@
-﻿---
+---
 title: Vue Guide | TokiForge
 description: Complete guide to using TokiForge with Vue 3. Learn how to use provideTheme, composables, and manage themes in Vue applications.
 ---
 
 # Vue Guide
 
-> **TokiForge v2.2.3** | **Vue 3+**
+> **TokiForge v2.4.0** | **Vue 3+**
 
 Complete guide to using TokiForge with Vue 3.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/vue@^2.2.3 @tokiforge/core@^2.2.3
+npm install @tokiforge/vue@^2.4.0 @tokiforge/core@^2.4.0
 ```
 
 ## Setup
@@ -68,6 +68,7 @@ Provides theme context to Vue components.
 - `persist?: boolean` - Save theme to localStorage (default: `true`)
 - **v2.2.3:** `storageKey?: string` - LocalStorage key for persisting theme (default: `'tokiforge-theme'`)
 - **v2.2.3:** `onThemeChange?: (themeName: string) => void` - Callback when theme changes (e.g. analytics)
+- **v2.4.0:** Provider uses shared `ThemeController` (same lifecycle as React/Next/Remix)
 - `watchSystemTheme?: boolean` - Auto-detect system theme (default: `false`)
 - `bodyClassPrefix?: string` - Body class prefix for static mode (default: `'theme'`)
 - `selector?: string` - CSS selector (default: `:root`)
@@ -204,10 +205,10 @@ body.theme-dark {
 
 Benefits:
 
-- ✅ Zero JavaScript overhead
-- ✅ Automatic localStorage persistence
-- ✅ System theme detection
-- ✅ All plugin features (token parsing, references)
+- ? Zero JavaScript overhead
+- ? Automatic localStorage persistence
+- ? System theme detection
+- ? All plugin features (token parsing, references)
 
 ## CSS Generation
 

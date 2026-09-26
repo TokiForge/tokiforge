@@ -1,11 +1,11 @@
 # @tokiforge/styled-components
 
-styled-components CSS-in-JS adapter for TokiForge theming system.
+styled-components CSS-in-JS adapter for TokiForge theming system (v2.4.0). Uses shared `ThemeController`.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/styled-components @tokiforge/core styled-components
+npm install @tokiforge/styled-components@^2.4.0 @tokiforge/core@^2.4.0 styled-components
 ```
 
 ## Usage

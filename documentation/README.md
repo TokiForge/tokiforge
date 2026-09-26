@@ -1,16 +1,17 @@
-﻿# TokiForge Documentation
+# TokiForge Documentation
 
-This is the documentation site for TokiForge v2.2.3, built with [VitePress](https://vitepress.dev/).
+This is the documentation site for TokiForge v2.4.0, built with [VitePress](https://vitepress.dev/).
 
-## Features in v2.2.3
+## Features in v2.4.0
 
-- **Production-Ready Release**: Comprehensive design token and theming engine with full framework support
-- **Performance Optimization**: Multi-tier caching, lazy loading, and compression integrated into ThemeRuntime
-- **Accessibility**: High contrast mode, reduced motion, color blind support (protanopia/deuteranopia/tritanopia), font size scaling, WCAG AAA compliance
-- **Advanced Token Features**: Functions, expressions, references with fallbacks, component scoping, fluent theming API, validation plugins, transformation pipeline
-- **Framework Support**: React, Vue, Svelte, Angular, Next.js, Remix, Astro, Solid, SvelteKit with SSR utilities
-- **Integrations**: Storybook addon, enhanced Figma sync with conflict resolution, Sketch/Adobe XD adapters, CMS integration (Contentful, Strapi, Sanity), Zeroheight, InVision DSM
-- **Developer Tools**: Powerful CLI (init, build, validate, analyze, diff, watch, migrate), token analytics, CI/CD integration, visual regression testing
+- **Runtime / Node split**: `@tokiforge/core/runtime` for apps, `@tokiforge/core/node` for CLI and file parsing
+- **Modern CSS export**: `color-mix()`, `@layer`, `@container`, CSS variables, `light-dark()`
+- **ThemeController**: Shared lifecycle across React, Vue, Angular, Svelte, Emotion, styled-components, and more
+- **Performance**: Multi-tier caching, lazy loading, compression; <3KB runtime
+- **Accessibility**: WCAG, APCA, high contrast, reduced motion, color blind modes
+- **Framework support**: React, Vue, Svelte, Angular, Next.js, Remix, Astro, Solid, SvelteKit with SSR utilities
+- **Integrations**: Storybook `register`, Figma sync, Sketch/Adobe XD, CMS (Contentful, Strapi, Sanity)
+- **Developer tools**: CLI (init, build with responsive/state CSS, validate, analyze, diff, watch, migrate), CI/CD, Tailwind v3/v4
 
 ## Development
 

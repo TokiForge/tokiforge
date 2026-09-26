@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { ThemeRuntime } from './theme-runtime';
+import { TokenExporter } from './token-exporter';
 import { ThemeError } from './types';
 import type { ThemeConfig, DesignTokens } from './types';
 
@@ -198,6 +199,15 @@ describe('ThemeRuntime', () => {
       runtime.applyTheme('dark', ':root', 'myapp');
       expect(runtime.getCurrentTheme()).toBe('dark');
     });
+
+    it('reuses generated CSS when the same theme is applied again', () => {
+      const spy = vi.spyOn(TokenExporter, 'exportCSS');
+      const runtime = new ThemeRuntime(config);
+      runtime.applyTheme('light');
+      runtime.applyTheme('light');
+      expect(spy).toHaveBeenCalledTimes(1);
+      spy.mockRestore();
+    });
   });
 
   describe('getCurrentTheme', () => {
@@ -349,6 +359,25 @@ describe('ThemeRuntime', () => {
   });
 
   describe('watchSystemTheme', () => {
+    it('replaces a previous watcher instead of leaking it', () => {
+      const runtime = new ThemeRuntime(config);
+      const mediaQuery = {
+        matches: false,
+        media: '',
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      };
+      vi.spyOn(globalThis.window, 'matchMedia').mockReturnValue(mediaQuery as any);
+
+      runtime.watchSystemTheme(() => {});
+      runtime.watchSystemTheme(() => {});
+
+      expect(mediaQuery.removeEventListener).toHaveBeenCalled();
+    });
+
     it('should return unwatch function', () => {
       const runtime = new ThemeRuntime(config);
       const mediaQuery = {

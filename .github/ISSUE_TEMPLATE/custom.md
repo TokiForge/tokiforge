@@ -17,7 +17,7 @@ assignees: ''
 A clear and concise description of your issue or question.
 
 **Environment:**
- - TokiForge Version: [e.g. 1.0.0]
+ - TokiForge Version: [e.g. 2.4.0]
  - Package: [e.g. @tokiforge/core, @tokiforge/react]
 
 **Additional context**

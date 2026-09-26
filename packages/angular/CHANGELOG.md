@@ -1,10 +1,18 @@
 # @tokiforge/angular
 
+## 2.4.0
+
+### Minor Changes
+
+- Service wraps shared `ThemeController`.
+- Version bump to 2.4.0; depends on `@tokiforge/core@^2.4.0`.
+- Angular unit tests enabled.
+
 ## 2.2.3
 
 ### Patch Changes
 
-- Version bump; @tokiforge/core@^2.2.3.
+- Version bump; @tokiforge/core@^2.4.0.
 
 ## 2.0.2
 

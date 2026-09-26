@@ -688,7 +688,11 @@ const tokens = {
   }
 };
 
-const responsive = ResponsiveTokens.process(tokens);
+const responsive = ResponsiveTokens.generateResponsiveCSS(tokens);
+const hoverPadding = ResponsiveTokens.getResponsiveValue(
+  tokens.spacing.padding as import('@tokiforge/core').TokenValue,
+  'lg'
+);
 ```
 
 ---
@@ -700,8 +704,11 @@ Compare and sync tokens with Figma.
 ```typescript
 import { FigmaDiff } from '@tokiforge/core';
 
-const diff = FigmaDiff.compare(localTokens, figmaTokens);
-const sync = FigmaDiff.sync(localTokens, figmaTokens, { strategy: 'merge' });
+const diff = FigmaDiff.compare(figmaTokens, codeTokens);
+const synced = FigmaDiff.sync(codeTokens, figmaTokens, { strategy: 'merge' });
+if (FigmaDiff.hasMismatches(diff)) {
+  console.log(FigmaDiff.generateReport(diff));
+}
 ```
 
 ---
@@ -713,11 +720,14 @@ Automated validation for CI/CD pipelines.
 ```typescript
 import { CICDValidator } from '@tokiforge/core';
 
-const validator = new CICDValidator();
-const result = await validator.validate(tokens);
+const result = CICDValidator.validate(tokens, {
+  strict: true,
+  checkAccessibility: true,
+  checkDeprecated: true,
+});
 if (!result.valid) {
-  console.error(result.errors);
-  process.exit(1);
+  console.error(CICDValidator.generateReport(result));
+  process.exit(CICDValidator.exitCode(result));
 }
 ```
 

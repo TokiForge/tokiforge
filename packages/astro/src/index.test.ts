@@ -1,11 +1,10 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import tokiforge, { getThemeFromCookies, setThemeCookie } from './index';
 import type { ThemeConfig } from '@tokiforge/core';
-
-vi.mock('@tokiforge/core', async () => {
-  const actual = await vi.importActual('@tokiforge/core');
-  return actual;
-});
 
 describe('Astro Integration', () => {
   const testConfig: ThemeConfig = {
@@ -47,6 +46,51 @@ describe('Astro Integration', () => {
     });
   });
 
+  describe('generateStaticCSS', () => {
+    let tmpDir: string;
+
+    beforeEach(() => {
+      tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tokiforge-astro-'));
+    });
+
+    afterEach(() => {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    });
+
+    it('writes per-theme CSS and a combined themes.css', () => {
+      const integration = tokiforge({
+        config: testConfig,
+        generateStaticCSS: true,
+        cssOutputDir: 'public/tokiforge',
+      });
+
+      const done = integration.hooks['astro:config:done'];
+      expect(done).toBeDefined();
+      done!({
+        config: { root: pathToFileURL(tmpDir + path.sep) },
+      } as never);
+
+      const light = fs.readFileSync(path.join(tmpDir, 'public/tokiforge/light.css'), 'utf-8');
+      const dark = fs.readFileSync(path.join(tmpDir, 'public/tokiforge/dark.css'), 'utf-8');
+      const combined = fs.readFileSync(path.join(tmpDir, 'public/tokiforge/themes.css'), 'utf-8');
+
+      expect(light).toContain('[data-theme="light"]');
+      expect(light).toContain('--hf-color-primary: #7C3AED');
+      expect(dark).toContain('[data-theme="dark"]');
+      expect(dark).toContain('--hf-color-primary: #A78BFA');
+      expect(combined).toContain('[data-theme="light"]');
+      expect(combined).toContain('[data-theme="dark"]');
+    });
+
+    it('skips writing when generateStaticCSS is false', () => {
+      const integration = tokiforge({ config: testConfig, generateStaticCSS: false });
+      integration.hooks['astro:config:done']!({
+        config: { root: pathToFileURL(tmpDir + path.sep) },
+      } as never);
+      expect(fs.existsSync(path.join(tmpDir, 'public/tokiforge'))).toBe(false);
+    });
+  });
+
   describe('getThemeFromCookies', () => {
     it('should return theme value from cookies', () => {
       const cookies = {
@@ -56,17 +100,11 @@ describe('Astro Integration', () => {
         },
       };
 
-      const result = getThemeFromCookies(cookies);
-      expect(result).toBe('dark');
+      expect(getThemeFromCookies(cookies)).toBe('dark');
     });
 
     it('should return null when no theme cookie exists', () => {
-      const cookies = {
-        get: () => null,
-      };
-
-      const result = getThemeFromCookies(cookies);
-      expect(result).toBeNull();
+      expect(getThemeFromCookies({ get: () => null })).toBeNull();
     });
 
     it('should support custom cookie name', () => {
@@ -77,8 +115,7 @@ describe('Astro Integration', () => {
         },
       };
 
-      const result = getThemeFromCookies(cookies, 'custom-theme');
-      expect(result).toBe('dark');
+      expect(getThemeFromCookies(cookies, 'custom-theme')).toBe('dark');
     });
   });
 
@@ -92,8 +129,7 @@ describe('Astro Integration', () => {
     });
 
     it('should support custom cookie name', () => {
-      const result = setThemeCookie('dark', 'custom-theme');
-      expect(result).toContain('custom-theme=dark');
+      expect(setThemeCookie('dark', 'custom-theme')).toContain('custom-theme=dark');
     });
   });
 });

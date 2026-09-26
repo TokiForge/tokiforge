@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createApp, h, defineComponent, nextTick, computed } from 'vue';
 import { provideTheme, useTheme, type ExtractTokenType, type ThemeContext } from './composables';
-import type { DesignTokens, TokenValue, ThemeConfig } from '@tokiforge/core';
+import type { DesignTokens, TokenValue, ThemeConfig } from '@tokiforge/core/runtime';
 
 interface TestDesignTokens extends DesignTokens {
   color: {

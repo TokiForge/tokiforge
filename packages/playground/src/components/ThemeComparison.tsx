@@ -1,5 +1,5 @@
 import { useMemo, memo } from 'react';
-import type { DesignTokens, ThemeConfig } from '@tokiforge/core';
+import type { DesignTokens, ThemeConfig } from '@tokiforge/core/runtime';
 import './ThemeComparison.css';
 
 interface ThemeComparisonProps {

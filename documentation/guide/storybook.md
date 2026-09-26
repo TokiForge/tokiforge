@@ -35,6 +35,7 @@ const config: StorybookConfig = {
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
+    // Registers the TokiForge panel + toolbar (same as "@tokiforge/storybook/register")
     createTokensAddon(themeConfig),
   ],
   framework: {

@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.4.0 - Runtime/Node Split, Modern CSS & Adapter Unification (2026-09-26)
+
+- **Core entries**: Documented `@tokiforge/core/runtime` and `@tokiforge/core/node`; browser apps no longer rely on Node stubs.
+- **Modern CSS**: Docs cover `color-mix()`, `@layer`, and `@container` export options.
+- **Adapters**: Vue, Angular, Emotion, and styled-components aligned on `ThemeController`; React/Next/Remix option parity (`watchSystemTheme`, `storageKey`, `SSRUtils`).
+- **Tooling**: Storybook `register`, Astro static CSS file output, CLI responsive/state CSS, Tailwind peer `^3 || ^4`.
+- **Version**: All install examples and package versions set to **2.4.0**.
+
 ## v2.2.4 - Monorepo Version Alignment & Recovery (2026-05-19)
 
 - **Hot Reload Dynamic Recovery**: Integrated a highly resilient `lazyWithRetry()` dynamic importer boundary to handle and auto-recover browser-cached dynamic chunk failures without screen crashes.

@@ -69,6 +69,8 @@ export interface TokenExportOptions {
   selector?: string;
   prefix?: string;
   variables?: boolean;
+  /** Wrap CSS output in `@layer <name> { ... }` */
+  layer?: string;
 }
 
 export interface TokenParserOptions {
@@ -80,6 +82,8 @@ export interface ColorRGB {
   r: number;
   g: number;
   b: number;
+  /** Alpha in 0–1. Omitted when the color is fully opaque. */
+  a?: number;
 }
 
 export interface ColorHSL {
@@ -125,15 +129,35 @@ export interface Plugin<TOptions = PluginOptions> {
 
 export interface AccessibilityMetrics {
   ratio: number;
+  /** Normal text, 4.5:1 */
   wcagAA: boolean;
+  /** Normal text, 7:1 */
   wcagAAA: boolean;
+  /** Large text, 3:1 */
+  wcagAALarge: boolean;
+  /** Large / bold text, 4.5:1 */
+  wcagAAALarge: boolean;
   level: 'pass' | 'fail' | 'large-text';
+  /** Token path of the foreground color, when this metric came from a token audit */
+  foreground?: string;
+  /** Token path (or literal) of the background color, when this metric came from a token audit */
+  background?: string;
 }
 
 export interface Breakpoint {
   name: string;
   min?: number;
   max?: number;
+  /**
+   * Emit a container query instead of a viewport media query.
+   * `true` → `@container`, string → `@container <name>`.
+   */
+  container?: boolean | string;
+  /**
+   * Prefers / feature media, e.g. `prefers-color-scheme: dark`
+   * or `prefers-reduced-motion: reduce`. Combined with min/max when present.
+   */
+  prefers?: string;
 }
 
 export interface DiffResult {

@@ -1,11 +1,11 @@
 # @tokiforge/remix
 
-Remix integration for TokiForge theming with session-based persistence.
+Remix integration for TokiForge theming with session-based persistence (v2.4.0). Re-exports `SSRUtils`; provider supports `watchSystemTheme` and `storageKey`.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/remix @tokiforge/core @remix-run/react @remix-run/node
+npm install @tokiforge/remix@^2.4.0 @tokiforge/core@^2.4.0 @remix-run/react @remix-run/node
 ```
 
 ## Usage

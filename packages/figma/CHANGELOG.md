@@ -1,10 +1,17 @@
 # @tokiforge/figma
 
+## 2.4.0
+
+### Minor Changes
+
+- Version bump to 2.4.0; depends on `@tokiforge/core@^2.4.0`.
+- Diff/sync APIs covered by additional tests.
+
 ## 2.2.3
 
 ### Patch Changes
 
-- Version bump; @tokiforge/core@^2.2.3.
+- Version bump; @tokiforge/core@^2.4.0.
 
 ## 2.0.2
 

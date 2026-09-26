@@ -1,8 +1,8 @@
-﻿# tokiforge-cli
+# tokiforge-cli
 
 **CLI tool for TokiForge design token management. Initialize, build, validate, analyze, and manage design tokens from the command line.**
 
-Command-line tool for TokiForge design tokens (v2.2.3).
+Command-line tool for TokiForge design tokens (v2.4.0).
 
 ## Installation
 
@@ -28,7 +28,7 @@ tokiforge init
 
 ### `tokiforge build`
 
-Build and export tokens to various formats (CSS, JS, TS, SCSS, JSON).
+Build and export tokens to various formats (CSS, JS, TS, SCSS, JSON). In v2.4.0, build also emits responsive and interactive-state CSS when those token definitions are present.
 
 ```bash
 tokiforge build

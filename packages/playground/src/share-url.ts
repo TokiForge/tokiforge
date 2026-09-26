@@ -1,4 +1,4 @@
-import type { DesignTokens } from '@tokiforge/core';
+import type { DesignTokens } from '@tokiforge/core/runtime';
 
 const PARAM = 'tokens';
 

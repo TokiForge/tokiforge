@@ -417,7 +417,7 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 
 ## Roadmap
 
-### Completed (v2.2.3)
+### Completed (v2.4.0)
 
 - [x] Core engine + React adapter
 - [x] Vue/Svelte/Angular adapters
@@ -445,6 +445,11 @@ Yes, TokiForge is SSR-safe and works with Next.js, Remix, Angular SSR, and other
 - [x] Sketch & Adobe XD design tool adapters
 - [x] Emotion & styled-components CSS-in-JS adapters
 - [x] Test suites for all framework adapters
+- [x] `@tokiforge/core/runtime` + `@tokiforge/core/node` entry points
+- [x] Modern CSS export (`color-mix`, `@layer`, `@container`)
+- [x] ThemeController on Vue, Angular, Emotion, and styled-components
+- [x] CLI responsive/state CSS emission
+- [x] Tailwind CSS v3 and v4 peer support
 
 ### In Progress
 

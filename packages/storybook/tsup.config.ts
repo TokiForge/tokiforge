@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/index.ts', 'src/register.tsx'],
   format: ['cjs', 'esm'],
   dts: {
     compilerOptions: {
@@ -12,5 +12,12 @@ export default defineConfig({
   clean: true,
   minify: true,
   treeshake: true,
-  external: ['react', '@storybook/addons', '@storybook/components', '@storybook/api', '@tokiforge/core'],
+  external: [
+    'react',
+    'react/jsx-runtime',
+    '@storybook/addons',
+    '@storybook/components',
+    '@storybook/api',
+    '@tokiforge/core',
+  ],
 });

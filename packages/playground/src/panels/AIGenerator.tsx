@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import type { DesignTokens } from '@tokiforge/core';
+import type { DesignTokens } from '@tokiforge/core/runtime';
 
 // ── Prompt templates ─────────────────────────────────────────────
 const PROMPT_TEMPLATES = [

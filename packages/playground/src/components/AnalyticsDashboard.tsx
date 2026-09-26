@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import type { DesignTokens } from '@tokiforge/core';
+import type { DesignTokens } from '@tokiforge/core/runtime';
 import './AnalyticsDashboard.css';
 
 interface AnalyticsDashboardProps {

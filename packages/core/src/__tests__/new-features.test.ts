@@ -3,6 +3,7 @@ import { TokenExporter } from '../token-exporter';
 import { TokenParser } from '../token-parser';
 import { ColorUtils } from '../color-utils';
 import { AccessibilityUtils } from '../accessibility-utils';
+import { ResponsiveTokens } from '../responsive-tokens';
 import { ThemeController } from '../theme-controller';
 import type { DesignTokens, ThemeConfig } from '../types';
 
@@ -110,6 +111,99 @@ describe('Chained token references', () => {
     } as unknown as DesignTokens;
 
     expect(() => TokenParser.expandReferences(tokens)).not.toThrow();
+  });
+
+  it('resolves references embedded in composite strings', () => {
+    const tokens: DesignTokens = {
+      color: { border: { value: '#111111', type: 'color' } },
+      border: { default: { value: '1px solid {color.border}', type: 'border' } },
+    };
+
+    const expanded = TokenParser.expandReferences(tokens) as Record<string, Record<string, Record<string, unknown>>>;
+    expect(expanded.border.default.value).toBe('1px solid #111111');
+  });
+});
+
+describe('DTCG group inheritance', () => {
+  it('inherits group $type onto leaf tokens', () => {
+    const dtcg = {
+      color: {
+        $type: 'color',
+        primary: { $value: '#7C3AED' },
+      },
+    } as unknown as DesignTokens;
+
+    const normalized = TokenParser.normalizeDTCG(dtcg) as Record<
+      string,
+      Record<string, Record<string, unknown>>
+    >;
+    expect(normalized.color.primary.value).toBe('#7C3AED');
+    expect(normalized.color.primary.type).toBe('color');
+  });
+
+  it('parses in-memory JSON content', () => {
+    const tokens = TokenParser.parseContent(
+      JSON.stringify({ color: { primary: { value: '#fff', type: 'color' } } })
+    );
+    expect((tokens as Record<string, Record<string, { value: string }>>).color.primary.value).toBe(
+      '#fff'
+    );
+  });
+
+  it('maps $deprecated to deprecated and back', () => {
+    const dtcg = {
+      color: { primary: { $value: '#000000', $type: 'color', $deprecated: true } },
+    } as unknown as DesignTokens;
+
+    const normalized = TokenParser.normalizeDTCG(dtcg) as Record<
+      string,
+      Record<string, Record<string, unknown>>
+    >;
+    expect(normalized.color.primary.deprecated).toBe(true);
+
+    const roundTrip = TokenParser.toDTCG(normalized as DesignTokens) as Record<
+      string,
+      Record<string, Record<string, unknown>>
+    >;
+    expect(roundTrip.color.primary.$deprecated).toBe(true);
+  });
+});
+
+describe('Modern CSS helpers', () => {
+  it('wraps CSS export in an @layer', () => {
+    const tokens: DesignTokens = {
+      color: { primary: { value: '#7C3AED', type: 'color' } },
+    };
+    const css = TokenExporter.exportCSS(tokens, { layer: 'tokens' });
+    expect(css.startsWith('@layer tokens {')).toBe(true);
+    expect(css).toContain('--hf-color-primary: #7C3AED');
+  });
+
+  it('emits color-mix and relative-color CSS', () => {
+    expect(ColorUtils.colorMixCSS('#000', '#fff', 0.25)).toBe(
+      'color-mix(in oklch, #000 75%, #fff)'
+    );
+    expect(ColorUtils.relativeColorCSS('var(--hf-color-primary)', 'l c h')).toBe(
+      'oklch(from var(--hf-color-primary) l c h)'
+    );
+  });
+
+  it('emits container and prefers queries', () => {
+    const tokens: DesignTokens = {
+      spacing: {
+        padding: {
+          value: '16px',
+          type: 'dimension',
+          responsive: { card: '24px', dark: '20px' },
+        },
+      },
+    };
+    const css = ResponsiveTokens.generateResponsiveCSS(tokens, [
+      { name: 'card', min: 400, container: true },
+      { name: 'dark', prefers: 'prefers-color-scheme: dark' },
+    ]);
+    expect(css).toContain('@container (min-width: 400px)');
+    expect(css).toContain('@media (prefers-color-scheme: dark)');
   });
 });
 
@@ -227,6 +321,115 @@ describe('APCA contrast', () => {
 
   it('returns ~0 for identical colors', () => {
     expect(AccessibilityUtils.calculateAPCA('#777777', '#777777')).toBe(0);
+  });
+});
+
+describe('WCAG contrast', () => {
+  it('treats black on white as AAA and parses rgb()', () => {
+    const hex = AccessibilityUtils.calculateContrast('#000000', '#FFFFFF');
+    const rgb = AccessibilityUtils.calculateContrast('rgb(0, 0, 0)', 'rgb(255, 255, 255)');
+    expect(hex.ratio).toBe(21);
+    expect(rgb.ratio).toBe(21);
+    expect(hex.wcagAA).toBe(true);
+    expect(hex.wcagAAA).toBe(true);
+  });
+
+  it('does not mark large-text-only contrast as WCAG AA', () => {
+    const result = AccessibilityUtils.calculateContrast('#777777', '#ffffff');
+    expect(result.ratio).toBeGreaterThanOrEqual(3);
+    expect(result.ratio).toBeLessThan(4.5);
+    expect(result.wcagAA).toBe(false);
+    expect(result.wcagAAA).toBe(false);
+    expect(result.wcagAALarge).toBe(true);
+    expect(result.level).toBe('large-text');
+  });
+
+  it('composites translucent foregrounds before measuring', () => {
+    const translucent = ColorUtils.getContrastRatio('rgba(0, 0, 0, 0.5)', '#ffffff');
+    expect(translucent).toBeGreaterThan(3);
+    expect(translucent).toBeLessThan(21);
+  });
+
+  it('audits text/background pairs and ignores unrelated palette colors', () => {
+    const palette: DesignTokens = {
+      color: {
+        primary: { value: '#7C3AED', type: 'color' },
+        secondary: { value: '#8B5CF6', type: 'color' },
+      },
+    };
+    expect(AccessibilityUtils.checkAccessibility(palette)).toEqual([]);
+
+    const themed: DesignTokens = {
+      color: {
+        text: { value: '#cccccc', type: 'color' },
+        background: { value: '#ffffff', type: 'color' },
+      },
+    };
+    const metrics = AccessibilityUtils.checkAccessibility(themed);
+    expect(metrics).toHaveLength(1);
+    expect(metrics[0].level).toBe('fail');
+    expect(metrics[0].foreground).toBe('color.text');
+    expect(metrics[0].background).toBe('color.background');
+  });
+});
+
+describe('Responsive and state CSS', () => {
+  it('emits min and max media queries only for breakpoints that have values', () => {
+    const tokens: DesignTokens = {
+      spacing: {
+        padding: {
+          value: '16px',
+          type: 'dimension',
+          responsive: { md: '24px', sm: '8px' },
+        },
+      },
+    };
+
+    const css = ResponsiveTokens.generateResponsiveCSS(tokens, [
+      { name: 'md', min: 768 },
+      { name: 'sm', max: 639 },
+      { name: 'xl', min: 1280 },
+    ]);
+
+    expect(css).toContain('@media (min-width: 768px)');
+    expect(css).toContain('--hf-spacing-padding: 24px');
+    expect(css).toContain('@media (max-width: 639px)');
+    expect(css).toContain('--hf-spacing-padding: 8px');
+    expect(css).not.toContain('min-width: 1280px');
+    expect(css).not.toContain('undefined');
+  });
+
+  it('uses pseudo-classes for interaction states', () => {
+    const tokens: DesignTokens = {
+      button: {
+        bg: {
+          value: '#7C3AED',
+          type: 'color',
+          states: { hover: '#6D28D9', loading: '#5B21B6' },
+        },
+      },
+    };
+
+    const css = ResponsiveTokens.generateStateCSS(tokens);
+    expect(css).toContain(':hover { --hf-button-bg: #6D28D9; }');
+    expect(css).toContain('.loading { --hf-button-bg: #5B21B6; }');
+    expect(css).not.toContain('.hover');
+  });
+});
+
+describe('CSS export safety', () => {
+  it('escapes values that would close an inline style tag', () => {
+    const tokens: DesignTokens = {
+      color: { primary: { value: '</style>', type: 'color' } },
+    };
+    expect(TokenExporter.exportCSS(tokens)).not.toContain('</');
+  });
+
+  it('rejects selectors that can break out of a declaration block', () => {
+    const tokens: DesignTokens = {
+      color: { primary: { value: '#000', type: 'color' } },
+    };
+    expect(() => TokenExporter.exportCSS(tokens, { selector: '} body {' })).toThrow();
   });
 });
 

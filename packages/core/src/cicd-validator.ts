@@ -48,16 +48,38 @@ export class CICDValidator {
   }
 
   private static checkAccessibilityRule(tokens: DesignTokens, options: CICDValidationOptions, errors: string[], warnings: string[]): void {
-    if (options.checkAccessibility) {
-      const report = AccessibilityUtils.generateAccessibilityReport(tokens);
-      if (report.failing > 0) {
-        if (options.strict) {
-          errors.push(`${report.failing} accessibility issues found`);
-        } else {
-          warnings.push(`${report.failing} accessibility issues found`);
-        }
+    if (!options.checkAccessibility) return;
+
+    const report = AccessibilityUtils.generateAccessibilityReport(tokens);
+    const failing = report.details.filter((metric) => metric.level === 'fail');
+    const largeTextOnly = report.details.filter((metric) => metric.level === 'large-text');
+
+    if (failing.length > 0) {
+      const message = `${failing.length} text/background pairs fail WCAG (below 3:1): ${this.describePairs(failing)}`;
+      if (options.strict) {
+        errors.push(message);
+      } else {
+        warnings.push(message);
       }
     }
+
+    if (largeTextOnly.length > 0) {
+      warnings.push(
+        `${largeTextOnly.length} text/background pairs only pass for large text: ${this.describePairs(largeTextOnly)}`
+      );
+    }
+  }
+
+  private static describePairs(metrics: Array<{ foreground?: string; background?: string; ratio: number }>): string {
+    return metrics
+      .slice(0, 8)
+      .map((metric) => {
+        const pair = metric.foreground && metric.background
+          ? `${metric.foreground} on ${metric.background}`
+          : 'pair';
+        return `${pair} (${metric.ratio}:1)`;
+      })
+      .join(', ');
   }
 
   private static checkCustomRules(tokens: DesignTokens, options: CICDValidationOptions, errors: string[]): void {
@@ -155,7 +177,9 @@ export class CICDValidator {
       }
 
       const node = obj as TokenNode;
-      if ('value' in node && node.deprecated === true) {
+      const version = node.version as { deprecated?: boolean } | undefined;
+      const isDeprecated = node.deprecated === true || node.$deprecated === true || version?.deprecated === true;
+      if ('value' in node && isDeprecated) {
         deprecated.push(path || 'root');
       } else {
         for (const key of Object.keys(node)) {

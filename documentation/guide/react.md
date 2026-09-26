@@ -1,18 +1,18 @@
-﻿---
+---
 title: React Guide | TokiForge
 description: Complete guide to using TokiForge with React. Learn how to set up ThemeProvider, use hooks, and manage themes in React applications.
 ---
 
 # React Guide
 
-> **TokiForge v2.2.3**
+> **TokiForge v2.4.0**
 
 TokiForge works seamlessly with React through the `@tokiforge/react` package.
 
 ## Installation
 
 ```bash
-npm install @tokiforge/react@^2.2.3 @tokiforge/core@^2.2.3
+npm install @tokiforge/react@^2.4.0 @tokiforge/core@^2.4.0
 ```
 
 ## Setup
@@ -74,6 +74,7 @@ Props:
 - **v2.2.3:** `persist?: boolean` - Read/write theme from storage (default: `true`)
 - **v2.2.3:** `onThemeChange?: (themeName: string) => void` - Callback when theme changes (e.g. analytics)
 - **v2.2.3:** `suppressHydrationWarning?: boolean` - Pass-through to root/body to avoid hydration warnings
+- **v2.4.0:** `watchSystemTheme?: boolean` - Follow `prefers-color-scheme` when enabled
 - `children: ReactNode` - Your app components
 
 ### `useTheme()`
